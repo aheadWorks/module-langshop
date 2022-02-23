@@ -1,0 +1,313 @@
+definitions:
+  scripts:
+    clean_source: &cleanSource |-
+      rm -rf .hgignore bitbucket-pipelines.yml .hg .git .gitignore
+    clean_test_results: &cleanTestResults |-
+      rm -rf test-results
+    pack_zip: &packZip |-
+      echo "Will create ${BITBUCKET_REPO_SLUG}.zip"
+      zip -r ${BITBUCKET_REPO_SLUG}.zip .
+    prepare_ssh: &prepareSSH |-
+      mkdir -p ~/.ssh
+      echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
+      (umask  077 ; echo ${AW_COMPOSER_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa)
+      # prepare git must be removed
+    prepare_git: &prepare_git |-
+      echo 'skip'
+      apk add --update openssh
+      apk add --update coreutils
+      apk add git
+      echo ${DEVOPS_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa
+      chmod 700 ~/.ssh
+      chmod 600 ~/.ssh/id_rsa
+    get_repositories: &getRepositories |-
+      TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
+      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100 >> repositories
+      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100\&page=2 >> repositories2
+    toggle_satis_rebuild: &toggleSatisRebuild |-
+      TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
+      [[ -z "$TOKEN" ]] && { echo "Can't obtain OAuth access token, check credentials" ; exit 1; }
+      curl -s  -X POST -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json" \
+      https://api.bitbucket.org/2.0/repositories/${COMPOSER_DEV_REPO}/pipelines/ \
+      -d '
+      {
+        "target": {
+            "type": "pipeline_ref_target",
+            "ref_type": "branch",
+            "ref_name": "master",
+            "selector": {
+              "type": "custom",
+              "pattern": "rebuild-selected-packages"
+            }
+          },
+          "variables": [
+            {
+              "key": "PACKAGE_URL",
+              "value": "'${BITBUCKET_GIT_SSH_ORIGIN}'"
+            }
+          ]
+      }' || ex
+
+  build_steps:
+    - step: &build
+        image: atlassian/default-image:2
+        name: Build
+        script:
+          - *cleanSource
+          - *packZip
+        artifacts:
+          - "*.zip"
+  test_steps:
+    - step: &validatePackage
+        name: Validate marketplace package
+        image: aheadworks/m2test
+        script:
+          - python3 /m2test.py validate_m2_package ${BITBUCKET_REPO_SLUG}.zip
+    - step: &eqpTest
+        name: EQP tests
+        image: aheadworks/m2test
+        script:
+          - mkdir -p test-results
+          - python3 /m2test.py eqp ${PWD} > test-results/test-EQP.xml
+        artifacts:
+          - "test-results/test-EQP.xml"
+    - step: &staticTest
+        name: Static tests
+        image: aheadworks/m2test-new:static-test-2.4-7.4
+        script:
+          - mkdir -p test-results
+          - *prepare_git
+          - python3 /m2test.py static ${PWD} test-results
+        artifacts:
+          - "test-results/**"
+    - step: &unitTestFirst
+        name: Unit tests 7.1
+        image: aheadworks/m2test-new:test-7.1
+        script:
+          - mkdir -p test-results
+          - if test -f README.md; then if grep -q "for Magento 2.4.*" README.md; then echo only for Magento 2.4; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+        artifacts:
+          - "test-results/test-unit.xml"
+    - step: &unitTestSecond
+        name: Unit tests 7.2
+        image: aheadworks/m2test-new:test-7.2
+        script:
+          - mkdir -p test-results
+          - if test -f README.md; then if grep -q "for Magento 2.4.*" README.md; then echo only for Magento 2.4; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+        artifacts:
+          - "test-results/test-unit.xml"
+    - step: &unitTestThird
+        name: Unit tests 7.3
+        image: aheadworks/m2test-new:test-7.3
+        script:
+          - mkdir -p test-results
+          - if test -f README.md; then if grep -q "for Magento 2.4.*" README.md; then echo only for Magento 2.4; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+        artifacts:
+          - "test-results/test-unit.xml"
+    - step: &unitMagento24
+        name: Unit tests magento 2.4
+        image: aheadworks/m2test-new:test-2.4-7.4
+        script:
+          - mkdir -p test-results
+          - if test -f README.md; then if grep -q "for Magento 2.3.*" README.md; then echo only for Magento 2.3; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+        artifacts:
+          - "test-results/test-unit.xml"
+    - step: &installMagento
+        name: Install Magento test
+        image: aheadworks/m2test-new:test-install-7.3
+        script:
+          - mkdir -p test-results
+          - if test -f README.md; then if grep -q "for Magento 2.3.*" README.md; then echo only for Magento 2.3; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi
+        artifacts:
+          - "logs1/**"
+          - "test-results/test-unit.xml"
+    - step: &installMagento24
+        name: Install Magento 2.4 test
+        image: aheadworks/m2test-new:test-install-2.4-7.4
+        script:
+          - mkdir -p test-results
+          - if test -f README.md; then if grep -q "for Magento 2.3.*" README.md; then echo only for Magento 2.3; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi
+        artifacts:
+          - "logs1/**"
+          - "test-results/test-unit.xml"
+
+  deployment_steps:
+    - step: &runPipelines
+        name: Run pipelines
+        image: aheadworks/m2test-new:test-7.2
+        script:
+          - *getRepositories
+          - apk add py3-requests
+          - python3 runpipelines.py
+    - step: &setPermissions
+        name: Set permissions
+        image: aheadworks/m2test-new:test-7.2
+        script:
+          - apk add py3-requests
+          - python3 /permissions.py
+    - step: &deployToDevComposer
+        name: Toggle satis refresh
+        script:
+          - *cleanTestResults
+          - *toggleSatisRebuild
+    - step: &deployToAwComposer
+        name: Deploy to composer repository
+        image: aheadworks/deploy
+        username: ${DOCKERHUB_LOGIN}
+        password: ${DOCKERHUB_PASSWORD}
+        script:
+          - *cleanTestResults
+          - *prepareSSH
+          - VERSION=$(cat composer.json | jq -r '.version') && NAME=$(cat composer.json | jq -r '.name')
+          - test -f ${BITBUCKET_REPO_SLUG}.zip
+          - echo "Ready to push ${NAME}-${VERSION} to ${AW_COMPOSER_API_URL}"
+          - ssh -t ${AW_COMPOSER_SSH_URL} "mkdir -p ${AW_COMPOSER_PACKAGES_ROOT}/${NAME}"
+          - scp ${BITBUCKET_REPO_SLUG}.zip ${AW_COMPOSER_SSH_URL}:${AW_COMPOSER_PACKAGES_ROOT}/${NAME}/${BITBUCKET_REPO_SLUG}-${VERSION}.zip
+          - REPO_URL=${AW_COMPOSER_API_URL} REPO_LOGIN=${AW_COMPOSER_API_LOGIN} REPO_TOKEN=${AW_COMPOSER_API_PASSWORD} deploy comp -p send-package --filename=${BITBUCKET_REPO_SLUG}-${VERSION}.zip ${BITBUCKET_REPO_SLUG}.zip
+    - step: &ecommerce_build
+        name: Ecommerce build
+        image: aheadworks/deploy-tools:latest
+        script:
+            - pip3 install aheadworks-deploy-manager
+            - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
+            - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
+            - python3 -m aheadworks_release_manager jira-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGN_TO}"
+        artifacts:
+            - "/build_archives/**"
+    - step: &swaggerWebApiDocBuild
+        name: Building Web Api Documentation
+        image: aheadworks/deploy-tools:latest
+        services:
+          - m24-74
+        script:
+          - pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
+    - step: &get_key
+        name: get_key
+        image: aheadworks/m2test-new:test-7.2
+        script:
+          - echo ${DEVOPS_SSH_KEY} > key
+          - printenv > env
+        artifacts:
+          - key
+          - env
+  services:
+    m24-74:
+      image: aheadworks/m2test-new:test-2.4-7.4
+pipelines:
+  tags:
+    '*.*.*':
+      - step: *deployToDevComposer
+  branches:
+    # For commits to master branch: run full set of tests
+    master:
+      - step: *build
+      - step: *validatePackage
+      - parallel:
+          - step: *eqpTest
+          - step: *staticTest
+          - step: *unitTestFirst
+          - step: *unitTestSecond
+          - step: *unitTestThird
+          - step: *unitMagento24
+          - step: *installMagento
+          - step: *installMagento24
+      - step: *ecommerce_build
+      - step: *swaggerWebApiDocBuild
+      - step: *deployToDevComposer
+      - step: *deployToAwComposer
+
+    # For every commit to develop branch: run tests
+    develop:
+        - parallel:
+            - step: *eqpTest
+            - step: *staticTest
+            - step: *unitTestSecond
+            - step: *unitMagento24
+            - step: *installMagento24
+        - step: *deployToDevComposer
+    feature/*:
+        - step: *eqpTest
+        - step: *staticTest
+        - step: *unitTestSecond
+        - step: *unitMagento24
+        - step: *installMagento24
+    bugfix/*:
+        - step: *eqpTest
+        - step: *staticTest
+        - step: *unitTestSecond
+        - step: *unitMagento24
+        - step: *installMagento24
+    release/*:
+      - step: *build
+      - step: *validatePackage
+      - parallel:
+          - step: *eqpTest
+          - step: *staticTest
+          - step: *unitTestFirst
+          - step: *unitTestSecond
+          - step: *unitTestThird
+          - step: *unitMagento24
+          - step: *installMagento
+          - step: *installMagento24
+
+  custom:
+    # Upload to AW composer manually
+    deploy-to-aw-composer:
+      - step: *build
+      - step: *validatePackage
+      - step: *deployToAwComposer
+
+    deploy-to-dev-composer:
+      - step: *deployToDevComposer
+
+    # Build pack manually
+    build-marketplace-package:
+      - step: *build
+      - step: *validatePackage
+
+    # Run tests manually
+    run-all-tests:
+      - parallel:
+          - step: *eqpTest
+          - step: *staticTest
+          - step: *unitTestSecond
+          - step: *unitMagento24
+          - step: *installMagento
+          - step: *installMagento24
+    # Run prerelease tests manually
+    run-prerelease-tests:
+      - parallel:
+          - step: *eqpTest
+          - step: *staticTest
+          - step: *unitTestFirst
+          - step: *unitTestSecond
+          - step: *unitTestThird
+          - step: *unitMagento24
+          - step: *installMagento
+          - step: *installMagento24
+
+    # set composer permissions
+    set_permissions:
+      - step: *setPermissions
+      
+    get_key:
+      - step: *get_key
+
+    #prepare build
+    ecommerce_build:
+      - step: *ecommerce_build
+
+    #prepare build
+    swagger-web-api-doc-build:
+      - step: *swaggerWebApiDocBuild
+
+    static-test-with-select-severity:
+      - variables:
+          - name: SEVERITY
+      - step: *staticTest
+
+
+    # copy this file to all modules
+
+
