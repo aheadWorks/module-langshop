@@ -5,7 +5,7 @@
         "magento/module-config": ">100.0",
         "magento/module-theme": ">100.0",
         "magento/module-ui": ">100.0",
-        "magento/module-integration": ">100.0",
+        "magento/module-integration": ">100.4.3",
         "magento/framework": ">100.0"
     },
     "type": "magento2-module",

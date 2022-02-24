@@ -1,0 +1,7 @@
+<integrations>
+    <integration name="Langshop">
+        <resources>
+            <resource name="Magento_Catalog::products" />
+        </resources>
+    </integration>
+</integrations>
