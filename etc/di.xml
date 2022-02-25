@@ -12,4 +12,21 @@
                 type="Aheadworks\Langshop\Model\Data\Processor\Composite" />
     <!-- END Data Processor Pool -->
 
+    <!-- START Scope Record Configuration -->
+    <preference for="Aheadworks\Langshop\Model\Locale\ScopeRecordInterface"
+                type="Aheadworks\Langshop\Model\Locale\ScopeRecord"/>
+    <preference for="Aheadworks\Langshop\Model\Locale\ScopeRecord\SearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <!-- END Scope Record Configuration -->
+
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Aheadworks\Langshop\Model\Locale\ScopeRecordInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="const">Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord::MAIN_TABLE_NAME</item>
+                    <item name="identifierField" xsi:type="const">Aheadworks\Langshop\Model\Locale\ScopeRecordInterface::RECORD_ID</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
