@@ -1,7 +1,7 @@
 <integrations>
     <integration name="Langshop">
         <resources>
-            <resource name="Magento_Catalog::products" />
+            <resource name="Magento_Backend::admin" />
         </resources>
     </integration>
 </integrations>
