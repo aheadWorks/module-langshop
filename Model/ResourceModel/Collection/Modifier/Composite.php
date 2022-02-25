@@ -1,9 +1,10 @@
 <?php
-namespace Aheadworks\Langshop\Model\ResourceModel\Collection;
+namespace Aheadworks\Langshop\Model\ResourceModel\Collection\Modifier;
 
+use Aheadworks\Langshop\Model\ResourceModel\Collection\ModifierInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 
-class CompositeModifier implements ModifierInterface
+class Composite implements ModifierInterface
 {
     /**
      * @var ModifierInterface[]

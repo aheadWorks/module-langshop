@@ -3,6 +3,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <preference for="Aheadworks\Langshop\Model\ResourceModel\Collection\ModifierInterface"
-                type="Aheadworks\Langshop\Model\ResourceModel\Collection\CompositeModifier" />
+                type="Aheadworks\Langshop\Model\ResourceModel\Collection\Modifier\Composite" />
 
 </config>
