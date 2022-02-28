@@ -59,13 +59,18 @@ class IntegrationTest extends TestCase
 
     public function testCreateIntegrationAndGenerateToken()
     {
-        $consumerId = 1;
-
         $this->integrationManagerMock
             ->expects($this->once())
             ->method('processIntegrationConfig')
             ->with([IntegrationService::INTEGRATION_NAME])
             ->willReturn([IntegrationService::INTEGRATION_NAME]);
+
+        $this->integrationService->createIntegration();
+    }
+
+    public function testGenerateToken()
+    {
+        $consumerId = 1;
         $integrationMock = $this->testGetIntegration();
         $integrationMock
             ->expects($this->once())
@@ -87,7 +92,7 @@ class IntegrationTest extends TestCase
             ->method('save')
             ->willReturn($integrationMock);
 
-        $this->integrationService->createIntegrationAndGenerateToken();
+        $this->integrationService->generateToken();
     }
 
     public function testGetIntegration()

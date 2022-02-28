@@ -3,7 +3,9 @@ namespace Aheadworks\Langshop\Setup\Patch\Data;
 
 use Aheadworks\Langshop\Model\Service\Integration as IntegrationService;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Exception\IntegrationException;
 
+//todo realize revertable interface
 class CreateIntegration implements DataPatchInterface
 {
     /**
@@ -24,11 +26,12 @@ class CreateIntegration implements DataPatchInterface
      * Create Langshop integration and generate access token
      *
      * @return void
-     * @throws \Exception
+     * @throws IntegrationException
      */
     public function apply()
     {
-        $this->integrationService->createIntegrationAndGenerateToken();
+        $this->integrationService->createIntegration();
+        $this->integrationService->generateToken();
     }
 
     /**

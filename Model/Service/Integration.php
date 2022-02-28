@@ -52,18 +52,30 @@ class Integration
     }
 
     /**
-     * Create Langshop integration and generate access token
+     * Create Langshop integration
      *
      * @return void
-     * @throws \Exception
      */
-    public function createIntegrationAndGenerateToken()
+    public function createIntegration()
     {
         $this->integrationManager->processIntegrationConfig([self::INTEGRATION_NAME]);
+    }
+
+    /**
+     * Generate access token
+     *
+     * @return bool
+     * @throws IntegrationException
+     */
+    public function generateToken()
+    {
         $integration = $this->getIntegration();
-        if ($this->oauthService->createAccessToken($integration->getData(IntegrationModel::CONSUMER_ID))) {
+        $isCreated = $this->oauthService->createAccessToken($integration->getData(IntegrationModel::CONSUMER_ID));
+        if ($isCreated) {
             $integration->setData(IntegrationModel::STATUS, IntegrationModel::STATUS_ACTIVE)->save();
         }
+
+        return $isCreated;
     }
 
     /**
