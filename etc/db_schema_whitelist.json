@@ -1,0 +1,17 @@
+{
+  "aw_ls_locale_scope": {
+    "column": {
+      "record_id": true,
+      "scope_id": true,
+      "scope_type": true,
+      "locale_code": true,
+      "is_primary": true
+    },
+    "index": {
+      "AW_LS_LOCALE_SCOPE_RECORD_ID": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}

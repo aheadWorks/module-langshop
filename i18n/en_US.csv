@@ -1,3 +1,5 @@
 "Locales","Locales"
 "Schema","Schema"
 "Resources","Resources"
+"Collection item modifier must implement %1","Collection item modifier must implement %1"
+"Data processor must implement %1","Data processor must implement %1"
