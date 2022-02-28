@@ -1,7 +1,10 @@
 <integrations>
     <integration name="Langshop">
         <resources>
-            <resource name="Magento_Backend::admin" />
+            <resource name="Aheadworks_Langshop::langshop"/>
+            <resource name="Aheadworks_Langshop::locales"/>
+            <resource name="Aheadworks_Langshop::schema"/>
+            <resource name="Aheadworks_Langshop::resources"/>
         </resources>
     </integration>
 </integrations>
