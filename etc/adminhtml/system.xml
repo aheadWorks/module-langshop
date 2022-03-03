@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="aheadworks" translate="label" sortOrder="300">
+            <label>Aheadworks Extensions</label>
+        </tab>
+        <section id="aw_ls" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Langshop</label>
+            <tab>aheadworks</tab>
+            <resource>Aheadworks_Langshop::langshop</resource>
+            <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
+                <label>Integration details</label>
+                <field id="consumer_key" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Consumer Key</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+                <field id="consumer_secret" translate="label" type="text" sortOrder="20" showInDefault="1">
+                    <label>Consumer Secret</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+                <field id="token" translate="label" type="text" sortOrder="30" showInDefault="1">
+                    <label>Access Token</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+                <field id="token_secret" translate="label" type="text" sortOrder="40" showInDefault="1">
+                    <label>Access Token Secret</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

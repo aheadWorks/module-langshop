@@ -3,3 +3,8 @@
 "Resources","Resources"
 "Collection item modifier must implement %1","Collection item modifier must implement %1"
 "Data processor must implement %1","Data processor must implement %1"
+"Integration details","Integration details"
+"Consumer Key","Consumer Key"
+"Consumer Secret","Consumer Secret"
+"Access Token","Access Token"
+"Access Token Secret","Access Token Secret"
