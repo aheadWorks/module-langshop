@@ -49,6 +49,7 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
+     * @codeCoverageIgnore
      */
     public function add($locale)
     {
@@ -57,6 +58,7 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
+     * @codeCoverageIgnore
      */
     public function update($locale)
     {
@@ -65,6 +67,7 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
+     * @codeCoverageIgnore
      */
     public function delete($locale)
     {
@@ -80,10 +83,15 @@ class Locale implements LocaleManagementInterface
         $scopeRecords = $this->scopeRecordRepository
             ->getList($searchCriteria)
             ->getItems();
+        $existingLocales = [];
         $locales = [];
 
         foreach ($scopeRecords as $scopeRecord) {
-            $locales[] = $this->loadHandler->load($scopeRecord);
+            $localeCode = $scopeRecord->getLocaleCode();
+            if (!isset($existingLocales[$localeCode])) {
+                $locales[] = $this->loadHandler->load($scopeRecord);
+                $existingLocales[] = $localeCode;
+            }
         }
 
         return $locales;
