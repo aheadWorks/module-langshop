@@ -2,13 +2,10 @@
 namespace Aheadworks\Langshop\Model\Locale;
 
 //todo
-/**
- * @codeCoverageIgnore
- */
+// phpcs:ignoreFile
 class SaveHandler
 {
     public function save()
     {
-
     }
 }

@@ -49,7 +49,7 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
-     * @codeCoverageIgnore
+     * @codingStandardsIgnoreStart
      */
     public function add($locale)
     {
@@ -58,7 +58,6 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
-     * @codeCoverageIgnore
      */
     public function update($locale)
     {
@@ -67,12 +66,12 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
-     * @codeCoverageIgnore
      */
     public function delete($locale)
     {
         // TODO: Implement delete() method.
     }
+    /* @codingStandardsIgnoreEnd  */
 
     /**
      * @inheritDoc
