@@ -1,7 +1,6 @@
 <?php
 namespace Aheadworks\Langshop\Model;
 
-use Aheadworks\Langshop\Api\Data\LocaleExtensionInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Magento\Framework\Model\AbstractModel;
 
@@ -101,21 +100,5 @@ class Locale extends AbstractModel implements LocaleInterface
     public function getPreviewUrl()
     {
         return $this->getData(self::PREVIEW_URL);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExtensionAttributes(LocaleExtensionInterface $extensionAttributes)
-    {
-        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
 }

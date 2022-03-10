@@ -1,9 +1,7 @@
 <?php
 namespace Aheadworks\Langshop\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
-interface LocaleInterface extends ExtensibleDataInterface
+interface LocaleInterface
 {
     const LOCALE = 'locale';
     const NAME = 'name';
@@ -101,21 +99,4 @@ interface LocaleInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setPreviewUrl($previewUrl);
-
-    /**
-     * Retrieve existing extension attributes object or create a new one
-     *
-     * @return \Aheadworks\Langshop\Api\Data\LocaleExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object
-     *
-     * @param \Aheadworks\Langshop\Api\Data\LocaleExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Aheadworks\Langshop\Api\Data\LocaleExtensionInterface $extensionAttributes
-    );
 }
