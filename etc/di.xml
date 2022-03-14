@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Aheadworks\Langshop\Api\Data\LocaleInterface"
+                type="Aheadworks\Langshop\Model\Locale"/>
+    <preference for="Aheadworks\Langshop\Api\LocaleManagementInterface"
+                type="Aheadworks\Langshop\Model\Service\Locale" />
 
     <!-- START Collection Modifier Pool -->
     <preference for="Aheadworks\Langshop\Model\ResourceModel\Collection\ModifierInterface"
@@ -26,6 +30,19 @@
                     <item name="entityTableName" xsi:type="const">Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord::MAIN_TABLE_NAME</item>
                     <item name="identifierField" xsi:type="const">Aheadworks\Langshop\Model\Locale\ScopeRecordInterface::RECORD_ID</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Aheadworks\Langshop\Model\Locale\LoadHandler">
+        <arguments>
+            <argument name="processor" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Composite</argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\Locale\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="url" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Url</item>
             </argument>
         </arguments>
     </type>
