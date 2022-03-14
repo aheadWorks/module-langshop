@@ -67,7 +67,7 @@ class Locale extends AbstractModel implements LocaleInterface
      */
     public function getPublished()
     {
-        return $this->getData(self::PUBLISHED);
+        return true;
     }
 
     /**

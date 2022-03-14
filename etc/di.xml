@@ -33,4 +33,17 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Aheadworks\Langshop\Model\Locale\LoadHandler">
+        <arguments>
+            <argument name="processor" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Composite</argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\Locale\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="url" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Url</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
