@@ -31,8 +31,7 @@
                        showInWebsite="0"
                        showInStore="0">
                     <label>Store views and websites to translate</label>
-                    <!-- TODO: LSM2-26 use correct custom source model -->
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <source_model>Aheadworks\Langshop\Model\Source\Locale\Scope\ListToTranslate</source_model>
                 </field>
             </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
