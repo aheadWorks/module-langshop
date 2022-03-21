@@ -1,5 +1,5 @@
 <?php
-namespace Aheadworks\Langshop\Api\Data\Schema\Resource;
+namespace Aheadworks\Langshop\Api\Data\Schema\TranslatableResource;
 
 interface FieldInterface
 {

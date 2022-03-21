@@ -1,8 +1,8 @@
 <?php
-namespace Aheadworks\Langshop\Model\Schema\Resource;
+namespace Aheadworks\Langshop\Model\Schema\TranslatableResource;
 
 
-use Aheadworks\Langshop\Api\Data\Schema\Resource\SortingInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class Sorting extends AbstractModel implements SortingInterface

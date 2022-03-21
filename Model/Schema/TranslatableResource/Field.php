@@ -1,8 +1,8 @@
 <?php
-namespace Aheadworks\Langshop\Model\Schema\Resource;
+namespace Aheadworks\Langshop\Model\Schema\TranslatableResource;
 
 
-use Aheadworks\Langshop\Api\Data\Schema\Resource\FieldInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class Field extends AbstractModel implements FieldInterface
