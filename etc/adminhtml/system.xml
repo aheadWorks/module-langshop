@@ -35,6 +35,26 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+
+            <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
+                <label>Integration details</label>
+                <field id="consumer_key" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Consumer Key</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+                <field id="consumer_secret" translate="label" type="text" sortOrder="20" showInDefault="1">
+                    <label>Consumer Secret</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+                <field id="token" translate="label" type="text" sortOrder="30" showInDefault="1">
+                    <label>Access Token</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+                <field id="token_secret" translate="label" type="text" sortOrder="40" showInDefault="1">
+                    <label>Access Token Secret</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>
