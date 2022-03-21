@@ -2,12 +2,12 @@
 namespace Aheadworks\Langshop\Test\Unit\Model\Service;
 
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\SearchResultsInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterface;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface;
+use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Service\Locale as LocaleService;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\SaveHandler;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\Repository as ScopeRecordRepository;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -62,7 +62,7 @@ class LocaleTest extends TestCase
     {
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $searchResultMock = $this->createMock(SearchResultsInterface::class);
-        $scopeRecord = $this->createMock(ScopeRecordInterface::class);
+        $scopeRecord = $this->createMock(RecordInterface::class);
         $locale = $this->createMock(LocaleInterface::class);
         $scopeRecords = [$scopeRecord];
         $locales = [$locale];

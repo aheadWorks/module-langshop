@@ -1,12 +1,12 @@
 <?php
-namespace Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord;
+namespace Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record;
 
 use Aheadworks\Langshop\Model\ResourceModel\AbstractCollection;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record
     as LocaleScopeRecordResourceModel;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterface
+use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface
     as LocaleScopeRecordInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord
+use Aheadworks\Langshop\Model\Locale\Scope\Record
     as LocaleScopeRecord;
 
 class Collection extends AbstractCollection

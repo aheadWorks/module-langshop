@@ -1,15 +1,15 @@
 <?php
-namespace Aheadworks\Langshop\Model\Locale\ScopeRecord;
+namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord as ResourceModel;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterface as EntityInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterfaceFactory as EntityInterfaceFactory;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord as EntityModel;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord\Collection;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord\CollectionFactory;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\SearchResultsInterface
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record as ResourceModel;
+use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface as EntityInterface;
+use Aheadworks\Langshop\Model\Locale\Scope\RecordInterfaceFactory as EntityInterfaceFactory;
+use Aheadworks\Langshop\Model\Locale\Scope\Record as EntityModel;
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\Collection;
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\CollectionFactory;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface
     as SearchResultsInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\SearchResultsInterfaceFactory
+use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterfaceFactory
     as SearchResultsInterfaceFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;

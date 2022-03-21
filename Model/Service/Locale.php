@@ -4,7 +4,7 @@ namespace Aheadworks\Langshop\Model\Service;
 use Aheadworks\Langshop\Api\LocaleManagementInterface;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\SaveHandler;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\Repository as ScopeRecordRepository;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class Locale implements LocaleManagementInterface

@@ -1,11 +1,11 @@
 <?php
-namespace Aheadworks\Langshop\Model\ResourceModel\Locale;
+namespace Aheadworks\Langshop\Model\ResourceModel\Locale\Scope;
 
 use Aheadworks\Langshop\Model\ResourceModel\AbstractResourceModel;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterface
+use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface
     as LocaleScopeRecordInterface;
 
-class ScopeRecord extends AbstractResourceModel
+class Record extends AbstractResourceModel
 {
     /**#@+
      * Constants defined for tables

@@ -1,10 +1,8 @@
 <?php
-namespace Aheadworks\Langshop\Model\Locale\ScopeRecord;
+namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
-use Magento\Framework\Api\SearchResultsInterface
-    as FrameworkSearchResultsInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterface
-    as LocaleScopeRecordInterface;
+use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
+use Magento\Framework\Api\SearchResultsInterface as FrameworkSearchResultsInterface;
 
 interface SearchResultsInterface extends FrameworkSearchResultsInterface
 {
