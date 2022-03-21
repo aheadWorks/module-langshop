@@ -5,6 +5,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Escaper as LocaleScopeEscaper;
 use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceModel;
 use Aheadworks\Langshop\Model\Source\AbstractOption as AbstractOptionSourceModel;
+use Aheadworks\Langshop\Model\Locale\Scope\UidResolver as LocaleScopeUidResolver;
 
 class ListToTranslate extends AbstractOptionSourceModel
 {
@@ -19,15 +20,23 @@ class ListToTranslate extends AbstractOptionSourceModel
     private $localeScopeEscaper;
 
     /**
+     * @var LocaleScopeUidResolver
+     */
+    private $localeScopeUidResolver;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param LocaleScopeEscaper $localeScopeEscaper
+     * @param LocaleScopeUidResolver $localeScopeUidResolver
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        LocaleScopeEscaper $localeScopeEscaper
+        LocaleScopeEscaper $localeScopeEscaper,
+        LocaleScopeUidResolver $localeScopeUidResolver
     ) {
         $this->storeManager = $storeManager;
         $this->localeScopeEscaper = $localeScopeEscaper;
+        $this->localeScopeUidResolver = $localeScopeUidResolver;
     }
 
     /**
@@ -50,22 +59,25 @@ class ListToTranslate extends AbstractOptionSourceModel
         foreach ($websiteList as $website) {
             $optionList[] = [
                 'label' => $this->localeScopeEscaper->getSanitizedName($website->getName()),
-                //TODO: LSM2-26 use the separate class to encode/decode scope UID
-                'value' => LocaleScopeTypeSourceModel::WEBSITE . '_' . $website->getId(),
+                'value' => $this->localeScopeUidResolver->getUid(
+                    LocaleScopeTypeSourceModel::WEBSITE,
+                    $website->getId()
+                ),
             ];
             $storeListOfWebsite = [];
             foreach ($storeList as $store) {
                 if ($store->getWebsiteId() == $website->getId()) {
                     $storeListOfWebsite[] = [
                         'label' => $this->localeScopeEscaper->getSanitizedName($store->getName()),
-                        //TODO: LSM2-26 use the separate class to encode/decode scope UID
-                        'value' => LocaleScopeTypeSourceModel::STORE . '_' . $store->getId(),
+                        'value' => $this->localeScopeUidResolver->getUid(
+                            LocaleScopeTypeSourceModel::STORE,
+                            $store->getId()
+                        ),
                     ];
                 }
             }
             $optionList[] = [
                 'label' => __('Store views of %1', $this->localeScopeEscaper->getSanitizedName($website->getName())),
-                //TODO: LSM2-26 use the separate class to encode/decode scope UID
                 'value' => array_values($storeListOfWebsite),
             ];
         }
