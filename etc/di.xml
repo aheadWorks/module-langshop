@@ -5,6 +5,10 @@
                 type="Aheadworks\Langshop\Model\Locale"/>
     <preference for="Aheadworks\Langshop\Api\LocaleManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Locale" />
+    <preference for="Aheadworks\Langshop\Api\Data\SchemaInterface"
+                type="Aheadworks\Langshop\Model\Schema"/>
+    <preference for="Aheadworks\Langshop\Api\SchemaManagementInterface"
+                type="Aheadworks\Langshop\Model\Service\Schema" />
 
     <!-- START Collection Modifier Pool -->
     <preference for="Aheadworks\Langshop\Model\ResourceModel\Collection\ModifierInterface"
@@ -43,6 +47,29 @@
         <arguments>
             <argument name="processorList" xsi:type="array">
                 <item name="url" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Url</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Aheadworks\Langshop\Model\Service\Schema">
+        <arguments>
+            <argument name="processor" xsi:type="object">Aheadworks\Langshop\Model\Schema\Processor\Composite</argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\Schema\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="general" xsi:type="object">Aheadworks\Langshop\Model\Schema\Processor\General</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\Schema\Processor\General">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="version" xsi:type="string">1.0.0</item>
+                <item name="possibilities" xsi:type="array">
+                    <item name="locale.get" xsi:type="string"/>
+                </item>
             </argument>
         </arguments>
     </type>
