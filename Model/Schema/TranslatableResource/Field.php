@@ -1,7 +1,6 @@
 <?php
 namespace Aheadworks\Langshop\Model\Schema\TranslatableResource;
 
-
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
 use Magento\Framework\Model\AbstractModel;
 

@@ -1,7 +1,6 @@
 <?php
 namespace Aheadworks\Langshop\Model\Schema\TranslatableResource;
 
-
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
 use Magento\Framework\Model\AbstractModel;
 
