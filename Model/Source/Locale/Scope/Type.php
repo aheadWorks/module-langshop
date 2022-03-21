@@ -1,9 +1,9 @@
 <?php
 namespace Aheadworks\Langshop\Model\Source\Locale\Scope;
 
-use Magento\Framework\Data\OptionSourceInterface;
+use Aheadworks\Langshop\Model\Source\AbstractOption as AbstractOptionSourceModel;
 
-class Type implements OptionSourceInterface
+class Type extends AbstractOptionSourceModel
 {
     /**#@+
      * Supported locale scope type values
@@ -14,28 +14,7 @@ class Type implements OptionSourceInterface
     /**#@-*/
 
     /**
-     * @var array|null
-     */
-    private $optionList;
-
-    /**
-     * Get option list
-     *
-     * @return array
-     */
-    public function toOptionArray()
-    {
-        if ($this->optionList !== null) {
-            return $this->optionList;
-        }
-
-        $this->optionList = $this->getOptionList();
-
-        return $this->optionList;
-    }
-
-    /**
-     * Retrieve the list of options
+     * Retrieve the list of locale scope types
      *
      * @return array
      */

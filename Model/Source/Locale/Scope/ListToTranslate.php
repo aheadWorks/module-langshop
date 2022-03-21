@@ -1,12 +1,12 @@
 <?php
 namespace Aheadworks\Langshop\Model\Source\Locale\Scope;
 
-use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceModel;
+use Aheadworks\Langshop\Model\Source\AbstractOption as AbstractOptionSourceModel;
 
-class ListToTranslate implements OptionSourceInterface
+class ListToTranslate extends AbstractOptionSourceModel
 {
     /**
      * @var StoreManagerInterface
@@ -17,11 +17,6 @@ class ListToTranslate implements OptionSourceInterface
      * @var Escaper
      */
     private $escaper;
-
-    /**
-     * @var array|null
-     */
-    private $optionList;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -40,23 +35,7 @@ class ListToTranslate implements OptionSourceInterface
      *
      * @return array
      */
-    public function toOptionArray()
-    {
-        if ($this->optionList !== null) {
-            return $this->optionList;
-        }
-
-        $this->optionList = $this->getOptionList();
-
-        return $this->optionList;
-    }
-
-    /**
-     * Retrieve the list of options
-     *
-     * @return array
-     */
-    private function getOptionList()
+    protected function getOptionList()
     {
         $optionList = [];
         $websiteList = $this->storeManager->getWebsites(
@@ -100,7 +79,7 @@ class ListToTranslate implements OptionSourceInterface
      * @param string $scopeName
      *
      * @return string
-     * TODO: consider refactoring to the separate sanitized-class
+     * TODO: consider refactoring to the separate sanitizer-class
      * origin: \Magento\Store\Ui\Component\Listing\Column\Store\Options::sanitizeName
      */
     private function getSanitizedName($scopeName)
