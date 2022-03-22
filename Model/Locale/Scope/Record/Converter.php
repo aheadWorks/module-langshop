@@ -1,9 +1,9 @@
 <?php
 namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterfaceFactory;
-use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Magento\Framework\DataObject\Copy;
 
 class Converter

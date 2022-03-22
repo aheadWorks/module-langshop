@@ -1,6 +1,7 @@
 <?php
 namespace Aheadworks\Langshop\Model\Locale\Scope;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record as LocaleScopeRecordResourceModel;
 use Magento\Framework\Model\AbstractModel;
 

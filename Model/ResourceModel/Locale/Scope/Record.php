@@ -1,9 +1,8 @@
 <?php
 namespace Aheadworks\Langshop\Model\ResourceModel\Locale\Scope;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Model\ResourceModel\AbstractResourceModel;
-use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface
-    as LocaleScopeRecordInterface;
 
 class Record extends AbstractResourceModel
 {

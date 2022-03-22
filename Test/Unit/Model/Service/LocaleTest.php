@@ -1,13 +1,13 @@
 <?php
 namespace Aheadworks\Langshop\Test\Unit\Model\Service;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface;
-use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface;
-use Aheadworks\Langshop\Model\Service\Locale as LocaleService;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\SaveHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface;
+use Aheadworks\Langshop\Model\Service\Locale as LocaleService;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use PHPUnit\Framework\MockObject\MockObject;

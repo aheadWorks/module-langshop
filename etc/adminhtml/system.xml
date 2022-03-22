@@ -32,6 +32,7 @@
                        showInStore="0">
                     <label>Store views and websites to translate</label>
                     <source_model>Aheadworks\Langshop\Model\Source\Locale\Scope\ListToTranslate</source_model>
+                    <backend_model>Aheadworks\Langshop\Model\Config\Backend\Locale\Scope\ListToTranslate</backend_model>
                 </field>
             </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">

@@ -40,7 +40,7 @@ class ListToTranslate extends AbstractOptionSourceModel
     }
 
     /**
-     * Retrieve the list of scopes, allowed for translation
+     * Retrieve the list of scopes, allowed for translation, where values are UIDs
      *
      * @return array
      */

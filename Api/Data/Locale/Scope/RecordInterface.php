@@ -1,5 +1,5 @@
 <?php
-namespace Aheadworks\Langshop\Model\Locale\Scope;
+namespace Aheadworks\Langshop\Api\Data\Locale\Scope;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 

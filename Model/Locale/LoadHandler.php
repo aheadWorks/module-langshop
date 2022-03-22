@@ -1,9 +1,9 @@
 <?php
 namespace Aheadworks\Langshop\Model\Locale;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Converter as LocaleScopeRecordConverter;
-use Aheadworks\Langshop\Model\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 class LoadHandler
