@@ -59,4 +59,14 @@ class Config
             $configScopeCode
         );
     }
+
+    /**
+     * Retrieve default locale code
+     *
+     * @return string
+     */
+    public function getDefaultLocaleCode()
+    {
+        return $this->localeResolver->getDefaultLocale();
+    }
 }
