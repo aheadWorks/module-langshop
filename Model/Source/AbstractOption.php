@@ -6,9 +6,9 @@ use Magento\Framework\Data\OptionSourceInterface;
 abstract class AbstractOption implements OptionSourceInterface
 {
     /**
-     * @var array|null
+     * @var array
      */
-    protected $optionList;
+    protected $optionList = [];
 
     /**
      * Get option list
@@ -17,11 +17,9 @@ abstract class AbstractOption implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        if ($this->optionList !== null) {
-            return $this->optionList;
+        if (empty($this->optionList)) {
+            $this->optionList = $this->getOptionList();
         }
-
-        $this->optionList = $this->getOptionList();
 
         return $this->optionList;
     }
