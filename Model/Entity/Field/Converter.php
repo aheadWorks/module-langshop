@@ -1,0 +1,123 @@
+<?php
+namespace Aheadworks\Langshop\Model\Entity\Field;
+
+use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterfaceFactory;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterfaceFactory;
+use Aheadworks\Langshop\Model\Entity\Field;
+use Aheadworks\Langshop\Model\Entity\Field\Sorting\DirectionList;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+
+class Converter
+{
+    /**
+     * @var DirectionList
+     */
+    private $directionList;
+
+    /**
+     * @var FieldInterfaceFactory
+     */
+    private $fieldSchemaFactory;
+
+    /**
+     * @var SortingInterfaceFactory
+     */
+    private $sortingElementFactory;
+
+    /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
+     * @param FieldInterfaceFactory $fieldSchemaFactory
+     * @param SortingInterfaceFactory $sortingElementFactory
+     * @param EventManager $eventManager
+     * @param DirectionList $directionList
+     */
+    public function __construct(
+        FieldInterfaceFactory $fieldSchemaFactory,
+        SortingInterfaceFactory $sortingElementFactory,
+        EventManager $eventManager,
+        DirectionList $directionList
+    ) {
+        $this->fieldSchemaFactory = $fieldSchemaFactory;
+        $this->sortingElementFactory = $sortingElementFactory;
+        $this->eventManager = $eventManager;
+        $this->directionList = $directionList;
+    }
+
+    /**
+     * Convert entity fields to resource schema field elements
+     *
+     * @param Field[] $fields
+     * @return array
+     */
+    public function convert(array $fields = [])
+    {
+        $result = [];
+        foreach ($fields as $field) {
+            $fieldSchema = $this->getFieldSchema($field);
+            $sortingElements = $this->getSortingElements($field);
+
+            $this->eventManager->dispatch('aw_ls_schema_field_convert', [
+                'sortingElements' => $sortingElements,
+                'fieldSchema' => $fieldSchema,
+                'field' => $field
+            ]);
+
+            $result[ResourceInterface::FIELDS][] = $fieldSchema;
+            foreach ($sortingElements as $sortingElement) {
+                $result[ResourceInterface::SORTING][] = $sortingElement;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get field schema
+     *
+     * @param Field $field
+     * @return FieldInterface
+     */
+    private function getFieldSchema(Field $field)
+    {
+        return $this->fieldSchemaFactory->create([
+            FieldInterface::KEY => $field->getCode(),
+            FieldInterface::LABEL => $field->getLabel(),
+            FieldInterface::TYPE => $field->getType(),
+            FieldInterface::SORT_ORDER => $field->getSortOrder(),
+            FieldInterface::IS_TRANSLATABLE => $field->isTranslatable(),
+            FieldInterface::FILTER => $field->isFilterable()
+                ? $field->getFilterType()
+                : 'none'
+        ]);
+    }
+
+    /**
+     * Get sorting elements
+     *
+     * @param Field $field
+     * @return SortingInterface[]
+     */
+    private function getSortingElements(Field $field)
+    {
+        $sortingElements = [];
+        if ($field->isSortable()) {
+            foreach ($this->directionList->get($field->getType()) as $direction => $labelEnding) {
+                $sortingElements[] = $this->sortingElementFactory->create([
+                    SortingInterface::FIELD => $field->getCode(),
+                    SortingInterface::LABEL => $field->getLabel() . ' ' . $labelEnding,
+                    SortingInterface::DIRECTION => $direction,
+                    SortingInterface::KEY => $field->getCode() . '_' . $direction
+                ]);
+            }
+        }
+
+        return $sortingElements;
+    }
+}
