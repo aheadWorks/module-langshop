@@ -60,6 +60,7 @@
         <arguments>
             <argument name="processorList" xsi:type="array">
                 <item name="general" xsi:type="object">Aheadworks\Langshop\Model\Schema\Processor\General</item>
+                <item name="translatable_resources" xsi:type="object">Aheadworks\Langshop\Model\Schema\Processor\TranslatableResources</item>
             </argument>
         </arguments>
     </type>
