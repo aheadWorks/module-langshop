@@ -94,17 +94,17 @@ interface RecordInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one
      *
-     * @return \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface|null
+     * @return \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object
      *
-     * @param \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface $extensionAttributes
+     * @param \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface $extensionAttributes
+        \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes
     );
 }

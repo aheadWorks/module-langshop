@@ -107,7 +107,7 @@ class Record extends AbstractModel implements RecordInterface
      * {@inheritdoc}
      */
     public function setExtensionAttributes(
-        \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface $extensionAttributes
+        \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes
     ) {
         return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
