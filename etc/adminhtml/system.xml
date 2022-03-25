@@ -1,13 +1,40 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="aheadworks" translate="label" sortOrder="300">
+        <tab id="aheadworks" translate="label" sortOrder="200">
             <label>Aheadworks Extensions</label>
         </tab>
-        <section id="aw_ls" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+        <section id="aw_ls"
+                 translate="label"
+                 type="text"
+                 sortOrder="10"
+                 showInDefault="1"
+                 showInWebsite="1"
+                 showInStore="1">
             <label>Langshop</label>
             <tab>aheadworks</tab>
             <resource>Aheadworks_Langshop::langshop</resource>
+            <group id="general"
+                   translate="label"
+                   type="text"
+                   sortOrder="10"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>General Settings</label>
+                <field id="scope_list_to_translate"
+                       translate="label"
+                       type="multiselect"
+                       sortOrder="10"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Store views and websites to translate</label>
+                    <source_model>Aheadworks\Langshop\Model\Source\Locale\Scope\ListToTranslate</source_model>
+                    <backend_model>Aheadworks\Langshop\Model\Config\Backend\Locale\Scope\ListToTranslate</backend_model>
+                </field>
+            </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
                 <label>Integration details</label>
                 <field id="consumer_key" translate="label" type="text" sortOrder="10" showInDefault="1">

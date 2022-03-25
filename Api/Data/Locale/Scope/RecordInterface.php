@@ -1,9 +1,9 @@
 <?php
-namespace Aheadworks\Langshop\Model\Locale;
+namespace Aheadworks\Langshop\Api\Data\Locale\Scope;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
-interface ScopeRecordInterface extends ExtensibleDataInterface
+interface RecordInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants defined for keys of the data array.
@@ -94,17 +94,17 @@ interface ScopeRecordInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one
      *
-     * @return \Aheadworks\Langshop\Model\Locale\ScopeRecordExtensionInterface|null
+     * @return \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object
      *
-     * @param \Aheadworks\Langshop\Model\Locale\ScopeRecordExtensionInterface $extensionAttributes
+     * @param \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Aheadworks\Langshop\Model\Locale\ScopeRecordExtensionInterface $extensionAttributes
+        \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface $extensionAttributes
     );
 }

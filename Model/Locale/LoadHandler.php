@@ -1,16 +1,17 @@
 <?php
 namespace Aheadworks\Langshop\Model\Locale;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\Converter;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Converter as LocaleScopeRecordConverter;
 use Magento\Framework\Exception\LocalizedException;
 
 class LoadHandler
 {
     /**
-     * @var Converter
+     * @var LocaleScopeRecordConverter
      */
-    private $converter;
+    private $localeScopeRecordConverter;
 
     /**
      * @var ProcessorInterface
@@ -18,25 +19,25 @@ class LoadHandler
     private $processor;
 
     /**
-     * @param Converter $converter
+     * @param LocaleScopeRecordConverter $localeScopeRecordConverter
      * @param ProcessorInterface $processor
      */
     public function __construct(
-        Converter $converter,
+        LocaleScopeRecordConverter $localeScopeRecordConverter,
         ProcessorInterface $processor
     ) {
-        $this->converter = $converter;
+        $this->localeScopeRecordConverter = $localeScopeRecordConverter;
         $this->processor = $processor;
     }
 
     /**
-     * @param ScopeRecordInterface $scopeRecord
-     * @throws LocalizedException
+     * @param LocaleScopeRecordInterface $scopeRecord
      * @return LocaleInterface
+     * @throws LocalizedException
      */
-    public function load(ScopeRecordInterface $scopeRecord)
+    public function load(LocaleScopeRecordInterface $scopeRecord)
     {
-        $locale = $this->converter->toLocaleDataModel($scopeRecord);
+        $locale = $this->localeScopeRecordConverter->toLocaleDataModel($scopeRecord);
 
         return $this->processor->process($locale, $scopeRecord->getData());
     }

@@ -1,11 +1,11 @@
 <?php
-namespace Aheadworks\Langshop\Model\Locale;
+namespace Aheadworks\Langshop\Model\Locale\Scope;
 
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord
-    as LocaleScopeRecordResourceModel;
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record as LocaleScopeRecordResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
-class ScopeRecord extends AbstractModel implements ScopeRecordInterface
+class Record extends AbstractModel implements RecordInterface
 {
     /**
      * {@inheritdoc}
@@ -107,7 +107,7 @@ class ScopeRecord extends AbstractModel implements ScopeRecordInterface
      * {@inheritdoc}
      */
     public function setExtensionAttributes(
-        \Aheadworks\Langshop\Model\Locale\ScopeRecordExtensionInterface $extensionAttributes
+        \Aheadworks\Langshop\Model\Locale\Scope\RecordExtensionInterface $extensionAttributes
     ) {
         return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }

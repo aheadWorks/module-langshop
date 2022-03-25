@@ -1,9 +1,9 @@
 <?php
-namespace Aheadworks\Langshop\Model\Locale\ScopeRecord;
+namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterfaceFactory;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterface;
 use Magento\Framework\DataObject\Copy;
 
 class Converter
@@ -33,10 +33,10 @@ class Converter
     /**
      * Convert scope record to locale data model
      *
-     * @param ScopeRecordInterface $scopeRecord
+     * @param LocaleScopeRecordInterface $scopeRecord
      * @return LocaleInterface
      */
-    public function toLocaleDataModel(ScopeRecordInterface $scopeRecord)
+    public function toLocaleDataModel(LocaleScopeRecordInterface $scopeRecord)
     {
         $locale = $this->localeFactory->create();
 

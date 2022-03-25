@@ -1,23 +1,21 @@
 <?php
-namespace Aheadworks\Langshop\Model\Locale\ScopeRecord;
+namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord as ResourceModel;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterface as EntityInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecordInterfaceFactory as EntityInterfaceFactory;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord as EntityModel;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord\Collection;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\ScopeRecord\CollectionFactory;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\SearchResultsInterface
-    as SearchResultsInterface;
-use Aheadworks\Langshop\Model\Locale\ScopeRecord\SearchResultsInterfaceFactory
-    as SearchResultsInterfaceFactory;
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as EntityInterface;
+use Aheadworks\Langshop\Model\Locale\Scope\Record as EntityModel;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface as SearchResultsInterface;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterfaceFactory as SearchResultsInterfaceFactory;
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterfaceFactory as EntityInterfaceFactory;
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record as ResourceModel;
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\Collection;
+use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\CollectionFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Api\SearchCriteriaInterface;
 
 class Repository
 {
