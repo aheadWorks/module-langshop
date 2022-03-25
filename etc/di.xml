@@ -74,4 +74,16 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Aheadworks\Langshop\Model\Entity\Field\Sorting\DirectionList">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="asc" xsi:type="string"/>
+                    <item name="desc" xsi:type="string"/>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
