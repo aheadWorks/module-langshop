@@ -1,10 +1,9 @@
 <?php
 namespace Aheadworks\Langshop\Model\Entity;
 
-use Aheadworks\Langshop\Api\Data\Schema\Resource\FieldInterface;
 use Magento\Framework\Model\AbstractModel;
 
-class Field extends AbstractModel implements FieldInterface
+class Field extends AbstractModel
 {
     const RESOURCE_TYPE = 'resource_type';
     const CODE = 'code';

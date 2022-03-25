@@ -61,6 +61,7 @@
             <argument name="processorList" xsi:type="array">
                 <item name="general" xsi:type="object">Aheadworks\Langshop\Model\Schema\Processor\General</item>
                 <item name="translatable_resources" xsi:type="object">Aheadworks\Langshop\Model\Schema\Processor\TranslatableResources</item>
+                <item name="translatable_resource_groups" xsi:type="object">Aheadworks\Langshop\Model\Schema\Processor\TranslatableResourceGroups</item>
             </argument>
         </arguments>
     </type>
@@ -85,5 +86,23 @@
             </argument>
         </arguments>
     </type>
+    <type name="Aheadworks\Langshop\Model\Schema\ResourceGroup\Pool">
+        <arguments>
+            <argument name="groupList" xsi:type="array">
+                <item name="general" xsi:type="object">Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup\General</item>
+            </argument>
+        </arguments>
+    </type>
 
+    <virtualType name="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup\General"
+                 type="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="id" xsi:type="string">1</item>
+                <item name="title" xsi:type="string">General</item>
+                <item name="sortOrder" xsi:type="string">1</item>
+                <item name="resources" xsi:type="array"></item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
