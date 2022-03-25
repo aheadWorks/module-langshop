@@ -1,8 +1,8 @@
 <?php
 namespace Aheadworks\Langshop\Api\Data\Schema;
 
-use Aheadworks\Langshop\Api\Data\Schema\Resource\FieldInterface;
-use Aheadworks\Langshop\Api\Data\Schema\Resource\SortingInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
 
 interface ResourceInterface
 {
