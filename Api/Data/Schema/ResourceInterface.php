@@ -1,9 +1,6 @@
 <?php
 namespace Aheadworks\Langshop\Api\Data\Schema;
 
-use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
-use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
-
 interface ResourceInterface
 {
     const RESOURCE = 'resource';
@@ -61,7 +58,7 @@ interface ResourceInterface
     /**
      * Set fields
      *
-     * @param FieldInterface[] $fields
+     * @param \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface[] $fields
      * @return $this
      */
     public function setFields($fields);
@@ -69,14 +66,14 @@ interface ResourceInterface
     /**
      * Get fields
      *
-     * @return FieldInterface[]
+     * @return \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface[]
      */
     public function getFields();
 
     /**
      * Set sorting
      *
-     * @param SortingInterface[] $sorting
+     * @param \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface[] $sorting
      * @return $this
      */
     public function setSorting(array $sorting);
@@ -84,7 +81,7 @@ interface ResourceInterface
     /**
      * Get sorting
      *
-     * @return SortingInterface[]
+     * @return \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface[]
      */
     public function getSorting();
 

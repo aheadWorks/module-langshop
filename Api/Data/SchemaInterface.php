@@ -1,9 +1,6 @@
 <?php
 namespace Aheadworks\Langshop\Api\Data;
 
-use Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface;
-use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
-
 interface SchemaInterface
 {
     const VERSION = 'version';
@@ -29,7 +26,7 @@ interface SchemaInterface
     /**
      * Set translatable resources
      *
-     * @param ResourceInterface[] $resources
+     * @param \Aheadworks\Langshop\Api\Data\Schema\ResourceInterface[] $resources
      * @return $this
      */
     public function setTranslatableResources($resources);
@@ -37,7 +34,7 @@ interface SchemaInterface
     /**
      * Get translatable resources
      *
-     * @return ResourceInterface[]
+     * @return \Aheadworks\Langshop\Api\Data\Schema\ResourceInterface[]
      */
     public function getTranslatableResources();
 
@@ -59,7 +56,7 @@ interface SchemaInterface
     /**
      * Set translatable resource groups
      *
-     * @param ResourceGroupInterface[] $resourceGroups
+     * @param \Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface[] $resourceGroups
      * @return $this
      */
     public function setTranslatableResourceGroups($resourceGroups);
@@ -67,7 +64,7 @@ interface SchemaInterface
     /**
      * Get translatable resource groups
      *
-     * @return ResourceGroupInterface[]
+     * @return \Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface[]
      */
     public function getTranslatableResourceGroups();
 }
