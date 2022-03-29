@@ -5,8 +5,19 @@
                 type="Aheadworks\Langshop\Model\Locale"/>
     <preference for="Aheadworks\Langshop\Api\LocaleManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Locale" />
+
     <preference for="Aheadworks\Langshop\Api\Data\SchemaInterface"
                 type="Aheadworks\Langshop\Model\Schema"/>
+    <preference for="Aheadworks\Langshop\Api\Data\Schema\ResourceInterface"
+                type="Aheadworks\Langshop\Model\Schema\TranslatableResource"/>
+    <preference for="Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface"
+                type="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup"/>
+    <preference for="Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface"
+                type="Aheadworks\Langshop\Model\Schema\TranslatableResource\Field"/>
+    <preference for="Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface"
+                type="Aheadworks\Langshop\Model\Schema\TranslatableResource\Sorting"/>
+    <preference for="Aheadworks\Langshop\Api\Data\Schema\ResourceGroup\ResourceInterface"
+                type="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel"/>
     <preference for="Aheadworks\Langshop\Api\SchemaManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Schema" />
 
