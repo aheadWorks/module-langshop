@@ -6,6 +6,7 @@ use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\SaveHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 class Locale implements LocaleManagementInterface
 {
@@ -49,27 +50,30 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
+     * @throws WebapiException
      * @codingStandardsIgnoreStart
      */
-    public function add($locale)
+    public function add()
     {
-        // TODO: Implement add() method.
+        throw new WebapiException(__('This method is not implemented yet.'), 501, 501);
     }
 
     /**
      * @inheritDoc
+     * @throws WebapiException
      */
     public function update($locale)
     {
-        // TODO: Implement update() method.
+        throw new WebapiException(__('This method is not implemented yet.'), 501, 501);
     }
 
     /**
      * @inheritDoc
+     * @throws WebapiException
      */
     public function delete($locale)
     {
-        // TODO: Implement delete() method.
+        throw new WebapiException(__('This method is not implemented yet.'), 501, 501);
     }
     /* @codingStandardsIgnoreEnd  */
 

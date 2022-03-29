@@ -6,24 +6,23 @@ interface LocaleManagementInterface
     /**
      * Add locale
      *
-     * @param \Aheadworks\Langshop\Api\Data\LocaleInterface $locale
-     * @return \Aheadworks\Langshop\Api\Data\LocaleInterface
+     * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
      */
-    public function add($locale);
+    public function add();
 
     /**
      * Update locale
      *
-     * @param \Aheadworks\Langshop\Api\Data\LocaleInterface $locale
-     * @return \Aheadworks\Langshop\Api\Data\LocaleInterface
+     * @param string $locale
+     * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
      */
     public function update($locale);
 
     /**
      * Delete locale
      *
-     * @param \Aheadworks\Langshop\Api\Data\LocaleInterface $locale
-     * @return bool
+     * @param string $locale
+     * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
      */
     public function delete($locale);
 
