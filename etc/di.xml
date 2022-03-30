@@ -112,16 +112,10 @@
             <argument name="label" xsi:type="string">Product Attribute</argument>
             <argument name="description" xsi:type="string">Product Attribute</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
+            <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\ProductAttribute</argument>
         </arguments>
     </virtualType>
 
-    <type name="Aheadworks\Langshop\Model\Entity\Field\Collector\Pool">
-        <arguments>
-            <argument name="collectorList" xsi:type="array">
-                <item name="product_attribute" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\ProductAttribute</item>
-            </argument>
-        </arguments>
-    </type>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\ProductAttribute"
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector">
         <arguments>
