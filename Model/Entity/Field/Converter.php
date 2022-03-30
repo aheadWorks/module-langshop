@@ -58,7 +58,7 @@ class Converter
      */
     public function convert(array $fields = [])
     {
-        $result = [];
+        $result = [ResourceInterface::FIELDS => [], ResourceInterface::SORTING => []];
         foreach ($fields as $field) {
             $fieldSchema = $this->getFieldSchema($field);
             $sortingElements = $this->getSortingElements($field);
@@ -86,15 +86,16 @@ class Converter
      */
     private function getFieldSchema(Field $field)
     {
-        return $this->fieldSchemaFactory->create([
-            FieldInterface::KEY => $field->getCode(),
-            FieldInterface::LABEL => $field->getLabel(),
-            FieldInterface::TYPE => $field->getType(),
-            FieldInterface::SORT_ORDER => $field->getSortOrder(),
-            FieldInterface::IS_TRANSLATABLE => $field->isTranslatable(),
-            FieldInterface::FILTER => $field->isFilterable()
-                ? $field->getFilterType()
-                : 'none'
+        return $this->fieldSchemaFactory->create(['data' => [
+                FieldInterface::KEY => $field->getCode(),
+                FieldInterface::LABEL => $field->getLabel(),
+                FieldInterface::TYPE => $field->getType(),
+                FieldInterface::SORT_ORDER => $field->getSortOrder(),
+                FieldInterface::IS_TRANSLATABLE => $field->isTranslatable(),
+                FieldInterface::FILTER => $field->isFilterable()
+                    ? $field->getFilterType()
+                    : 'none'
+            ]
         ]);
     }
 
@@ -109,11 +110,12 @@ class Converter
         $sortingElements = [];
         if ($field->isSortable()) {
             foreach ($this->directionList->get($field->getType()) as $direction => $labelEnding) {
-                $sortingElements[] = $this->sortingElementFactory->create([
-                    SortingInterface::FIELD => $field->getCode(),
-                    SortingInterface::LABEL => $field->getLabel() . ' ' . $labelEnding,
-                    SortingInterface::DIRECTION => $direction,
-                    SortingInterface::KEY => $field->getCode() . '_' . $direction
+                $sortingElements[] = $this->sortingElementFactory->create(['data' => [
+                        SortingInterface::FIELD => $field->getCode(),
+                        SortingInterface::LABEL => $field->getLabel() . ' ' . $labelEnding,
+                        SortingInterface::DIRECTION => $direction,
+                        SortingInterface::KEY => $field->getCode() . '_' . $direction
+                    ]
                 ]);
             }
         }

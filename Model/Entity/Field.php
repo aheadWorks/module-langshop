@@ -5,7 +5,6 @@ use Magento\Framework\Model\AbstractModel;
 
 class Field extends AbstractModel
 {
-    const RESOURCE_TYPE = 'resource_type';
     const CODE = 'code';
     const LABEL = 'label';
     const TYPE = 'type';
@@ -13,29 +12,7 @@ class Field extends AbstractModel
     const FILTER_TYPE = 'filter_type';
     const SORT_ORDER = 'sort_order';
     const IS_SORTABLE = 'is_sortable';
-    const SORTING_LABEL_LIST = 'sorting_label_list';
     const IS_TRANSLATABLE = 'is_translatable';
-
-    /**
-     * Set resource type
-     *
-     * @param string $resourceType
-     * @return $this
-     */
-    public function setResourceType($resourceType)
-    {
-        return $this->setData(self::RESOURCE_TYPE, $resourceType);
-    }
-
-    /**
-     * Get resource type
-     *
-     * @return string
-     */
-    public function getResourceType()
-    {
-        return  $this->getData(self::RESOURCE_TYPE);
-    }
 
     /**
      * Set code
@@ -182,27 +159,6 @@ class Field extends AbstractModel
     public function isSortable()
     {
         return $this->getData(self::IS_SORTABLE);
-    }
-
-    /**
-     * Set sorting label list
-     *
-     * @param string[] $sortingLabelList
-     * @return $this
-     */
-    public function setSortingLabelList($sortingLabelList)
-    {
-        return $this->setData(self::SORTING_LABEL_LIST, $sortingLabelList);
-    }
-
-    /**
-     * Get sorting label list
-     *
-     * @return string[]
-     */
-    public function getSortingLabelList()
-    {
-        return $this->getData(self::SORTING_LABEL_LIST);
     }
 
     /**

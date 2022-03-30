@@ -56,7 +56,7 @@ interface ResourceGroupInterface
     /**
      * Set resources
      *
-     * @param array $resources
+     * @param \Aheadworks\Langshop\Api\Data\Schema\ResourceGroup\ResourceInterface[] $resources
      * @return $this
      */
     public function setResources($resources);
@@ -64,7 +64,7 @@ interface ResourceGroupInterface
     /**
      * Get resources
      *
-     * @return array
+     * @return \Aheadworks\Langshop\Api\Data\Schema\ResourceGroup\ResourceInterface[]
      */
     public function getResources();
 }

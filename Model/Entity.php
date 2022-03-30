@@ -2,7 +2,7 @@
 namespace Aheadworks\Langshop\Model;
 
 use Aheadworks\Langshop\Model\Entity\Field;
-use Aheadworks\Langshop\Model\Entity\Field\Repository as FieldRepository;
+use Aheadworks\Langshop\Model\Entity\Field\Collector as FieldCollector;
 use Magento\Framework\Exception\LocalizedException;
 
 class Entity
@@ -28,25 +28,30 @@ class Entity
     private $viewType;
 
     /**
-     * @var FieldRepository
+     * @var FieldCollector
      */
-    private $fieldRepository;
+    private $fieldCollector;
 
     /**
-     * @param FieldRepository $fieldRepository
+     * @var Field[]
+     */
+    private $fields;
+
+    /**
+     * @param FieldCollector $fieldCollector
      * @param string $resourceType
      * @param string $label
      * @param string $description
      * @param string $viewType
      */
     public function __construct(
-        FieldRepository $fieldRepository,
+        FieldCollector $fieldCollector,
         $resourceType = '',
         $label = '',
         $description = '',
         $viewType = ''
     ) {
-        $this->fieldRepository = $fieldRepository;
+        $this->fieldCollector = $fieldCollector;
         $this->resourceType = $resourceType;
         $this->label = $label;
         $this->description = $description;
@@ -101,6 +106,10 @@ class Entity
      */
     public function getFields()
     {
-        return $this->fieldRepository->get($this->getResourceType());
+        if (empty($this->fields)) {
+            $this->fields = $this->fieldCollector->collect();
+        }
+
+        return $this->fields;
     }
 }
