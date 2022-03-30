@@ -5,7 +5,6 @@ use Magento\Framework\Model\AbstractModel;
 
 class Field extends AbstractModel
 {
-    const RESOURCE_TYPE = 'resource_type';
     const CODE = 'code';
     const LABEL = 'label';
     const TYPE = 'type';
@@ -14,27 +13,6 @@ class Field extends AbstractModel
     const SORT_ORDER = 'sort_order';
     const IS_SORTABLE = 'is_sortable';
     const IS_TRANSLATABLE = 'is_translatable';
-
-    /**
-     * Set resource type
-     *
-     * @param string $resourceType
-     * @return $this
-     */
-    public function setResourceType($resourceType)
-    {
-        return $this->setData(self::RESOURCE_TYPE, $resourceType);
-    }
-
-    /**
-     * Get resource type
-     *
-     * @return string
-     */
-    public function getResourceType()
-    {
-        return  $this->getData(self::RESOURCE_TYPE);
-    }
 
     /**
      * Set code

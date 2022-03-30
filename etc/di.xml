@@ -141,7 +141,6 @@
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="resource_type" xsi:type="string">product_attribute</item>
                 <item name="code" xsi:type="string">attribute_id</item>
                 <item name="label" xsi:type="string">Attribute Id</item>
                 <item name="type" xsi:type="string">text</item>
@@ -157,7 +156,6 @@
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="resource_type" xsi:type="string">product_attribute</item>
                 <item name="code" xsi:type="string">attribute_code</item>
                 <item name="label" xsi:type="string">Attribute Code</item>
                 <item name="type" xsi:type="string">text</item>
@@ -173,7 +171,6 @@
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="resource_type" xsi:type="string">product_attribute</item>
                 <item name="code" xsi:type="string">frontend_label</item>
                 <item name="label" xsi:type="string">Default Label</item>
                 <item name="type" xsi:type="string">text</item>
@@ -189,7 +186,6 @@
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="resource_type" xsi:type="string">product_attribute</item>
                 <item name="code" xsi:type="string">frontend_input</item>
                 <item name="label" xsi:type="string">Attribute Type</item>
                 <item name="type" xsi:type="string">text</item>
@@ -205,7 +201,6 @@
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="resource_type" xsi:type="string">product_attribute</item>
                 <item name="code" xsi:type="string">scope</item>
                 <item name="label" xsi:type="string">Scope</item>
                 <item name="type" xsi:type="string">text</item>
