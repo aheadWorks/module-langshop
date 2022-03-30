@@ -102,9 +102,12 @@
         <arguments>
             <argument name="entityList" xsi:type="array">
                 <item name="product_attribute" xsi:type="object">Aheadworks\Langshop\Model\Entity\ProductAttribute</item>
+                <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category</item>
             </argument>
         </arguments>
     </type>
+
+    <!-- START Schema Entities -->
     <virtualType name="Aheadworks\Langshop\Model\Entity\ProductAttribute"
                  type="Aheadworks\Langshop\Model\Entity">
         <arguments>
@@ -115,7 +118,19 @@
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\ProductAttribute</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Category"
+                 type="Aheadworks\Langshop\Model\Entity">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">category</argument>
+            <argument name="label" xsi:type="string">Category</argument>
+            <argument name="description" xsi:type="string">Category</argument>
+            <argument name="viewType" xsi:type="string">grid</argument>
+            <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Category</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Schema Entities -->
 
+    <!-- START Schema Product Attribute Fields -->
     <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\ProductAttribute"
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector">
         <arguments>
@@ -212,6 +227,50 @@
             </argument>
         </arguments>
     </virtualType>
+    <!-- END Schema Product Attribute Fields -->
+
+    <!-- START Schema Category Fields -->
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\Category"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector">
+        <arguments>
+            <argument name="collectorList" xsi:type="array">
+                <item name="static" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\Category</item>
+                <item name="dynamic" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute\Category</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\Category"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="category_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\CategoryId</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute\Category"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute">
+        <arguments>
+            <argument name="entityTypeCode" xsi:type="const">Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\CategoryId"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">category_id</item>
+                <item name="label" xsi:type="string">Category Id</item>
+                <item name="type" xsi:type="string">text</item>
+                <item name="is_filterable" xsi:type="boolean">true</item>
+                <item name="filter_type" xsi:type="string">text</item>
+                <item name="sort_order" xsi:type="string">10</item>
+                <item name="is_sortable" xsi:type="boolean">true</item>
+                <item name="is_translatable" xsi:type="boolean">false</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Schema Category Fields -->
 
     <type name="Aheadworks\Langshop\Model\Schema\ResourceGroup\Pool">
         <arguments>
@@ -229,9 +288,8 @@
                 <item name="title" xsi:type="string">General</item>
                 <item name="sortOrder" xsi:type="string">1</item>
                 <item name="resources" xsi:type="array">
-                    <item name="product_attribute" xsi:type="object">
-                        Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\ProductAttribute
-                    </item>
+                    <item name="product_attribute" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\ProductAttribute</item>
+                    <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Category</item>
                 </item>
             </argument>
         </arguments>
@@ -242,6 +300,15 @@
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">product_attribute</item>
                 <item name="sort_order" xsi:type="string">10</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Category"
+                 type="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="resource" xsi:type="string">category</item>
+                <item name="sort_order" xsi:type="string">20</item>
             </argument>
         </arguments>
     </virtualType>

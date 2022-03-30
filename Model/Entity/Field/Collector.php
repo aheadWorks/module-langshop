@@ -22,7 +22,7 @@ class Collector implements CollectorInterface
     /**
      * @inheritDoc
      */
-    public function collect(array $fields = [])
+    public function collect(array $fields = []): array
     {
         foreach ($this->collectorList as $collector) {
             if (!$collector instanceof CollectorInterface) {
