@@ -13,7 +13,6 @@ class Field extends AbstractModel
     const FILTER_TYPE = 'filter_type';
     const SORT_ORDER = 'sort_order';
     const IS_SORTABLE = 'is_sortable';
-    const SORTING_LABEL_LIST = 'sorting_label_list';
     const IS_TRANSLATABLE = 'is_translatable';
 
     /**
@@ -182,27 +181,6 @@ class Field extends AbstractModel
     public function isSortable()
     {
         return $this->getData(self::IS_SORTABLE);
-    }
-
-    /**
-     * Set sorting label list
-     *
-     * @param string[] $sortingLabelList
-     * @return $this
-     */
-    public function setSortingLabelList($sortingLabelList)
-    {
-        return $this->setData(self::SORTING_LABEL_LIST, $sortingLabelList);
-    }
-
-    /**
-     * Get sorting label list
-     *
-     * @return string[]
-     */
-    public function getSortingLabelList()
-    {
-        return $this->getData(self::SORTING_LABEL_LIST);
     }
 
     /**
