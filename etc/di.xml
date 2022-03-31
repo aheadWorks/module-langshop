@@ -246,6 +246,7 @@
         <arguments>
             <argument name="collectorList" xsi:type="array">
                 <item name="static" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\Product</item>
+                <item name="dynamic" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute\Product</item>
             </argument>
         </arguments>
     </virtualType>
