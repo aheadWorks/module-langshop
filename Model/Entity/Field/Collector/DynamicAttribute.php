@@ -62,6 +62,11 @@ class DynamicAttribute implements CollectorInterface
      */
     public function collect(array $fields = []): array
     {
+        /**
+         * @todo the building of the search criteria has to be reconsidered
+         * in terms of being able to compile different filters for entity types
+         * or ignore some service attributes
+         */
         $attributes = $this->attributeRepository->getList(
             $this->entityTypeCode,
             $this->searchCriteriaBuilder->create()
@@ -91,6 +96,10 @@ class DynamicAttribute implements CollectorInterface
      */
     private function isTranslatable(Attribute $attribute): bool
     {
+        /**
+         * @todo the list of translatable types can differ regarding of
+         * used entity type, that probably has to come from di
+         */
         return !$attribute->isScopeGlobal() &&
             in_array($attribute->getFrontendInput(), self::TRANSLATABLE_TYPES);
     }
