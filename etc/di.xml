@@ -261,6 +261,13 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute\Product"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute">
+        <arguments>
+            <argument name="entityTypeCode" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\EntityId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
