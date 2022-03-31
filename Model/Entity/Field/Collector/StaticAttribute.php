@@ -23,7 +23,7 @@ class StaticAttribute implements CollectorInterface
     /**
      * @inheritDoc
      */
-    public function collect(array $fields = [])
+    public function collect(array $fields = []): array
     {
         foreach ($this->fields as $code => $field) {
             $fields[$code] = $field;

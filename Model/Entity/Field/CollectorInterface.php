@@ -11,5 +11,5 @@ interface CollectorInterface
      * @param Field[] $fields
      * @return Field[]
      */
-    public function collect(array $fields = []);
+    public function collect(array $fields = []): array;
 }
