@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- START Locales -->
     <route url="/V1/awLangshop/locales" method="GET">
         <service class="Aheadworks\Langshop\Api\LocaleManagementInterface" method="getList"/>
         <resources>
@@ -25,11 +26,35 @@
             <resource ref="Aheadworks_Sarp2::locales"/>
         </resources>
     </route>
+    <!-- END Locales -->
 
+    <!-- START Schema -->
     <route url="/V1/awLangshop/schema" method="GET">
         <service class="Aheadworks\Langshop\Api\SchemaManagementInterface" method="get"/>
         <resources>
             <resource ref="Aheadworks_Sarp2::schema"/>
         </resources>
     </route>
+    <!-- END Schema -->
+
+    <!-- START Translatable Resources -->
+    <route url="/V1/awLangshop/translatableResource/:resourceType" method="GET">
+        <service class="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="Aheadworks_Langshop::resources"/>
+        </resources>
+    </route>
+    <route url="/V1/awLangshop/translatableResource/:resourceType/:resourceId" method="GET">
+        <service class="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface" method="getById"/>
+        <resources>
+            <resource ref="Aheadworks_Langshop::resources"/>
+        </resources>
+    </route>
+    <route url="/V1/awLangshop/translatableResource/:resourceType/:resourceId" method="PUT">
+        <service class="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface" method="save"/>
+        <resources>
+            <resource ref="Aheadworks_Langshop::resources"/>
+        </resources>
+    </route>
+    <!-- END Translatable Resources -->
 </routes>
