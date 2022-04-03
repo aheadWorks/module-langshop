@@ -8,9 +8,21 @@ use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterfaceFacto
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterfaceFactory;
 use Aheadworks\Langshop\Api\TranslatableResourceManagementInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
+    /**
+     * @var RepositoryPool
+     */
+    private $repositoryPool;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
     /**
      * @var ResourceListInterfaceFactory
      */
@@ -22,13 +34,19 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     private $resourceFactory;
 
     /**
+     * @param RepositoryPool $repositoryPool
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ResourceListInterfaceFactory $resourceListFactory
      * @param TranslatableResourceInterfaceFactory $resourceFactory
      */
     public function __construct(
+        RepositoryPool $repositoryPool,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         ResourceListInterfaceFactory $resourceListFactory,
         TranslatableResourceInterfaceFactory $resourceFactory
     ) {
+        $this->repositoryPool = $repositoryPool;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceListFactory = $resourceListFactory;
         $this->resourceFactory = $resourceFactory;
     }
@@ -38,6 +56,10 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function getList(string $resourceType): ResourceListInterface
     {
+        $resources = $this->repositoryPool->getRepository($resourceType)->getList(
+            $this->searchCriteriaBuilder->create()
+        );
+
         return $this->resourceListFactory->create();
     }
 
@@ -46,6 +68,8 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function getById(string $resourceType, int $resourceId): TranslatableResourceInterface
     {
+        $resource = $this->repositoryPool->getRepository($resourceType)->getById($resourceId);
+
         return $this->resourceFactory->create()
             ->setResourceId($resourceId)
             ->setResourceType($resourceType);
@@ -56,8 +80,11 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function save(string $resourceType, int $resourceId): TranslatableResourceInterface
     {
-        return $this->resourceFactory->create()
-            ->setResourceId($resourceId)
-            ->setResourceType($resourceType);
+        $repository = $this->repositoryPool->getRepository($resourceType);
+
+        $resource = $repository->getById($resourceId);
+        $repository->save($resource);
+
+        return $this->getById($resourceType, $resourceId);
     }
 }

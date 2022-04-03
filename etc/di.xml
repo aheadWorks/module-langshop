@@ -45,6 +45,16 @@
                 type="Magento\Framework\Api\SearchResults" />
     <!-- END Scope Record Configuration -->
 
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool">
+        <arguments>
+            <argument name="repositories" xsi:type="array">
+                <item name="attribute" xsi:type="object">Magento\Eav\Api\AttributeRepositoryInterface\Proxy</item>
+                <item name="product" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</item>
+                <item name="category" xsi:type="object">Magento\Catalog\Api\CategoryRepositoryInterface\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
