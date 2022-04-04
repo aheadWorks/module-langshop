@@ -35,12 +35,12 @@ interface TranslatableResourceInterface
     public function setResourceType(string $resourceType): TranslatableResourceInterface;
 
     /**
-     * @return array|null
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface[]|null
      */
     public function getFields(): ?array;
 
     /**
-     * @param array $fields
+     * @param \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface[] $fields
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      */
     public function setFields(array $fields): TranslatableResourceInterface;

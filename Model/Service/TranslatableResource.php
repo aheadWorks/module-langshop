@@ -6,13 +6,18 @@ namespace Aheadworks\Langshop\Model\Service;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterfaceFactory;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
-use Aheadworks\Langshop\Api\Data\TranslatableResourceInterfaceFactory;
 use Aheadworks\Langshop\Api\TranslatableResourceManagementInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
+    /**
+     * @var Converter
+     */
+    private $converter;
+
     /**
      * @var RepositoryPool
      */
@@ -29,26 +34,21 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     private $resourceListFactory;
 
     /**
-     * @var TranslatableResourceInterfaceFactory
-     */
-    private $resourceFactory;
-
-    /**
+     * @param Converter $converter
      * @param RepositoryPool $repositoryPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ResourceListInterfaceFactory $resourceListFactory
-     * @param TranslatableResourceInterfaceFactory $resourceFactory
      */
     public function __construct(
+        Converter $converter,
         RepositoryPool $repositoryPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ResourceListInterfaceFactory $resourceListFactory,
-        TranslatableResourceInterfaceFactory $resourceFactory
+        ResourceListInterfaceFactory $resourceListFactory
     ) {
+        $this->converter = $converter;
         $this->repositoryPool = $repositoryPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceListFactory = $resourceListFactory;
-        $this->resourceFactory = $resourceFactory;
     }
 
     /**
@@ -56,11 +56,16 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function getList(string $resourceType): ResourceListInterface
     {
-        $resources = $this->repositoryPool->getRepository($resourceType)->getList(
-            $this->searchCriteriaBuilder->create()
-        );
+        $repository = $this->repositoryPool->getRepository($resourceType);
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $items = $repository->getList($searchCriteria)->getItems();
 
-        return $this->resourceListFactory->create();
+        $resources = [];
+        foreach ($items as $item) {
+            $resources[] = $this->converter->convert($item, $resourceType);
+        }
+
+        return $this->resourceListFactory->create()->setItems($resources);
     }
 
     /**
@@ -68,11 +73,10 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function getById(string $resourceType, int $resourceId): TranslatableResourceInterface
     {
-        $resource = $this->repositoryPool->getRepository($resourceType)->getById($resourceId);
+        $repository = $this->repositoryPool->getRepository($resourceType);
+        $item = $repository->getById($resourceId);
 
-        return $this->resourceFactory->create()
-            ->setResourceId($resourceId)
-            ->setResourceType($resourceType);
+        return $this->converter->convert($item, $resourceType);
     }
 
     /**

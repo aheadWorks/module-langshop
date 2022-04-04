@@ -23,6 +23,8 @@
 
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResourceInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\Field" />
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource\ResourceList" />
     <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"
