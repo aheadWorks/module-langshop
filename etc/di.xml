@@ -25,6 +25,10 @@
                 type="Aheadworks\Langshop\Model\TranslatableResource" />
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource\Field" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\ContentInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\Content" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\Pagination" />
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource\ResourceList" />
     <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"

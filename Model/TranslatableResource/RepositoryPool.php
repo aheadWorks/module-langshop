@@ -27,7 +27,7 @@ class RepositoryPool
      * @param string $resourceType
      * @throws NoSuchEntityException
      */
-    public function getRepository(string $resourceType)
+    public function get(string $resourceType)
     {
         $repository = $this->repositories[$resourceType] ?? null;
         if (!$repository) {
