@@ -14,14 +14,14 @@ interface PaginationInterface
      * @param int $page
      * @return $this
      */
-    public function setPage($page);
+    public function setPage(int $page);
 
     /**
      * Get page
      *
-     * @return int
+     * @return int|null
      */
-    public function getPage();
+    public function getPage(): ?int;
 
     /**
      * Set page size
@@ -29,14 +29,14 @@ interface PaginationInterface
      * @param int $pageSize
      * @return $this
      */
-    public function setPageSize($pageSize);
+    public function setPageSize(int $pageSize);
 
     /**
      * Get page size
      *
-     * @return int
+     * @return int|null
      */
-    public function getPageSize();
+    public function getPageSize(): ?int;
 
     /**
      * Set total pages
@@ -44,14 +44,14 @@ interface PaginationInterface
      * @param int $totalPages
      * @return $this
      */
-    public function setTotalPages($totalPages);
+    public function setTotalPages(int $totalPages);
 
     /**
      * Get total pages
      *
-     * @return int
+     * @return int|null
      */
-    public function getTotalPages();
+    public function getTotalPages(): ?int;
 
     /**
      * Set total items
@@ -59,12 +59,12 @@ interface PaginationInterface
      * @param int $totalItems
      * @return $this
      */
-    public function setTotalItems($totalItems);
+    public function setTotalItems(int $totalItems);
 
     /**
      * Get total items
      *
-     * @return int
+     * @return int|null
      */
-    public function getTotalItems();
+    public function getTotalItems(): ?int;
 }

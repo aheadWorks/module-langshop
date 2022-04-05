@@ -9,7 +9,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function setPage($page)
+    public function setPage(int $page)
     {
         return $this->setData(self::PAGE, $page);
     }
@@ -17,7 +17,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function getPage()
+    public function getPage(): ?int
     {
         return $this->getData(self::PAGE);
     }
@@ -25,7 +25,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function setPageSize($pageSize)
+    public function setPageSize(int $pageSize)
     {
         return $this->setData(self::PAGE_SIZE, $pageSize);
     }
@@ -33,7 +33,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function getPageSize()
+    public function getPageSize(): ?int
     {
         return $this->getData(self::PAGE_SIZE);
     }
@@ -41,7 +41,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function setTotalPages($totalPages)
+    public function setTotalPages(int $totalPages)
     {
         return $this->setData(self::TOTAL_PAGES, $totalPages);
     }
@@ -49,7 +49,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function getTotalPages()
+    public function getTotalPages(): ?int
     {
         return $this->getData(self::TOTAL_PAGES);
     }
@@ -57,7 +57,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function setTotalItems($totalItems)
+    public function setTotalItems(int $totalItems)
     {
         return $this->setData(self::TOTAL_ITEMS, $totalItems);
     }
@@ -65,7 +65,7 @@ class Pagination extends AbstractModel implements PaginationInterface
     /**
      * @inheritDoc
      */
-    public function getTotalItems()
+    public function getTotalItems(): ?int
     {
         return $this->getData(self::TOTAL_ITEMS);
     }

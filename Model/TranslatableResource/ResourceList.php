@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
+use Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
 use Magento\Framework\Model\AbstractModel;
 
@@ -27,7 +28,7 @@ class ResourceList extends AbstractModel implements ResourceListInterface
     /**
      * @inheritDoc
      */
-    public function getPagination(): ?array
+    public function getPagination(): ?PaginationInterface
     {
         return $this->getData(self::PAGINATION);
     }
@@ -35,7 +36,7 @@ class ResourceList extends AbstractModel implements ResourceListInterface
     /**
      * @inheritDoc
      */
-    public function setPagination(array $pagination): ResourceListInterface
+    public function setPagination(PaginationInterface $pagination): ResourceListInterface
     {
         return $this->setData(self::PAGINATION, $pagination);
     }

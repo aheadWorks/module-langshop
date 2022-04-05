@@ -23,13 +23,13 @@ interface ResourceListInterface
     public function setItems(array $items): ResourceListInterface;
 
     /**
-     * @return array|null
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface|null
      */
-    public function getPagination(): ?array;
+    public function getPagination(): ?PaginationInterface;
 
     /**
-     * @param array $pagination
+     * @param \Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface $pagination
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface
      */
-    public function setPagination(array $pagination): ResourceListInterface;
+    public function setPagination(PaginationInterface $pagination): ResourceListInterface;
 }
