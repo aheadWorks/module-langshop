@@ -55,11 +55,39 @@
         <arguments>
             <argument name="repositories" xsi:type="array">
                 <item name="attribute" xsi:type="object">Magento\Eav\Api\AttributeRepositoryInterface\Proxy</item>
-                <item name="product" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</item>
-                <item name="category" xsi:type="object">Magento\Catalog\Api\CategoryRepositoryInterface\Proxy</item>
+                <item name="product" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product</item>
+                <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory"
+                 type="Magento\Eav\Model\Entity\Collection\AbstractCollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory"
+                 type="Magento\Eav\Model\Entity\Collection\AbstractCollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category\Collection</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory</argument>
+            <argument name="resourceType" xsi:type="string">product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory</argument>
+            <argument name="resourceType" xsi:type="string">category</argument>
+        </arguments>
+    </virtualType>
 
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
