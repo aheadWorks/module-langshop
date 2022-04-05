@@ -1,7 +1,6 @@
 <?php
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
-
 use Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface;
 use Magento\Framework\Model\AbstractModel;
 

@@ -73,7 +73,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function getById(string $resourceType, int $resourceId): TranslatableResourceInterface
     {
-        $repository = $this->repositoryPool->getRepository($resourceType);
+        $repository = $this->repositoryPool->get($resourceType);
         $item = $repository->getById($resourceId);
 
         return $this->converter->convert($item, $resourceType);
@@ -84,7 +84,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function save(string $resourceType, int $resourceId): TranslatableResourceInterface
     {
-        $repository = $this->repositoryPool->getRepository($resourceType);
+        $repository = $this->repositoryPool->get($resourceType);
 
         $resource = $repository->getById($resourceId);
         $repository->save($resource);
