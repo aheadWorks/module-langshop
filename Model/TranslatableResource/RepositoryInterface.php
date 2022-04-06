@@ -22,7 +22,7 @@ interface RepositoryInterface
     /**
      * Save entity
      *
-     * @param AbstractModel $entity
+     * @param \Magento\Framework\Model\AbstractModel $entity
      * @return \Magento\Framework\Model\AbstractModel
      */
     public function save(\Magento\Framework\Model\AbstractModel $entity);

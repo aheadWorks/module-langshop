@@ -25,6 +25,7 @@ class RepositoryPool
      * Retrieves repository by specific type
      *
      * @param string $resourceType
+     * @return RepositoryInterface
      * @throws NoSuchEntityException
      */
     public function get(string $resourceType)
