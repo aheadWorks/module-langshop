@@ -197,6 +197,30 @@ class Repository
     }
 
     /**
+     * Get default scope record
+     *
+     * @return EntityInterface|mixed
+     * @throws NoSuchEntityException
+     */
+    public function getDefault()
+    {
+        if (!isset($this->instanceList['default'])) {
+            /** @var EntityInterface $entity */
+            $entity = $this->entityInterfaceFactory->create();
+            $this->resourceModel->load($entity, 0, EntityInterface::SCOPE_ID);
+            if (!$entity->getRecordId()) {
+                throw NoSuchEntityException::singleField(
+                    EntityInterface::SCOPE_ID,
+                    0
+                );
+            }
+            $this->instanceList['default'] = $entity;
+        }
+
+        return $this->instanceList['default'];
+    }
+
+    /**
      * Prepare object of entity interface
      *
      * @param EntityModel $model

@@ -19,7 +19,6 @@ class DefaultValue implements ProcessorInterface
         if (!isset($data['pageSize'])) {
             $data['pageSize'] = 20;
         }
-        //todo get the default locale if it's not specified
 
         return $data;
     }
