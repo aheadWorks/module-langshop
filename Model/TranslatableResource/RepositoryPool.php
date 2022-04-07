@@ -8,12 +8,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class RepositoryPool
 {
     /**
-     * @var array
+     * @var RepositoryInterface[]
      */
     private $repositories;
 
     /**
-     * @param array $repositories
+     * @param RepositoryInterface[] $repositories
      */
     public function __construct(
         array $repositories = []
@@ -28,7 +28,7 @@ class RepositoryPool
      * @return RepositoryInterface
      * @throws NoSuchEntityException
      */
-    public function get(string $resourceType)
+    public function get(string $resourceType): RepositoryInterface
     {
         $repository = $this->repositories[$resourceType] ?? null;
         if (!$repository) {

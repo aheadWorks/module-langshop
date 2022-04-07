@@ -6,17 +6,18 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleRepository;
 use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
+use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogAbstractCollection;
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-use Magento\Eav\Model\Entity\Collection\AbstractCollectionFactory;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Data\Collection\AbstractDb as AbstractCollection;
+use Magento\Framework\Data\Collection\AbstractDbFactory as AbstractCollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 
-class EavEntity
+class EavEntity implements RepositoryInterface
 {
     /**
      * @var EntityAttribute
@@ -65,13 +66,9 @@ class EavEntity
     }
 
     /**
-     * Prepares/gets collection for the entity
-     *
-     * @param SearchCriteria $searchCriteria
-     * @return AbstractCollection
-     * @throws LocalizedException
+     * @inheritDoc
      */
-    public function getList(SearchCriteria $searchCriteria): AbstractCollection
+    public function getList(SearchCriteriaInterface $searchCriteria): AbstractCollection
     {
         $collection = $this->collectionFactory->create();
 
@@ -79,22 +76,26 @@ class EavEntity
     }
 
     /**
-     * Retrieves resource data by the identifier
-     *
-     * @param int $resourceId
-     * @return DataObject
-     * @throws LocalizedException
+     * @inheritDoc
      */
-    public function getById(int $resourceId): DataObject
+    public function get(int $entityId): DataObject
     {
         $collection = $this->collectionFactory->create()
-            ->addFieldToFilter('entity_id', $resourceId);
+            ->addFieldToFilter('entity_id', $entityId);
 
         if (!$this->addLocalizedAttributes($collection)->count()) {
-            throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $resourceId));
+            throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $entityId));
         }
 
         return $collection->getFirstItem();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save(DataObject $entity): DataObject
+    {
+        // TODO: Implement save() method.
     }
 
     /**

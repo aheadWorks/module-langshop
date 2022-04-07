@@ -13,7 +13,6 @@ use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Data\Collection\AbstractDb;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
@@ -90,7 +89,6 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         $params = $this->request->getParams();
         $params = $this->dataProcessor->process($params);
 
-        /** @var AbstractDb $items */
         $items = $repository->getList($searchCriteria);
 
         $resources = [];

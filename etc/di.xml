@@ -62,13 +62,13 @@
     </type>
 
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory"
-                 type="Magento\Eav\Model\Entity\Collection\AbstractCollectionFactory">
+                 type="Magento\Framework\Data\Collection\AbstractDbFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product\Collection</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory"
-                 type="Magento\Eav\Model\Entity\Collection\AbstractCollectionFactory">
+                 type="Magento\Framework\Data\Collection\AbstractDbFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category\Collection</argument>
         </arguments>
