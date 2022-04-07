@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
-use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleRepository;
+use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogAbstractCollection;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Collection\AbstractCollectionFactory;
 use Magento\Framework\Api\SearchCriteria;
@@ -13,13 +14,14 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\AbstractModel;
 
 class EavEntity
 {
     /**
-     * @var EntityPool
+     * @var EntityAttribute
      */
-    private $entityPool;
+    private $entityAttribute;
 
     /**
      * @var LocaleRepository
@@ -42,20 +44,20 @@ class EavEntity
     private $resourceType;
 
     /**
-     * @param EntityPool $entityPool
+     * @param EntityAttribute $entityAttribute
      * @param LocaleRepository $localeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AbstractCollectionFactory $collectionFactory
      * @param string $resourceType
      */
     public function __construct(
-        EntityPool $entityPool,
+        EntityAttribute $entityAttribute,
         LocaleRepository $localeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AbstractCollectionFactory $collectionFactory,
         string $resourceType
     ) {
-        $this->entityPool = $entityPool;
+        $this->entityAttribute = $entityAttribute;
         $this->localeRepository = $localeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionFactory = $collectionFactory;
@@ -73,7 +75,7 @@ class EavEntity
     {
         $collection = $this->collectionFactory->create();
 
-        return $this->joinAttributes($collection);
+        return $this->addLocalizedAttributes($collection);
     }
 
     /**
@@ -87,9 +89,8 @@ class EavEntity
     {
         $collection = $this->collectionFactory->create()
             ->addFieldToFilter('entity_id', $resourceId);
-        $this->joinAttributes($collection);
 
-        if (!$collection->count()) {
+        if (!$this->addLocalizedAttributes($collection)->count()) {
             throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $resourceId));
         }
 
@@ -97,26 +98,36 @@ class EavEntity
     }
 
     /**
-     * Joins available for translate attributes to the collection
+     * Adds localized attribute values to the collection
      *
      * @param AbstractCollection $collection
      * @return AbstractCollection
      * @throws LocalizedException
      */
-    private function joinAttributes(AbstractCollection $collection): AbstractCollection
+    private function addLocalizedAttributes(AbstractCollection $collection): AbstractCollection
     {
-        $attributes = $this->getAttributes();
-        if ($attributes) {
+        if ($collection instanceof CatalogAbstractCollection) {
+            $attributeCodes = [[], []];
+            foreach ($this->entityAttribute->getList($this->resourceType) as $attribute) {
+                $attributeCodes[$attribute->isTranslatable()][] = $attribute->getCode();
+            }
+
+            $localizedCollection = clone $collection;
+            $collection->addAttributeToSelect($attributeCodes[0]);
+            $localizedCollection->addAttributeToSelect($attributeCodes[1]);
+
             foreach ($this->getLocales() as $locale) {
-                foreach ($attributes as $attribute) {
-                    $collection->joinAttribute(
-                        sprintf('%s_%s', $attribute, $locale->getLocaleCode()),
-                        sprintf('%s/%s', $collection->getEntity()->getType(), $attribute),
-                        'entity_id',
-                        null,
-                        'left',
-                        $locale->getScopeId()
-                    );
+                $localizedCollection->clear()->setStoreId($locale->getScopeId());
+
+                /** @var AbstractModel $localizedItem */
+                foreach ($localizedCollection as $localizedItem) {
+                    foreach ($attributeCodes[1] as $attributeCode) {
+                        $item = $collection->getItemById($localizedItem->getId());
+
+                        $value = $item->getData($attributeCode) ?? [];
+                        $value[$locale->getLocaleCode()] = $localizedItem->getData($attributeCode);
+                        $item->setData($attributeCode, $value);
+                    }
                 }
             }
         }
@@ -134,25 +145,5 @@ class EavEntity
         return $this->localeRepository->getList(
             $this->searchCriteriaBuilder->create()
         )->getItems();
-    }
-
-    /**
-     * Retrieves translatable attributes
-     *
-     * @return string[]
-     * @throws LocalizedException
-     */
-    private function getAttributes(): array
-    {
-        $attributes = [];
-
-        $fields = $this->entityPool->getByType($this->resourceType)->getFields();
-        foreach ($fields as $field) {
-            if ($field->isTranslatable()) {
-                $attributes[] = $field->getCode();
-            }
-        }
-
-        return array_unique($attributes);
     }
 }

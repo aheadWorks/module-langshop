@@ -3,20 +3,18 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
-use Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterfaceFactory;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterfaceFactory;
-use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
 class Converter
 {
     /**
-     * @var EntityPool
+     * @var EntityAttribute
      */
-    private $entityPool;
+    private $entityAttribute;
 
     /**
      * @var FieldInterfaceFactory
@@ -29,16 +27,16 @@ class Converter
     private $resourceFactory;
 
     /**
-     * @param EntityPool $entityPool
+     * @param EntityAttribute $entityAttribute
      * @param FieldInterfaceFactory $fieldFactory
      * @param TranslatableResourceInterfaceFactory $resourceFactory
      */
     public function __construct(
-        EntityPool $entityPool,
+        EntityAttribute $entityAttribute,
         FieldInterfaceFactory $fieldFactory,
         TranslatableResourceInterfaceFactory $resourceFactory
     ) {
-        $this->entityPool = $entityPool;
+        $this->entityAttribute = $entityAttribute;
         $this->fieldFactory = $fieldFactory;
         $this->resourceFactory = $resourceFactory;
     }
@@ -55,31 +53,24 @@ class Converter
         DataObject $item,
         string $resourceType
     ): TranslatableResourceInterface {
+        $fields = [];
+        foreach ($this->entityAttribute->getList($resourceType) as $attribute) {
+            /** @var Field $field */
+            $field = $this->fieldFactory->create()
+                ->setKey($attribute->getCode())
+                ->setValue($item->getData($attribute->getCode()));
+
+            /**
+             * The fields must be represented as plain array, not object,
+             * otherwise we'll lose the keys (locales) in the value
+             * @see \Magento\Framework\Reflection\DataObjectProcessor::buildOutputDataArray()
+             */
+            $fields[] = $field->getData();
+        }
+
         return $this->resourceFactory->create()
             ->setResourceId((int) $item->getId())
             ->setResourceType($resourceType)
-            ->setFields($this->getResourceFields($item, $resourceType));
-    }
-
-    /**
-     * @param DataObject $item
-     * @param string $resourceType
-     * @return FieldInterface[]
-     * @throws LocalizedException
-     */
-    private function getResourceFields(
-        DataObject $item,
-        string $resourceType
-    ): array {
-        $fields = [];
-
-        $entityFields = $this->entityPool->getByType($resourceType)->getFields();
-        foreach ($entityFields as $entityField) {
-            $fields[] = $this->fieldFactory->create()
-                ->setKey($entityField->getCode())
-                ->setValue($item->getData($entityField->getCode()));
-        }
-
-        return $fields;
+            ->setFields($fields);
     }
 }
