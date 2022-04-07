@@ -207,11 +207,11 @@ class Repository
         if (!isset($this->instanceList['default'])) {
             /** @var EntityInterface $entity */
             $entity = $this->entityInterfaceFactory->create();
-            $this->resourceModel->load($entity, 0, EntityInterface::SCOPE_ID);
+            $this->resourceModel->load($entity, 1, EntityInterface::IS_PRIMARY);
             if (!$entity->getRecordId()) {
                 throw NoSuchEntityException::singleField(
-                    EntityInterface::SCOPE_ID,
-                    0
+                    EntityInterface::IS_PRIMARY,
+                    1
                 );
             }
             $this->instanceList['default'] = $entity;
