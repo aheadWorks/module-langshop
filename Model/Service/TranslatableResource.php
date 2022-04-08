@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Service;
 
-use Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterfaceFactory;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
-use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterfaceFactory;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Api\TranslatableResourceManagementInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
@@ -32,16 +30,6 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var PaginationInterfaceFactory
-     */
-    private $paginationFactory;
-
-    /**
-     * @var ResourceListInterfaceFactory
-     */
-    private $resourceListFactory;
-
-    /**
      * @var RequestInterface
      */
     private $request;
@@ -55,8 +43,6 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      * @param Converter $converter
      * @param RepositoryPool $repositoryPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param PaginationInterfaceFactory $paginationFactory
-     * @param ResourceListInterfaceFactory $resourceListFactory
      * @param RequestInterface $request
      * @param ProcessorInterface $dataProcessor
      */
@@ -64,16 +50,12 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         Converter $converter,
         RepositoryPool $repositoryPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        PaginationInterfaceFactory $paginationFactory,
-        ResourceListInterfaceFactory $resourceListFactory,
         RequestInterface $request,
         ProcessorInterface $dataProcessor
     ) {
         $this->converter = $converter;
         $this->repositoryPool = $repositoryPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->paginationFactory = $paginationFactory;
-        $this->resourceListFactory = $resourceListFactory;
         $this->request = $request;
         $this->dataProcessor = $dataProcessor;
     }
@@ -91,20 +73,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
 
         $items = $repository->getList($searchCriteria);
 
-        $resources = [];
-        foreach ($items as $item) {
-            $resources[] = $this->converter->convert($item, $resourceType);
-        }
-
-        $pagination = $this->paginationFactory->create()
-            ->setPage($items->getCurPage())
-            ->setPageSize($items->getPageSize() ?: $items->getSize())
-            ->setTotalPages($items->getLastPageNumber())
-            ->setTotalItems($items->getSize());
-
-        return $this->resourceListFactory->create()
-            ->setItems($resources)
-            ->setPagination($pagination);
+        return $this->converter->convertCollection($items, $resourceType);
     }
 
     /**
