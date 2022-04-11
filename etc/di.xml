@@ -479,6 +479,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Aheadworks\Langshop\Model\Entity\Field\Filter\Pool">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="text" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Text</item>
+                <item name="select" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Select</item>
+                <item name="multiselect" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Multiselect</item>
+                <item name="date" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Date</item>
+            </argument>
+        </arguments>
+    </type>
+
 
     <virtualType name="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup\General"
                  type="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup">

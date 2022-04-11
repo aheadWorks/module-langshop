@@ -66,11 +66,16 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     public function getList(string $resourceType): ResourceListInterface
     {
         $repository = $this->repositoryPool->get($resourceType);
-        $searchCriteria = $this->searchCriteriaBuilder->create();
 
         $params = $this->request->getParams();
+        $params['resourceType'] = $resourceType;
         $params = $this->dataProcessor->process($params);
 
+        if (isset($params['filters'])) {
+            $this->searchCriteriaBuilder->addFilters($params['filters']);
+        }
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
         $items = $repository->getList($searchCriteria);
 
         return $this->converter->convertCollection($items, $resourceType);
