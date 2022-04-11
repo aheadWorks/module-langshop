@@ -522,4 +522,8 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <plugin name="disable_body_overriding" type="Aheadworks\Langshop\Plugin\RestParamsOverrider" />
+    </type>
 </config>
