@@ -45,5 +45,5 @@ abstract class AbstractFilter
      * @param string $conditionType
      * @return void
      */
-    abstract function prepare(&$value, &$conditionType);
+    abstract protected function prepare(&$value, &$conditionType);
 }

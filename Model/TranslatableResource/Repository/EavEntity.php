@@ -95,7 +95,8 @@ class EavEntity implements RepositoryInterface
      */
     public function save(DataObject $entity): DataObject
     {
-        // TODO: Implement save() method.
+        //todo: https://aheadworks.atlassian.net/browse/LSM2-56
+        return $entity;
     }
 
     /**

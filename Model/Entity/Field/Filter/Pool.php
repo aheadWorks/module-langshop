@@ -23,7 +23,8 @@ class Pool
      * @param string $filterType
      * @return AbstractFilter
      */
-    public function get($filterType) {
+    public function get($filterType)
+    {
         return isset($this->filters[$filterType])
             ? $this->filters[$filterType]
             : $this->filters['text'];
