@@ -17,27 +17,27 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @var Converter
      */
-    private $converter;
+    private Converter $converter;
 
     /**
      * @var RepositoryPool
      */
-    private $repositoryPool;
+    private RepositoryPool $repositoryPool;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
 
     /**
      * @var ProcessorInterface
      */
-    private $dataProcessor;
+    private ProcessorInterface $dataProcessor;
 
     /**
      * @param Converter $converter
@@ -94,12 +94,9 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function save(string $resourceType, int $resourceId): TranslatableResourceInterface
+    public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface
     {
-        $repository = $this->repositoryPool->get($resourceType);
-
-        $resource = $repository->get($resourceId);
-        $repository->save($resource);
+        $this->repositoryPool->get($resourceType)->save($resourceId, $translations);
 
         return $this->getById($resourceType, $resourceId);
     }

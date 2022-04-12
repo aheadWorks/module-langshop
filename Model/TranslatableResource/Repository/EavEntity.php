@@ -3,13 +3,17 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
-use Aheadworks\Langshop\Model\TranslatableResource\{EntityAttribute, LocaleScope, RepositoryInterface};
+use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
+use Aheadworks\Langshop\Model\TranslatableResource\LocaleScope;
+use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogAbstractCollection;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as AbstractCollection;
 use Magento\Framework\Data\Collection\AbstractDbFactory as AbstractCollectionFactory;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\{LocalizedException, NoSuchEntityException};
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 
 class EavEntity implements RepositoryInterface
@@ -25,6 +29,11 @@ class EavEntity implements RepositoryInterface
     private EntityAttribute $entityAttribute;
 
     /**
+     * @var TranslationValidation
+     */
+    private TranslationValidation $translationValidation;
+
+    /**
      * @var AbstractCollectionFactory
      */
     private AbstractCollectionFactory $collectionFactory;
@@ -37,17 +46,20 @@ class EavEntity implements RepositoryInterface
     /**
      * @param LocaleScope $localeScope
      * @param EntityAttribute $entityAttribute
+     * @param TranslationValidation $translationValidation
      * @param AbstractCollectionFactory $collectionFactory
      * @param string $resourceType
      */
     public function __construct(
         LocaleScope $localeScope,
         EntityAttribute $entityAttribute,
+        TranslationValidation $translationValidation,
         AbstractCollectionFactory $collectionFactory,
         string $resourceType
     ) {
         $this->localeScope = $localeScope;
         $this->entityAttribute = $entityAttribute;
+        $this->translationValidation = $translationValidation;
         $this->collectionFactory = $collectionFactory;
         $this->resourceType = $resourceType;
     }
@@ -80,9 +92,11 @@ class EavEntity implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function save(DataObject $entity): DataObject
+    public function save(int $entityId, array $translations): void
     {
-        // TODO: Implement save() method.
+        foreach ($translations as $translation) {
+            $this->translationValidation->validate($translation, $this->resourceType);
+        }
     }
 
     /**
