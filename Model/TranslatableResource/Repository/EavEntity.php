@@ -3,64 +3,51 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
-use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleRepository;
-use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
-use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\{EntityAttribute, LocaleScope, RepositoryInterface};
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogAbstractCollection;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as AbstractCollection;
 use Magento\Framework\Data\Collection\AbstractDbFactory as AbstractCollectionFactory;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\{LocalizedException, NoSuchEntityException};
 use Magento\Framework\Model\AbstractModel;
 
 class EavEntity implements RepositoryInterface
 {
     /**
+     * @var LocaleScope
+     */
+    private LocaleScope $localeScope;
+
+    /**
      * @var EntityAttribute
      */
-    private $entityAttribute;
-
-    /**
-     * @var LocaleRepository
-     */
-    private $localeRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
+    private EntityAttribute $entityAttribute;
 
     /**
      * @var AbstractCollectionFactory
      */
-    private $collectionFactory;
+    private AbstractCollectionFactory $collectionFactory;
 
     /**
      * @var string
      */
-    private $resourceType;
+    private string $resourceType;
 
     /**
+     * @param LocaleScope $localeScope
      * @param EntityAttribute $entityAttribute
-     * @param LocaleRepository $localeRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AbstractCollectionFactory $collectionFactory
      * @param string $resourceType
      */
     public function __construct(
+        LocaleScope $localeScope,
         EntityAttribute $entityAttribute,
-        LocaleRepository $localeRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         AbstractCollectionFactory $collectionFactory,
         string $resourceType
     ) {
+        $this->localeScope = $localeScope;
         $this->entityAttribute = $entityAttribute;
-        $this->localeRepository = $localeRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionFactory = $collectionFactory;
         $this->resourceType = $resourceType;
     }
@@ -117,8 +104,8 @@ class EavEntity implements RepositoryInterface
             $collection->addAttributeToSelect($attributeCodes[0]);
             $localizedCollection->addAttributeToSelect($attributeCodes[1]);
 
-            foreach ($this->getLocales() as $locale) {
-                $localizedCollection->clear()->setStoreId($locale->getScopeId());
+            foreach ($this->localeScope->getList() as $localeScope) {
+                $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
 
                 /** @var AbstractModel $localizedItem */
                 foreach ($localizedCollection as $localizedItem) {
@@ -126,7 +113,7 @@ class EavEntity implements RepositoryInterface
                         $item = $collection->getItemById($localizedItem->getId());
 
                         $value = $item->getData($attributeCode) ?? [];
-                        $value[$locale->getLocaleCode()] = $localizedItem->getData($attributeCode);
+                        $value[$localeScope->getLocaleCode()] = $localizedItem->getData($attributeCode);
                         $item->setData($attributeCode, $value);
                     }
                 }
@@ -134,17 +121,5 @@ class EavEntity implements RepositoryInterface
         }
 
         return $collection;
-    }
-
-    /**
-     * Retrieves available to translate locales
-     *
-     * @return RecordInterface[]
-     */
-    private function getLocales(): array
-    {
-        return $this->localeRepository->getList(
-            $this->searchCriteriaBuilder->create()
-        )->getItems();
     }
 }
