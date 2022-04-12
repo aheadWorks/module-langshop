@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
-use Aheadworks\Langshop\Api\Data\TranslatableResource\ContentInterface;
+use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Magento\Framework\Model\AbstractModel;
 
-class Content extends AbstractModel implements ContentInterface
+class Translation extends AbstractModel implements TranslationInterface
 {
     /**
      * @inheritDoc

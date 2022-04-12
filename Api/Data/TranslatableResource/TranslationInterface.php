@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Api\Data\TranslatableResource;
 
-interface ContentInterface
+interface TranslationInterface
 {
     const LOCALE = 'locale';
     const KEY = 'key';
