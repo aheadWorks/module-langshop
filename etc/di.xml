@@ -78,6 +78,7 @@
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">product</argument>
         </arguments>
     </virtualType>
@@ -85,6 +86,7 @@
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">category</argument>
         </arguments>
     </virtualType>
@@ -161,6 +163,17 @@
                     <item name="asc" xsi:type="string"/>
                     <item name="desc" xsi:type="string"/>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Aheadworks\Langshop\Model\Entity\Field\Filter\Builder">
+        <arguments>
+            <argument name="preparers" xsi:type="array">
+                <item name="text" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Text</item>
+                <item name="date" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Date</item>
+                <item name="select" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Select</item>
+                <item name="multiselect" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Multiselect</item>
             </argument>
         </arguments>
     </type>
@@ -489,7 +502,6 @@
             </argument>
         </arguments>
     </type>
-
 
     <virtualType name="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup\General"
                  type="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup">

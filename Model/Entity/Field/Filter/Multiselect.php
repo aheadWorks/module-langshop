@@ -1,15 +1,21 @@
 <?php
 namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 
-class Multiselect extends AbstractFilter
+class Multiselect implements PreparerInterface
 {
     /**
      * @inheritDoc
      */
-    public function prepare(&$value, &$conditionType)
+    public function getPreparedConditionType($value)
     {
-        $conditionType = is_array($value)
-            ? 'in'
-            : 'finset';
+        return is_array($value) ? 'in' : 'finset';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPreparedValue($value)
+    {
+        return $value;
     }
 }

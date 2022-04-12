@@ -1,15 +1,22 @@
 <?php
 namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 
-class Date extends AbstractFilter
+class Date implements PreparerInterface
 {
     /**
      * @inheritDoc
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getPreparedConditionType($value)
+    {
+        return 'eq';
+    }
+
+    /**
+     * @inheritDoc
      * todo: when the frontend is ready, we will need to check the date format
      */
-    public function prepare(&$value, &$conditionType)
+    public function getPreparedValue($value)
     {
-        $conditionType = 'eq';
+        return $value;
     }
 }

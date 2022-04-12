@@ -1,15 +1,21 @@
 <?php
 namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 
-class Select extends AbstractFilter
+class Select implements PreparerInterface
 {
     /**
      * @inheritDoc
      */
-    public function prepare(&$value, &$conditionType)
+    public function getPreparedConditionType($value)
     {
-        $conditionType = is_array($value)
-            ? 'in'
-            : 'eq';
+        return is_array($value) ? 'in' : 'eq';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPreparedValue($value)
+    {
+        return $value;
     }
 }

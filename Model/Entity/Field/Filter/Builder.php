@@ -4,7 +4,7 @@ namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 
-abstract class AbstractFilter
+class Builder
 {
     /**
      * @var FilterBuilder
@@ -12,12 +12,20 @@ abstract class AbstractFilter
     protected $filterBuilder;
 
     /**
+     * @var PreparerInterface[]
+     */
+    private $preparers;
+
+    /**
      * @param FilterBuilder $filterBuilder
+     * @param array $preparers
      */
     public function __construct(
-        FilterBuilder $filterBuilder
+        FilterBuilder $filterBuilder,
+        array $preparers = []
     ) {
         $this->filterBuilder = $filterBuilder;
+        $this->preparers = $preparers;
     }
 
     /**
@@ -25,25 +33,21 @@ abstract class AbstractFilter
      *
      * @param string $field
      * @param string|array $value
-     * @param string $conditionType
+     * @param string $filterType
      * @return Filter
      */
-    public function create($field, $value, $conditionType = 'eq')
+    public function create($field, $value, $filterType = 'text')
     {
-        $this->prepare($value, $conditionType);
+        $preparer = isset($this->preparers[$filterType])
+            ? $this->preparers[$filterType]
+            : $this->preparers['text'];
+
+        $conditionType = $preparer->getPreparedConditionType($value);
+        $value = $preparer->getPreparedValue($value);
 
         return $this->filterBuilder->setConditionType($conditionType)
             ->setField($field)
             ->setValue($value)
             ->create();
     }
-
-    /**
-     * Prepare params
-     *
-     * @param string|array $value
-     * @param string $conditionType
-     * @return void
-     */
-    abstract protected function prepare(&$value, &$conditionType);
 }
