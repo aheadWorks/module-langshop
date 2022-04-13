@@ -73,11 +73,24 @@
             <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category\Collection</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\ResourceModelFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category</argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product"
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory</argument>
             <argument name="resourceType" xsi:type="string">product</argument>
         </arguments>
     </virtualType>
@@ -85,6 +98,7 @@
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\ResourceModelFactory</argument>
             <argument name="resourceType" xsi:type="string">category</argument>
         </arguments>
     </virtualType>
