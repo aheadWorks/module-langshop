@@ -200,21 +200,15 @@ class Repository
      * Get default scope record
      *
      * @return EntityInterface|mixed
-     * @throws NoSuchEntityException
      */
     public function getDefault()
     {
         if (!isset($this->instanceList['default'])) {
-            /** @var EntityInterface $entity */
-            $entity = $this->entityInterfaceFactory->create();
-            $this->resourceModel->load($entity, 1, EntityInterface::IS_PRIMARY);
-            if (!$entity->getRecordId()) {
-                throw NoSuchEntityException::singleField(
-                    EntityInterface::IS_PRIMARY,
-                    1
-                );
-            }
-            $this->instanceList['default'] = $entity;
+            /** @var Collection $collection */
+            $collection = $this->collectionFactory->create();
+            $collection->addFilter(EntityInterface::SCOPE_ID, 0);
+
+            $this->instanceList['default'] = $collection->getFirstItem();
         }
 
         return $this->instanceList['default'];
