@@ -4,33 +4,31 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Validation;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
-use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
-use Aheadworks\Langshop\Model\TranslatableResource\LocaleScope;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class Translation
 {
     /**
-     * @var LocaleScope
+     * @var Locale
      */
-    private LocaleScope $localeScope;
+    private Locale $locale;
 
     /**
-     * @var EntityAttribute
+     * @var Attribute
      */
-    private EntityAttribute $entityAttribute;
+    private Attribute $attribute;
 
     /**
-     * @param LocaleScope $localeScope
-     * @param EntityAttribute $entityAttribute
+     * @param Locale $locale
+     * @param Attribute $attribute
      */
     public function __construct(
-        LocaleScope $localeScope,
-        EntityAttribute $entityAttribute
+        Locale $locale,
+        Attribute $attribute
     ) {
-        $this->localeScope = $localeScope;
-        $this->entityAttribute = $entityAttribute;
+        $this->locale = $locale;
+        $this->attribute = $attribute;
     }
 
     /**
@@ -43,26 +41,7 @@ class Translation
      */
     public function validate(TranslationInterface $translation, string $resourceType): void
     {
-        $locales = [];
-        foreach ($this->localeScope->getList() as $locale) {
-            $locales[] = $locale->getLocaleCode();
-        }
-
-        $attributes = [];
-        foreach ($this->entityAttribute->getList($resourceType) as $attribute) {
-            $attributes[] = $attribute->getCode();
-        }
-
-        if (!in_array($translation->getLocale(), $locales)) {
-            throw new NoSuchEntityException(
-                __('Locale with code = "%1" does not exist.', $translation->getLocale())
-            );
-        }
-
-        if (!in_array($translation->getKey(), $attributes)) {
-            throw new NoSuchEntityException(
-                __('Attribute with code = "%1" does not exist.', $translation->getKey())
-            );
-        }
+        $this->locale->validate($translation->getLocale());
+        $this->attribute->validate($translation->getKey(), $resourceType);
     }
 }
