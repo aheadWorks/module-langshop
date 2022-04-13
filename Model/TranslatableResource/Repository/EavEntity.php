@@ -136,6 +136,9 @@ class EavEntity implements RepositoryInterface
                 foreach ($localizedCollection as $localizedItem) {
                     $item = $collection->getItemById($localizedItem->getId());
                     foreach ($attributeCodes[1] as $attributeCode) {
+                        $value = is_array($item->getData($attributeCode))
+                            ? $item->getData($attributeCode)
+                            : [];
                         $value[$locale->getLocaleCode()] = $localizedItem->getData($attributeCode);
                         $item->setData($attributeCode, $value);
                     }

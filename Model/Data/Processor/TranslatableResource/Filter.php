@@ -45,6 +45,7 @@ class Filter implements ProcessorInterface
 
         foreach ($filter as $field => $value) {
             $attribute = $attributes[$field] ?? null;
+            //todo: throw an exception if field is missing
             if ($attribute) {
                 $filterType = $attribute->getFilterType();
                 $filters[] = $this->filterBuilder->create($field, $value, $filterType);
