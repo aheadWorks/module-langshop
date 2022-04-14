@@ -8,6 +8,7 @@ use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleRepository
 use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogAbstractCollection;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as AbstractCollection;
@@ -40,6 +41,11 @@ class EavEntity implements RepositoryInterface
     private $collectionFactory;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @var string
      */
     private $resourceType;
@@ -49,6 +55,7 @@ class EavEntity implements RepositoryInterface
      * @param LocaleRepository $localeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AbstractCollectionFactory $collectionFactory
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param string $resourceType
      */
     public function __construct(
@@ -56,12 +63,14 @@ class EavEntity implements RepositoryInterface
         LocaleRepository $localeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AbstractCollectionFactory $collectionFactory,
+        CollectionProcessorInterface $collectionProcessor,
         string $resourceType
     ) {
         $this->entityAttribute = $entityAttribute;
         $this->localeRepository = $localeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionFactory = $collectionFactory;
+        $this->collectionProcessor = $collectionProcessor;
         $this->resourceType = $resourceType;
     }
 
@@ -71,6 +80,8 @@ class EavEntity implements RepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): AbstractCollection
     {
         $collection = $this->collectionFactory->create();
+
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
         return $this->addLocalizedAttributes($collection);
     }
@@ -95,7 +106,8 @@ class EavEntity implements RepositoryInterface
      */
     public function save(DataObject $entity): DataObject
     {
-        // TODO: Implement save() method.
+        //todo: https://aheadworks.atlassian.net/browse/LSM2-56
+        return $entity;
     }
 
     /**
@@ -122,10 +134,11 @@ class EavEntity implements RepositoryInterface
 
                 /** @var AbstractModel $localizedItem */
                 foreach ($localizedCollection as $localizedItem) {
+                    $item = $collection->getItemById($localizedItem->getId());
                     foreach ($attributeCodes[1] as $attributeCode) {
-                        $item = $collection->getItemById($localizedItem->getId());
-
-                        $value = $item->getData($attributeCode) ?? [];
+                        $value = is_array($item->getData($attributeCode))
+                            ? $item->getData($attributeCode)
+                            : [];
                         $value[$locale->getLocaleCode()] = $localizedItem->getData($attributeCode);
                         $item->setData($attributeCode, $value);
                     }
