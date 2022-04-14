@@ -2,22 +2,32 @@
 namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource;
 
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
-use Magento\Framework\Api\FilterBuilder;
+use Aheadworks\Langshop\Model\Entity\Field\Filter\Builder;
+use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
+use Magento\Framework\Exception\LocalizedException;
 
 class Filter implements ProcessorInterface
 {
     /**
-     * @var FilterBuilder
+     * @var Builder
      */
     private $filterBuilder;
 
     /**
-     * @param FilterBuilder $filterBuilder
+     * @var EntityAttribute
+     */
+    private $entityAttribute;
+
+    /**
+     * @param Builder $filterBuilder
+     * @param EntityAttribute $entityAttribute
      */
     public function __construct(
-        FilterBuilder $filterBuilder
+        Builder $filterBuilder,
+        EntityAttribute $entityAttribute
     ) {
         $this->filterBuilder = $filterBuilder;
+        $this->entityAttribute = $entityAttribute;
     }
 
     /**
@@ -25,10 +35,23 @@ class Filter implements ProcessorInterface
      *
      * @param array $data
      * @return array
+     * @throws LocalizedException
      */
     public function process($data)
     {
-        //todo create filters
+        $filter = $data['filter'] ?? [];
+        $filters = [];
+        $attributes = $this->entityAttribute->getList($data['resourceType']);
+
+        foreach ($filter as $field => $value) {
+            $attribute = $attributes[$field] ?? null;
+            //todo: throw an exception if field is missing
+            if ($attribute) {
+                $filterType = $attribute->getFilterType();
+                $filters[] = $this->filterBuilder->create($field, $value, $filterType);
+            }
+        }
+        $data['filters'] = $filters;
 
         return $data;
     }

@@ -8,6 +8,7 @@ use Aheadworks\Langshop\Model\TranslatableResource\LocaleScope;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as Collection;
 use Magento\Framework\Data\Collection\AbstractDbFactory as CollectionFactory;
@@ -45,6 +46,11 @@ class EavEntity implements RepositoryInterface
     private TranslationValidation $translationValidation;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private CollectionProcessorInterface $collectionProcessor;
+
+    /**
      * @var string
      */
     private string $resourceType;
@@ -55,6 +61,7 @@ class EavEntity implements RepositoryInterface
      * @param CollectionFactory $collectionFactory
      * @param ResourceModelFactory $resourceModelFactory
      * @param TranslationValidation $translationValidation
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param string $resourceType
      */
     public function __construct(
@@ -63,6 +70,7 @@ class EavEntity implements RepositoryInterface
         CollectionFactory $collectionFactory,
         ResourceModelFactory $resourceModelFactory,
         TranslationValidation $translationValidation,
+        CollectionProcessorInterface $collectionProcessor,
         string $resourceType
     ) {
         $this->localeScope = $localeScope;
@@ -70,6 +78,7 @@ class EavEntity implements RepositoryInterface
         $this->collectionFactory = $collectionFactory;
         $this->resourceModelFactory = $resourceModelFactory;
         $this->translationValidation = $translationValidation;
+        $this->collectionProcessor = $collectionProcessor;
         $this->resourceType = $resourceType;
     }
 
@@ -79,6 +88,7 @@ class EavEntity implements RepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): Collection
     {
         $collection = $this->collectionFactory->create();
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
         return $this->addLocalizedAttributes($collection);
     }
@@ -162,10 +172,11 @@ class EavEntity implements RepositoryInterface
 
                 /** @var AbstractModel $localizedItem */
                 foreach ($localizedCollection as $localizedItem) {
+                    $item = $collection->getItemById($localizedItem->getId());
                     foreach ($attributeCodes[1] as $attributeCode) {
-                        $item = $collection->getItemById($localizedItem->getId());
-
-                        $value = $item->getData($attributeCode) ?? [];
+                        $value = is_array($item->getData($attributeCode))
+                            ? $item->getData($attributeCode)
+                            : [];
                         $value[$localeScope->getLocaleCode()] = $localizedItem->getData($attributeCode);
                         $item->setData($attributeCode, $value);
                     }
