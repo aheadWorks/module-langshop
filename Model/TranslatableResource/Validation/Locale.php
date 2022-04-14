@@ -3,23 +3,23 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Validation;
 
-use Aheadworks\Langshop\Model\TranslatableResource\LocaleScope;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class Locale
 {
     /**
-     * @var LocaleScope
+     * @var LocaleScopeProvider
      */
-    private LocaleScope $localeScope;
+    private LocaleScopeProvider $localeScopeProvider;
 
     /**
-     * @param LocaleScope $localeScope
+     * @param LocaleScopeProvider $localeScopeProvider
      */
     public function __construct(
-        LocaleScope $localeScope
+        LocaleScopeProvider $localeScopeProvider
     ) {
-        $this->localeScope = $localeScope;
+        $this->localeScopeProvider = $localeScopeProvider;
     }
 
     /**
@@ -31,7 +31,7 @@ class Locale
     public function validate(string $value): void
     {
         $locales = [];
-        foreach ($this->localeScope->getList() as $locale) {
+        foreach ($this->localeScopeProvider->getList() as $locale) {
             $locales[] = $locale->getLocaleCode();
         }
 
