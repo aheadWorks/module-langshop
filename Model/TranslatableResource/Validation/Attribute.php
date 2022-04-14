@@ -3,24 +3,24 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Validation;
 
-use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class Attribute
 {
     /**
-     * @var EntityAttribute
+     * @var EntityAttributeProvider
      */
-    private EntityAttribute $entityAttribute;
+    private EntityAttributeProvider $entityAttributeProvider;
 
     /**
-     * @param EntityAttribute $entityAttribute
+     * @param EntityAttributeProvider $entityAttributeProvider
      */
     public function __construct(
-        EntityAttribute $entityAttribute
+        EntityAttributeProvider $entityAttributeProvider
     ) {
-        $this->entityAttribute = $entityAttribute;
+        $this->entityAttributeProvider = $entityAttributeProvider;
     }
 
     /**
@@ -34,7 +34,7 @@ class Attribute
     public function validate(string $value, string $resourceType): void
     {
         $attributes = [];
-        foreach ($this->entityAttribute->getList($resourceType) as $attribute) {
+        foreach ($this->entityAttributeProvider->getList($resourceType) as $attribute) {
             $attributes[] = $attribute->getCode();
         }
 

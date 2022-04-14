@@ -9,53 +9,54 @@ use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterfaceFactory;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterfaceFactory;
-use Magento\Framework\Data\Collection\AbstractDb as AbstractCollection;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
+use Magento\Framework\Data\Collection\AbstractDb as Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
 class Converter
 {
     /**
-     * @var EntityAttribute
-     */
-    private $entityAttribute;
-
-    /**
      * @var FieldInterfaceFactory
      */
-    private $fieldFactory;
+    private FieldInterfaceFactory $fieldFactory;
+
+    /**
+     * @var EntityAttributeProvider
+     */
+    private EntityAttributeProvider $entityAttributeProvider;
 
     /**
      * @var PaginationInterfaceFactory
      */
-    private $paginationFactory;
+    private PaginationInterfaceFactory $paginationFactory;
 
     /**
      * @var ResourceListInterfaceFactory
      */
-    private $resourceListFactory;
+    private ResourceListInterfaceFactory $resourceListFactory;
 
     /**
      * @var TranslatableResourceInterfaceFactory
      */
-    private $resourceFactory;
+    private TranslatableResourceInterfaceFactory $resourceFactory;
 
     /**
-     * @param EntityAttribute $entityAttribute
      * @param FieldInterfaceFactory $fieldFactory
+     * @param EntityAttributeProvider $entityAttributeProvider
      * @param PaginationInterfaceFactory $paginationFactory
      * @param ResourceListInterfaceFactory $resourceListFactory
      * @param TranslatableResourceInterfaceFactory $resourceFactory
      */
     public function __construct(
-        EntityAttribute $entityAttribute,
         FieldInterfaceFactory $fieldFactory,
+        EntityAttributeProvider $entityAttributeProvider,
         PaginationInterfaceFactory $paginationFactory,
         ResourceListInterfaceFactory $resourceListFactory,
         TranslatableResourceInterfaceFactory $resourceFactory
     ) {
-        $this->entityAttribute = $entityAttribute;
         $this->fieldFactory = $fieldFactory;
+        $this->entityAttributeProvider = $entityAttributeProvider;
         $this->paginationFactory = $paginationFactory;
         $this->resourceListFactory = $resourceListFactory;
         $this->resourceFactory = $resourceFactory;
@@ -72,7 +73,7 @@ class Converter
     public function convert(DataObject $item, string $resourceType): TranslatableResourceInterface
     {
         $fields = [];
-        foreach ($this->entityAttribute->getList($resourceType) as $attribute) {
+        foreach ($this->entityAttributeProvider->getList($resourceType) as $attribute) {
             /** @var Field $field */
             $field = $this->fieldFactory->create()
                 ->setKey($attribute->getCode())
@@ -95,12 +96,12 @@ class Converter
     /**
      * Converts the collection to translatable resource list
      *
-     * @param AbstractCollection $collection
+     * @param Collection $collection
      * @param string $resourceType
      * @return ResourceListInterface
      * @throws LocalizedException
      */
-    public function convertCollection(AbstractCollection $collection, string $resourceType): ResourceListInterface
+    public function convertCollection(Collection $collection, string $resourceType): ResourceListInterface
     {
         $resources = [];
         foreach ($collection->getItems() as $item) {
