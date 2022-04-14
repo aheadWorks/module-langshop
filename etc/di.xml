@@ -561,6 +561,6 @@
     </virtualType>
 
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
-        <plugin name="disable_body_overriding" type="Aheadworks\Langshop\Plugin\RestParamsOverrider" />
+        <plugin name="aw_ls_disable_body_overriding" type="Aheadworks\Langshop\Plugin\Webapi\Controller\Rest\ParamsOverrider" />
     </type>
 </config>

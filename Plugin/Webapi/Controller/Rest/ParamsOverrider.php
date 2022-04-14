@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Plugin;
+namespace Aheadworks\Langshop\Plugin\Webapi\Controller\Rest;
 
 use Aheadworks\Langshop\Api\TranslatableResourceManagementInterface;
-use Magento\Webapi\Controller\Rest\ParamsOverrider;
+use Magento\Webapi\Controller\Rest\ParamsOverrider as WebapiParamsOverrider;
 
-class RestParamsOverrider
+class ParamsOverrider
 {
     /**
      * The body overriding does not recognize arrays as it should,
      * so needs to be disabled for translatable resources.
      *
-     * @param ParamsOverrider $paramsOverrider
+     * @param WebapiParamsOverrider $paramsOverrider
      * @param array $urlPathParams
      * @param array $requestBodyParams
      * @param string $serviceClassName
@@ -20,7 +20,7 @@ class RestParamsOverrider
      * @return array
      */
     public function beforeOverrideRequestBodyIdWithPathParam(
-        ParamsOverrider $paramsOverrider,
+        WebapiParamsOverrider $paramsOverrider,
         array $urlPathParams,
         array $requestBodyParams,
         string $serviceClassName,
