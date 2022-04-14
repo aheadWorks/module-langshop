@@ -25,8 +25,8 @@
                 type="Aheadworks\Langshop\Model\TranslatableResource" />
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource\Field" />
-    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\ContentInterface"
-                type="Aheadworks\Langshop\Model\TranslatableResource\Content" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\Translation" />
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource\Pagination" />
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface"
@@ -73,11 +73,24 @@
             <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category\Collection</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\ResourceModelFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category</argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product"
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory</argument>
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">product</argument>
         </arguments>
@@ -86,6 +99,7 @@
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\ResourceModelFactory</argument>
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">category</argument>
         </arguments>
@@ -545,4 +559,8 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <plugin name="aw_ls_disable_body_overriding" type="Aheadworks\Langshop\Plugin\Webapi\Controller\Rest\ParamsOverrider" />
+    </type>
 </config>

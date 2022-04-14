@@ -33,8 +33,9 @@ interface TranslatableResourceManagementInterface
      *
      * @param string $resourceType
      * @param int $resourceId
+     * @param \Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface[] $translations
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      * @throws LocalizedException
      */
-    public function save(string $resourceType, int $resourceId): TranslatableResourceInterface;
+    public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface;
 }

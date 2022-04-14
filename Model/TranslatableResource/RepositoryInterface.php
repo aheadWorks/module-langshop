@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
+use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as AbstractCollection;
 use Magento\Framework\DataObject;
@@ -33,9 +34,10 @@ interface RepositoryInterface
     /**
      * Save entity
      *
-     * @param DataObject $entity
-     * @return DataObject
+     * @param int $entityId
+     * @param TranslationInterface[] $translations
      * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function save(DataObject $entity): DataObject;
+    public function save(int $entityId, array $translations): void;
 }

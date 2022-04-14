@@ -3,73 +3,81 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
-use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleRepository;
-use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
+use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute as EntityAttributeProvider;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogAbstractCollection;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\Collection\AbstractDb as AbstractCollection;
-use Magento\Framework\Data\Collection\AbstractDbFactory as AbstractCollectionFactory;
+use Magento\Framework\Data\Collection\AbstractDb as Collection;
+use Magento\Framework\Data\Collection\AbstractDbFactory as CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelFactory;
 
 class EavEntity implements RepositoryInterface
 {
     /**
-     * @var EntityAttribute
+     * @var CollectionFactory
      */
-    private $entityAttribute;
+    private CollectionFactory $collectionFactory;
 
     /**
-     * @var LocaleRepository
+     * @var LocaleScopeProvider
      */
-    private $localeRepository;
+    private LocaleScopeProvider $localeScopeProvider;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var ResourceModelFactory
      */
-    private $searchCriteriaBuilder;
+    private ResourceModelFactory $resourceModelFactory;
 
     /**
-     * @var AbstractCollectionFactory
+     * @var TranslationValidation
      */
-    private $collectionFactory;
+    private TranslationValidation $translationValidation;
+
+    /**
+     * @var EntityAttributeProvider
+     */
+    private EntityAttributeProvider $entityAttributeProvider;
 
     /**
      * @var CollectionProcessorInterface
      */
-    private $collectionProcessor;
+    private CollectionProcessorInterface $collectionProcessor;
 
     /**
      * @var string
      */
-    private $resourceType;
+    private string $resourceType;
 
     /**
-     * @param EntityAttribute $entityAttribute
-     * @param LocaleRepository $localeRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param AbstractCollectionFactory $collectionFactory
+     * @param CollectionFactory $collectionFactory
+     * @param LocaleScopeProvider $localeScopeProvider
+     * @param ResourceModelFactory $resourceModelFactory
+     * @param TranslationValidation $translationValidation
+     * @param EntityAttributeProvider $entityAttributeProvider
      * @param CollectionProcessorInterface $collectionProcessor
      * @param string $resourceType
      */
     public function __construct(
-        EntityAttribute $entityAttribute,
-        LocaleRepository $localeRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        AbstractCollectionFactory $collectionFactory,
+        CollectionFactory $collectionFactory,
+        LocaleScopeProvider $localeScopeProvider,
+        ResourceModelFactory $resourceModelFactory,
+        TranslationValidation $translationValidation,
+        EntityAttributeProvider $entityAttributeProvider,
         CollectionProcessorInterface $collectionProcessor,
         string $resourceType
     ) {
-        $this->entityAttribute = $entityAttribute;
-        $this->localeRepository = $localeRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionFactory = $collectionFactory;
+        $this->localeScopeProvider = $localeScopeProvider;
+        $this->resourceModelFactory = $resourceModelFactory;
+        $this->translationValidation = $translationValidation;
+        $this->entityAttributeProvider = $entityAttributeProvider;
         $this->collectionProcessor = $collectionProcessor;
         $this->resourceType = $resourceType;
     }
@@ -77,10 +85,9 @@ class EavEntity implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): AbstractCollection
+    public function getList(SearchCriteriaInterface $searchCriteria): Collection
     {
         $collection = $this->collectionFactory->create();
-
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         return $this->addLocalizedAttributes($collection);
@@ -91,37 +98,70 @@ class EavEntity implements RepositoryInterface
      */
     public function get(int $entityId): DataObject
     {
-        $collection = $this->collectionFactory->create()
-            ->addFieldToFilter('entity_id', $entityId);
+        $collection = $this->prepareCollectionById($entityId);
 
-        if (!$this->addLocalizedAttributes($collection)->count()) {
-            throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $entityId));
-        }
-
-        return $collection->getFirstItem();
+        return $this->addLocalizedAttributes($collection)->getFirstItem();
     }
 
     /**
      * @inheritDoc
      */
-    public function save(DataObject $entity): DataObject
+    public function save(int $entityId, array $translations): void
     {
-        //todo: https://aheadworks.atlassian.net/browse/LSM2-56
-        return $entity;
+        $localeScopes = [];
+        foreach ($this->localeScopeProvider->getList() as $localeScope) {
+            $localeScopes[$localeScope->getLocaleCode()] = $localeScope->getScopeId();
+        }
+
+        $translationByScopes = [];
+        foreach ($translations as $translation) {
+            $this->translationValidation->validate($translation, $this->resourceType);
+
+            if (isset($localeScopes[$translation->getLocale()])) {
+                $scopeId = $localeScopes[$translation->getLocale()];
+                $translationByScopes[$scopeId][$translation->getKey()] = $translation->getValue();
+            }
+        }
+
+        /** @var AbstractModel $item */
+        $item = $this->prepareCollectionById($entityId)->getFirstItem();
+        foreach ($translationByScopes as $scopeId => $values) {
+            $item->addData($values)->setData('store_id', $scopeId);
+            $this->resourceModelFactory->create()->save($item);
+        }
+    }
+
+    /**
+     * Filters collection by incoming id, throws exception if nothing is found
+     *
+     * @param int $entityId
+     * @return Collection
+     * @throws NoSuchEntityException
+     */
+    private function prepareCollectionById(int $entityId): Collection
+    {
+        $collection = $this->collectionFactory->create()
+            ->addFieldToFilter('entity_id', $entityId);
+
+        if (!$collection->getSize()) {
+            throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $entityId));
+        }
+
+        return $collection;
     }
 
     /**
      * Adds localized attribute values to the collection
      *
-     * @param AbstractCollection $collection
-     * @return AbstractCollection
+     * @param Collection $collection
+     * @return Collection
      * @throws LocalizedException
      */
-    private function addLocalizedAttributes(AbstractCollection $collection): AbstractCollection
+    private function addLocalizedAttributes(Collection $collection): Collection
     {
-        if ($collection instanceof CatalogAbstractCollection) {
+        if ($collection instanceof CatalogCollection) {
             $attributeCodes = [[], []];
-            foreach ($this->entityAttribute->getList($this->resourceType) as $attribute) {
+            foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
                 $attributeCodes[$attribute->isTranslatable()][] = $attribute->getCode();
             }
 
@@ -129,8 +169,8 @@ class EavEntity implements RepositoryInterface
             $collection->addAttributeToSelect($attributeCodes[0]);
             $localizedCollection->addAttributeToSelect($attributeCodes[1]);
 
-            foreach ($this->getLocales() as $locale) {
-                $localizedCollection->clear()->setStoreId($locale->getScopeId());
+            foreach ($this->localeScopeProvider->getList() as $localeScope) {
+                $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
 
                 /** @var AbstractModel $localizedItem */
                 foreach ($localizedCollection as $localizedItem) {
@@ -139,7 +179,7 @@ class EavEntity implements RepositoryInterface
                         $value = is_array($item->getData($attributeCode))
                             ? $item->getData($attributeCode)
                             : [];
-                        $value[$locale->getLocaleCode()] = $localizedItem->getData($attributeCode);
+                        $value[$localeScope->getLocaleCode()] = $localizedItem->getData($attributeCode);
                         $item->setData($attributeCode, $value);
                     }
                 }
@@ -147,17 +187,5 @@ class EavEntity implements RepositoryInterface
         }
 
         return $collection;
-    }
-
-    /**
-     * Retrieves available to translate locales
-     *
-     * @return RecordInterface[]
-     */
-    private function getLocales(): array
-    {
-        return $this->localeRepository->getList(
-            $this->searchCriteriaBuilder->create()
-        )->getItems();
     }
 }
