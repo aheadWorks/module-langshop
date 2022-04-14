@@ -39,7 +39,7 @@ class Filter implements ProcessorInterface
      * @return array
      * @throws LocalizedException
      */
-    public function process($data)
+    public function process(array $data): array
     {
         $filter = $data['filter'] ?? [];
         $filters = [];

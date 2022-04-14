@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
@@ -12,12 +14,12 @@ class Locale implements ProcessorInterface
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @var ScopeRecordRepository
      */
-    private $scopeRecordRepository;
+    private ScopeRecordRepository $scopeRecordRepository;
 
     /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -38,7 +40,7 @@ class Locale implements ProcessorInterface
      * @return array
      * @throws NoSuchEntityException
      */
-    public function process($data)
+    public function process(array $data): array
     {
         $locale = $data['locale'] ?? $this->scopeRecordRepository->getDefault()->getLocaleCode();
         $storeIds = [];
