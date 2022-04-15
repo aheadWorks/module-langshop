@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource;
 
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\Entity\Field\Filter\Builder;
-use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Magento\Framework\Exception\LocalizedException;
 
 class Filter implements ProcessorInterface
@@ -11,23 +13,23 @@ class Filter implements ProcessorInterface
     /**
      * @var Builder
      */
-    private $filterBuilder;
+    private Builder $filterBuilder;
 
     /**
-     * @var EntityAttribute
+     * @var EntityAttributeProvider
      */
-    private $entityAttribute;
+    private EntityAttributeProvider $entityAttributeProvider;
 
     /**
      * @param Builder $filterBuilder
-     * @param EntityAttribute $entityAttribute
+     * @param EntityAttributeProvider $entityAttributeProvider
      */
     public function __construct(
         Builder $filterBuilder,
-        EntityAttribute $entityAttribute
+        EntityAttributeProvider $entityAttributeProvider
     ) {
         $this->filterBuilder = $filterBuilder;
-        $this->entityAttribute = $entityAttribute;
+        $this->entityAttributeProvider = $entityAttributeProvider;
     }
 
     /**
@@ -37,11 +39,11 @@ class Filter implements ProcessorInterface
      * @return array
      * @throws LocalizedException
      */
-    public function process($data)
+    public function process(array $data): array
     {
         $filter = $data['filter'] ?? [];
         $filters = [];
-        $attributes = $this->entityAttribute->getList($data['resourceType']);
+        $attributes = $this->entityAttributeProvider->getList($data['resourceType']);
 
         foreach ($filter as $field => $value) {
             $attribute = $attributes[$field] ?? null;

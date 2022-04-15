@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
-use Aheadworks\Langshop\Model\TranslatableResource\EntityAttribute as EntityAttributeProvider;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;

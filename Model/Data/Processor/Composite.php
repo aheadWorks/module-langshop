@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Data\Processor;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
@@ -9,7 +11,7 @@ class Composite implements ProcessorInterface
     /**
      * @var ProcessorInterface[]
      */
-    private $processorList;
+    private array $processorList;
 
     /**
      * @param ProcessorInterface[] $processorList
@@ -22,7 +24,7 @@ class Composite implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process($data)
+    public function process(array $data): array
     {
         foreach ($this->processorList as $processor) {
             if (!$processor instanceof ProcessorInterface) {

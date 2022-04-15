@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Data;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -12,5 +14,5 @@ interface ProcessorInterface
      * @return array
      * @throws LocalizedException
      */
-    public function process($data);
+    public function process(array $data): array;
 }
