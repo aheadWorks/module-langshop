@@ -160,14 +160,18 @@ class EavEntity implements RepositoryInterface
     private function addLocalizedAttributes(Collection $collection): Collection
     {
         if ($collection instanceof CatalogCollection) {
-            $attributeCodes = [[], []];
+            $attributeCodes = [
+                'translatable' => [],
+                'untranslatable' => []
+            ];
             foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
-                $attributeCodes[$attribute->isTranslatable()][] = $attribute->getCode();
+                $isTranslatable = $attribute->isTranslatable() ? 'translatable' : 'untranslatable';
+                $attributeCodes[$isTranslatable][] = $attribute->getCode();
             }
 
             $localizedCollection = clone $collection;
-            $collection->addAttributeToSelect($attributeCodes[0]);
-            $localizedCollection->addAttributeToSelect($attributeCodes[1]);
+            $collection->addAttributeToSelect($attributeCodes['translatable']);
+            $localizedCollection->addAttributeToSelect($attributeCodes['untranslatable']);
 
             foreach ($this->localeScopeProvider->getList() as $localeScope) {
                 $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
@@ -175,7 +179,7 @@ class EavEntity implements RepositoryInterface
                 /** @var AbstractModel $localizedItem */
                 foreach ($localizedCollection as $localizedItem) {
                     $item = $collection->getItemById($localizedItem->getId());
-                    foreach ($attributeCodes[1] as $attributeCode) {
+                    foreach ($attributeCodes['translatable'] as $attributeCode) {
                         $value = is_array($item->getData($attributeCode))
                             ? $item->getData($attributeCode)
                             : [];
