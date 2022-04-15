@@ -197,6 +197,24 @@ class Repository
     }
 
     /**
+     * Get default scope record
+     *
+     * @return EntityInterface|mixed
+     */
+    public function getDefault()
+    {
+        if (!isset($this->instanceList['default'])) {
+            /** @var Collection $collection */
+            $collection = $this->collectionFactory->create();
+            $collection->addFilter(EntityInterface::SCOPE_ID, 0);
+
+            $this->instanceList['default'] = $collection->getFirstItem();
+        }
+
+        return $this->instanceList['default'];
+    }
+
+    /**
      * Prepare object of entity interface
      *
      * @param EntityModel $model

@@ -82,7 +82,7 @@ class DynamicAttribute implements CollectorInterface
                 ->setIsFilterable($attribute->getIsFilterable())
                 ->setFilterType($attribute->getFrontendInput());
 
-            $fields[] = $field;
+            $fields[$attribute->getAttributeCode()] = $field;
         }
 
         return $fields;

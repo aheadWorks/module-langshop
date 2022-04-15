@@ -21,6 +21,19 @@
     <preference for="Aheadworks\Langshop\Api\SchemaManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Schema" />
 
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResourceInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\Field" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\Translation" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\Pagination" />
+    <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface"
+                type="Aheadworks\Langshop\Model\TranslatableResource\ResourceList" />
+    <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"
+                type="Aheadworks\Langshop\Model\Service\TranslatableResource" />
+
     <!-- START Collection Modifier Pool -->
     <preference for="Aheadworks\Langshop\Model\ResourceModel\Collection\ModifierInterface"
                 type="Aheadworks\Langshop\Model\ResourceModel\Collection\Modifier\Composite" />
@@ -37,6 +50,60 @@
     <preference for="Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface"
                 type="Magento\Framework\Api\SearchResults" />
     <!-- END Scope Record Configuration -->
+
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool">
+        <arguments>
+            <argument name="repositories" xsi:type="array">
+                <item name="attribute" xsi:type="object">Magento\Eav\Api\AttributeRepositoryInterface\Proxy</item>
+                <item name="product" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product</item>
+                <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory"
+                 type="Magento\Framework\Data\Collection\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory"
+                 type="Magento\Framework\Data\Collection\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\ResourceModelFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+            <argument name="resourceType" xsi:type="string">product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\ResourceModelFactory</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+            <argument name="resourceType" xsi:type="string">category</argument>
+        </arguments>
+    </virtualType>
 
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
@@ -61,6 +128,21 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Aheadworks\Langshop\Model\Service\TranslatableResource">
+        <arguments>
+            <argument name="dataProcessor" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Composite</argument>
+        </arguments>
+    </type>
+    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Composite"
+                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
+            </argument>
+        </arguments>
+    </virtualType>
 
     <type name="Aheadworks\Langshop\Model\Service\Schema">
         <arguments>
@@ -94,6 +176,17 @@
                     <item name="asc" xsi:type="string"/>
                     <item name="desc" xsi:type="string"/>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Aheadworks\Langshop\Model\Entity\Field\Filter\Builder">
+        <arguments>
+            <argument name="preparers" xsi:type="array">
+                <item name="text" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Text</item>
+                <item name="date" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Date</item>
+                <item name="select" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Select</item>
+                <item name="multiselect" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Multiselect</item>
             </argument>
         </arguments>
     </type>
@@ -412,6 +505,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Aheadworks\Langshop\Model\Entity\Field\Filter\Pool">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="text" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Text</item>
+                <item name="select" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Select</item>
+                <item name="multiselect" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Multiselect</item>
+                <item name="date" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Date</item>
+            </argument>
+        </arguments>
+    </type>
 
     <virtualType name="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup\General"
                  type="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup">
@@ -455,4 +558,8 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <plugin name="aw_ls_disable_body_overriding" type="Aheadworks\Langshop\Plugin\Webapi\Controller\Rest\ParamsOverrider" />
+    </type>
 </config>
