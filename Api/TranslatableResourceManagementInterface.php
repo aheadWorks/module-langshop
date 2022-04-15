@@ -13,10 +13,12 @@ interface TranslatableResourceManagementInterface
      * Retrieves all translatable resources by specific type
      *
      * @param string $resourceType
+     * @param int $page
+     * @param int $pageSize
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface
      * @throws LocalizedException
      */
-    public function getList(string $resourceType): ResourceListInterface;
+    public function getList(string $resourceType, int $page = 1, int $pageSize = 20): ResourceListInterface;
 
     /**
      * Retrieves translatable resource by type and identifier

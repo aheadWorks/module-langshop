@@ -63,7 +63,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function getList(string $resourceType): ResourceListInterface
+    public function getList(string $resourceType, int $page = 1, int $pageSize = 20): ResourceListInterface
     {
         $repository = $this->repositoryPool->get($resourceType);
 
@@ -75,7 +75,9 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             $this->searchCriteriaBuilder->addFilters($params['filters']);
         }
 
+        $this->searchCriteriaBuilder->setCurrentPage($page)->setPageSize($pageSize);
         $searchCriteria = $this->searchCriteriaBuilder->create();
+
         $items = $repository->getList($searchCriteria);
 
         return $this->converter->convertCollection($items, $resourceType);
