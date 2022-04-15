@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\TranslatableResource;
+namespace Aheadworks\Langshop\Model\TranslatableResource\Provider;
 
 use Aheadworks\Langshop\Model\Entity\Field;
 use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
@@ -12,12 +12,12 @@ class EntityAttribute
     /**
      * @var EntityPool
      */
-    private $entityPool;
+    private EntityPool $entityPool;
 
     /**
-     * @var array
+     * @var Field[]
      */
-    private $attributes;
+    private array $attributes;
 
     /**
      * @param EntityPool $entityPool
