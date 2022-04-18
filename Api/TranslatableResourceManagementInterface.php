@@ -16,6 +16,9 @@ interface TranslatableResourceManagementInterface
      * @param mixed $locale
      * @param int|null $page
      * @param int|null $pageSize
+     * @param string|null $sortBy
+     * @param string|null $orderBy
+     * @param string[]|null $filter
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface
      * @throws LocalizedException
      */
@@ -23,7 +26,10 @@ interface TranslatableResourceManagementInterface
         string $resourceType,
         $locale = [],
         ?int $page = null,
-        ?int $pageSize = null
+        ?int $pageSize = null,
+        ?string $sortBy = null,
+        ?string $orderBy = null,
+        ?array $filter = []
     ): ResourceListInterface;
 
     /**

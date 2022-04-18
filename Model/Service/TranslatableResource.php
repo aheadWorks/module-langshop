@@ -10,7 +10,6 @@ use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\RequestInterface;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
@@ -30,11 +29,6 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-
-    /**
      * @var ProcessorInterface
      */
     private ProcessorInterface $dataProcessor;
@@ -43,20 +37,17 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      * @param Converter $converter
      * @param RepositoryPool $repositoryPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param RequestInterface $request
      * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         Converter $converter,
         RepositoryPool $repositoryPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        RequestInterface $request,
         ProcessorInterface $dataProcessor
     ) {
         $this->converter = $converter;
         $this->repositoryPool = $repositoryPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->request = $request;
         $this->dataProcessor = $dataProcessor;
     }
 
@@ -67,14 +58,18 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         string $resourceType,
         $locale = [],
         ?int $page = null,
-        ?int $pageSize = null
+        ?int $pageSize = null,
+        ?string $sortBy = null,
+        ?string $orderBy = null,
+        ?array $filter = []
     ): ResourceListInterface {
         $repository = $this->repositoryPool->get($resourceType);
         $locales = is_array($locale) ? $locale : [$locale];
 
-        $params = $this->request->getParams();
-        $params['resourceType'] = $resourceType;
-        $params = $this->dataProcessor->process($params);
+        $params = $this->dataProcessor->process([
+            'resourceType' => $resourceType,
+            'filter' => $filter
+        ]);
 
         if (isset($params['filters'])) {
             $this->searchCriteriaBuilder->addFilters($params['filters']);
