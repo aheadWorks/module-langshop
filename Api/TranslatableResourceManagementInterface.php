@@ -13,22 +13,29 @@ interface TranslatableResourceManagementInterface
      * Retrieves all translatable resources by specific type
      *
      * @param string $resourceType
-     * @param int $page
-     * @param int $pageSize
+     * @param mixed $locale
+     * @param int|null $page
+     * @param int|null $pageSize
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface
      * @throws LocalizedException
      */
-    public function getList(string $resourceType, int $page = 1, int $pageSize = 20): ResourceListInterface;
+    public function getList(
+        string $resourceType,
+        $locale = [],
+        ?int $page = null,
+        ?int $pageSize = null
+    ): ResourceListInterface;
 
     /**
      * Retrieves translatable resource by type and identifier
      *
      * @param string $resourceType
      * @param int $resourceId
+     * @param mixed $locale
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      * @throws LocalizedException
      */
-    public function getById(string $resourceType, int $resourceId): TranslatableResourceInterface;
+    public function getById(string $resourceType, int $resourceId, $locale = []): TranslatableResourceInterface;
 
     /**
      * Saves translatable resource

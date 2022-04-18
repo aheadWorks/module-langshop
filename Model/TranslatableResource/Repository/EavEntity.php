@@ -85,7 +85,7 @@ class EavEntity implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): Collection
+    public function getList(SearchCriteriaInterface $searchCriteria, array $locales): Collection
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
@@ -96,7 +96,7 @@ class EavEntity implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function get(int $entityId): DataObject
+    public function get(int $entityId, array $locales): DataObject
     {
         $collection = $this->prepareCollectionById($entityId);
 

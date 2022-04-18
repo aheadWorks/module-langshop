@@ -63,9 +63,14 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function getList(string $resourceType, int $page = 1, int $pageSize = 20): ResourceListInterface
-    {
+    public function getList(
+        string $resourceType,
+        $locale = [],
+        ?int $page = null,
+        ?int $pageSize = null
+    ): ResourceListInterface {
         $repository = $this->repositoryPool->get($resourceType);
+        $locales = is_array($locale) ? $locale : [$locale];
 
         $params = $this->request->getParams();
         $params['resourceType'] = $resourceType;
@@ -75,26 +80,24 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             $this->searchCriteriaBuilder->addFilters($params['filters']);
         }
 
-        $this->searchCriteriaBuilder->setCurrentPage($page)->setPageSize($pageSize);
-        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->setCurrentPage($page ?? 1)
+            ->setPageSize($pageSize ?? 20)
+            ->create();
 
-        $items = $repository->getList($searchCriteria);
+        $collection = $repository->getList($searchCriteria, $locales);
 
-        return $this->converter->convertCollection($items, $resourceType);
+        return $this->converter->convertCollection($collection, $resourceType);
     }
 
     /**
      * @inheritDoc
      */
-    public function getById(string $resourceType, int $resourceId): TranslatableResourceInterface
+    public function getById(string $resourceType, int $resourceId, $locale = []): TranslatableResourceInterface
     {
         $repository = $this->repositoryPool->get($resourceType);
-
-        $params = $this->request->getParams();
-        $params['resourceType'] = $resourceType;
-        $params = $this->dataProcessor->process($params);
-
-        $item = $repository->get($resourceId);
+        $locales = is_array($locale) ? $locale : [$locale];
+        $item = $repository->get($resourceId, $locales);
 
         return $this->converter->convert($item, $resourceType);
     }
@@ -104,7 +107,8 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface
     {
-        $this->repositoryPool->get($resourceType)->save($resourceId, $translations);
+        $repository = $this->repositoryPool->get($resourceType);
+        $repository->save($resourceId, $translations);
 
         return $this->getById($resourceType, $resourceId);
     }
