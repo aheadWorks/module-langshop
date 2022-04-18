@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
-use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Attribute as AttributeValidation;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Locale as LocaleValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -21,9 +23,19 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelF
 class EavEntity implements RepositoryInterface
 {
     /**
+     * @var LocaleValidation
+     */
+    private LocaleValidation $localeValidation;
+
+    /**
      * @var CollectionFactory
      */
     private CollectionFactory $collectionFactory;
+
+    /**
+     * @var AttributeValidation
+     */
+    private AttributeValidation $attributeValidation;
 
     /**
      * @var LocaleScopeProvider
@@ -34,11 +46,6 @@ class EavEntity implements RepositoryInterface
      * @var ResourceModelFactory
      */
     private ResourceModelFactory $resourceModelFactory;
-
-    /**
-     * @var TranslationValidation
-     */
-    private TranslationValidation $translationValidation;
 
     /**
      * @var EntityAttributeProvider
@@ -56,27 +63,30 @@ class EavEntity implements RepositoryInterface
     private string $resourceType;
 
     /**
+     * @param LocaleValidation $localeValidation
      * @param CollectionFactory $collectionFactory
+     * @param AttributeValidation $attributeValidation
      * @param LocaleScopeProvider $localeScopeProvider
      * @param ResourceModelFactory $resourceModelFactory
-     * @param TranslationValidation $translationValidation
      * @param EntityAttributeProvider $entityAttributeProvider
      * @param CollectionProcessorInterface $collectionProcessor
      * @param string $resourceType
      */
     public function __construct(
+        LocaleValidation $localeValidation,
         CollectionFactory $collectionFactory,
+        AttributeValidation $attributeValidation,
         LocaleScopeProvider $localeScopeProvider,
         ResourceModelFactory $resourceModelFactory,
-        TranslationValidation $translationValidation,
         EntityAttributeProvider $entityAttributeProvider,
         CollectionProcessorInterface $collectionProcessor,
         string $resourceType
     ) {
+        $this->localeValidation = $localeValidation;
         $this->collectionFactory = $collectionFactory;
+        $this->attributeValidation = $attributeValidation;
         $this->localeScopeProvider = $localeScopeProvider;
         $this->resourceModelFactory = $resourceModelFactory;
-        $this->translationValidation = $translationValidation;
         $this->entityAttributeProvider = $entityAttributeProvider;
         $this->collectionProcessor = $collectionProcessor;
         $this->resourceType = $resourceType;
@@ -87,10 +97,14 @@ class EavEntity implements RepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria, array $locales): Collection
     {
+        foreach ($locales as $locale) {
+            $this->localeValidation->validate($locale);
+        }
+
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        return $this->addLocalizedAttributes($collection);
+        return $this->addLocalizedAttributes($collection, $locales);
     }
 
     /**
@@ -98,9 +112,13 @@ class EavEntity implements RepositoryInterface
      */
     public function get(int $entityId, array $locales): DataObject
     {
+        foreach ($locales as $locale) {
+            $this->localeValidation->validate($locale);
+        }
+
         $collection = $this->prepareCollectionById($entityId);
 
-        return $this->addLocalizedAttributes($collection)->getFirstItem();
+        return $this->addLocalizedAttributes($collection, $locales)->getFirstItem();
     }
 
     /**
@@ -108,27 +126,39 @@ class EavEntity implements RepositoryInterface
      */
     public function save(int $entityId, array $translations): void
     {
-        $localeScopes = [];
-        foreach ($this->localeScopeProvider->getList() as $localeScope) {
-            $localeScopes[$localeScope->getLocaleCode()] = $localeScope->getScopeId();
-        }
-
-        $translationByScopes = [];
+        $translationByLocales = [];
         foreach ($translations as $translation) {
-            $this->translationValidation->validate($translation, $this->resourceType);
+            $this->localeValidation->validate($translation->getLocale());
+            $this->attributeValidation->validate($translation->getKey(), $this->resourceType);
 
-            if (isset($localeScopes[$translation->getLocale()])) {
-                $scopeId = $localeScopes[$translation->getLocale()];
-                $translationByScopes[$scopeId][$translation->getKey()] = $translation->getValue();
-            }
+            $translationByLocales[$translation->getLocale()][$translation->getKey()] = $translation->getValue();
         }
 
         /** @var AbstractModel $item */
         $item = $this->prepareCollectionById($entityId)->getFirstItem();
-        foreach ($translationByScopes as $scopeId => $values) {
-            $item->addData($values)->setData('store_id', $scopeId);
-            $this->resourceModelFactory->create()->save($item);
+        foreach ($translationByLocales as $locale => $values) {
+            foreach ($this->getLocaleScopes([$locale]) as $localeScope) {
+                $item->addData($values)->setData('store_id', $localeScope->getScopeId());
+                $this->resourceModelFactory->create()->save($item);
+            }
         }
+    }
+
+    /**
+     * Retrieves locale scopes by locale codes or primary flag
+     *
+     * @param string[] $locales
+     * @return RecordInterface[]
+     */
+    private function getLocaleScopes(array $locales): array
+    {
+        $localeScopes = $this->localeScopeProvider->getList();
+
+        $searchByLocales = fn (RecordInterface $localeScope): bool => in_array($localeScope->getLocaleCode(), $locales);
+        $searchByPrimary = fn (RecordInterface $localeScope): bool => (bool) $localeScope->getIsPrimary();
+
+        return array_filter($localeScopes, $searchByLocales) ?:
+            array_filter($localeScopes, $searchByPrimary);
     }
 
     /**
@@ -154,10 +184,11 @@ class EavEntity implements RepositoryInterface
      * Adds localized attribute values to the collection
      *
      * @param Collection $collection
+     * @param string[] $locales
      * @return Collection
      * @throws LocalizedException
      */
-    private function addLocalizedAttributes(Collection $collection): Collection
+    private function addLocalizedAttributes(Collection $collection, array $locales): Collection
     {
         if ($collection instanceof CatalogCollection) {
             $attributeCodes = [
@@ -170,10 +201,10 @@ class EavEntity implements RepositoryInterface
             }
 
             $localizedCollection = clone $collection;
-            $collection->addAttributeToSelect($attributeCodes['translatable']);
-            $localizedCollection->addAttributeToSelect($attributeCodes['untranslatable']);
+            $collection->addAttributeToSelect($attributeCodes['untranslatable']);
+            $localizedCollection->addAttributeToSelect($attributeCodes['translatable']);
 
-            foreach ($this->localeScopeProvider->getList() as $localeScope) {
+            foreach ($this->getLocaleScopes($locales) as $localeScope) {
                 $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
 
                 /** @var AbstractModel $localizedItem */
