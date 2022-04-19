@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Service;
 
 use Aheadworks\Langshop\Api\LocaleManagementInterface;
@@ -13,22 +15,22 @@ class Locale implements LocaleManagementInterface
     /**
      * @var ScopeRecordRepository
      */
-    private $scopeRecordRepository;
+    private ScopeRecordRepository $scopeRecordRepository;
 
     /**
      * @var SaveHandler
      */
-    private $saveHandler;
+    private SaveHandler $saveHandler;
 
     /**
      * @var LoadHandler
      */
-    private $loadHandler;
+    private LoadHandler $loadHandler;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @param ScopeRecordRepository $scopeRecordRepository
@@ -91,7 +93,7 @@ class Locale implements LocaleManagementInterface
 
         foreach ($scopeRecords as $scopeRecord) {
             $localeCode = $scopeRecord->getLocaleCode();
-            if (!isset($existingLocales[$localeCode])) {
+            if (!in_array($localeCode, $existingLocales)) {
                 $locales[] = $this->loadHandler->load($scopeRecord);
                 $existingLocales[] = $localeCode;
             }
