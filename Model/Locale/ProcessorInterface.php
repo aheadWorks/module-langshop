@@ -1,17 +1,20 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Locale;
 
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 interface ProcessorInterface
 {
     /**
      * Process locale
      *
-     * @param \Aheadworks\Langshop\Api\Data\LocaleInterface $locale
+     * @param LocaleInterface $locale
      * @param array $data
-     * @return \Aheadworks\Langshop\Api\Data\LocaleInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return LocaleInterface
+     * @throws LocalizedException
      */
-    public function process(LocaleInterface $locale, array $data);
+    public function process(LocaleInterface $locale, array $data): LocaleInterface;
 }

@@ -30,7 +30,7 @@ class Name implements ProcessorInterface
      * @param array $data
      * @return LocaleInterface
      */
-    public function process(LocaleInterface $locale, array $data)
+    public function process(LocaleInterface $locale, array $data): LocaleInterface
     {
         $localeCode = $locale->getLocale();
         if ($localeCode) {

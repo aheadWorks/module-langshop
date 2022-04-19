@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Locale\Processor;
 
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
@@ -10,7 +12,7 @@ class Composite implements ProcessorInterface
     /**
      * @var ProcessorInterface[]
      */
-    private $processorList;
+    private array $processorList;
 
     /**
      * @param ProcessorInterface[] $processorList
@@ -24,7 +26,7 @@ class Composite implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(LocaleInterface $locale, array $data = [])
+    public function process(LocaleInterface $locale, array $data = []): LocaleInterface
     {
         foreach ($this->processorList as $processor) {
             if (!$processor instanceof ProcessorInterface) {

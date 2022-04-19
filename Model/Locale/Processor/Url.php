@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Locale\Processor;
 
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
@@ -13,12 +15,12 @@ class Url implements ProcessorInterface
     /**
      * @var UrlInterface
      */
-    private $url;
+    private UrlInterface $url;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @param UrlInterface $url
@@ -40,7 +42,7 @@ class Url implements ProcessorInterface
      * @return LocaleInterface
      * @throws LocalizedException
      */
-    public function process(LocaleInterface $locale, array $data)
+    public function process(LocaleInterface $locale, array $data): LocaleInterface
     {
         $type = $data['scope_type'];
 
