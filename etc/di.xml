@@ -125,6 +125,7 @@
         <arguments>
             <argument name="processorList" xsi:type="array">
                 <item name="url" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Url</item>
+                <item name="name" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Name</item>
             </argument>
         </arguments>
     </type>
