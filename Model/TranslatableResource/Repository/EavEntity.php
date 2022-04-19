@@ -135,28 +135,11 @@ class EavEntity implements RepositoryInterface
         /** @var AbstractModel $item */
         $item = $this->prepareCollectionById($entityId)->getFirstItem();
         foreach ($translationByLocales as $locale => $values) {
-            foreach ($this->getLocaleScopes([$locale]) as $localeScope) {
+            foreach ($this->localeScopeProvider->getByLocale([$locale]) as $localeScope) {
                 $item->addData($values)->setData('store_id', $localeScope->getScopeId());
                 $this->resourceModelFactory->create()->save($item);
             }
         }
-    }
-
-    /**
-     * Retrieves locale scopes by locale codes or primary flag
-     *
-     * @param string[] $locales
-     * @return RecordInterface[]
-     */
-    private function getLocaleScopes(array $locales): array
-    {
-        $localeScopes = $this->localeScopeProvider->getList();
-
-        $searchByLocales = fn (RecordInterface $localeScope): bool => in_array($localeScope->getLocaleCode(), $locales);
-        $searchByPrimary = fn (RecordInterface $localeScope): bool => (bool) $localeScope->getIsPrimary();
-
-        return array_filter($localeScopes, $searchByLocales) ?:
-            array_filter($localeScopes, $searchByPrimary);
     }
 
     /**
@@ -202,7 +185,7 @@ class EavEntity implements RepositoryInterface
             $collection->addAttributeToSelect($attributeCodes['untranslatable']);
             $localizedCollection->addAttributeToSelect($attributeCodes['translatable']);
 
-            foreach ($this->getLocaleScopes($locales) as $localeScope) {
+            foreach ($this->localeScopeProvider->getByLocale($locales) as $localeScope) {
                 $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
 
                 /** @var AbstractModel $localizedItem */
