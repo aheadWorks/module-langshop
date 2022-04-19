@@ -7,8 +7,8 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
-use Aheadworks\Langshop\Model\TranslatableResource\Validation\Attribute as AttributeValidation;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Locale as LocaleValidation;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -33,11 +33,6 @@ class EavEntity implements RepositoryInterface
     private CollectionFactory $collectionFactory;
 
     /**
-     * @var AttributeValidation
-     */
-    private AttributeValidation $attributeValidation;
-
-    /**
      * @var LocaleScopeProvider
      */
     private LocaleScopeProvider $localeScopeProvider;
@@ -46,6 +41,11 @@ class EavEntity implements RepositoryInterface
      * @var ResourceModelFactory
      */
     private ResourceModelFactory $resourceModelFactory;
+
+    /**
+     * @var TranslationValidation
+     */
+    private TranslationValidation $translationValidation;
 
     /**
      * @var EntityAttributeProvider
@@ -65,9 +65,9 @@ class EavEntity implements RepositoryInterface
     /**
      * @param LocaleValidation $localeValidation
      * @param CollectionFactory $collectionFactory
-     * @param AttributeValidation $attributeValidation
      * @param LocaleScopeProvider $localeScopeProvider
      * @param ResourceModelFactory $resourceModelFactory
+     * @param TranslationValidation $translationValidation
      * @param EntityAttributeProvider $entityAttributeProvider
      * @param CollectionProcessorInterface $collectionProcessor
      * @param string $resourceType
@@ -75,18 +75,18 @@ class EavEntity implements RepositoryInterface
     public function __construct(
         LocaleValidation $localeValidation,
         CollectionFactory $collectionFactory,
-        AttributeValidation $attributeValidation,
         LocaleScopeProvider $localeScopeProvider,
         ResourceModelFactory $resourceModelFactory,
+        TranslationValidation $translationValidation,
         EntityAttributeProvider $entityAttributeProvider,
         CollectionProcessorInterface $collectionProcessor,
         string $resourceType
     ) {
         $this->localeValidation = $localeValidation;
         $this->collectionFactory = $collectionFactory;
-        $this->attributeValidation = $attributeValidation;
         $this->localeScopeProvider = $localeScopeProvider;
         $this->resourceModelFactory = $resourceModelFactory;
+        $this->translationValidation = $translationValidation;
         $this->entityAttributeProvider = $entityAttributeProvider;
         $this->collectionProcessor = $collectionProcessor;
         $this->resourceType = $resourceType;
@@ -128,9 +128,7 @@ class EavEntity implements RepositoryInterface
     {
         $translationByLocales = [];
         foreach ($translations as $translation) {
-            $this->localeValidation->validate($translation->getLocale());
-            $this->attributeValidation->validate($translation->getKey(), $this->resourceType);
-
+            $this->translationValidation->validate($translation, $this->resourceType);
             $translationByLocales[$translation->getLocale()][$translation->getKey()] = $translation->getValue();
         }
 
