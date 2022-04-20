@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
@@ -85,22 +86,22 @@ class EavEntity implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): Collection
+    public function getList(SearchCriteriaInterface $searchCriteria, array $localeScopes): Collection
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        return $this->addLocalizedAttributes($collection);
+        return $this->addLocalizedAttributes($collection, $localeScopes);
     }
 
     /**
      * @inheritDoc
      */
-    public function get(int $entityId): DataObject
+    public function get(int $entityId, array $localeScopes): DataObject
     {
         $collection = $this->prepareCollectionById($entityId);
 
-        return $this->addLocalizedAttributes($collection)->getFirstItem();
+        return $this->addLocalizedAttributes($collection, $localeScopes)->getFirstItem();
     }
 
     /**
@@ -108,26 +109,19 @@ class EavEntity implements RepositoryInterface
      */
     public function save(int $entityId, array $translations): void
     {
-        $localeScopes = [];
-        foreach ($this->localeScopeProvider->getList() as $localeScope) {
-            $localeScopes[$localeScope->getLocaleCode()] = $localeScope->getScopeId();
-        }
-
-        $translationByScopes = [];
+        $translationByLocales = [];
         foreach ($translations as $translation) {
             $this->translationValidation->validate($translation, $this->resourceType);
-
-            if (isset($localeScopes[$translation->getLocale()])) {
-                $scopeId = $localeScopes[$translation->getLocale()];
-                $translationByScopes[$scopeId][$translation->getKey()] = $translation->getValue();
-            }
+            $translationByLocales[$translation->getLocale()][$translation->getKey()] = $translation->getValue();
         }
 
         /** @var AbstractModel $item */
         $item = $this->prepareCollectionById($entityId)->getFirstItem();
-        foreach ($translationByScopes as $scopeId => $values) {
-            $item->addData($values)->setData('store_id', $scopeId);
-            $this->resourceModelFactory->create()->save($item);
+        foreach ($translationByLocales as $locale => $values) {
+            foreach ($this->localeScopeProvider->getByLocale([$locale]) as $localeScope) {
+                $item->addData($values)->setData('store_id', $localeScope->getScopeId());
+                $this->resourceModelFactory->create()->save($item);
+            }
         }
     }
 
@@ -154,10 +148,11 @@ class EavEntity implements RepositoryInterface
      * Adds localized attribute values to the collection
      *
      * @param Collection $collection
+     * @param RecordInterface[] $localeScopes
      * @return Collection
      * @throws LocalizedException
      */
-    private function addLocalizedAttributes(Collection $collection): Collection
+    private function addLocalizedAttributes(Collection $collection, array $localeScopes): Collection
     {
         if ($collection instanceof CatalogCollection) {
             $attributeCodes = [
@@ -170,10 +165,10 @@ class EavEntity implements RepositoryInterface
             }
 
             $localizedCollection = clone $collection;
-            $collection->addAttributeToSelect($attributeCodes['translatable']);
-            $localizedCollection->addAttributeToSelect($attributeCodes['untranslatable']);
+            $collection->addAttributeToSelect($attributeCodes['untranslatable']);
+            $localizedCollection->addAttributeToSelect($attributeCodes['translatable']);
 
-            foreach ($this->localeScopeProvider->getList() as $localeScope) {
+            foreach ($localeScopes as $localeScope) {
                 $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
 
                 /** @var AbstractModel $localizedItem */

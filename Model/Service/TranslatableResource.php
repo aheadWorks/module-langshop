@@ -10,7 +10,6 @@ use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\RequestInterface;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
@@ -30,11 +29,6 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-
-    /**
      * @var ProcessorInterface
      */
     private ProcessorInterface $dataProcessor;
@@ -43,58 +37,69 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      * @param Converter $converter
      * @param RepositoryPool $repositoryPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param RequestInterface $request
      * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         Converter $converter,
         RepositoryPool $repositoryPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        RequestInterface $request,
         ProcessorInterface $dataProcessor
     ) {
         $this->converter = $converter;
         $this->repositoryPool = $repositoryPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->request = $request;
         $this->dataProcessor = $dataProcessor;
     }
 
     /**
      * @inheritDoc
      */
-    public function getList(string $resourceType, int $page = 1, int $pageSize = 20): ResourceListInterface
-    {
+    public function getList(
+        string $resourceType,
+        $locale = [],
+        ?int $page = null,
+        ?int $pageSize = null,
+        ?string $sortBy = null,
+        ?string $orderBy = null,
+        ?array $filter = []
+    ): ResourceListInterface {
         $repository = $this->repositoryPool->get($resourceType);
 
-        $params = $this->request->getParams();
-        $params['resourceType'] = $resourceType;
-        $params = $this->dataProcessor->process($params);
+        $params = $this->dataProcessor->process([
+            'resourceType' => $resourceType,
+            'locale' => $locale,
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'filter' => $filter
+        ]);
 
         if (isset($params['filters'])) {
             $this->searchCriteriaBuilder->addFilters($params['filters']);
         }
 
-        $this->searchCriteriaBuilder->setCurrentPage($page)->setPageSize($pageSize);
-        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->setCurrentPage($params['page'])
+            ->setPageSize($params['pageSize'])
+            ->create();
 
-        $items = $repository->getList($searchCriteria);
+        $collection = $repository->getList($searchCriteria, $params['locale']);
 
-        return $this->converter->convertCollection($items, $resourceType);
+        return $this->converter->convertCollection($collection, $resourceType);
     }
 
     /**
      * @inheritDoc
      */
-    public function getById(string $resourceType, int $resourceId): TranslatableResourceInterface
+    public function getById(string $resourceType, int $resourceId, $locale = []): TranslatableResourceInterface
     {
         $repository = $this->repositoryPool->get($resourceType);
 
-        $params = $this->request->getParams();
-        $params['resourceType'] = $resourceType;
-        $params = $this->dataProcessor->process($params);
+        $params = $this->dataProcessor->process([
+            'resourceType' => $resourceType,
+            'locale' => $locale
+        ]);
 
-        $item = $repository->get($resourceId);
+        $item = $repository->get($resourceId, $params['locale']);
 
         return $this->converter->convert($item, $resourceType);
     }
@@ -104,7 +109,8 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface
     {
-        $this->repositoryPool->get($resourceType)->save($resourceId, $translations);
+        $repository = $this->repositoryPool->get($resourceType);
+        $repository->save($resourceId, $translations);
 
         return $this->getById($resourceType, $resourceId);
     }

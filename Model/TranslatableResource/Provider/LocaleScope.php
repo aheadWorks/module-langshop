@@ -50,4 +50,19 @@ class LocaleScope
 
         return $this->localeScopes;
     }
+
+    /**
+     * Retrieves locale scopes by locale codes or primary flag
+     *
+     * @param string[] $locales
+     * @return RecordInterface[]
+     */
+    public function getByLocale(array $locales): array
+    {
+        $searchByLocales = fn (RecordInterface $localeScope): bool => in_array($localeScope->getLocaleCode(), $locales);
+        $searchByPrimary = fn (RecordInterface $localeScope): bool => (bool) $localeScope->getIsPrimary();
+
+        return array_filter($this->getList(), $searchByLocales) ?:
+            array_filter($this->getList(), $searchByPrimary);
+    }
 }

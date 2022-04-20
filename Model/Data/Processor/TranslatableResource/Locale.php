@@ -3,62 +3,48 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource;
 
-use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Locale as LocaleValidation;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 class Locale implements ProcessorInterface
 {
     /**
-     * @var SearchCriteriaBuilder
+     * @var LocaleValidation
      */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private LocaleValidation $localeValidation;
 
     /**
-     * @var ScopeRecordRepository
+     * @var LocaleScopeProvider
      */
-    private ScopeRecordRepository $scopeRecordRepository;
+    private LocaleScopeProvider $localeScopeProvider;
 
     /**
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param ScopeRecordRepository $scopeRecordRepository
+     * @param LocaleValidation $localeValidation
+     * @param LocaleScopeProvider $localeScopeProvider
      */
     public function __construct(
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        ScopeRecordRepository $scopeRecordRepository
+        LocaleValidation $localeValidation,
+        LocaleScopeProvider $localeScopeProvider
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->scopeRecordRepository = $scopeRecordRepository;
+        $this->localeValidation = $localeValidation;
+        $this->localeScopeProvider = $localeScopeProvider;
     }
 
     /**
-     * Get store ids by locale code
+     * Validation and processing incoming locales
      *
      * @param array $data
      * @return array
-     * @throws NoSuchEntityException
      */
     public function process(array $data): array
     {
-        $locale = $data['locale'] ?? $this->scopeRecordRepository->getDefault()->getLocaleCode();
-        $storeIds = [];
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(
-                RecordInterface::LOCALE_CODE,
-                is_array($locale) ? $locale : [$locale],
-                'in'
-            )->addFilter(
-                RecordInterface::SCOPE_TYPE,
-                'store'
-            )->create();
+        $locales = &$data['locale'];
 
-        $scopeRecords = $this->scopeRecordRepository->getList($searchCriteria);
-        foreach ($scopeRecords->getItems() as $scopeRecord) {
-            $storeIds[$scopeRecord->getScopeId()] = $scopeRecord->getLocaleCode();
-        }
-        $data['store_ids'] = $storeIds;
+        $locales = is_array($locales) ? $locales : [$locales];
+        array_map([$this->localeValidation, 'validate'], $locales);
+
+        $locales = $this->localeScopeProvider->getByLocale($locales);
 
         return $data;
     }
