@@ -47,8 +47,6 @@
     <!-- START Scope Record Configuration -->
     <preference for="Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface"
                 type="Aheadworks\Langshop\Model\Locale\Scope\Record"/>
-    <preference for="Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
     <!-- END Scope Record Configuration -->
 
     <type name="Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool">

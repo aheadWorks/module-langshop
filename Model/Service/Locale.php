@@ -7,7 +7,6 @@ use Aheadworks\Langshop\Api\LocaleManagementInterface;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\SaveHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
 class Locale implements LocaleManagementInterface
@@ -28,26 +27,18 @@ class Locale implements LocaleManagementInterface
     private LoadHandler $loadHandler;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-
-    /**
      * @param ScopeRecordRepository $scopeRecordRepository
      * @param SaveHandler $saveHandler
      * @param LoadHandler $loadHandler
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         ScopeRecordRepository $scopeRecordRepository,
         SaveHandler $saveHandler,
-        LoadHandler $loadHandler,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        LoadHandler $loadHandler
     ) {
         $this->scopeRecordRepository = $scopeRecordRepository;
         $this->loadHandler = $loadHandler;
         $this->saveHandler = $saveHandler;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -82,12 +73,9 @@ class Locale implements LocaleManagementInterface
     /**
      * @inheritDoc
      */
-    public function getList()
+    public function getList(): array
     {
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $scopeRecords = $this->scopeRecordRepository
-            ->getList($searchCriteria)
-            ->getItems();
+        $scopeRecords = $this->scopeRecordRepository->getList();
         $existingLocales = [];
         $locales = [];
 

@@ -1,18 +1,16 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as EntityInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record as EntityModel;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterface as SearchResultsInterface;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\SearchResultsInterfaceFactory as SearchResultsInterfaceFactory;
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterfaceFactory as EntityInterfaceFactory;
 use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record as ResourceModel;
 use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\Collection;
 use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\CollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -22,67 +20,51 @@ class Repository
     /**
      * @var ResourceModel
      */
-    private $resourceModel;
+    private ResourceModel $resourceModel;
 
     /**
      * @var EntityInterfaceFactory
      */
-    private $entityInterfaceFactory;
+    private EntityInterfaceFactory $entityInterfaceFactory;
 
     /**
      * @var CollectionFactory
      */
-    private $collectionFactory;
-
-    /**
-     * @var SearchResultsInterfaceFactory
-     */
-    private $searchResultsFactory;
+    private CollectionFactory $collectionFactory;
 
     /**
      * @var JoinProcessorInterface
      */
-    private $extensionAttributesJoinProcessor;
-
-    /**
-     * @var CollectionProcessorInterface
-     */
-    private $collectionProcessor;
+    private JoinProcessorInterface $extensionAttributesJoinProcessor;
 
     /**
      * @var DataObjectHelper
      */
-    private $dataObjectHelper;
+    private DataObjectHelper $dataObjectHelper;
 
     /**
      * @var array
      */
-    private $instanceList = [];
+    private array $instanceList = [];
 
     /**
      * @param ResourceModel $resourceModel
      * @param EntityInterfaceFactory $entityInterfaceFactory
      * @param CollectionFactory $collectionFactory
-     * @param SearchResultsInterfaceFactory $searchResultsFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param CollectionProcessorInterface $collectionProcessor
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         ResourceModel $resourceModel,
         EntityInterfaceFactory $entityInterfaceFactory,
         CollectionFactory $collectionFactory,
-        SearchResultsInterfaceFactory $searchResultsFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->resourceModel = $resourceModel;
         $this->entityInterfaceFactory = $entityInterfaceFactory;
         $this->collectionFactory = $collectionFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->collectionProcessor = $collectionProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
     }
 
@@ -165,35 +147,26 @@ class Repository
     }
 
     /**
-     * Retrieve list of entities matching the specified criteria
+     * Retrieve list of entities
      *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultsInterface
+     * @return EntityInterface[]
      */
-    public function getList(SearchCriteriaInterface $searchCriteria)
+    public function getList(): array
     {
-        /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
 
         $this->extensionAttributesJoinProcessor->process(
             $collection,
             EntityInterface::class
         );
-        $this->collectionProcessor->process($searchCriteria, $collection);
-
-        /** @var SearchResultsInterface $searchResults */
-        $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($searchCriteria);
-        $searchResults->setTotalCount($collection->getSize());
 
         $entityList = [];
         /** @var EntityModel $item */
         foreach ($collection->getItems() as $item) {
             $entityList[] = $this->getEntity($item);
         }
-        $searchResults->setItems($entityList);
 
-        return $searchResults;
+        return $entityList;
     }
 
     /**

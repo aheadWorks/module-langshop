@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Api;
 
 interface LocaleManagementInterface
@@ -31,5 +33,5 @@ interface LocaleManagementInterface
      *
      * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
      */
-    public function getList();
+    public function getList(): array;
 }

@@ -5,15 +5,9 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Provider;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class LocaleScope
 {
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-
     /**
      * @var LocaleScopeRepository
      */
@@ -25,14 +19,11 @@ class LocaleScope
     private array $localeScopes;
 
     /**
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param LocaleScopeRepository $localeScopeRepository
      */
     public function __construct(
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         LocaleScopeRepository $localeScopeRepository
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->localeScopeRepository = $localeScopeRepository;
     }
 
@@ -44,8 +35,7 @@ class LocaleScope
     public function getList(): array
     {
         if (!isset($this->localeScopes)) {
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-            $this->localeScopes = $this->localeScopeRepository->getList($searchCriteria)->getItems();
+            $this->localeScopes = $this->localeScopeRepository->getList();
         }
 
         return $this->localeScopes;
