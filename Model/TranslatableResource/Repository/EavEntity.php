@@ -7,7 +7,6 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
-use Aheadworks\Langshop\Model\TranslatableResource\Validation\Locale as LocaleValidation;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -22,11 +21,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelF
 
 class EavEntity implements RepositoryInterface
 {
-    /**
-     * @var LocaleValidation
-     */
-    private LocaleValidation $localeValidation;
-
     /**
      * @var CollectionFactory
      */
@@ -63,7 +57,6 @@ class EavEntity implements RepositoryInterface
     private string $resourceType;
 
     /**
-     * @param LocaleValidation $localeValidation
      * @param CollectionFactory $collectionFactory
      * @param LocaleScopeProvider $localeScopeProvider
      * @param ResourceModelFactory $resourceModelFactory
@@ -73,7 +66,6 @@ class EavEntity implements RepositoryInterface
      * @param string $resourceType
      */
     public function __construct(
-        LocaleValidation $localeValidation,
         CollectionFactory $collectionFactory,
         LocaleScopeProvider $localeScopeProvider,
         ResourceModelFactory $resourceModelFactory,
@@ -82,7 +74,6 @@ class EavEntity implements RepositoryInterface
         CollectionProcessorInterface $collectionProcessor,
         string $resourceType
     ) {
-        $this->localeValidation = $localeValidation;
         $this->collectionFactory = $collectionFactory;
         $this->localeScopeProvider = $localeScopeProvider;
         $this->resourceModelFactory = $resourceModelFactory;
@@ -95,30 +86,22 @@ class EavEntity implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria, array $locales): Collection
+    public function getList(SearchCriteriaInterface $searchCriteria, array $localeScopes): Collection
     {
-        foreach ($locales as $locale) {
-            $this->localeValidation->validate($locale);
-        }
-
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        return $this->addLocalizedAttributes($collection, $locales);
+        return $this->addLocalizedAttributes($collection, $localeScopes);
     }
 
     /**
      * @inheritDoc
      */
-    public function get(int $entityId, array $locales): DataObject
+    public function get(int $entityId, array $localeScopes): DataObject
     {
-        foreach ($locales as $locale) {
-            $this->localeValidation->validate($locale);
-        }
-
         $collection = $this->prepareCollectionById($entityId);
 
-        return $this->addLocalizedAttributes($collection, $locales)->getFirstItem();
+        return $this->addLocalizedAttributes($collection, $localeScopes)->getFirstItem();
     }
 
     /**
@@ -165,11 +148,11 @@ class EavEntity implements RepositoryInterface
      * Adds localized attribute values to the collection
      *
      * @param Collection $collection
-     * @param string[] $locales
+     * @param RecordInterface[] $localeScopes
      * @return Collection
      * @throws LocalizedException
      */
-    private function addLocalizedAttributes(Collection $collection, array $locales): Collection
+    private function addLocalizedAttributes(Collection $collection, array $localeScopes): Collection
     {
         if ($collection instanceof CatalogCollection) {
             $attributeCodes = [
@@ -185,7 +168,7 @@ class EavEntity implements RepositoryInterface
             $collection->addAttributeToSelect($attributeCodes['untranslatable']);
             $localizedCollection->addAttributeToSelect($attributeCodes['translatable']);
 
-            foreach ($this->localeScopeProvider->getByLocale($locales) as $localeScope) {
+            foreach ($localeScopes as $localeScope) {
                 $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
 
                 /** @var AbstractModel $localizedItem */

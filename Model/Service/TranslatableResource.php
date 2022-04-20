@@ -64,10 +64,10 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         ?array $filter = []
     ): ResourceListInterface {
         $repository = $this->repositoryPool->get($resourceType);
-        $locales = is_array($locale) ? $locale : [$locale];
 
         $params = $this->dataProcessor->process([
             'resourceType' => $resourceType,
+            'locale' => $locale,
             'filter' => $filter
         ]);
 
@@ -80,7 +80,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             ->setPageSize($pageSize ?? 20)
             ->create();
 
-        $collection = $repository->getList($searchCriteria, $locales);
+        $collection = $repository->getList($searchCriteria, $params['locale']);
 
         return $this->converter->convertCollection($collection, $resourceType);
     }
@@ -91,8 +91,13 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     public function getById(string $resourceType, int $resourceId, $locale = []): TranslatableResourceInterface
     {
         $repository = $this->repositoryPool->get($resourceType);
-        $locales = is_array($locale) ? $locale : [$locale];
-        $item = $repository->get($resourceId, $locales);
+
+        $params = $this->dataProcessor->process([
+            'resourceType' => $resourceType,
+            'locale' => $locale
+        ]);
+
+        $item = $repository->get($resourceId, $params['locale']);
 
         return $this->converter->convert($item, $resourceType);
     }

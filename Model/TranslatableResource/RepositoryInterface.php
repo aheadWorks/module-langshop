@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as Collection;
@@ -16,22 +17,22 @@ interface RepositoryInterface
      * Retrieve entities matching the specified criteria
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @param string[] $locales
+     * @param RecordInterface[] $localeScopes
      * @return Collection
      * @throws LocalizedException
      */
-    public function getList(SearchCriteriaInterface $searchCriteria, array $locales): Collection;
+    public function getList(SearchCriteriaInterface $searchCriteria, array $localeScopes): Collection;
 
     /**
      * Get entity
      *
      * @param int $entityId
-     * @param string[] $locales
+     * @param RecordInterface[] $localeScopes
      * @return DataObject
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function get(int $entityId, array $locales): DataObject;
+    public function get(int $entityId, array $localeScopes): DataObject;
 
     /**
      * Save entity
