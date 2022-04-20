@@ -68,6 +68,8 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         $params = $this->dataProcessor->process([
             'resourceType' => $resourceType,
             'locale' => $locale,
+            'page' => $page,
+            'pageSize' => $pageSize,
             'filter' => $filter
         ]);
 
@@ -76,8 +78,8 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         }
 
         $searchCriteria = $this->searchCriteriaBuilder
-            ->setCurrentPage($page ?? 1)
-            ->setPageSize($pageSize ?? 20)
+            ->setCurrentPage($params['page'])
+            ->setPageSize($params['pageSize'])
             ->create();
 
         $collection = $repository->getList($searchCriteria, $params['locale']);
