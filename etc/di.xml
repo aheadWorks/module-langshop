@@ -107,7 +107,6 @@
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface" xsi:type="array">
-                    <item name="entityTableName" xsi:type="const">Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record::MAIN_TABLE_NAME</item>
                     <item name="identifierField" xsi:type="const">Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface::RECORD_ID</item>
                 </item>
             </argument>
