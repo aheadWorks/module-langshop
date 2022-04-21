@@ -81,6 +81,20 @@ class Repository
     }
 
     /**
+     * Retrieves locale scopes by locale codes
+     *
+     * @param string[] $locales
+     * @return RecordInterface[]
+     */
+    public function getByLocale(array $locales): array
+    {
+        return array_filter(
+            $this->getList(),
+            fn (RecordInterface $localeScope) => in_array($localeScope->getLocaleCode(), $locales)
+        );
+    }
+
+    /**
      * Retrieves primary locale scope
      *
      * @return RecordInterface
