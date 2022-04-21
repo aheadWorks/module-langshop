@@ -75,7 +75,11 @@ class Locale implements LocaleManagementInterface
      */
     public function getList(): array
     {
-        $scopeRecords = $this->scopeRecordRepository->getList();
+        $scopeRecords = array_merge(
+            [$this->scopeRecordRepository->getPrimary()],
+            $this->scopeRecordRepository->getList()
+        );
+
         $existingLocales = [];
         $locales = [];
 

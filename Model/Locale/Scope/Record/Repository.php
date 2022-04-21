@@ -3,205 +3,94 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
-use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as EntityInterface;
-use Aheadworks\Langshop\Model\Locale\Scope\Record as EntityModel;
-use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterfaceFactory as EntityInterfaceFactory;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record as ResourceModel;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\Collection;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record\CollectionFactory;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterfaceFactory;
+use Aheadworks\Langshop\Model\Config\ListToTranslate as ListToTranslateConfig;
+use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
+use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeType;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreRepository;
 
 class Repository
 {
     /**
-     * @var ResourceModel
+     * @var RecordInterfaceFactory
      */
-    private ResourceModel $resourceModel;
+    private RecordInterfaceFactory $localeScopeFactory;
 
     /**
-     * @var EntityInterfaceFactory
+     * @var ListToTranslateConfig
      */
-    private EntityInterfaceFactory $entityInterfaceFactory;
+    private ListToTranslateConfig $listToTranslateConfig;
 
     /**
-     * @var CollectionFactory
+     * @var StoreRepository
      */
-    private CollectionFactory $collectionFactory;
+    private StoreRepository $storeRepository;
 
     /**
-     * @var JoinProcessorInterface
+     * @var LocaleConfig
      */
-    private JoinProcessorInterface $extensionAttributesJoinProcessor;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private DataObjectHelper $dataObjectHelper;
+    private LocaleConfig $localeConfig;
 
     /**
      * @var array
      */
-    private array $instanceList = [];
+    private array $localeScopes;
 
     /**
-     * @param ResourceModel $resourceModel
-     * @param EntityInterfaceFactory $entityInterfaceFactory
-     * @param CollectionFactory $collectionFactory
-     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param DataObjectHelper $dataObjectHelper
+     * @param RecordInterfaceFactory $localeScopeFactory
+     * @param ListToTranslateConfig $listToTranslateConfig
+     * @param StoreRepository $storeRepository
+     * @param LocaleConfig $localeConfig
      */
     public function __construct(
-        ResourceModel $resourceModel,
-        EntityInterfaceFactory $entityInterfaceFactory,
-        CollectionFactory $collectionFactory,
-        JoinProcessorInterface $extensionAttributesJoinProcessor,
-        DataObjectHelper $dataObjectHelper
+        RecordInterfaceFactory $localeScopeFactory,
+        ListToTranslateConfig $listToTranslateConfig,
+        StoreRepository $storeRepository,
+        LocaleConfig $localeConfig
     ) {
-        $this->resourceModel = $resourceModel;
-        $this->entityInterfaceFactory = $entityInterfaceFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->dataObjectHelper = $dataObjectHelper;
+        $this->localeScopeFactory = $localeScopeFactory;
+        $this->listToTranslateConfig = $listToTranslateConfig;
+        $this->storeRepository = $storeRepository;
+        $this->localeConfig = $localeConfig;
     }
 
     /**
-     * Load entity by id
+     * Retrieves list of locale scopes
      *
-     * @param int $recordId
-     * @param bool $forceLoad
-     * @return EntityInterface
-     * @throws NoSuchEntityException
-     */
-    public function getById($recordId, $forceLoad = false)
-    {
-        if ($forceLoad || !isset($this->instanceList[$recordId])) {
-            /** @var EntityInterface $entity */
-            $entity = $this->entityInterfaceFactory->create();
-            $this->resourceModel->load($entity, $recordId);
-            if (!$entity->getRecordId()) {
-                throw NoSuchEntityException::singleField(
-                    EntityInterface::RECORD_ID,
-                    $recordId
-                );
-            }
-            $this->instanceList[$recordId] = $entity;
-        }
-        return $this->instanceList[$recordId];
-    }
-
-    /**
-     * Save given entity
-     *
-     * @param EntityInterface $entity
-     * @return EntityInterface
-     * @throws CouldNotSaveException
-     */
-    public function save(EntityInterface $entity)
-    {
-        try {
-            $this->resourceModel->save($entity);
-            $this->instanceList[$entity->getRecordId()] = $entity;
-        } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
-        }
-
-        return $entity;
-    }
-
-    /**
-     * Delete given entity
-     *
-     * @param EntityInterface $entity
-     * @return bool
-     * @throws CouldNotDeleteException
-     */
-    public function delete(EntityInterface $entity)
-    {
-        try {
-            $this->resourceModel->delete($entity);
-            if (isset($this->instanceList[$entity->getRecordId()])) {
-                unset($this->instanceList[$entity->getRecordId()]);
-            }
-        } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
-        }
-
-        return true;
-    }
-
-    /**
-     * Delete entity by given id
-     *
-     * @param int $recordId
-     * @return bool
-     * @throws CouldNotDeleteException
-     * @throws NoSuchEntityException
-     */
-    public function deleteById($recordId)
-    {
-        return $this->delete($this->getById($recordId));
-    }
-
-    /**
-     * Retrieve list of entities
-     *
-     * @return EntityInterface[]
+     * @return RecordInterface[]
      */
     public function getList(): array
     {
-        $collection = $this->collectionFactory->create();
+        if (!isset($this->localeScopes)) {
+            $scopeIds = $this->listToTranslateConfig->getValue();
 
-        $this->extensionAttributesJoinProcessor->process(
-            $collection,
-            EntityInterface::class
-        );
-
-        $entityList = [];
-        /** @var EntityModel $item */
-        foreach ($collection->getItems() as $item) {
-            $entityList[] = $this->getEntity($item);
+            foreach ($this->storeRepository->getList() as $scope) {
+                if (in_array($scope->getId(), $scopeIds)) {
+                    $this->localeScopes[] = $this->localeScopeFactory->create()
+                        ->setScopeId($scope->getId())
+                        ->setScopeType(LocaleScopeType::STORE)
+                        ->setLocaleCode($this->localeConfig->getValue((int) $scope->getId()))
+                        ->setIsPrimary(false);
+                }
+            }
         }
 
-        return $entityList;
+        return $this->localeScopes;
     }
 
     /**
-     * Get default scope record
+     * Retrieves primary locale scope
      *
-     * @return EntityInterface|mixed
+     * @return RecordInterface
      */
-    public function getDefault()
+    public function getPrimary(): RecordInterface
     {
-        if (!isset($this->instanceList['default'])) {
-            /** @var Collection $collection */
-            $collection = $this->collectionFactory->create();
-            $collection->addFilter(EntityInterface::SCOPE_ID, 0);
-
-            $this->instanceList['default'] = $collection->getFirstItem();
-        }
-
-        return $this->instanceList['default'];
-    }
-
-    /**
-     * Prepare object of entity interface
-     *
-     * @param EntityModel $model
-     * @return EntityInterface
-     */
-    private function getEntity($model)
-    {
-        /** @var EntityInterface $object */
-        $entity = $this->entityInterfaceFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $entity,
-            $model->getData(),
-            EntityInterface::class
-        );
-        return $entity;
+        return $this->localeScopeFactory->create()
+            ->setScopeId(Store::DEFAULT_STORE_ID)
+            ->setScopeType(LocaleScopeType::DEFAULT)
+            ->setLocaleCode($this->localeConfig->getValue(Store::DEFAULT_STORE_ID))
+            ->setIsPrimary(true);
     }
 }

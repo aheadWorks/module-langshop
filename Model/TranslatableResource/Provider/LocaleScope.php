@@ -14,11 +14,6 @@ class LocaleScope
     private LocaleScopeRepository $localeScopeRepository;
 
     /**
-     * @var RecordInterface[]
-     */
-    private array $localeScopes;
-
-    /**
      * @param LocaleScopeRepository $localeScopeRepository
      */
     public function __construct(
@@ -34,11 +29,7 @@ class LocaleScope
      */
     public function getList(): array
     {
-        if (!isset($this->localeScopes)) {
-            $this->localeScopes = $this->localeScopeRepository->getList();
-        }
-
-        return $this->localeScopes;
+        return $this->localeScopeRepository->getList();
     }
 
     /**
@@ -49,10 +40,13 @@ class LocaleScope
      */
     public function getByLocale(array $locales): array
     {
-        $searchByLocales = fn (RecordInterface $localeScope): bool => in_array($localeScope->getLocaleCode(), $locales);
-        $searchByPrimary = fn (RecordInterface $localeScope): bool => (bool) $localeScope->getIsPrimary();
+        $localeScopes = [];
+        foreach ($this->getList() as $localeScope) {
+            if (in_array($localeScope->getLocaleCode(), $locales)) {
+                $localeScopes[] = $localeScope;
+            }
+        }
 
-        return array_filter($this->getList(), $searchByLocales) ?:
-            array_filter($this->getList(), $searchByPrimary);
+        return $localeScopes ?: [$this->localeScopeRepository->getPrimary()];
     }
 }
