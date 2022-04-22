@@ -54,10 +54,18 @@
     <type name="Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool">
         <arguments>
             <argument name="repositories" xsi:type="array">
-                <item name="attribute" xsi:type="object">Magento\Eav\Api\AttributeRepositoryInterface\Proxy</item>
+                <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute">
+        <arguments>
+            <argument name="fieldPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Pool</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\ResourceModelFactory</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\AttributeCollectionProcessor</argument>
+            <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\CollectionFactory</argument>
         </arguments>
     </type>
 
@@ -73,6 +81,12 @@
             <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category\Collection</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\CollectionFactory"
+                 type="Magento\Framework\Data\Collection\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory"
                  type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
         <arguments>
@@ -83,6 +97,12 @@
                  type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\ResourceModelFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Eav\Model\ResourceModel\Entity\Attribute</argument>
         </arguments>
     </virtualType>
 
@@ -252,10 +272,12 @@
                 <item name="attribute_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\AttributeId</item>
                 <item name="entity_type_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\EntityTypeId</item>
                 <item name="attribute_code" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\AttributeCode</item>
+                <item name="store_label" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\StoreLabel</item>
                 <item name="frontend_label" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendLabel</item>
                 <item name="frontend_input" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendInput</item>
-                <item name="scope" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\Scope</item>
-            </argument>
+                <item name="options" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\Options</item>
+                <item name="swatches" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\Swatches</item>
+                </argument>
         </arguments>
     </virtualType>
 
@@ -304,6 +326,20 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\StoreLabel"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">store_label</item>
+                <item name="label" xsi:type="string">Store Label</item>
+                <item name="type" xsi:type="string">array</item>
+                <item name="is_filterable" xsi:type="boolean">false</item>
+                <item name="sort_order" xsi:type="string">40</item>
+                <item name="is_sortable" xsi:type="boolean">false</item>
+                <item name="is_translatable" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendLabel"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
@@ -313,9 +349,9 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">40</item>
+                <item name="sort_order" xsi:type="string">50</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">true</item>
+                <item name="is_translatable" xsi:type="boolean">false</item>
             </argument>
         </arguments>
     </virtualType>
@@ -328,24 +364,37 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">50</item>
+                <item name="sort_order" xsi:type="string">60</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\Scope"
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\Options"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">scope</item>
-                <item name="label" xsi:type="string">Scope</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">60</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
+                <item name="code" xsi:type="string">options</item>
+                <item name="label" xsi:type="string">Options</item>
+                <item name="type" xsi:type="string">array</item>
+                <item name="is_filterable" xsi:type="boolean">false</item>
+                <item name="sort_order" xsi:type="string">70</item>
+                <item name="is_sortable" xsi:type="boolean">false</item>
+                <item name="is_translatable" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\Swatches"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">swatches</item>
+                <item name="label" xsi:type="string">Swatches</item>
+                <item name="type" xsi:type="string">array</item>
+                <item name="is_filterable" xsi:type="boolean">false</item>
+                <item name="sort_order" xsi:type="string">80</item>
+                <item name="is_sortable" xsi:type="boolean">false</item>
+                <item name="is_translatable" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -517,6 +566,23 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Field\Pool">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\DefaultField</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Pool"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Field\Pool">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="options" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Options</item>
+                <item name="swatches" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Swatches</item>
+            </argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup\General"
                  type="Aheadworks\Langshop\Model\Schema\TranslatableResourceGroup">

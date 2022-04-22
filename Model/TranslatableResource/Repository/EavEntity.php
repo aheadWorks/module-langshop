@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Model\Source\TranslatableResource\Field;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
@@ -156,17 +157,17 @@ class EavEntity implements RepositoryInterface
     {
         if ($collection instanceof CatalogCollection) {
             $attributeCodes = [
-                'translatable' => [],
-                'untranslatable' => []
+                Field::TRANSLATABLE => [],
+                Field::UNTRANSLATABLE => []
             ];
             foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
-                $isTranslatable = $attribute->isTranslatable() ? 'translatable' : 'untranslatable';
+                $isTranslatable = $attribute->isTranslatable() ? Field::TRANSLATABLE : Field::UNTRANSLATABLE;
                 $attributeCodes[$isTranslatable][] = $attribute->getCode();
             }
 
             $localizedCollection = clone $collection;
-            $collection->addAttributeToSelect($attributeCodes['untranslatable']);
-            $localizedCollection->addAttributeToSelect($attributeCodes['translatable']);
+            $collection->addAttributeToSelect($attributeCodes[Field::UNTRANSLATABLE]);
+            $localizedCollection->addAttributeToSelect($attributeCodes[Field::TRANSLATABLE]);
 
             foreach ($localeScopes as $localeScope) {
                 $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
@@ -174,7 +175,7 @@ class EavEntity implements RepositoryInterface
                 /** @var AbstractModel $localizedItem */
                 foreach ($localizedCollection as $localizedItem) {
                     $item = $collection->getItemById($localizedItem->getId());
-                    foreach ($attributeCodes['translatable'] as $attributeCode) {
+                    foreach ($attributeCodes[Field::TRANSLATABLE] as $attributeCode) {
                         $value = is_array($item->getData($attributeCode))
                             ? $item->getData($attributeCode)
                             : [];
