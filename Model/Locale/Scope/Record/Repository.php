@@ -8,11 +8,17 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterfaceFactory;
 use Aheadworks\Langshop\Model\Config\ListToTranslate as ListToTranslateConfig;
 use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
 use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeType;
+use Magento\Framework\Locale\ResolverInterface as LocaleResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
 
 class Repository
 {
+    /**
+     * @var LocaleResolverInterface
+     */
+    private LocaleResolverInterface $localeResolver;
+
     /**
      * @var RecordInterfaceFactory
      */
@@ -39,17 +45,20 @@ class Repository
     private array $localeScopes;
 
     /**
+     * @param LocaleResolverInterface $localeResolver
      * @param RecordInterfaceFactory $localeScopeFactory
      * @param ListToTranslateConfig $listToTranslateConfig
      * @param StoreRepository $storeRepository
      * @param LocaleConfig $localeConfig
      */
     public function __construct(
+        LocaleResolverInterface $localeResolver,
         RecordInterfaceFactory $localeScopeFactory,
         ListToTranslateConfig $listToTranslateConfig,
         StoreRepository $storeRepository,
         LocaleConfig $localeConfig
     ) {
+        $this->localeResolver = $localeResolver;
         $this->localeScopeFactory = $localeScopeFactory;
         $this->listToTranslateConfig = $listToTranslateConfig;
         $this->storeRepository = $storeRepository;
@@ -104,7 +113,7 @@ class Repository
         return $this->localeScopeFactory->create()
             ->setScopeId(Store::DEFAULT_STORE_ID)
             ->setScopeType(LocaleScopeType::DEFAULT)
-            ->setLocaleCode($this->localeConfig->getValue(Store::DEFAULT_STORE_ID))
+            ->setLocaleCode($this->localeResolver->getDefaultLocale())
             ->setIsPrimary(true);
     }
 }
