@@ -1,6 +1,7 @@
 <?php
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
+use Aheadworks\Langshop\Model\TranslatableResource\Checker\Field as FieldChecker;
 use Aheadworks\Langshop\Model\TranslatableResource\Field\CustomFieldInterface;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\DataObject;
@@ -8,6 +9,20 @@ use Magento\Framework\Exception\LocalizedException;
 
 class Options implements CustomFieldInterface
 {
+    /**
+     * @var FieldChecker
+     */
+    private FieldChecker $fieldChecker;
+
+    /**
+     * @param FieldChecker $fieldChecker
+     */
+    public function __construct(
+        FieldChecker $fieldChecker
+    ) {
+        $this->fieldChecker = $fieldChecker;
+    }
+
     /**
      * @inheritDoc
      * @param Attribute $attribute
@@ -18,7 +33,7 @@ class Options implements CustomFieldInterface
     {
         $values = [];
         $fieldType = $attribute->getFrontendInput();
-        if (in_array($fieldType, ['select', 'multiselect'])) {
+        if ($this->fieldChecker->canContainOptions($fieldType)) {
             $options = $attribute->getSource()->getAllOptions(false);
 
             foreach ($options as $option) {
@@ -36,7 +51,7 @@ class Options implements CustomFieldInterface
      *
      * @param mixed $value
      * @param string $label
-     * @return array
+     * @return array Format: array('<value>' => '<label>', ...)
      * @throws LocalizedException
      */
     private function getPreparedValue($value, string $label): array

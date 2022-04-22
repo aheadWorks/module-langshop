@@ -1,6 +1,7 @@
 <?php
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
+use Aheadworks\Langshop\Model\TranslatableResource\Checker\Field as FieldChecker;
 use Aheadworks\Langshop\Model\TranslatableResource\Field\CustomFieldInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\Swatch as SwatchProvider;
 use Magento\Eav\Model\Entity\Attribute;
@@ -15,17 +16,25 @@ class Swatches implements CustomFieldInterface
     private SwatchProvider $swatchProvider;
 
     /**
+     * @var FieldChecker
+     */
+    private FieldChecker $fieldChecker;
+
+    /**
      * @var array
      */
     private array $values = [];
 
     /**
      * @param SwatchProvider $swatchProvider
+     * @param FieldChecker $fieldChecker
      */
     public function __construct(
-        SwatchProvider $swatchProvider
+        SwatchProvider $swatchProvider,
+        FieldChecker $fieldChecker
     ) {
         $this->swatchProvider = $swatchProvider;
+        $this->fieldChecker = $fieldChecker;
     }
 
     /**
@@ -38,7 +47,7 @@ class Swatches implements CustomFieldInterface
         $attributeId = $attribute->getId();
         if (!isset($this->values[$attributeId][$storeId])) {
             $fieldType = $attribute->getFrontendInput();
-            $this->values[$attributeId][$storeId] = in_array($fieldType, ['select', 'multiselect'])
+            $this->values[$attributeId][$storeId] = $this->fieldChecker->canContainOptions($fieldType)
                 ? $this->swatchProvider->getValues($attribute)
                 : [];
         }

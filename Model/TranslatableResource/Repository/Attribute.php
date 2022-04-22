@@ -137,7 +137,7 @@ class Attribute implements RepositoryInterface
             foreach ($localizedCollection as $localizedItem) {
                 $localizedItem->setStoreId($locale->getScopeId());
                 $item = $collection->getItemById($localizedItem->getId());
-                foreach ($attributeCodes[1] as $attributeCode) {
+                foreach ($attributeCodes[Field::TRANSLATABLE] as $attributeCode) {
                     $field = $this->fieldPool->getField($attributeCode);
                     $value = is_array($item->getData($attributeCode))
                         ? $item->getData($attributeCode)
@@ -162,6 +162,7 @@ class Attribute implements RepositoryInterface
     private function prepareLocalizedCollection(Collection $collection, int $storeId): void
     {
         $from = $collection->getSelect()->getPart('from');
+        // unset removes the previous store label join
         unset($from['al']);
         $collection->getSelect()->setPart('from', $from);
         $collection->clear()->addStoreLabel($storeId);
