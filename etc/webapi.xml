@@ -5,25 +5,25 @@
     <route url="/V1/awLangshop/locales" method="GET">
         <service class="Aheadworks\Langshop\Api\LocaleManagementInterface" method="getList"/>
         <resources>
-            <resource ref="Aheadworks_Sarp2::locales"/>
+            <resource ref="Aheadworks_Langshop::locales"/>
         </resources>
     </route>
     <route url="/V1/awLangshop/locales" method="POST">
         <service class="Aheadworks\Langshop\Api\LocaleManagementInterface" method="add"/>
         <resources>
-            <resource ref="Aheadworks_Sarp2::locales"/>
+            <resource ref="Aheadworks_Langshop::locales"/>
         </resources>
     </route>
     <route url="/V1/awLangshop/locales/:locale" method="PUT">
         <service class="Aheadworks\Langshop\Api\LocaleManagementInterface" method="update"/>
         <resources>
-            <resource ref="Aheadworks_Sarp2::locales"/>
+            <resource ref="Aheadworks_Langshop::locales"/>
         </resources>
     </route>
     <route url="/V1/awLangshop/locales/:locale" method="DELETE">
         <service class="Aheadworks\Langshop\Api\LocaleManagementInterface" method="delete"/>
         <resources>
-            <resource ref="Aheadworks_Sarp2::locales"/>
+            <resource ref="Aheadworks_Langshop::locales"/>
         </resources>
     </route>
     <!-- END Locales -->
@@ -32,7 +32,7 @@
     <route url="/V1/awLangshop/schema" method="GET">
         <service class="Aheadworks\Langshop\Api\SchemaManagementInterface" method="get"/>
         <resources>
-            <resource ref="Aheadworks_Sarp2::schema"/>
+            <resource ref="Aheadworks_Langshop::schema"/>
         </resources>
     </route>
     <!-- END Schema -->
