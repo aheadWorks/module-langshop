@@ -3,23 +3,23 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Validation;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class Locale
 {
     /**
-     * @var LocaleScopeProvider
+     * @var LocaleScopeRepository
      */
-    private LocaleScopeProvider $localeScopeProvider;
+    private LocaleScopeRepository $localeScopeRepository;
 
     /**
-     * @param LocaleScopeProvider $localeScopeProvider
+     * @param LocaleScopeRepository $localeScopeRepository
      */
     public function __construct(
-        LocaleScopeProvider $localeScopeProvider
+        LocaleScopeRepository $localeScopeRepository
     ) {
-        $this->localeScopeProvider = $localeScopeProvider;
+        $this->localeScopeRepository = $localeScopeRepository;
     }
 
     /**
@@ -30,12 +30,7 @@ class Locale
      */
     public function validate(string $value): void
     {
-        $locales = [];
-        foreach ($this->localeScopeProvider->getList() as $locale) {
-            $locales[] = $locale->getLocaleCode();
-        }
-
-        if (!in_array($value, $locales)) {
+        if (!$this->localeScopeRepository->getByLocale([$value])) {
             throw new NoSuchEntityException(
                 __('Locale with code = "%1" does not exist.', $value)
             );
