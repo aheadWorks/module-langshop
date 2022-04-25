@@ -60,7 +60,6 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         ?int $page = null,
         ?int $pageSize = null,
         ?string $sortBy = null,
-        ?string $orderBy = null,
         ?array $filter = []
     ): ResourceListInterface {
         $repository = $this->repositoryPool->get($resourceType);
@@ -70,14 +69,19 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             'locale' => $locale,
             'page' => $page,
             'pageSize' => $pageSize,
+            'sortBy' => $sortBy,
             'filter' => $filter
         ]);
 
+        $searchCriteriaBuilder = $this->searchCriteriaBuilder;
         if (isset($params['filters'])) {
-            $this->searchCriteriaBuilder->addFilters($params['filters']);
+            $searchCriteriaBuilder->addFilters($params['filters']);
+        }
+        if ($params['sortBy']) {
+            $searchCriteriaBuilder->addSortOrder($params['sortBy']);
         }
 
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $searchCriteriaBuilder
             ->setCurrentPage($params['page'])
             ->setPageSize($params['pageSize'])
             ->create();
