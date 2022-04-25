@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Provider\LocaleScope as LocaleScopeProvider;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Locale as LocaleValidation;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 
@@ -15,20 +15,20 @@ class Locale implements ProcessorInterface
     private LocaleValidation $localeValidation;
 
     /**
-     * @var LocaleScopeProvider
+     * @var LocaleScopeRepository
      */
-    private LocaleScopeProvider $localeScopeProvider;
+    private LocaleScopeRepository $localeScopeRepository;
 
     /**
      * @param LocaleValidation $localeValidation
-     * @param LocaleScopeProvider $localeScopeProvider
+     * @param LocaleScopeRepository $localeScopeRepository
      */
     public function __construct(
         LocaleValidation $localeValidation,
-        LocaleScopeProvider $localeScopeProvider
+        LocaleScopeRepository $localeScopeRepository
     ) {
         $this->localeValidation = $localeValidation;
-        $this->localeScopeProvider = $localeScopeProvider;
+        $this->localeScopeRepository = $localeScopeRepository;
     }
 
     /**
@@ -44,7 +44,8 @@ class Locale implements ProcessorInterface
         $locales = is_array($locales) ? $locales : [$locales];
         array_map([$this->localeValidation, 'validate'], $locales);
 
-        $locales = $this->localeScopeProvider->getByLocale($locales);
+        $locales = $this->localeScopeRepository->getByLocale($locales) ?:
+            [$this->localeScopeRepository->getPrimary()];
 
         return $data;
     }

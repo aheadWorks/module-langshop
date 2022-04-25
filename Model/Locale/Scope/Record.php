@@ -1,20 +1,13 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Locale\Scope;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
-use Aheadworks\Langshop\Model\ResourceModel\Locale\Scope\Record as LocaleScopeRecordResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
 class Record extends AbstractModel implements RecordInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function _construct()
-    {
-        $this->_init(LocaleScopeRecordResourceModel::class);
-    }
-
     /**
      * {@inheritdoc}
      */
