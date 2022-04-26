@@ -7,6 +7,7 @@ use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\Entity\Field\Converter as FieldConverter;
+use Aheadworks\Langshop\Model\Schema\TranslatableResource\Sorting as SchemaSorting;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\LocalizedException;
@@ -62,6 +63,7 @@ class Sorting implements ProcessorInterface
                 throw new NoSuchEntityException(__('Sorting "%1" is not correct.', $sortBy));
             }
 
+            /** @var SchemaSorting $sorting */
             $sortBy = $this->sortOrderBuilder
                 ->setField($sorting->getField())
                 ->setDirection(strtoupper($sorting->getDirection()))

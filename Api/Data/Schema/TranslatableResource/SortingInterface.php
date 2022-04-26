@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Api\Data\Schema\TranslatableResource;
 
 interface SortingInterface
@@ -37,34 +39,4 @@ interface SortingInterface
      * @return string
      */
     public function getLabel();
-
-    /**
-     * Set field
-     *
-     * @param string $field
-     * @return $this
-     */
-    public function setField($field);
-
-    /**
-     * Get field
-     *
-     * @return string
-     */
-    public function getField();
-
-    /**
-     * Set direction
-     *
-     * @param string $direction
-     * @return $this
-     */
-    public function setDirection($direction);
-
-    /**
-     * Get direction
-     *
-     * @return string
-     */
-    public function getDirection();
 }
