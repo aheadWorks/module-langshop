@@ -3,9 +3,12 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Source\TranslatableResource\Field;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\TranslatableResource\Field\Pool as FieldPool;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Framework\Data\Collection\AbstractDbFactory as CollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -13,7 +16,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 
 class Attribute implements RepositoryInterface
 {
@@ -38,29 +42,53 @@ class Attribute implements RepositoryInterface
     private FieldPool $fieldPool;
 
     /**
-     * @var ResourceModelFactory
+     * @var TranslationValidation
      */
-    private ResourceModelFactory $resourceModelFactory;
+    private TranslationValidation $translationValidation;
+
+    /**
+     * @var LocaleScopeRepository
+     */
+    private LocaleScopeRepository $localeScopeRepository;
+
+    /**
+     * @var ProcessorInterface
+     */
+    private ProcessorInterface $fieldProcessor;
+
+    /**
+     * @var AttributeFactory
+     */
+    private AttributeFactory $attributeFactory;
 
     /**
      * @param CollectionFactory $collectionFactory
      * @param EntityAttribute $entityAttribute
      * @param CollectionProcessorInterface $collectionProcessor
      * @param FieldPool $fieldPool
-     * @param ResourceModelFactory $resourceModelFactory
+     * @param TranslationValidation $translationValidation
+     * @param LocaleScopeRepository $localeScopeRepository
+     * @param ProcessorInterface $fieldProcessor
+     * @param AttributeFactory $attributeFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         EntityAttribute $entityAttribute,
         CollectionProcessorInterface $collectionProcessor,
         FieldPool $fieldPool,
-        ResourceModelFactory $resourceModelFactory
+        TranslationValidation $translationValidation,
+        LocaleScopeRepository $localeScopeRepository,
+        ProcessorInterface $fieldProcessor,
+        AttributeFactory $attributeFactory
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->entityAttribute = $entityAttribute;
         $this->collectionProcessor = $collectionProcessor;
         $this->fieldPool = $fieldPool;
-        $this->resourceModelFactory = $resourceModelFactory;
+        $this->translationValidation = $translationValidation;
+        $this->localeScopeRepository = $localeScopeRepository;
+        $this->fieldProcessor = $fieldProcessor;
+        $this->attributeFactory = $attributeFactory;
     }
 
     /**
@@ -88,7 +116,33 @@ class Attribute implements RepositoryInterface
      */
     public function save(int $entityId, array $translations): void
     {
-        //todo https://aheadworks.atlassian.net/browse/LSM2-76
+        $translationByLocales = [];
+        foreach ($translations as $translation) {
+            $this->translationValidation->validate($translation, 'attribute');
+            $translationByLocales[$translation->getLocale()][$translation->getKey()] = $translation->getValue();
+        }
+
+        $item = $this->getItem($entityId);
+        foreach ($translationByLocales as $locale => $values) {
+            foreach ($this->localeScopeRepository->getByLocale([$locale]) as $localeScope) {
+                $item->setStoreId($localeScope->getScopeId());
+                $values = $this->fieldProcessor->process($item, $values);
+                $item->addData($values);
+                $item->save();
+            }
+        }
+    }
+
+    /**
+     * Get item
+     *
+     * @param int $entityId
+     * @return EavAttribute
+     */
+    private function getItem(int $entityId)
+    {
+        $attribute = $this->attributeFactory->create();
+        return $attribute->load($entityId);
     }
 
     /**
@@ -133,7 +187,6 @@ class Attribute implements RepositoryInterface
         $localizedCollection = clone $collection;
 
         foreach ($localeScopes as $locale) {
-            $this->prepareLocalizedCollection($localizedCollection, $locale->getScopeId());
             foreach ($localizedCollection as $localizedItem) {
                 $localizedItem->setStoreId($locale->getScopeId());
                 $item = $collection->getItemById($localizedItem->getId());
@@ -149,22 +202,5 @@ class Attribute implements RepositoryInterface
         }
 
         return $collection;
-    }
-
-    /**
-     * Prepare localized collection
-     *
-     * @param Collection $collection
-     * @param int $storeId
-     * @return void
-     * @throws \Zend_Db_Select_Exception
-     */
-    private function prepareLocalizedCollection(Collection $collection, int $storeId): void
-    {
-        $from = $collection->getSelect()->getPart('from');
-        // unset removes the previous store label join
-        unset($from['al']);
-        $collection->getSelect()->setPart('from', $from);
-        $collection->clear()->addStoreLabel($storeId);
     }
 }
