@@ -73,17 +73,11 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             'filter' => $filter
         ]);
 
-        $searchCriteriaBuilder = $this->searchCriteriaBuilder;
-        if (isset($params['filters'])) {
-            $searchCriteriaBuilder->addFilters($params['filters']);
-        }
-        if ($params['sortBy']) {
-            $searchCriteriaBuilder->addSortOrder($params['sortBy']);
-        }
-
-        $searchCriteria = $searchCriteriaBuilder
+        $searchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage($params['page'])
             ->setPageSize($params['pageSize'])
+            ->setSortOrders($params['sortBy'])
+            ->addFilters($params['filter'])
             ->create();
 
         $collection = $repository->getList($searchCriteria, $params['locale']);

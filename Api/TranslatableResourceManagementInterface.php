@@ -17,7 +17,7 @@ interface TranslatableResourceManagementInterface
      * @param int|null $page
      * @param int|null $pageSize
      * @param string|null $sortBy
-     * @param string[]|null $filter
+     * @param \Aheadworks\Langshop\Api\Data\TranslatableResource\FilterInterface[]|null $filter
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface
      * @throws LocalizedException
      */
