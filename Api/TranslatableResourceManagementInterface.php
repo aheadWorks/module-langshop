@@ -13,7 +13,7 @@ interface TranslatableResourceManagementInterface
      * Retrieves all translatable resources by specific type
      *
      * @param string $resourceType
-     * @param mixed $locale
+     * @param string[] $locale
      * @param int|null $page
      * @param int|null $pageSize
      * @param string|null $sortBy
@@ -23,7 +23,7 @@ interface TranslatableResourceManagementInterface
      */
     public function getList(
         string $resourceType,
-        $locale = [],
+        array $locale = [],
         ?int $page = null,
         ?int $pageSize = null,
         ?string $sortBy = null,
@@ -35,11 +35,11 @@ interface TranslatableResourceManagementInterface
      *
      * @param string $resourceType
      * @param int $resourceId
-     * @param mixed $locale
+     * @param string[] $locale
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      * @throws LocalizedException
      */
-    public function getById(string $resourceType, int $resourceId, $locale = []): TranslatableResourceInterface;
+    public function getById(string $resourceType, int $resourceId, array $locale = []): TranslatableResourceInterface;
 
     /**
      * Saves translatable resource
