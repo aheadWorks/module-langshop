@@ -158,6 +158,7 @@
             <argument name="processorList" xsi:type="array">
                 <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
                 <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
                 <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
             </argument>
         </arguments>
