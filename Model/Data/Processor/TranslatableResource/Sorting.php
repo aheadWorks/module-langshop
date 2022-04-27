@@ -55,7 +55,8 @@ class Sorting implements ProcessorInterface
      */
     public function process(array $data): array
     {
-        $sortBy = &$data['sortBy'];
+        $sortBy = $data['sortBy'];
+        $data['sortBy'] = [];
 
         if ($sortBy) {
             $sorting = $this->getSorting($data['resourceType'], $sortBy);
@@ -64,7 +65,7 @@ class Sorting implements ProcessorInterface
             }
 
             /** @var SchemaSorting $sorting */
-            $sortBy = $this->sortOrderBuilder
+            $data['sortBy'][] = $this->sortOrderBuilder
                 ->setField($sorting->getField())
                 ->setDirection(strtoupper($sorting->getDirection()))
                 ->create();
