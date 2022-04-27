@@ -41,9 +41,7 @@ class Locale implements ProcessorInterface
     {
         $locales = &$data['locale'];
 
-        $locales = is_array($locales) ? $locales : [$locales];
         array_map([$this->localeValidation, 'validate'], $locales);
-
         $locales = $this->localeScopeRepository->getByLocale($locales) ?:
             [$this->localeScopeRepository->getPrimary()];
 

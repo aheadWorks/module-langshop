@@ -65,7 +65,7 @@ definitions:
           - python3 /m2test.py validate_m2_package ${BITBUCKET_REPO_SLUG}.zip
     - step: &eqpTest
         name: EQP tests
-        image: aheadworks/m2test
+        image: aheadworks/m2test-new:2.4-7.4
         script:
           - mkdir -p test-results
           - python3 /m2test.py eqp ${PWD} > test-results/test-EQP.xml

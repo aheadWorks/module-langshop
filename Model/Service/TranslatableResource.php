@@ -56,11 +56,10 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function getList(
         string $resourceType,
-        $locale = [],
+        array $locale = [],
         ?int $page = null,
         ?int $pageSize = null,
         ?string $sortBy = null,
-        ?string $orderBy = null,
         ?array $filter = []
     ): ResourceListInterface {
         $repository = $this->repositoryPool->get($resourceType);
@@ -70,16 +69,15 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             'locale' => $locale,
             'page' => $page,
             'pageSize' => $pageSize,
+            'sortBy' => $sortBy,
             'filter' => $filter
         ]);
-
-        if (isset($params['filters'])) {
-            $this->searchCriteriaBuilder->addFilters($params['filters']);
-        }
 
         $searchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage($params['page'])
             ->setPageSize($params['pageSize'])
+            ->setSortOrders($params['sortBy'])
+            ->addFilters($params['filter'])
             ->create();
 
         $collection = $repository->getList($searchCriteria, $params['locale']);
@@ -90,7 +88,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function getById(string $resourceType, int $resourceId, $locale = []): TranslatableResourceInterface
+    public function getById(string $resourceType, int $resourceId, array $locale = []): TranslatableResourceInterface
     {
         $repository = $this->repositoryPool->get($resourceType);
 
