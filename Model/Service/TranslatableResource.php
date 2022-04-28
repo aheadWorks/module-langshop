@@ -9,6 +9,7 @@ use Aheadworks\Langshop\Api\TranslatableResourceManagementInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
@@ -73,14 +74,17 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             'filter' => $filter
         ]);
 
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteriaBuilder = $this->searchCriteriaBuilder
             ->setCurrentPage($params['page'])
             ->setPageSize($params['pageSize'])
-            ->setSortOrders($params['sortBy'])
-            ->addFilters($params['filter'])
-            ->create();
+            ->setSortOrders($params['sortBy']);
 
-        $collection = $repository->getList($searchCriteria, $params['locale']);
+        /** @var Filter $filter */
+        foreach ($params['filter'] as $filter) {
+            $searchCriteriaBuilder->addFilters([$filter]);
+        }
+
+        $collection = $repository->getList($searchCriteriaBuilder->create(), $params['locale']);
 
         return $this->converter->convertCollection($collection, $resourceType);
     }
