@@ -73,6 +73,7 @@ class Repository
     public function getList(): array
     {
         if (!isset($this->localeScopes)) {
+            $this->localeScopes = [];
             $scopeIds = $this->listToTranslateConfig->getValue();
 
             foreach ($this->storeRepository->getList() as $scope) {
