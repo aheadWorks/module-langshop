@@ -1,57 +1,66 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Checker\Field as FieldChecker;
-use Aheadworks\Langshop\Model\TranslatableResource\Field\CustomFieldInterface;
-use Aheadworks\Langshop\Model\TranslatableResource\Provider\Swatch as SwatchProvider;
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
-use Magento\Framework\DataObject;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
+use Magento\Swatches\Model\Swatch;
 
-class Swatches implements CustomFieldInterface
+class Swatches implements ProcessorInterface
 {
     /**
-     * @var SwatchProvider
+     * @var SwatchCollectionFactory
      */
-    private SwatchProvider $swatchProvider;
+    private SwatchCollectionFactory $swatchCollectionFactory;
 
     /**
-     * @var FieldChecker
-     */
-    private FieldChecker $fieldChecker;
-
-    /**
-     * @var array
-     */
-    private array $values = [];
-
-    /**
-     * @param SwatchProvider $swatchProvider
-     * @param FieldChecker $fieldChecker
+     * @param SwatchCollectionFactory $swatchCollectionFactory
      */
     public function __construct(
-        SwatchProvider $swatchProvider,
-        FieldChecker $fieldChecker
+        SwatchCollectionFactory $swatchCollectionFactory
     ) {
-        $this->swatchProvider = $swatchProvider;
-        $this->fieldChecker = $fieldChecker;
+        $this->swatchCollectionFactory = $swatchCollectionFactory;
     }
 
     /**
-     * @inheritDoc
-     * @param Attribute $attribute
+     * Retrieves swatches for the attributes
+     *
+     * @param AbstractModel[] $items
+     * @param int $storeId
+     * @return void
      */
-    public function getData(DataObject $attribute, string $fieldCode)
+    public function load(array $items, int $storeId): void
     {
-        $storeId = $attribute->getStoreId();
-        $attributeId = $attribute->getId();
-        if (!isset($this->values[$attributeId][$storeId])) {
-            $fieldType = $attribute->getFrontendInput();
-            $this->values[$attributeId][$storeId] = $this->fieldChecker->canContainOptions($fieldType)
-                ? $this->swatchProvider->getValues($attribute)
-                : [];
+        foreach ($this->getSwatches(array_keys($items), $storeId) as $attributeId => $swatches) {
+            $items[$attributeId]->setData('swatches', $swatches);
+        }
+    }
+
+    /**
+     * @param int[] $attributeIds
+     * @param int $storeId
+     * @return array
+     */
+    private function getSwatches(array $attributeIds, int $storeId): array
+    {
+        $swatches = [];
+
+        $swatchCollection = $this->swatchCollectionFactory->create()
+            ->addStoreFilter($storeId);
+
+        $swatchCollection->join(
+            ['eao' => 'eav_attribute_option'],
+            'eao.option_id = main_table.option_id',
+            ['attribute_id' => 'eao.attribute_id']
+        )->addFieldToFilter('eao.attribute_id', $attributeIds);
+
+        /** @var Swatch $swatch */
+        foreach ($swatchCollection as $swatch) {
+            $swatches[$swatch->getAttributeId()][$swatch->getOptionId()] = $swatch->getValue();
         }
 
-        return $this->values[$attributeId][$storeId];
+        return $swatches;
     }
 }

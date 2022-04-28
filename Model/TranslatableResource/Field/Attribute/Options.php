@@ -1,70 +1,61 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Checker\Field as FieldChecker;
-use Aheadworks\Langshop\Model\TranslatableResource\Field\CustomFieldInterface;
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
+use Magento\Eav\Model\Entity\Attribute\Option;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
+use Magento\Framework\Model\AbstractModel;
 
-class Options implements CustomFieldInterface
+class Options implements ProcessorInterface
 {
     /**
-     * @var FieldChecker
+     * @var OptionCollectionFactory
      */
-    private FieldChecker $fieldChecker;
+    private OptionCollectionFactory $optionCollectionFactory;
 
     /**
-     * @param FieldChecker $fieldChecker
+     * @param OptionCollectionFactory $optionCollectionFactory
      */
     public function __construct(
-        FieldChecker $fieldChecker
+        OptionCollectionFactory $optionCollectionFactory
     ) {
-        $this->fieldChecker = $fieldChecker;
+        $this->optionCollectionFactory = $optionCollectionFactory;
     }
 
     /**
-     * @inheritDoc
-     * @param Attribute $attribute
-     * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData(DataObject $attribute, string $fieldCode)
-    {
-        $values = [];
-        $fieldType = $attribute->getFrontendInput();
-        if ($this->fieldChecker->canContainOptions($fieldType)) {
-            $options = $attribute->getSource()->getAllOptions(false);
-
-            foreach ($options as $option) {
-                if (!empty($option['value'])) {
-                    $values = array_replace($values, $this->getPreparedValue($option['value'], $option['label']));
-                }
-            }
-        }
-
-        return $values;
-    }
-
-    /**
-     * Get prepared value
+     * Retrieves options for the attributes
      *
-     * @param mixed $value
-     * @param string $label
-     * @return array Format: array('<value>' => '<label>', ...)
-     * @throws LocalizedException
+     * @param AbstractModel[] $items
+     * @param int $storeId
+     * @return void
      */
-    private function getPreparedValue($value, string $label): array
+    public function load(array $items, int $storeId): void
     {
-        $values = [];
-        if (is_array($value)) {
-            foreach ($value as $item) {
-                $values = array_replace($values, $this->getPreparedValue($item['value'], $item['label']));
-            }
-        } else {
-            $values[$value] = $label;
+        foreach ($this->getOptions(array_keys($items), $storeId) as $attributeId => $options) {
+            $items[$attributeId]->setData('options', $options);
+        }
+    }
+
+    /**
+     * @param int[] $attributeIds
+     * @param int $storeId
+     * @return array
+     */
+    private function getOptions(array $attributeIds, int $storeId): array
+    {
+        $options = [];
+
+        $optionCollection = $this->optionCollectionFactory->create()
+            ->addFieldToFilter('main_table.attribute_id', $attributeIds)
+            ->setStoreFilter($storeId);
+
+        /** @var Option $option */
+        foreach ($optionCollection as $option) {
+            $options[$option->getAttributeId()][$option->getId()] = $option->getValue();
         }
 
-        return $values;
+        return $options;
     }
 }

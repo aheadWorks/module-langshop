@@ -1,19 +1,18 @@
 <?php
 declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field;
 
-use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 
 interface ProcessorInterface
 {
     /**
-     * Process data
+     * Retrieves data for the particular field/store
      *
-     * @param DataObject $object
-     * @param array $data
-     * @return array
-     * @throws LocalizedException
+     * @param AbstractModel[] $items
+     * @param int $storeId
+     * @return void
      */
-    public function process(DataObject $object, array $data): array;
+    public function load(array $items, int $storeId): void;
 }

@@ -132,11 +132,14 @@ class EavEntity implements RepositoryInterface
      * @param int $entityId
      * @return Collection
      * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     private function prepareCollectionById(int $entityId): Collection
     {
-        $collection = $this->collectionFactory->create()
-            ->addFieldToFilter('entity_id', $entityId);
+        $collection = $this->collectionFactory->create();
+
+        $fieldName = $collection->getResource()->getIdFieldName();
+        $collection->addFieldToFilter($fieldName, $entityId);
 
         if (!$collection->getSize()) {
             throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $entityId));
@@ -155,33 +158,34 @@ class EavEntity implements RepositoryInterface
      */
     private function addLocalizedAttributes(Collection $collection, array $localeScopes): Collection
     {
-        if ($collection instanceof CatalogCollection) {
-            $attributeCodes = [
-                Field::TRANSLATABLE => [],
-                Field::UNTRANSLATABLE => []
-            ];
-            foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
-                $isTranslatable = $attribute->isTranslatable() ? Field::TRANSLATABLE : Field::UNTRANSLATABLE;
-                $attributeCodes[$isTranslatable][] = $attribute->getCode();
-            }
+        $attributeCodes = [
+            Field::TRANSLATABLE => [],
+            Field::UNTRANSLATABLE => []
+        ];
+        foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
+            $isTranslatable = $attribute->isTranslatable() ? Field::TRANSLATABLE : Field::UNTRANSLATABLE;
+            $attributeCodes[$isTranslatable][] = $attribute->getCode();
+        }
 
-            $localizedCollection = clone $collection;
+        $localizedCollection = clone $collection;
+
+        if ($collection instanceof CatalogCollection) {
             $collection->addAttributeToSelect($attributeCodes[Field::UNTRANSLATABLE]);
             $localizedCollection->addAttributeToSelect($attributeCodes[Field::TRANSLATABLE]);
+        }
 
-            foreach ($localeScopes as $localeScope) {
-                $localizedCollection->clear()->setStoreId($localeScope->getScopeId());
+        foreach ($localeScopes as $localeScope) {
+            $localizedCollection->setStoreId((int) $localeScope->getScopeId())->clear();
 
-                /** @var AbstractModel $localizedItem */
-                foreach ($localizedCollection as $localizedItem) {
-                    $item = $collection->getItemById($localizedItem->getId());
-                    foreach ($attributeCodes[Field::TRANSLATABLE] as $attributeCode) {
-                        $value = is_array($item->getData($attributeCode))
-                            ? $item->getData($attributeCode)
-                            : [];
-                        $value[$localeScope->getLocaleCode()] = $localizedItem->getData($attributeCode);
-                        $item->setData($attributeCode, $value);
-                    }
+            /** @var AbstractModel $localizedItem */
+            foreach ($localizedCollection->getItems() as $localizedItem) {
+                $item = $collection->getItemById($localizedItem->getId());
+                foreach ($attributeCodes[Field::TRANSLATABLE] as $attributeCode) {
+                    $value = is_array($item->getData($attributeCode))
+                        ? $item->getData($attributeCode)
+                        : [];
+                    $value[$localeScope->getLocaleCode()] = $localizedItem->getData($attributeCode);
+                    $item->setData($attributeCode, $value);
                 }
             }
         }
