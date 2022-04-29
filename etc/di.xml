@@ -61,13 +61,25 @@
         </arguments>
     </type>
 
-    <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\Collection">
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorPool\Attribute"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorPool">
         <arguments>
-            <argument name="fieldProcessors" xsi:type="array">
+            <argument name="processors" xsi:type="array">
                 <item name="options" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Options</item>
                 <item name="store_label" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\StoreLabel</item>
                 <item name="swatches" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Swatches</item>
             </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\Collection">
+        <arguments>
+            <argument name="processorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorPool\Attribute</argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\ResourceModel">
+        <arguments>
+            <argument name="processorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorPool\Attribute</argument>
         </arguments>
     </type>
 
@@ -104,7 +116,7 @@
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\ResourceModelFactory"
                  type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\Eav\Model\ResourceModel\Entity\Attribute</argument>
+            <argument name="instanceName" xsi:type="string">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\ResourceModel</argument>
         </arguments>
     </virtualType>
 

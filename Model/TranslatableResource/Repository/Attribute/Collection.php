@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorPool;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection\Proxy as AttributeCollectionProxy;
@@ -18,9 +18,9 @@ class Collection extends AttributeCollectionProxy
     private AttributeCollectionFactory $attributeCollectionFactory;
 
     /**
-     * @var ProcessorInterface[]
+     * @var ProcessorPool
      */
-    private array $fieldProcessors;
+    private ProcessorPool $processorPool;
 
     /**
      * @var int
@@ -29,14 +29,14 @@ class Collection extends AttributeCollectionProxy
 
     /**
      * @param AttributeCollectionFactory $attributeCollectionFactory
-     * @param ProcessorInterface[] $fieldProcessors
+     * @param ProcessorPool $processorPool
      */
     public function __construct(
         AttributeCollectionFactory $attributeCollectionFactory,
-        array $fieldProcessors
+        ProcessorPool $processorPool
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
-        $this->fieldProcessors = $fieldProcessors;
+        $this->processorPool = $processorPool;
     }
 
     /**
@@ -81,8 +81,8 @@ class Collection extends AttributeCollectionProxy
         $items = parent::getItems();
 
         if ($items) {
-            foreach ($this->fieldProcessors as $fieldProcessor) {
-                $fieldProcessor->load($items, $this->getStoreId());
+            foreach ($this->processorPool->get() as $processor) {
+                $processor->load($items, $this->getStoreId());
             }
         }
 

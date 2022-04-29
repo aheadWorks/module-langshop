@@ -12,19 +12,19 @@ class StoreLabel implements ProcessorInterface
     /**
      * @var ResourceConnection
      */
-    private ResourceConnection $resourceConnection;
+    private ResourceConnection $resource;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @param ResourceConnection $resource
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resource
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->resource = $resource;
     }
 
     /**
-     * Retrieves store label for the attributes
+     * Retrieves store labels for the attributes
      *
      * @param AbstractModel[] $items
      * @param int $storeId
@@ -40,15 +40,48 @@ class StoreLabel implements ProcessorInterface
     }
 
     /**
+     * Saves store labels for the attribute
+     *
+     * @param AbstractModel $item
+     * @param int $storeId
+     * @return void
+     */
+    public function save(AbstractModel $item, int $storeId): void
+    {
+        $storeLabel = $item->getData('store_label');
+        if ($storeLabel) {
+            $this->resource->getConnection()->insertOnDuplicate(
+                $this->getTableName(),
+                [
+                    'attribute_id' => $item->getId(),
+                    'store_id' => $storeId,
+                    'value' => $item->getData('store_label')
+                ],
+                ['value']
+            );
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getTableName(): string
+    {
+        return $this->resource->getConnection()->getTableName(
+            'eav_attribute_label'
+        );
+    }
+
+    /**
      * @param int[] $attributeIds
      * @param int $storeId
      * @return array
      */
     private function getStoreLabels(array $attributeIds, int $storeId): array
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->resource->getConnection();
         $select = $connection->select()
-            ->from($connection->getTableName('eav_attribute_label'), ['attribute_id', 'value'])
+            ->from($this->getTableName(), ['attribute_id', 'value'])
             ->where('attribute_id in(?)', $attributeIds)
             ->where('store_id = ?', $storeId);
 

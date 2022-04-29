@@ -39,6 +39,18 @@ class Swatches implements ProcessorInterface
     }
 
     /**
+     * Saves swatches for the attribute
+     *
+     * @param AbstractModel $item
+     * @param int $storeId
+     * @return void
+     */
+    public function save(AbstractModel $item, int $storeId): void
+    {
+        // TODO: Implement save() method.
+    }
+
+    /**
      * @param int[] $attributeIds
      * @param int $storeId
      * @return array
