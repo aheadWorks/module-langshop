@@ -55,7 +55,7 @@ class Sorting implements ProcessorInterface
      */
     public function process(array $data): array
     {
-        $sortBy = $data['sortBy'];
+        $sortBy = $data['sortBy'] ?? null;
         $data['sortBy'] = [];
 
         if ($sortBy) {

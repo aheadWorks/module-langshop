@@ -42,7 +42,7 @@ class Repository
     /**
      * @var array
      */
-    private array $localeScopes = [];
+    private array $localeScopes;
 
     /**
      * @param LocaleResolverInterface $localeResolver
@@ -72,16 +72,16 @@ class Repository
      */
     public function getList(): array
     {
-        if (empty($this->localeScopes)) {
+        if (!isset($this->localeScopes)) {
+            $this->localeScopes = [];
             $scopeIds = $this->listToTranslateConfig->getValue();
 
             foreach ($this->storeRepository->getList() as $scope) {
-                $scopeId = $scope->getId();
-                if (in_array($scopeId, $scopeIds)) {
-                    $this->localeScopes[$scopeId] = $this->localeScopeFactory->create()
-                        ->setScopeId($scopeId)
+                if (in_array($scope->getId(), $scopeIds)) {
+                    $this->localeScopes[] = $this->localeScopeFactory->create()
+                        ->setScopeId($scope->getId())
                         ->setScopeType(LocaleScopeType::STORE)
-                        ->setLocaleCode($this->localeConfig->getValue((int) $scopeId))
+                        ->setLocaleCode($this->localeConfig->getValue((int) $scope->getId()))
                         ->setIsPrimary(false);
                 }
             }
