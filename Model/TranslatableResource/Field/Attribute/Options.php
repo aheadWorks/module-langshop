@@ -6,7 +6,10 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
 use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\Store;
 
 class Options implements ProcessorInterface
 {
@@ -16,12 +19,20 @@ class Options implements ProcessorInterface
     private OptionCollectionFactory $optionCollectionFactory;
 
     /**
+     * @var ResourceConnection
+     */
+    private ResourceConnection $resourceConnection;
+
+    /**
      * @param OptionCollectionFactory $optionCollectionFactory
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        OptionCollectionFactory $optionCollectionFactory
+        OptionCollectionFactory $optionCollectionFactory,
+        ResourceConnection $resourceConnection
     ) {
         $this->optionCollectionFactory = $optionCollectionFactory;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -33,8 +44,13 @@ class Options implements ProcessorInterface
      */
     public function load(array $items, int $storeId): void
     {
-        foreach ($this->getOptions(array_keys($items), $storeId) as $attributeId => $options) {
-            $items[$attributeId]->setData('options', $options);
+        foreach ($this->getOptions(array_keys($items), $storeId) as $optionId => $option) {
+            $item = $items[$option->getAttributeId()];
+
+            $item->setData('options', array_replace(
+                $item->getData('options') ?? [],
+                [$optionId => $option->getValue()]
+            ));
         }
     }
 
@@ -44,30 +60,65 @@ class Options implements ProcessorInterface
      * @param AbstractModel $item
      * @param int $storeId
      * @return void
+     * @throws LocalizedException
      */
     public function save(AbstractModel $item, int $storeId): void
     {
-        // TODO: Implement save() method.
+        $options = $item->getData('options');
+        if (is_array($options)) {
+            $optionIds = array_keys($this->getOptions([$item->getId()]));
+            foreach ($options as $optionId => $value) {
+                if (!in_array($optionId, $optionIds)) {
+                    throw new LocalizedException(__('Option with identifier = "%1" does not exist.', $optionId));
+                }
+            }
+
+            $toInsert = [];
+            $existingOptions = $this->getOptions([$item->getId()], $storeId);
+
+            foreach ($options as $optionId => $value) {
+                $toInsert[] = [
+                    'value_id' => $existingOptions[$optionId]->getData('value_id'),
+                    'option_id' => $optionId,
+                    'store_id' => $storeId,
+                    'value' => $value
+                ];
+            }
+
+            $this->resourceConnection->getConnection()->insertOnDuplicate(
+                $this->getTableName(),
+                $toInsert
+            );
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getTableName(): string
+    {
+        return $this->resourceConnection->getConnection()->getTableName(
+            'eav_attribute_option_value'
+        );
     }
 
     /**
      * @param int[] $attributeIds
      * @param int $storeId
-     * @return array
+     * @return Option[]
      */
-    private function getOptions(array $attributeIds, int $storeId): array
+    private function getOptions(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
-        $options = [];
-
         $optionCollection = $this->optionCollectionFactory->create()
             ->addFieldToFilter('main_table.attribute_id', $attributeIds)
             ->setStoreFilter($storeId);
 
-        /** @var Option $option */
-        foreach ($optionCollection as $option) {
-            $options[$option->getAttributeId()][$option->getId()] = $option->getValue();
-        }
+        $optionCollection->getSelect()->joinLeft(
+            ['eaov' => $this->getTableName()],
+            "eaov.option_id = main_table.option_id and eaov.store_id = $storeId",
+            ['value_id' => 'eaov.value_id']
+        )->order('option_id');
 
-        return $options;
+        return $optionCollection->getItems();
     }
 }

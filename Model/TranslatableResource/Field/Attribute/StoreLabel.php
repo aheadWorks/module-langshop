@@ -12,15 +12,15 @@ class StoreLabel implements ProcessorInterface
     /**
      * @var ResourceConnection
      */
-    private ResourceConnection $resource;
+    private ResourceConnection $resourceConnection;
 
     /**
-     * @param ResourceConnection $resource
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resourceConnection
     ) {
-        $this->resource = $resource;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -32,10 +32,12 @@ class StoreLabel implements ProcessorInterface
      */
     public function load(array $items, int $storeId): void
     {
-        $storeLabels = $this->getStoreLabels(array_keys($items), $storeId);
-
         foreach ($items as $item) {
-            $item->setData('store_label', $storeLabels[$item->getId()] ?? $item->getData('frontend_label'));
+            $item->setData('store_label', $item->getData('frontend_label'));
+        }
+
+        foreach ($this->getStoreLabels(array_keys($items), $storeId) as $storeLabel) {
+            $items[$storeLabel['attribute_id']]->setData('store_label', $storeLabel['value']);
         }
     }
 
@@ -50,14 +52,18 @@ class StoreLabel implements ProcessorInterface
     {
         $storeLabel = $item->getData('store_label');
         if ($storeLabel) {
-            $this->resource->getConnection()->insertOnDuplicate(
+            $storeLabelId = array_key_first(
+                $this->getStoreLabels([$item->getId()], $storeId)
+            );
+
+            $this->resourceConnection->getConnection()->insertOnDuplicate(
                 $this->getTableName(),
                 [
+                    'attribute_label_id' => $storeLabelId,
                     'attribute_id' => $item->getId(),
                     'store_id' => $storeId,
-                    'value' => $item->getData('store_label')
-                ],
-                ['value']
+                    'value' => $storeLabel
+                ]
             );
         }
     }
@@ -67,7 +73,7 @@ class StoreLabel implements ProcessorInterface
      */
     private function getTableName(): string
     {
-        return $this->resource->getConnection()->getTableName(
+        return $this->resourceConnection->getConnection()->getTableName(
             'eav_attribute_label'
         );
     }
@@ -79,12 +85,12 @@ class StoreLabel implements ProcessorInterface
      */
     private function getStoreLabels(array $attributeIds, int $storeId): array
     {
-        $connection = $this->resource->getConnection();
+        $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
-            ->from($this->getTableName(), ['attribute_id', 'value'])
+            ->from($this->getTableName())
             ->where('attribute_id in(?)', $attributeIds)
             ->where('store_id = ?', $storeId);
 
-        return $connection->fetchPairs($select);
+        return $connection->fetchAssoc($select);
     }
 }

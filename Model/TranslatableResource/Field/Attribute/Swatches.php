@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\Store;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 
@@ -16,12 +19,20 @@ class Swatches implements ProcessorInterface
     private SwatchCollectionFactory $swatchCollectionFactory;
 
     /**
+     * @var ResourceConnection
+     */
+    private ResourceConnection $resourceConnection;
+
+    /**
      * @param SwatchCollectionFactory $swatchCollectionFactory
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        SwatchCollectionFactory $swatchCollectionFactory
+        SwatchCollectionFactory $swatchCollectionFactory,
+        ResourceConnection $resourceConnection
     ) {
         $this->swatchCollectionFactory = $swatchCollectionFactory;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -33,8 +44,13 @@ class Swatches implements ProcessorInterface
      */
     public function load(array $items, int $storeId): void
     {
-        foreach ($this->getSwatches(array_keys($items), $storeId) as $attributeId => $swatches) {
-            $items[$attributeId]->setData('swatches', $swatches);
+        foreach ($this->getSwatches(array_keys($items), $storeId) as $optionId => $swatch) {
+            $item = $items[$swatch->getData('attribute_id')];
+
+            $item->setData('swatches', array_replace(
+                $item->getData('swatches') ?? [],
+                [$optionId => $swatch->getData('value')]
+            ));
         }
     }
 
@@ -44,18 +60,56 @@ class Swatches implements ProcessorInterface
      * @param AbstractModel $item
      * @param int $storeId
      * @return void
+     * @throws LocalizedException
      */
     public function save(AbstractModel $item, int $storeId): void
     {
-        // TODO: Implement save() method.
+        $swatches = $item->getData('swatches');
+        if (is_array($swatches)) {
+            $optionIds = array_keys($this->getSwatches([$item->getId()]));
+            foreach ($swatches as $optionId => $swatch) {
+                if (!in_array($optionId, $optionIds)) {
+                    throw new LocalizedException(__('Option with identifier = "%1" does not exist.', $optionId));
+                }
+            }
+
+            $toInsert = [];
+            $existingSwatches = $this->getSwatches([$item->getId()], $storeId);
+
+            foreach ($swatches as $optionId => $value) {
+                $existingSwatch = $existingSwatches[$optionId] ?? null;
+
+                $toInsert[] = [
+                    'swatch_id' => $existingSwatch ? $existingSwatch->getId() : null,
+                    'option_id' => $optionId,
+                    'store_id' => $storeId,
+                    'value' => $value
+                ];
+            }
+
+            $this->resourceConnection->getConnection()->insertOnDuplicate(
+                $this->getTableName(),
+                $toInsert
+            );
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getTableName(): string
+    {
+        return $this->resourceConnection->getConnection()->getTableName(
+            'eav_attribute_option_swatch'
+        );
     }
 
     /**
      * @param int[] $attributeIds
      * @param int $storeId
-     * @return array
+     * @return Swatch[]
      */
-    private function getSwatches(array $attributeIds, int $storeId): array
+    private function getSwatches(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
         $swatches = [];
 
@@ -70,7 +124,7 @@ class Swatches implements ProcessorInterface
 
         /** @var Swatch $swatch */
         foreach ($swatchCollection as $swatch) {
-            $swatches[$swatch->getAttributeId()][$swatch->getOptionId()] = $swatch->getValue();
+            $swatches[$swatch->getData('option_id')] = $swatch;
         }
 
         return $swatches;
