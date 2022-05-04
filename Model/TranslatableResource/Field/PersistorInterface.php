@@ -5,7 +5,7 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Field;
 
 use Magento\Framework\Model\AbstractModel;
 
-interface ProcessorInterface
+interface PersistorInterface
 {
     /**
      * Retrieves data for the particular field/store

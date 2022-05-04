@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
 
-class StoreLabel implements ProcessorInterface
+class StoreLabel implements PersistorInterface
 {
+    /**
+     * Field to process
+     */
+    private const FIELD = 'store_label';
+
     /**
      * @var ResourceConnection
      */
@@ -33,11 +38,11 @@ class StoreLabel implements ProcessorInterface
     public function load(array $items, int $storeId): void
     {
         foreach ($items as $item) {
-            $item->setData('store_label', $item->getData('frontend_label'));
+            $item->setData(self::FIELD, $item->getData('frontend_label'));
         }
 
         foreach ($this->getStoreLabels(array_keys($items), $storeId) as $storeLabel) {
-            $items[$storeLabel['attribute_id']]->setData('store_label', $storeLabel['value']);
+            $items[$storeLabel['attribute_id']]->setData(self::FIELD, $storeLabel['value']);
         }
     }
 
@@ -50,7 +55,7 @@ class StoreLabel implements ProcessorInterface
      */
     public function save(AbstractModel $item, int $storeId): void
     {
-        $storeLabel = $item->getData('store_label');
+        $storeLabel = $item->getData(self::FIELD);
         if ($storeLabel) {
             $storeLabelId = array_key_first(
                 $this->getStoreLabels([$item->getId()], $storeId)

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
@@ -11,8 +11,13 @@ use Magento\Store\Model\Store;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 
-class Swatches implements ProcessorInterface
+class Swatches implements PersistorInterface
 {
+    /**
+     * Field to process
+     */
+    private const FIELD = 'swatches';
+
     /**
      * @var SwatchCollectionFactory
      */
@@ -47,8 +52,8 @@ class Swatches implements ProcessorInterface
         foreach ($this->getSwatches(array_keys($items), $storeId) as $optionId => $swatch) {
             $item = $items[$swatch->getData('attribute_id')];
 
-            $item->setData('swatches', array_replace(
-                $item->getData('swatches') ?? [],
+            $item->setData(self::FIELD, array_replace(
+                $item->getData(self::FIELD) ?? [],
                 [$optionId => $swatch->getData('value')]
             ));
         }
@@ -64,7 +69,7 @@ class Swatches implements ProcessorInterface
      */
     public function save(AbstractModel $item, int $storeId): void
     {
-        $swatches = $item->getData('swatches');
+        $swatches = $item->getData(self::FIELD);
         if (is_array($swatches)) {
             $optionIds = array_keys($this->getSwatches([$item->getId()]));
             foreach ($swatches as $optionId => $swatch) {

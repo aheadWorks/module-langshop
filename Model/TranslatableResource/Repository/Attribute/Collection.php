@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorPool;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection\Proxy as AttributeCollectionProxy;
@@ -18,9 +18,9 @@ class Collection extends AttributeCollectionProxy
     private AttributeCollectionFactory $attributeCollectionFactory;
 
     /**
-     * @var ProcessorPool
+     * @var PersistorPool
      */
-    private ProcessorPool $processorPool;
+    private PersistorPool $persistorPool;
 
     /**
      * @var int
@@ -29,14 +29,14 @@ class Collection extends AttributeCollectionProxy
 
     /**
      * @param AttributeCollectionFactory $attributeCollectionFactory
-     * @param ProcessorPool $processorPool
+     * @param PersistorPool $persistorPool
      */
     public function __construct(
         AttributeCollectionFactory $attributeCollectionFactory,
-        ProcessorPool $processorPool
+        PersistorPool $persistorPool
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
-        $this->processorPool = $processorPool;
+        $this->persistorPool = $persistorPool;
     }
 
     /**
@@ -81,8 +81,8 @@ class Collection extends AttributeCollectionProxy
         $items = parent::getItems();
 
         if ($items) {
-            foreach ($this->processorPool->get() as $processor) {
-                $processor->load($items, $this->getStoreId());
+            foreach ($this->persistorPool->get() as $persistor) {
+                $persistor->load($items, $this->getStoreId());
             }
         }
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorInterface;
 use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -11,8 +11,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 
-class Options implements ProcessorInterface
+class Options implements PersistorInterface
 {
+    /**
+     * Field to process
+     */
+    private const FIELD = 'options';
+
     /**
      * @var OptionCollectionFactory
      */
@@ -47,8 +52,8 @@ class Options implements ProcessorInterface
         foreach ($this->getOptions(array_keys($items), $storeId) as $optionId => $option) {
             $item = $items[$option->getAttributeId()];
 
-            $item->setData('options', array_replace(
-                $item->getData('options') ?? [],
+            $item->setData(self::FIELD, array_replace(
+                $item->getData(self::FIELD) ?? [],
                 [$optionId => $option->getValue()]
             ));
         }
@@ -64,7 +69,7 @@ class Options implements ProcessorInterface
      */
     public function save(AbstractModel $item, int $storeId): void
     {
-        $options = $item->getData('options');
+        $options = $item->getData(self::FIELD);
         if (is_array($options)) {
             $optionIds = array_keys($this->getOptions([$item->getId()]));
             foreach ($options as $optionId => $value) {

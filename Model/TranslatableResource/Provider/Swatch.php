@@ -115,7 +115,7 @@ class Swatch
      * @param int $storeId
      * @return array
      */
-    public function getStoreOptionValues(Attribute $attribute, int $storeId): array
+    private function getStoreOptionValues(Attribute $attribute, int $storeId): array
     {
         $values = [];
         /** @var Collection $collection */

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Field\ProcessorPool;
+use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResourceModel;
 use Magento\Eav\Model\ResourceModel\Entity\AttributeFactory as AttributeResourceModelFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Proxy as AttributeResourceModelProxy;
@@ -19,20 +19,20 @@ class ResourceModel extends AttributeResourceModelProxy
     private AttributeResourceModelFactory $attributeResourceModelFactory;
 
     /**
-     * @var ProcessorPool
+     * @var PersistorPool
      */
-    private ProcessorPool $processorPool;
+    private PersistorPool $persistorPool;
 
     /**
      * @param AttributeResourceModelFactory $attributeResourceModelFactory
-     * @param ProcessorPool $processorPool
+     * @param PersistorPool $persistorPool
      */
     public function __construct(
         AttributeResourceModelFactory $attributeResourceModelFactory,
-        ProcessorPool $processorPool
+        PersistorPool $persistorPool
     ) {
         $this->attributeResourceModelFactory = $attributeResourceModelFactory;
-        $this->processorPool = $processorPool;
+        $this->persistorPool = $persistorPool;
     }
 
     /**
@@ -58,8 +58,8 @@ class ResourceModel extends AttributeResourceModelProxy
         parent::save($object);
 
         $storeId = (int) $object->getData('store_id') ?? Store::DEFAULT_STORE_ID;
-        foreach ($this->processorPool->get() as $processor) {
-            $processor->save($object, $storeId);
+        foreach ($this->persistorPool->get() as $persistor) {
+            $persistor->save($object, $storeId);
         }
     }
 }
