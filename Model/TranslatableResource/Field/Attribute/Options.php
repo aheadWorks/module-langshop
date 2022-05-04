@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Option as OptionValidation;
 use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\Store;
 
 class Options implements PersistorInterface
 {
@@ -29,15 +29,23 @@ class Options implements PersistorInterface
     private ResourceConnection $resourceConnection;
 
     /**
+     * @var OptionValidation
+     */
+    private OptionValidation $optionValidation;
+
+    /**
      * @param OptionCollectionFactory $optionCollectionFactory
      * @param ResourceConnection $resourceConnection
+     * @param OptionValidation $optionValidation
      */
     public function __construct(
         OptionCollectionFactory $optionCollectionFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        OptionValidation $optionValidation
     ) {
         $this->optionCollectionFactory = $optionCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->optionValidation = $optionValidation;
     }
 
     /**
@@ -70,12 +78,9 @@ class Options implements PersistorInterface
     public function save(AbstractModel $item, int $storeId): void
     {
         $options = $item->getData(self::FIELD);
-        if (is_array($options)) {
-            $optionIds = array_keys($this->getOptions([$item->getId()]));
+        if (is_array($options) && $options) {
             foreach ($options as $optionId => $value) {
-                if (!in_array($optionId, $optionIds)) {
-                    throw new LocalizedException(__('Option with identifier = "%1" does not exist.', $optionId));
-                }
+                $this->optionValidation->validate((int) $optionId, (int) $item->getId());
             }
 
             $toInsert = [];
@@ -112,7 +117,7 @@ class Options implements PersistorInterface
      * @param int $storeId
      * @return Option[]
      */
-    private function getOptions(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
+    private function getOptions(array $attributeIds, int $storeId): array
     {
         $optionCollection = $this->optionCollectionFactory->create()
             ->addFieldToFilter('main_table.attribute_id', $attributeIds)

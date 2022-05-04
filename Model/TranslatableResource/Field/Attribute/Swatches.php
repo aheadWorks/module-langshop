@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Option as OptionValidation;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\Store;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 
@@ -29,15 +29,23 @@ class Swatches implements PersistorInterface
     private ResourceConnection $resourceConnection;
 
     /**
+     * @var OptionValidation
+     */
+    private OptionValidation $optionValidation;
+
+    /**
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param ResourceConnection $resourceConnection
+     * @param OptionValidation $optionValidation
      */
     public function __construct(
         SwatchCollectionFactory $swatchCollectionFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        OptionValidation $optionValidation
     ) {
         $this->swatchCollectionFactory = $swatchCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->optionValidation = $optionValidation;
     }
 
     /**
@@ -70,12 +78,9 @@ class Swatches implements PersistorInterface
     public function save(AbstractModel $item, int $storeId): void
     {
         $swatches = $item->getData(self::FIELD);
-        if (is_array($swatches)) {
-            $optionIds = array_keys($this->getSwatches([$item->getId()]));
+        if (is_array($swatches) && $swatches) {
             foreach ($swatches as $optionId => $swatch) {
-                if (!in_array($optionId, $optionIds)) {
-                    throw new LocalizedException(__('Option with identifier = "%1" does not exist.', $optionId));
-                }
+                $this->optionValidation->validate((int) $optionId, (int) $item->getId());
             }
 
             $toInsert = [];
@@ -114,7 +119,7 @@ class Swatches implements PersistorInterface
      * @param int $storeId
      * @return Swatch[]
      */
-    private function getSwatches(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
+    private function getSwatches(array $attributeIds, int $storeId): array
     {
         $swatches = [];
 

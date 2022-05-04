@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResourceModel;
 use Magento\Eav\Model\ResourceModel\Entity\AttributeFactory as AttributeResourceModelFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Proxy as AttributeResourceModelProxy;
@@ -24,15 +25,23 @@ class ResourceModel extends AttributeResourceModelProxy
     private PersistorPool $persistorPool;
 
     /**
+     * @var EavConfig
+     */
+    private EavConfig $eavConfig;
+
+    /**
      * @param AttributeResourceModelFactory $attributeResourceModelFactory
      * @param PersistorPool $persistorPool
+     * @param EavConfig $eavConfig
      */
     public function __construct(
         AttributeResourceModelFactory $attributeResourceModelFactory,
-        PersistorPool $persistorPool
+        PersistorPool $persistorPool,
+        EavConfig $eavConfig
     ) {
         $this->attributeResourceModelFactory = $attributeResourceModelFactory;
         $this->persistorPool = $persistorPool;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -61,5 +70,7 @@ class ResourceModel extends AttributeResourceModelProxy
         foreach ($this->persistorPool->get() as $persistor) {
             $persistor->save($object, $storeId);
         }
+
+        $this->eavConfig->clear();
     }
 }
