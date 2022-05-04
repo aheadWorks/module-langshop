@@ -104,7 +104,7 @@ class Converter
     public function convertCollection(Collection $collection, string $resourceType): ResourceListInterface
     {
         $resources = [];
-        foreach ($collection->getItems() as $item) {
+        foreach ($collection as $item) {
             $resources[] = $this->convert($item, $resourceType);
         }
 

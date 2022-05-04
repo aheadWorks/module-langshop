@@ -42,7 +42,7 @@ interface TranslationInterface
     /**
      * Set value
      *
-     * @param string $value
+     * @param mixed $value
      * @return $this
      */
     public function setValue($value);
@@ -50,7 +50,7 @@ interface TranslationInterface
     /**
      * Get value
      *
-     * @return string
+     * @return mixed
      */
     public function getValue();
 }
