@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity\Field\Collector;
 
 use Aheadworks\Langshop\Model\Entity\Field;

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity;
 
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;

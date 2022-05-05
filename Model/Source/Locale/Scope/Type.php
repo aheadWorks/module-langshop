@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Source\Locale\Scope;
 
 use Aheadworks\Langshop\Model\Source\AbstractOption as AbstractOptionSourceModel;

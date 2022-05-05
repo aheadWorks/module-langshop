@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Setup\Patch\Data;
 
 use Aheadworks\Langshop\Model\Service\Integration as IntegrationService;
