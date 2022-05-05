@@ -10,9 +10,9 @@ class Type extends AbstractOptionSourceModel
     /**#@+
      * Supported locale scope type values
      */
-    const DEFAULT   = 'default';
-    const WEBSITE   = 'website';
-    const STORE     = 'store';
+    public const DEFAULT   = 'default';
+    public const WEBSITE   = 'website';
+    public const STORE     = 'store';
     /**#@-*/
 
     /**

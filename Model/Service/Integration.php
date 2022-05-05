@@ -13,7 +13,7 @@ use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 
 class Integration
 {
-    const INTEGRATION_NAME = 'Langshop';
+    public const INTEGRATION_NAME = 'Langshop';
 
     /**
      * @var ConfigBasedIntegrationManager
