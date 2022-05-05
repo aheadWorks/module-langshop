@@ -18,7 +18,7 @@ class Type extends AbstractOptionSourceModel
      *
      * @return array
      */
-    protected function getOptionList()
+    protected function getOptionList(): array
     {
         return [
             [

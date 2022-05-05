@@ -15,8 +15,8 @@ class DefaultValue implements ProcessorInterface
      */
     public function process(array $data): array
     {
-        $data['page'] = $data['page'] ?? 1;
-        $data['pageSize'] = $data['pageSize'] ?? 20;
+        $data['page'] ??= 1;
+        $data['pageSize'] ??= 20;
 
         return $data;
     }

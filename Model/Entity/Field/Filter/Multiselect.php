@@ -6,7 +6,7 @@ class Multiselect implements PreparerInterface
     /**
      * @inheritDoc
      */
-    public function getPreparedConditionType($value)
+    public function getPreparedConditionType($value): string
     {
         return is_array($value) ? 'in' : 'finset';
     }

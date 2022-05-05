@@ -11,12 +11,12 @@ class Converter
     /**
      * @var Copy
      */
-    private $copyService;
+    private Copy $copyService;
 
     /**
      * @var LocaleInterfaceFactory
      */
-    private $localeFactory;
+    private LocaleInterfaceFactory $localeFactory;
 
     /**
      * @param Copy $copyService
@@ -36,7 +36,7 @@ class Converter
      * @param LocaleScopeRecordInterface $scopeRecord
      * @return LocaleInterface
      */
-    public function toLocaleDataModel(LocaleScopeRecordInterface $scopeRecord)
+    public function toLocaleDataModel(LocaleScopeRecordInterface $scopeRecord): LocaleInterface
     {
         $locale = $this->localeFactory->create();
 

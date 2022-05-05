@@ -11,12 +11,12 @@ class LoadHandler
     /**
      * @var LocaleScopeRecordConverter
      */
-    private $localeScopeRecordConverter;
+    private LocaleScopeRecordConverter $localeScopeRecordConverter;
 
     /**
      * @var ProcessorInterface
      */
-    private $processor;
+    private ProcessorInterface $processor;
 
     /**
      * @param LocaleScopeRecordConverter $localeScopeRecordConverter
@@ -35,7 +35,7 @@ class LoadHandler
      * @return LocaleInterface
      * @throws LocalizedException
      */
-    public function load(LocaleScopeRecordInterface $scopeRecord)
+    public function load(LocaleScopeRecordInterface $scopeRecord): LocaleInterface
     {
         $locale = $this->localeScopeRecordConverter->toLocaleDataModel($scopeRecord);
 

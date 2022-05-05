@@ -9,7 +9,7 @@ interface PreparerInterface
      * @param string|array $value
      * @return string
      */
-    public function getPreparedConditionType($value);
+    public function getPreparedConditionType($value): string;
 
     /**
      * Get prepared value

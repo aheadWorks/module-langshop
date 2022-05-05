@@ -12,12 +12,12 @@ class Converter
     /**
      * @var FieldConverter
      */
-    private $fieldConverter;
+    private FieldConverter $fieldConverter;
 
     /**
-     * @var ResourceInterface
+     * @var ResourceInterfaceFactory
      */
-    private $resourceFactory;
+    private ResourceInterfaceFactory $resourceFactory;
 
     /**
      * @param FieldConverter $fieldConverter
@@ -38,7 +38,7 @@ class Converter
      * @return ResourceInterface
      * @throws LocalizedException
      */
-    public function convert(Entity $entity)
+    public function convert(Entity $entity): ResourceInterface
     {
         $fieldsElements = $this->fieldConverter->convert($entity->getFields());
 
@@ -60,7 +60,7 @@ class Converter
      * @return ResourceInterface[]
      * @throws LocalizedException
      */
-    public function convertAll(array $entities = [])
+    public function convertAll(array $entities = []): array
     {
         $resources = [];
         foreach ($entities as $entity) {

@@ -10,7 +10,7 @@ class Composite implements ProcessorInterface
     /**
      * @var ProcessorInterface[]
      */
-    private $processorList;
+    private array $processorList;
 
     /**
      * @param ProcessorInterface[] $processorList
@@ -24,7 +24,7 @@ class Composite implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(SchemaInterface $schema)
+    public function process(SchemaInterface $schema): void
     {
         foreach ($this->processorList as $processor) {
             if (!$processor instanceof ProcessorInterface) {

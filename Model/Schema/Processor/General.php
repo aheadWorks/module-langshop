@@ -9,7 +9,7 @@ class General implements ProcessorInterface
     /**
      * @var array
      */
-    private $data;
+    private array $data;
 
     /**
      * @param array $data
@@ -23,7 +23,7 @@ class General implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(SchemaInterface $schema)
+    public function process(SchemaInterface $schema): void
     {
         foreach ($this->data as $key => $value) {
             $schema->setData($key, $value);

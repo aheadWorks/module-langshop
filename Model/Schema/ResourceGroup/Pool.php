@@ -6,12 +6,12 @@ use Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface;
 class Pool
 {
     /**
-     * @var array
+     * @var ResourceGroupInterface[]
      */
-    private $groupList;
+    private array $groupList;
 
     /**
-     * @param array $groupList
+     * @param ResourceGroupInterface[] $groupList
      */
     public function __construct(
         array $groupList = []
@@ -24,7 +24,7 @@ class Pool
      *
      * @return ResourceGroupInterface[]
      */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->groupList;
     }

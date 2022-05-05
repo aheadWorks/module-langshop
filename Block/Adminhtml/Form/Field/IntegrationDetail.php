@@ -13,19 +13,19 @@ class IntegrationDetail extends BaseField
     /**
      * @var IntegrationService
      */
-    private $integrationService;
+    private IntegrationService $integrationService;
 
     /**
      * @param Context $context
      * @param IntegrationService $integrationService
-     * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
+     * @param array $data
      */
     public function __construct(
         Context $context,
         IntegrationService $integrationService,
-        array $data = [],
-        SecureHtmlRenderer $secureRenderer = null
+        SecureHtmlRenderer $secureRenderer = null,
+        array $data = []
     ) {
         parent::__construct($context, $data, $secureRenderer);
         $this->integrationService = $integrationService;

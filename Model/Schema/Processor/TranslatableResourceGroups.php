@@ -10,7 +10,7 @@ class TranslatableResourceGroups implements ProcessorInterface
     /**
      * @var GroupPool
      */
-    private $groupPool;
+    private GroupPool $groupPool;
 
     /**
      * @param GroupPool $groupPool
@@ -24,7 +24,7 @@ class TranslatableResourceGroups implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(SchemaInterface $schema)
+    public function process(SchemaInterface $schema): void
     {
         $schema->setTranslatableResourceGroups($this->groupPool->getAll());
     }

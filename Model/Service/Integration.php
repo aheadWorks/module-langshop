@@ -16,22 +16,22 @@ class Integration
     /**
      * @var ConfigBasedIntegrationManager
      */
-    private $integrationManager;
+    private ConfigBasedIntegrationManager $integrationManager;
 
     /**
      * @var IntegrationServiceInterface
      */
-    private $integrationService;
+    private IntegrationServiceInterface $integrationService;
 
     /**
      * @var OauthServiceInterface
      */
-    private $oauthService;
+    private OauthServiceInterface $oauthService;
 
     /**
      * @var TokenProvider
      */
-    private $tokenProvider;
+    private TokenProvider $tokenProvider;
 
     /**
      * @param ConfigBasedIntegrationManager $integrationManager
@@ -56,7 +56,7 @@ class Integration
      *
      * @return void
      */
-    public function createIntegration()
+    public function createIntegration(): void
     {
         $this->integrationManager->processIntegrationConfig([self::INTEGRATION_NAME]);
     }
@@ -67,7 +67,7 @@ class Integration
      * @return bool
      * @throws IntegrationException
      */
-    public function generateToken()
+    public function generateToken(): bool
     {
         $integration = $this->getIntegration();
         $isCreated = $this->oauthService->createAccessToken($integration->getData(IntegrationModel::CONSUMER_ID));
@@ -84,7 +84,7 @@ class Integration
      * @return IntegrationModel
      * @throws IntegrationException
      */
-    public function getIntegration()
+    public function getIntegration(): IntegrationModel
     {
         $integrationId = $this->integrationService->findByName(self::INTEGRATION_NAME)->getId();
 
@@ -98,7 +98,7 @@ class Integration
      * @throws Exception
      * @throws IntegrationException
      */
-    public function getAccessToken()
+    public function getAccessToken(): array
     {
         $integration = $this->getIntegration();
         $consumer = $this->tokenProvider->getConsumerByKey($integration->getData('consumer_key'));

@@ -6,7 +6,7 @@ class Text implements PreparerInterface
     /**
      * @inheritDoc
      */
-    public function getPreparedConditionType($value)
+    public function getPreparedConditionType($value): string
     {
         return 'like';
     }

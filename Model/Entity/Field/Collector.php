@@ -6,12 +6,12 @@ use Magento\Framework\Exception\LocalizedException;
 class Collector implements CollectorInterface
 {
     /**
-     * @var array
+     * @var CollectorInterface[]
      */
-    private $collectorList;
+    private array $collectorList;
 
     /**
-     * @param array $collectorList
+     * @param CollectorInterface[] $collectorList
      */
     public function __construct(
         array $collectorList = []

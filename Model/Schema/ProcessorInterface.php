@@ -12,5 +12,5 @@ interface ProcessorInterface
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function process(SchemaInterface $schema);
+    public function process(SchemaInterface $schema): void;
 }

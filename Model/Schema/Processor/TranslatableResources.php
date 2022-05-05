@@ -11,12 +11,12 @@ class TranslatableResources implements ProcessorInterface
     /**
      * @var Converter
      */
-    private $converter;
+    private Converter $converter;
 
     /**
      * @var EntityPool
      */
-    private $entityPool;
+    private EntityPool $entityPool;
 
     /**
      * @param Converter $converter
@@ -33,7 +33,7 @@ class TranslatableResources implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(SchemaInterface $schema)
+    public function process(SchemaInterface $schema): void
     {
         $entities = $this->entityPool->getAll();
         $translatableResources = $this->converter->convertAll($entities);

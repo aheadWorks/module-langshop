@@ -11,7 +11,7 @@ class CreateIntegration implements DataPatchInterface
     /**
      * @var IntegrationService
      */
-    private $integrationService;
+    private IntegrationService $integrationService;
 
     /**
      * @param IntegrationService $integrationService

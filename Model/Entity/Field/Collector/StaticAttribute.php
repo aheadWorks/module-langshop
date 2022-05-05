@@ -9,7 +9,7 @@ class StaticAttribute implements CollectorInterface
     /**
      * @var Field[]
      */
-    private $fields;
+    private array $fields;
 
     /**
      * @param Field[] $fields

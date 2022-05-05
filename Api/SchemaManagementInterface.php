@@ -1,6 +1,8 @@
 <?php
 namespace Aheadworks\Langshop\Api;
 
+use Aheadworks\Langshop\Api\Data\SchemaInterface;
+
 interface SchemaManagementInterface
 {
     /**
@@ -8,5 +10,5 @@ interface SchemaManagementInterface
      *
      * @return \Aheadworks\Langshop\Api\Data\SchemaInterface
      */
-    public function get();
+    public function get(): SchemaInterface;
 }
