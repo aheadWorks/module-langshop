@@ -5,8 +5,8 @@ namespace Aheadworks\Langshop\Model\Schema\Processor;
 
 use Aheadworks\Langshop\Api\Data\SchemaInterface;
 use Aheadworks\Langshop\Model\Entity\Converter;
-use Aheadworks\Langshop\Model\Schema\ProcessorInterface;
 use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
+use Aheadworks\Langshop\Model\Schema\ProcessorInterface;
 
 class TranslatableResources implements ProcessorInterface
 {

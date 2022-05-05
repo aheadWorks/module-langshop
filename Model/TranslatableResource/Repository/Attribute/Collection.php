@@ -5,8 +5,8 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection\Proxy as AttributeCollectionProxy;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 

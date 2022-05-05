@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Service;
 
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Integration\Model\ConfigBasedIntegrationManager;
-use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Framework\Oauth\Exception;
 use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
-use Magento\Framework\Oauth\Exception;
 
 class Integration
 {

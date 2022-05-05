@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Data\Processor;
 
-use Magento\Framework\Exception\ConfigurationMismatchException;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 
 class Composite implements ProcessorInterface
 {
