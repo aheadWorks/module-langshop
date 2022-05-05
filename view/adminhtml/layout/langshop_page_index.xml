@@ -2,7 +2,11 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Aheadworks\Langshop\Block\Adminhtml\Page\Iframe" name="aw_ls_iframe" template="Aheadworks_Langshop::iframe.phtml"/>
+            <block class="Magento\Backend\Block\Template" name="aw_ls_iframe" template="Aheadworks_Langshop::iframe.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Aheadworks\Langshop\ViewModel\Page\Iframe</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

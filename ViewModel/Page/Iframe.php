@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Aheadworks\Langshop\Block\Adminhtml\Page;
+namespace Aheadworks\Langshop\ViewModel\Page;
 
-use Magento\Backend\Block\Template;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class Iframe extends Template
+class Iframe implements ArgumentInterface
 {
     /**
      * Get source url
