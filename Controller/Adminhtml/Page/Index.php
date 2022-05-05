@@ -4,8 +4,9 @@ namespace Aheadworks\Langshop\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * @inheritDoc
