@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Service;
 
+use Aheadworks\Langshop\Api\Data\SchemaInterface;
 use Aheadworks\Langshop\Api\Data\SchemaInterfaceFactory;
 use Aheadworks\Langshop\Api\SchemaManagementInterface;
 use Aheadworks\Langshop\Model\Schema\ProcessorInterface;
@@ -10,12 +13,12 @@ class Schema implements SchemaManagementInterface
     /**
      * @var ProcessorInterface
      */
-    private $processor;
+    private ProcessorInterface $processor;
 
     /**
      * @var SchemaInterfaceFactory
      */
-    private $schemaFactory;
+    private SchemaInterfaceFactory $schemaFactory;
 
     /**
      * @param ProcessorInterface $processor
@@ -32,7 +35,7 @@ class Schema implements SchemaManagementInterface
     /**
      * @inheritDoc
      */
-    public function get()
+    public function get(): SchemaInterface
     {
         $schema = $this->schemaFactory->create();
         $this->processor->process($schema);

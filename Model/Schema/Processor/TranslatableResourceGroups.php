@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema\Processor;
 
 use Aheadworks\Langshop\Api\Data\SchemaInterface;
@@ -10,7 +12,7 @@ class TranslatableResourceGroups implements ProcessorInterface
     /**
      * @var GroupPool
      */
-    private $groupPool;
+    private GroupPool $groupPool;
 
     /**
      * @param GroupPool $groupPool
@@ -24,7 +26,7 @@ class TranslatableResourceGroups implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(SchemaInterface $schema)
+    public function process(SchemaInterface $schema): void
     {
         $schema->setTranslatableResourceGroups($this->groupPool->getAll());
     }

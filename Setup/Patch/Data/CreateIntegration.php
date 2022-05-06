@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Setup\Patch\Data;
 
 use Aheadworks\Langshop\Model\Service\Integration as IntegrationService;
-use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 //todo realize revertable interface
 class CreateIntegration implements DataPatchInterface
@@ -11,7 +13,7 @@ class CreateIntegration implements DataPatchInterface
     /**
      * @var IntegrationService
      */
-    private $integrationService;
+    private IntegrationService $integrationService;
 
     /**
      * @param IntegrationService $integrationService

@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource;
 
+use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Locale as LocaleValidation;
-use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 
 class Locale implements ProcessorInterface
 {

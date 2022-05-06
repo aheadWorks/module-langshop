@@ -2,13 +2,13 @@
 namespace Aheadworks\Langshop\Test\Unit\Model\Service;
 
 use Aheadworks\Langshop\Model\Service\Integration as IntegrationService;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\Integration;
+use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Model\Oauth\Consumer;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
-use Magento\Integration\Model\ConfigBasedIntegrationManager;
-use Magento\Integration\Api\OauthServiceInterface;
-use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Integration\Model\Integration as IntegrationModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

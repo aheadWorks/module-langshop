@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 
 class Date implements PreparerInterface
@@ -6,7 +8,7 @@ class Date implements PreparerInterface
     /**
      * @inheritDoc
      */
-    public function getPreparedConditionType($value)
+    public function getPreparedConditionType($value): string
     {
         return 'eq';
     }

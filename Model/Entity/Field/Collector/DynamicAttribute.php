@@ -22,22 +22,22 @@ class DynamicAttribute implements CollectorInterface
     /**
      * @var AttributeRepositoryInterface
      */
-    private $attributeRepository;
+    private AttributeRepositoryInterface $attributeRepository;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @var EntityFieldFactory
      */
-    private $entityFieldFactory;
+    private EntityFieldFactory $entityFieldFactory;
 
     /**
      * @var string
      */
-    private $entityTypeCode;
+    private string $entityTypeCode;
 
     /**
      * @param AttributeRepositoryInterface $attributeRepository

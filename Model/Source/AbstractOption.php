@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -8,7 +10,7 @@ abstract class AbstractOption implements OptionSourceInterface
     /**
      * @var array
      */
-    protected $optionList = [];
+    protected array $optionList = [];
 
     /**
      * Get option list
@@ -29,5 +31,5 @@ abstract class AbstractOption implements OptionSourceInterface
      *
      * @return array
      */
-    abstract protected function getOptionList();
+    abstract protected function getOptionList(): array;
 }

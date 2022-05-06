@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Source\Locale\Scope;
 
 use Aheadworks\Langshop\Model\Source\AbstractOption as AbstractOptionSourceModel;
@@ -8,9 +10,9 @@ class Type extends AbstractOptionSourceModel
     /**#@+
      * Supported locale scope type values
      */
-    const DEFAULT   = 'default';
-    const WEBSITE   = 'website';
-    const STORE     = 'store';
+    public const DEFAULT   = 'default';
+    public const WEBSITE   = 'website';
+    public const STORE     = 'store';
     /**#@-*/
 
     /**
@@ -18,7 +20,7 @@ class Type extends AbstractOptionSourceModel
      *
      * @return array
      */
-    protected function getOptionList()
+    protected function getOptionList(): array
     {
         return [
             [

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema;
 
 use Aheadworks\Langshop\Api\Data\SchemaInterface;
@@ -12,5 +14,5 @@ interface ProcessorInterface
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function process(SchemaInterface $schema);
+    public function process(SchemaInterface $schema): void;
 }

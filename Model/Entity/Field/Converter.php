@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity\Field;
 
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
@@ -15,22 +17,22 @@ class Converter
     /**
      * @var DirectionList
      */
-    private $directionList;
+    private DirectionList $directionList;
 
     /**
      * @var FieldInterfaceFactory
      */
-    private $fieldSchemaFactory;
+    private FieldInterfaceFactory $fieldSchemaFactory;
 
     /**
      * @var SortingInterfaceFactory
      */
-    private $sortingElementFactory;
+    private SortingInterfaceFactory $sortingElementFactory;
 
     /**
      * @var EventManager
      */
-    private $eventManager;
+    private EventManager $eventManager;
 
     /**
      * @param FieldInterfaceFactory $fieldSchemaFactory
@@ -56,7 +58,7 @@ class Converter
      * @param Field[] $fields
      * @return array
      */
-    public function convert(array $fields = [])
+    public function convert(array $fields = []): array
     {
         $result = [ResourceInterface::FIELDS => [], ResourceInterface::SORTING => []];
         foreach ($fields as $field) {
@@ -84,7 +86,7 @@ class Converter
      * @param Field $field
      * @return FieldInterface
      */
-    private function getFieldSchema(Field $field)
+    private function getFieldSchema(Field $field): FieldInterface
     {
         return $this->fieldSchemaFactory->create(['data' => [
                 FieldInterface::KEY => $field->getCode(),
@@ -105,7 +107,7 @@ class Converter
      * @param Field $field
      * @return SortingInterface[]
      */
-    private function getSortingElements(Field $field)
+    private function getSortingElements(Field $field): array
     {
         $sortingElements = [];
         if ($field->isSortable()) {

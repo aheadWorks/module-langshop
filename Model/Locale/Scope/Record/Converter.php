@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Locale\Scope\Record;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
@@ -11,12 +13,12 @@ class Converter
     /**
      * @var Copy
      */
-    private $copyService;
+    private Copy $copyService;
 
     /**
      * @var LocaleInterfaceFactory
      */
-    private $localeFactory;
+    private LocaleInterfaceFactory $localeFactory;
 
     /**
      * @param Copy $copyService
@@ -36,7 +38,7 @@ class Converter
      * @param LocaleScopeRecordInterface $scopeRecord
      * @return LocaleInterface
      */
-    public function toLocaleDataModel(LocaleScopeRecordInterface $scopeRecord)
+    public function toLocaleDataModel(LocaleScopeRecordInterface $scopeRecord): LocaleInterface
     {
         $locale = $this->localeFactory->create();
 

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model;
 
 use Aheadworks\Langshop\Model\Entity\Field;
@@ -8,34 +10,34 @@ use Magento\Framework\Exception\LocalizedException;
 class Entity
 {
     /**
-     * @var string
-     */
-    private $resourceType;
-
-    /**
-     * @var string
-     */
-    private $label;
-
-    /**
-     * @var string
-     */
-    private $description;
-
-    /**
-     * @var string
-     */
-    private $viewType;
-
-    /**
      * @var FieldCollector
      */
-    private $fieldCollector;
+    private FieldCollector $fieldCollector;
+
+    /**
+     * @var string
+     */
+    private string $resourceType;
+
+    /**
+     * @var string
+     */
+    private string $label;
+
+    /**
+     * @var string
+     */
+    private string $description;
+
+    /**
+     * @var string
+     */
+    private string $viewType;
 
     /**
      * @var Field[]
      */
-    private $fields;
+    private array $fields;
 
     /**
      * @param FieldCollector $fieldCollector
@@ -46,10 +48,10 @@ class Entity
      */
     public function __construct(
         FieldCollector $fieldCollector,
-        $resourceType = '',
-        $label = '',
-        $description = '',
-        $viewType = ''
+        string $resourceType = '',
+        string $label = '',
+        string $description = '',
+        string $viewType = ''
     ) {
         $this->fieldCollector = $fieldCollector;
         $this->resourceType = $resourceType;
@@ -63,7 +65,7 @@ class Entity
      *
      * @return string
      */
-    public function getResourceType()
+    public function getResourceType(): string
     {
         return $this->resourceType;
     }
@@ -73,7 +75,7 @@ class Entity
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
@@ -83,7 +85,7 @@ class Entity
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -93,7 +95,7 @@ class Entity
      *
      * @return string
      */
-    public function getViewType()
+    public function getViewType(): string
     {
         return $this->viewType;
     }
@@ -104,7 +106,7 @@ class Entity
      * @return Field[]
      * @throws LocalizedException
      */
-    public function getFields()
+    public function getFields(): array
     {
         if (empty($this->fields)) {
             $this->fields = $this->fieldCollector->collect();

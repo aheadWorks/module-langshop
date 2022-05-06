@@ -5,14 +5,17 @@ use Magento\Framework\Model\AbstractModel;
 
 class Field extends AbstractModel
 {
-    const CODE = 'code';
-    const LABEL = 'label';
-    const TYPE = 'type';
-    const IS_FILTERABLE = 'is_filterable';
-    const FILTER_TYPE = 'filter_type';
-    const SORT_ORDER = 'sort_order';
-    const IS_SORTABLE = 'is_sortable';
-    const IS_TRANSLATABLE = 'is_translatable';
+    /**
+     * Constants for internal keys
+     */
+    private const CODE = 'code';
+    private const LABEL = 'label';
+    private const TYPE = 'type';
+    private const IS_FILTERABLE = 'is_filterable';
+    private const FILTER_TYPE = 'filter_type';
+    private const SORT_ORDER = 'sort_order';
+    private const IS_SORTABLE = 'is_sortable';
+    private const IS_TRANSLATABLE = 'is_translatable';
 
     /**
      * Set code

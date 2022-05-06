@@ -1,22 +1,24 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema\Processor;
 
 use Aheadworks\Langshop\Api\Data\SchemaInterface;
 use Aheadworks\Langshop\Model\Entity\Converter;
-use Aheadworks\Langshop\Model\Schema\ProcessorInterface;
 use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
+use Aheadworks\Langshop\Model\Schema\ProcessorInterface;
 
 class TranslatableResources implements ProcessorInterface
 {
     /**
      * @var Converter
      */
-    private $converter;
+    private Converter $converter;
 
     /**
      * @var EntityPool
      */
-    private $entityPool;
+    private EntityPool $entityPool;
 
     /**
      * @param Converter $converter
@@ -33,7 +35,7 @@ class TranslatableResources implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function process(SchemaInterface $schema)
+    public function process(SchemaInterface $schema): void
     {
         $entities = $this->entityPool->getAll();
         $translatableResources = $this->converter->convertAll($entities);

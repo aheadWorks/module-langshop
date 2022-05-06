@@ -10,7 +10,7 @@ class RepositoryPool
     /**
      * @var RepositoryInterface[]
      */
-    private $repositories;
+    private array $repositories;
 
     /**
      * @param RepositoryInterface[] $repositories

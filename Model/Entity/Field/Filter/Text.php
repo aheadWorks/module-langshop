@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 
 class Text implements PreparerInterface
@@ -6,7 +8,7 @@ class Text implements PreparerInterface
     /**
      * @inheritDoc
      */
-    public function getPreparedConditionType($value)
+    public function getPreparedConditionType($value): string
     {
         return 'like';
     }

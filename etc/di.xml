@@ -36,11 +36,6 @@
     <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\TranslatableResource" />
 
-    <!-- START Collection Modifier Pool -->
-    <preference for="Aheadworks\Langshop\Model\ResourceModel\Collection\ModifierInterface"
-                type="Aheadworks\Langshop\Model\ResourceModel\Collection\Modifier\Composite" />
-    <!-- END Collection Modifier Pool -->
-
     <!-- START Data Processor Pool -->
     <preference for="Aheadworks\Langshop\Model\Data\ProcessorInterface"
                 type="Aheadworks\Langshop\Model\Data\Processor\Composite" />
@@ -121,7 +116,7 @@
     </virtualType>
 
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Product"
-                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\CollectionFactory</argument>
             <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product\ResourceModelFactory</argument>
@@ -130,7 +125,7 @@
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category"
-                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionFactory</argument>
             <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\ResourceModelFactory</argument>
@@ -139,7 +134,7 @@
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute"
-                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\EavEntity">
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\CollectionFactory</argument>
             <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute\ResourceModelFactory</argument>

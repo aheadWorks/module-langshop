@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 
 interface PreparerInterface
@@ -9,7 +11,7 @@ interface PreparerInterface
      * @param string|array $value
      * @return string
      */
-    public function getPreparedConditionType($value);
+    public function getPreparedConditionType($value): string;
 
     /**
      * Get prepared value

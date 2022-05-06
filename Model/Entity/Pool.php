@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity;
 
 use Aheadworks\Langshop\Model\Entity;
@@ -9,7 +11,7 @@ class Pool
     /**
      * @var Entity[]
      */
-    private $entityList;
+    private array $entityList;
 
     /**
      * @param Entity[] $entityList
@@ -25,7 +27,7 @@ class Pool
      *
      * @return Entity[]
      */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->entityList;
     }
@@ -37,7 +39,7 @@ class Pool
      * @return Entity
      * @throws LocalizedException
      */
-    public function getByType($type)
+    public function getByType(string $type): Entity
     {
         if (!isset($this->entityList[$type])) {
             throw new LocalizedException(__('No such entity with type = %1', $type));

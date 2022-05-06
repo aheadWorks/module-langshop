@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 
 use Magento\Framework\Api\Filter;
@@ -9,12 +11,12 @@ class Builder
     /**
      * @var FilterBuilder
      */
-    protected $filterBuilder;
+    protected FilterBuilder $filterBuilder;
 
     /**
      * @var PreparerInterface[]
      */
-    private $preparers;
+    private array $preparers;
 
     /**
      * @param FilterBuilder $filterBuilder
@@ -36,7 +38,7 @@ class Builder
      * @param string $filterType
      * @return Filter
      */
-    public function create($field, $value, $filterType = 'text')
+    public function create($field, $value, $filterType = 'text'): Filter
     {
         $preparer = isset($this->preparers[$filterType])
             ? $this->preparers[$filterType]

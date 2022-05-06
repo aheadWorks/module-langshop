@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
-use Aheadworks\Langshop\Model\Source\TranslatableResource\Field;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
+use Aheadworks\Langshop\Model\Source\TranslatableResource\Field;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\RepositoryInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
@@ -20,7 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelFactory;
 
-class EavEntity implements RepositoryInterface
+class Repository implements RepositoryInterface
 {
     /**
      * @var CollectionFactory
