@@ -20,7 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelFactory;
 
-class EavEntity implements RepositoryInterface
+class Repository implements RepositoryInterface
 {
     /**
      * @var CollectionFactory
