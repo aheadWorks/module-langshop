@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\TranslatableResource;
+namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class RepositoryPool
+class Pool
 {
     /**
      * @var RepositoryInterface[]

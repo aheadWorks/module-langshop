@@ -46,7 +46,7 @@
                 type="Aheadworks\Langshop\Model\Locale\Scope\Record"/>
     <!-- END Scope Record Configuration -->
 
-    <type name="Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool">
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool">
         <arguments>
             <argument name="repositories" xsi:type="array">
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
