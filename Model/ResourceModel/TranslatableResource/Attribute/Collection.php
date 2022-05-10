@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\ResourceModel\Attribute;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\ResourceModel;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
 use Magento\Eav\Model\Config as EavConfig;
