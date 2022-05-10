@@ -3,12 +3,10 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Saas;
 
 use Aheadworks\Langshop\Model\Config\Saas as SaasConfig;
-use Aheadworks\Langshop\Model\Service\Integration;
-use Magento\Backend\Model\Auth\Session;
+use Aheadworks\Langshop\Model\Saas\Url\Param\Builder as ParamsBuilder;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Store\Model\Store;
 
 class UrlBuilder
 {
@@ -18,24 +16,14 @@ class UrlBuilder
     private CurlFactory $curlFactory;
 
     /**
-     * @var Store
-     */
-    private Store $store;
-
-    /**
-     * @var Integration
-     */
-    private Integration $integration;
-
-    /**
      * @var SerializerInterface
      */
     private SerializerInterface $jsonSerializer;
 
     /**
-     * @var Session
+     * @var ParamsBuilder
      */
-    private Session $session;
+    private ParamsBuilder $paramsBuilder;
 
     /**
      * @var SaasConfig
@@ -44,28 +32,21 @@ class UrlBuilder
 
     /**
      * @param CurlFactory $curlFactory
-     * @param Store $store
-     * @param Integration $integration
      * @param SerializerInterface $jsonSerializer
-     * @param Session $session
      * @param SaasConfig $config
+     * @param ParamsBuilder $paramsBuilder
      */
     public function __construct(
         CurlFactory $curlFactory,
-        Store $store,
-        Integration $integration,
         SerializerInterface $jsonSerializer,
-        Session $session,
-        SaasConfig $config
+        SaasConfig $config,
+        ParamsBuilder $paramsBuilder
     ) {
         $this->curlFactory = $curlFactory;
-        $this->store = $store;
-        $this->integration = $integration;
         $this->jsonSerializer = $jsonSerializer;
-        $this->session = $session;
         $this->config = $config;
+        $this->paramsBuilder = $paramsBuilder;
     }
-
 
     /**
      * Get wizard url
@@ -75,16 +56,7 @@ class UrlBuilder
      */
     public function getWizardUrl(): string
     {
-        $params = [
-            'domain' => str_replace(
-                ['http://', 'https://'],
-                '',
-                $this->store->getBaseUrl()
-            ),
-            'email' => $this->session->getUser()->getEmail(),
-            'token' => $this->integration->getAccessToken(),
-            'rest_path' => '/rest/all/V1/awLangshop'
-        ];
+        $params = $this->paramsBuilder->buildForMagentoInstallRequest();
         $params = $this->jsonSerializer->serialize($params);
         $curl = $this->curlFactory->create();
         $headers = [

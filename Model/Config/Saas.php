@@ -40,8 +40,7 @@ class Saas
     public function getPublicKey(): string
     {
         $value = $this->scopeConfig->getValue(
-            self::XML_PATH_GENERAL_SAAS_PUBLIC_KEY,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            self::XML_PATH_GENERAL_SAAS_PUBLIC_KEY
         );
 
         return $value ?? '';
@@ -69,8 +68,7 @@ class Saas
     public function getDomain(): string
     {
         return $this->scopeConfig->getValue(
-            self::XML_PATH_GENERAL_SAAS_DOMAIN,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            self::XML_PATH_GENERAL_SAAS_DOMAIN
         );
     }
 }
