@@ -12,22 +12,30 @@ interface FieldInterface
     const VALUE = 'value';
 
     /**
+     * Get key
+     *
      * @return string|null
      */
     public function getKey(): ?string;
 
     /**
+     * Set key
+     *
      * @param string $key
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface
      */
     public function setKey(string $key): FieldInterface;
 
     /**
+     * Get value
+     *
      * @return mixed
      */
     public function getValue();
 
     /**
+     * Set value
+     *
      * @param mixed $value
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface
      */

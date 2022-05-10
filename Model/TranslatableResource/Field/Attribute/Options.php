@@ -103,6 +103,8 @@ class Options implements PersistorInterface
     }
 
     /**
+     * Retrieves the main table to work with
+     *
      * @return string
      */
     private function getTableName(): string
@@ -113,6 +115,8 @@ class Options implements PersistorInterface
     }
 
     /**
+     * Retrieves options from database
+     *
      * @param int[] $attributeIds
      * @param int $storeId
      * @return Option[]

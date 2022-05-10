@@ -45,6 +45,8 @@ class Attribute extends AttributeResourceModelProxy
     }
 
     /**
+     * Get proxied instance
+     *
      * @return AttributeResourceModel
      */
     public function _getSubject(): AttributeResourceModel

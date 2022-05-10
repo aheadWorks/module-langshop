@@ -74,6 +74,8 @@ class StoreLabel implements PersistorInterface
     }
 
     /**
+     * Retrieves the main table to work with
+     *
      * @return string
      */
     private function getTableName(): string
@@ -84,6 +86,8 @@ class StoreLabel implements PersistorInterface
     }
 
     /**
+     * Retrieves store labels from database
+     *
      * @param int[] $attributeIds
      * @param int $storeId
      * @return array

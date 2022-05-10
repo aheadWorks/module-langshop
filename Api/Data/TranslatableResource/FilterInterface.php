@@ -12,23 +12,31 @@ interface FilterInterface
     const VALUE = 'value';
 
     /**
+     * Set field
+     *
      * @param string $field
      * @return $this
      */
     public function setField(string $field): FilterInterface;
 
     /**
+     * Get field
+     *
      * @return string
      */
     public function getField(): string;
 
     /**
+     * Set value
+     *
      * @param string $value
      * @return $this
      */
     public function setValue(string $value): FilterInterface;
 
     /**
+     * Get value
+     *
      * @return string
      */
     public function getValue(): string;
