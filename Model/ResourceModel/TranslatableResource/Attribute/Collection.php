@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
@@ -44,7 +44,7 @@ class Collection extends AttributeCollectionProxy
      */
     public function _getSubject(): AttributeCollection
     {
-        if (!$this->_subject) {
+        if (!isset($this->_subject)) {
             $this->_subject = $this->attributeCollectionFactory->create();
         }
 

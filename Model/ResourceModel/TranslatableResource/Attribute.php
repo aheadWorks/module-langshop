@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
 use Magento\Eav\Model\Config as EavConfig;
@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 
-class ResourceModel extends AttributeResourceModelProxy
+class Attribute extends AttributeResourceModelProxy
 {
     /**
      * @var AttributeResourceModelFactory
@@ -49,7 +49,7 @@ class ResourceModel extends AttributeResourceModelProxy
      */
     public function _getSubject(): AttributeResourceModel
     {
-        if (!$this->_subject) {
+        if (!isset($this->_subject)) {
             $this->_subject = $this->attributeResourceModelFactory->create();
         }
 

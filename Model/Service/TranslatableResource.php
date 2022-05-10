@@ -8,7 +8,7 @@ use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Api\TranslatableResourceManagementInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Converter;
-use Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool;
+use Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool as RepositoryPool;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
