@@ -46,6 +46,9 @@
                 type="Aheadworks\Langshop\Model\Locale\Scope\Record"/>
     <!-- END Scope Record Configuration -->
 
+    <preference for="Aheadworks\Langshop\Api\SaasManagementInterface"
+                type="Aheadworks\Langshop\Model\Service\Saas" />
+
     <type name="Aheadworks\Langshop\Model\TranslatableResource\RepositoryPool">
         <arguments>
             <argument name="repositories" xsi:type="array">
