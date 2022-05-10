@@ -8,8 +8,8 @@ interface FilterInterface
     /**
      * Constants for internal keys
      */
-    const FIELD = 'field';
-    const VALUE = 'value';
+    public const FIELD = 'field';
+    public const VALUE = 'value';
 
     /**
      * Set field

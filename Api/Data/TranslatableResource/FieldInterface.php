@@ -8,8 +8,8 @@ interface FieldInterface
     /**
      * Constants for internal keys
      */
-    const KEY = 'key';
-    const VALUE = 'value';
+    public const KEY = 'key';
+    public const VALUE = 'value';
 
     /**
      * Get key

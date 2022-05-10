@@ -8,8 +8,8 @@ interface ResourceListInterface
     /**
      * Constants for internal keys
      */
-    const ITEMS = 'data';
-    const PAGINATION = 'pagination';
+    public const ITEMS = 'data';
+    public const PAGINATION = 'pagination';
 
     /**
      * Get items

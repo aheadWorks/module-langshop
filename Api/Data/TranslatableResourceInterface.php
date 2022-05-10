@@ -8,9 +8,9 @@ interface TranslatableResourceInterface
     /**
      * Constants for internal keys
      */
-    const RESOURCE_ID = 'resourceId';
-    const RESOURCE_TYPE = 'resourceType';
-    const FIELDS = 'fields';
+    public const RESOURCE_ID = 'resourceId';
+    public const RESOURCE_TYPE = 'resourceType';
+    public const FIELDS = 'fields';
 
     /**
      * Get resource id
