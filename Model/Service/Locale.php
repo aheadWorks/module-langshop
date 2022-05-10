@@ -43,8 +43,8 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
+     *
      * @throws WebapiException
-     * @codingStandardsIgnoreStart
      */
     public function add()
     {
@@ -53,6 +53,7 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
+     *
      * @throws WebapiException
      */
     public function update($locale)
@@ -62,13 +63,13 @@ class Locale implements LocaleManagementInterface
 
     /**
      * @inheritDoc
+     *
      * @throws WebapiException
      */
     public function delete($locale)
     {
         throw new WebapiException(__('This method is not implemented yet.'), 501, 501);
     }
-    /* @codingStandardsIgnoreEnd  */
 
     /**
      * @inheritDoc

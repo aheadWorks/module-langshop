@@ -7,7 +7,7 @@ use Magento\Framework\Model\AbstractModel;
 class Locale extends AbstractModel implements LocaleInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLocale($locale)
     {
@@ -15,7 +15,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLocale()
     {
@@ -23,7 +23,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -31,7 +31,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -39,7 +39,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrimary($primary)
     {
@@ -47,7 +47,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrimary()
     {
@@ -55,7 +55,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPublished($published)
     {
@@ -63,7 +63,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPublished()
     {
@@ -71,7 +71,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUrl($url)
     {
@@ -79,7 +79,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -87,7 +87,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPreviewUrl($previewUrl)
     {
@@ -95,7 +95,7 @@ class Locale extends AbstractModel implements LocaleInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPreviewUrl()
     {

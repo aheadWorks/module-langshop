@@ -9,8 +9,7 @@ use Magento\Webapi\Controller\Rest\ParamsOverrider as WebapiParamsOverrider;
 class ParamsOverrider
 {
     /**
-     * The body overriding does not recognize arrays as it should,
-     * so needs to be disabled for translatable resources.
+     * Disables body overriding for translatable resources
      *
      * @param WebapiParamsOverrider $paramsOverrider
      * @param array $urlPathParams
