@@ -22,7 +22,7 @@ class Composite implements ProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(array $data): array
     {

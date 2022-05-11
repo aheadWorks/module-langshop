@@ -20,6 +20,8 @@ class PersistorPool
     }
 
     /**
+     * Retrieve array of persistors for processing
+     *
      * @return PersistorInterface[]
      */
     public function get(): array

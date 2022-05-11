@@ -40,6 +40,8 @@ class Collection extends AttributeCollectionProxy
     }
 
     /**
+     * Get proxied instance
+     *
      * @return AttributeCollection
      */
     public function _getSubject(): AttributeCollection
@@ -52,6 +54,8 @@ class Collection extends AttributeCollectionProxy
     }
 
     /**
+     * Set store scope
+     *
      * @param int $storeId
      * @return $this
      */
@@ -63,6 +67,8 @@ class Collection extends AttributeCollectionProxy
     }
 
     /**
+     * Retrieve store scope
+     *
      * @return int
      */
     public function getStoreId(): int

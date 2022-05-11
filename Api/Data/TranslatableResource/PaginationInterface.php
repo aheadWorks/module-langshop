@@ -3,10 +3,10 @@ namespace Aheadworks\Langshop\Api\Data\TranslatableResource;
 
 interface PaginationInterface
 {
-    const PAGE = 'page';
-    const PAGE_SIZE = 'pageSize';
-    const TOTAL_PAGES = 'totalPages';
-    const TOTAL_ITEMS = 'totalItems';
+    public const PAGE = 'page';
+    public const PAGE_SIZE = 'pageSize';
+    public const TOTAL_PAGES = 'totalPages';
+    public const TOTAL_ITEMS = 'totalItems';
 
     /**
      * Set page

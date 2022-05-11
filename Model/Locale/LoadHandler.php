@@ -33,6 +33,8 @@ class LoadHandler
     }
 
     /**
+     * Converts locale scope to the locale object
+     *
      * @param LocaleScopeRecordInterface $scopeRecord
      * @return LocaleInterface
      * @throws LocalizedException
