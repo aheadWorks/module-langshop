@@ -75,7 +75,7 @@ class UrlBuilder
     /**
      * Get application url
      *
-     * todo: when Saas will be work set actual url
+     * @todo: when Saas will be work set actual url
      * @return string
      */
     public function getApplicationUrl(): string
