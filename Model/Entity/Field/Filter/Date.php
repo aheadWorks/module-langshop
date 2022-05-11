@@ -15,7 +15,8 @@ class Date implements PreparerInterface
 
     /**
      * @inheritDoc
-     * todo: when the frontend is ready, we will need to check the date format
+     *
+     * @todo: when the frontend is ready, we will need to check the date format
      */
     public function getPreparedValue($value)
     {

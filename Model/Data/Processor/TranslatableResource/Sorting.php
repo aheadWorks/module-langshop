@@ -75,6 +75,8 @@ class Sorting implements ProcessorInterface
     }
 
     /**
+     * Gets sorting by incoming key
+     *
      * @param string $resourceType
      * @param string $sortBy
      * @return SortingInterface|null

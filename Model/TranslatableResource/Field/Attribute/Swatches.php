@@ -105,6 +105,8 @@ class Swatches implements PersistorInterface
     }
 
     /**
+     * Retrieves the main table to work with
+     *
      * @return string
      */
     private function getTableName(): string
@@ -115,6 +117,8 @@ class Swatches implements PersistorInterface
     }
 
     /**
+     * Retrieves swatches from database
+     *
      * @param int[] $attributeIds
      * @param int $storeId
      * @return Swatch[]

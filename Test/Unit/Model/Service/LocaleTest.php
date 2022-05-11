@@ -54,22 +54,23 @@ class LocaleTest extends TestCase
     {
         $scopeRecord = $this->createMock(RecordInterface::class);
         $locale = $this->createMock(LocaleInterface::class);
-        $scopeRecords = [$scopeRecord];
-        $locales = [$locale];
 
         $this->scopeRecordRepositoryMock
             ->expects($this->once())
             ->method('getList')
-            ->willReturn($scopeRecords);
+            ->willReturn([$scopeRecord]);
 
-        foreach ($scopeRecords as $scopeRecord) {
-            $this->loadHandlerMock
-                ->expects($this->any())
-                ->method('load')
-                ->with($scopeRecord)
-                ->willReturn($locale);
-        }
+        $this->scopeRecordRepositoryMock
+            ->expects($this->once())
+            ->method('getPrimary')
+            ->willReturn($scopeRecord);
 
-        $this->assertSame($locales, $this->localeService->getList());
+        $this->loadHandlerMock
+            ->expects($this->any())
+            ->method('load')
+            ->with($scopeRecord)
+            ->willReturn($locale);
+
+        $this->assertSame([$locale], $this->localeService->getList());
     }
 }

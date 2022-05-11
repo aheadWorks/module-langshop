@@ -9,11 +9,11 @@ interface RecordInterface extends ExtensibleDataInterface
      * Constants defined for keys of the data array.
      * Identical to the name of the getter in snake case
      */
-    const RECORD_ID = 'record_id';
-    const SCOPE_ID = 'scope_id';
-    const SCOPE_TYPE = 'scope_type';
-    const LOCALE_CODE = 'locale_code';
-    const IS_PRIMARY = 'is_primary';
+    public const RECORD_ID = 'record_id';
+    public const SCOPE_ID = 'scope_id';
+    public const SCOPE_TYPE = 'scope_type';
+    public const LOCALE_CODE = 'locale_code';
+    public const IS_PRIMARY = 'is_primary';
     /**#@-*/
 
     /**

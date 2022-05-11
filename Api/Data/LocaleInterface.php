@@ -3,12 +3,12 @@ namespace Aheadworks\Langshop\Api\Data;
 
 interface LocaleInterface
 {
-    const LOCALE = 'locale';
-    const NAME = 'name';
-    const PRIMARY = 'primary';
-    const PUBLISHED = 'published';
-    const URL = 'url';
-    const PREVIEW_URL = 'preview_url';
+    public const LOCALE = 'locale';
+    public const NAME = 'name';
+    public const PRIMARY = 'primary';
+    public const PUBLISHED = 'published';
+    public const URL = 'url';
+    public const PREVIEW_URL = 'preview_url';
 
     /**
      * Get locale
