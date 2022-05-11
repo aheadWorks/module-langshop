@@ -58,75 +58,88 @@ definitions:
         artifacts:
           - "*.zip"
   test_steps:
-    - step: &validatePackage
-        name: Validate marketplace package
-        image: aheadworks/m2test
+    - step: &validatePackage-2.3.7
+        name: Validate marketplace package on Magento 2.3.7
+        image: aheadworks/m2test-new:eqp-2.3.7-p3
         script:
-          - python3 /m2test.py validate_m2_package ${BITBUCKET_REPO_SLUG}.zip
-    - step: &eqpTest
-        name: EQP tests
-        image: aheadworks/m2test-new:2.4-7.4
+          - python3 /m2test.py validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
+    - step: &validatePackage-2.4.4
+        name: Validate marketplace package on Magento 2.4.4
+        image: aheadworks/m2test-new:eqp-2.4.4
         script:
-          - mkdir -p test-results
-          - python3 /m2test.py eqp ${PWD} > test-results/test-EQP.xml
-        artifacts:
-          - "test-results/test-EQP.xml"
-    - step: &staticTest
-        name: Static tests
-        image: aheadworks/m2test-new:static-test-2.4-7.4
+          - python3 /m2test.py validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
+    - step: &eqpTest-2.3.7
+        name: EQP tests on Magento 2.3.7
+        image: aheadworks/m2test-new:eqp-2.3.7-p3
         script:
-          - mkdir -p test-results
-          - *prepare_git
-          - python3 /m2test.py static ${PWD} test-results
+          - mkdir -p test-results/eqp
+          - python3 /m2test.py eqp ${PWD} > test-results/eqp/test-EQP-2.3.7.xml
         artifacts:
           - "test-results/**"
-    - step: &unitTestFirst
-        name: Unit tests 7.1
-        image: aheadworks/m2test-new:test-7.1
+    - step: &eqpTest-2.4.4
+        name: EQP tests on Magento 2.4.4
+        image: aheadworks/m2test-new:eqp-2.4.4
         script:
-          - mkdir -p test-results
-          - if test -f README.md; then if grep -q "for Magento 2.4.*" README.md; then echo only for Magento 2.4; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+          - mkdir -p test-results/eqp
+          - python3 /m2test.py eqp ${PWD} > test-results/eqp/test-EQP.xml
         artifacts:
-          - "test-results/test-unit.xml"
-    - step: &unitTestSecond
-        name: Unit tests 7.2
-        image: aheadworks/m2test-new:test-7.2
+          - "test-results/**"
+    - step: &staticTest-2.3.7
+        name: Static tests on Magento 2.3.7
+        image: aheadworks/m2test-new:2.3.7-p3-with-dump-7.4
         script:
-          - mkdir -p test-results
-          - if test -f README.md; then if grep -q "for Magento 2.4.*" README.md; then echo only for Magento 2.4; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+          - mkdir -p test-results/static-2.3.7-p3
+          - *prepare_git
+          # Fixup missing php version requirement in magento 2.3.7
+          - OLD=${PWD} && cd /var/www/html && composer -n --no-install require php "~7.4.0||~8.1.0" && cd $OLD
+          - python3 /m2test.py static ${PWD} test-results/static-2.3.7-p3
         artifacts:
-          - "test-results/test-unit.xml"
-    - step: &unitTestThird
-        name: Unit tests 7.3
-        image: aheadworks/m2test-new:test-7.3
+          - "test-results/**"
+    - step: &staticTest-2.4.4
+        name: Static tests on Magento 2.4.4
+        image: aheadworks/m2test-new:2.4.4-with-dump-8.1
         script:
-          - mkdir -p test-results
-          - if test -f README.md; then if grep -q "for Magento 2.4.*" README.md; then echo only for Magento 2.4; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+          - mkdir -p test-results/static
+          - *prepare_git
+          # 2.4.4-specific. Fix false positive code duplication test for fonts
+          - echo 'lib/internal/LinLibertineFont/' > /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
+          - echo 'lib/internal/GnuFreeFont/' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
+          - echo 'lib/web/fonts/opensans/semibold/opensans-600.woff2' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
+          - echo 'lib/web/fonts/opensans/regular/opensans-400.woff2' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
+          - python3 /m2test.py static ${PWD} test-results/static
         artifacts:
-          - "test-results/test-unit.xml"
-    - step: &unitMagento24
-        name: Unit tests magento 2.4
-        image: aheadworks/m2test-new:test-2.4-7.4
+          - "test-results/**"
+    - step: &unitTestPHP74
+        name: Unit tests PHP 7.4
+        image: aheadworks/m2test-new:2.3.7-p3-with-dump-7.4
         script:
           - mkdir -p test-results
-          - if test -f README.md; then if grep -q "for Magento 2.3.*" README.md; then echo only for Magento 2.3; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py unit ${PWD} test-results/test-unit.xml; fi
+          - python3 /m2test.py unit ${PWD} test-results/test-unit-2.3.7.xml
         artifacts:
-          - "test-results/test-unit.xml"
-    - step: &installMagento
-        name: Install Magento test
-        image: aheadworks/m2test-new:test-install-7.3
+          - "test-results/**"
+    - step: &unitTestPHP81
+        name: Unit tests PHP 8.1
+        image: aheadworks/m2test-new:2.4.4-with-dump-8.1
         script:
           - mkdir -p test-results
-          - if test -f README.md; then if grep -q "for Magento 2.3.*" README.md; then echo only for Magento 2.3; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi
+          - python3 /m2test.py unit ${PWD} test-results/test-unit.xml
+        artifacts:
+          - "test-results/**"
+    - step: &installMagento-2.3.7
+        name: Install Magento 2.3.7 test
+        image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
+        script:
+          - mkdir -p test-results
+          - python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
           - "test-results/test-unit.xml"
-    - step: &installMagento24
-        name: Install Magento 2.4 test
-        image: aheadworks/m2test-new:test-install-2.4-7.4
+    - step: &installMagento-2.4.4
+        name: Install Magento 2.4.4 test
+        image: aheadworks/m2test-new:2.4.4-without-dump-8.1
         script:
           - mkdir -p test-results
-          - if test -f README.md; then if grep -q "for Magento 2.3.*" README.md; then echo only for Magento 2.3; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi; else python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml; fi
+          - python3 /m2test.py install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
           - "test-results/test-unit.xml"
@@ -134,14 +147,14 @@ definitions:
   deployment_steps:
     - step: &runPipelines
         name: Run pipelines
-        image: aheadworks/m2test-new:test-7.2
+        image: aheadworks/m2test-new:test-7.4
         script:
           - *getRepositories
           - apk add py3-requests
           - python3 runpipelines.py
     - step: &setPermissions
         name: Set permissions
-        image: aheadworks/m2test-new:test-7.2
+        image: aheadworks/m2test-new:test-7.4
         script:
           - apk add py3-requests
           - python3 /permissions.py
@@ -184,7 +197,7 @@ definitions:
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
     - step: &get_key
         name: get_key
-        image: aheadworks/m2test-new:test-7.2
+        image: aheadworks/m2test-new:test-7.4
         script:
           - echo ${DEVOPS_SSH_KEY} > key
           - printenv > env
@@ -202,16 +215,17 @@ pipelines:
     # For commits to master branch: run full set of tests
     master:
       - step: *build
-      - step: *validatePackage
+      - step: *validatePackage-2.3.7
+      - step: *validatePackage-2.4.4
       - parallel:
-          - step: *eqpTest
-          - step: *staticTest
-          - step: *unitTestFirst
-          - step: *unitTestSecond
-          - step: *unitTestThird
-          - step: *unitMagento24
-          - step: *installMagento
-          - step: *installMagento24
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.4
       - step: *ecommerce_build
       - step: *swaggerWebApiDocBuild
       - step: *deployToDevComposer
@@ -219,43 +233,48 @@ pipelines:
 
     # For every commit to develop branch: run tests
     develop:
-        - parallel:
-            - step: *eqpTest
-            - step: *staticTest
-            - step: *unitTestSecond
-            - step: *unitMagento24
-            - step: *installMagento24
-        - step: *deployToDevComposer
+      - parallel:
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *unitTestPHP74
+          - step: *installMagento-2.4.4
+      - step: *deployToDevComposer
     feature/*:
-        - step: *eqpTest
-        - step: *staticTest
-        - step: *unitTestSecond
-        - step: *unitMagento24
-        - step: *installMagento24
+        - step: *eqpTest-2.3.7
+        - step: *eqpTest-2.4.4
+        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.4
+        - step: *unitTestPHP74
+        - step: *installMagento-2.4.4
     bugfix/*:
-        - step: *eqpTest
-        - step: *staticTest
-        - step: *unitTestSecond
-        - step: *unitMagento24
-        - step: *installMagento24
+        - step: *eqpTest-2.3.7
+        - step: *eqpTest-2.4.4
+        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.4
+        - step: *unitTestPHP74
+        - step: *installMagento-2.4.4
     release/*:
       - step: *build
-      - step: *validatePackage
+      - step: *validatePackage-2.3.7
+      - step: *validatePackage-2.4.4
       - parallel:
-          - step: *eqpTest
-          - step: *staticTest
-          - step: *unitTestFirst
-          - step: *unitTestSecond
-          - step: *unitTestThird
-          - step: *unitMagento24
-          - step: *installMagento
-          - step: *installMagento24
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.4
 
   custom:
     # Upload to AW composer manually
     deploy-to-aw-composer:
       - step: *build
-      - step: *validatePackage
+      - step: *validatePackage-2.3.7
+      - step: *validatePackage-2.4.4
       - step: *deployToAwComposer
 
     deploy-to-dev-composer:
@@ -264,33 +283,36 @@ pipelines:
     # Build pack manually
     build-marketplace-package:
       - step: *build
-      - step: *validatePackage
+      - step: *validatePackage-2.3.7
+      - step: *validatePackage-2.4.4
 
     # Run tests manually
     run-all-tests:
       - parallel:
-          - step: *eqpTest
-          - step: *staticTest
-          - step: *unitTestSecond
-          - step: *unitMagento24
-          - step: *installMagento
-          - step: *installMagento24
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.4
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
-          - step: *eqpTest
-          - step: *staticTest
-          - step: *unitTestFirst
-          - step: *unitTestSecond
-          - step: *unitTestThird
-          - step: *unitMagento24
-          - step: *installMagento
-          - step: *installMagento24
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.4
 
     # set composer permissions
     set_permissions:
       - step: *setPermissions
-      
+
     get_key:
       - step: *get_key
 
@@ -305,9 +327,7 @@ pipelines:
     static-test-with-select-severity:
       - variables:
           - name: SEVERITY
-      - step: *staticTest
-
+      - step: *staticTest-2.3.7
+      - step: *staticTest-2.4.4
 
     # copy this file to all modules
-
-

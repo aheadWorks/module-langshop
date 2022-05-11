@@ -3,8 +3,8 @@ namespace Aheadworks\Langshop\Api\Data\Schema\ResourceGroup;
 
 interface ResourceInterface
 {
-    const RESOURCE = 'resource';
-    const SORT_ORDER = 'sort_order';
+    public const RESOURCE = 'resource';
+    public const SORT_ORDER = 'sort_order';
 
     /**
      * Set resource

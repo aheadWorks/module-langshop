@@ -8,27 +8,35 @@ interface FilterInterface
     /**
      * Constants for internal keys
      */
-    const FIELD = 'field';
-    const VALUE = 'value';
+    public const FIELD = 'field';
+    public const VALUE = 'value';
 
     /**
+     * Set field
+     *
      * @param string $field
      * @return $this
      */
     public function setField(string $field): FilterInterface;
 
     /**
+     * Get field
+     *
      * @return string
      */
     public function getField(): string;
 
     /**
+     * Set value
+     *
      * @param string $value
      * @return $this
      */
     public function setValue(string $value): FilterInterface;
 
     /**
+     * Get value
+     *
      * @return string
      */
     public function getValue(): string;

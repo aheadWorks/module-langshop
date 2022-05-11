@@ -3,12 +3,12 @@ namespace Aheadworks\Langshop\Api\Data\Schema\TranslatableResource;
 
 interface FieldInterface
 {
-    const KEY = 'key';
-    const LABEL = 'label';
-    const TYPE = 'type';
-    const IS_TRANSLATABLE = 'isTranslatable';
-    const FILTER = 'filter';
-    const SORT_ORDER = 'sortOrder';
+    public const KEY = 'key';
+    public const LABEL = 'label';
+    public const TYPE = 'type';
+    public const IS_TRANSLATABLE = 'isTranslatable';
+    public const FILTER = 'filter';
+    public const SORT_ORDER = 'sortOrder';
 
     /**
      * Set key

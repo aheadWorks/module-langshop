@@ -9,7 +9,7 @@ use Magento\Framework\Model\AbstractModel;
 class Record extends AbstractModel implements RecordInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRecordId()
     {
@@ -17,7 +17,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRecordId($recordId)
     {
@@ -25,7 +25,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getScopeId()
     {
@@ -33,7 +33,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setScopeId($scopeId)
     {
@@ -41,7 +41,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getScopeType()
     {
@@ -49,7 +49,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setScopeType($scopeType)
     {
@@ -57,7 +57,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLocaleCode()
     {
@@ -65,7 +65,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLocaleCode($localeCode)
     {
@@ -73,7 +73,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsPrimary()
     {
@@ -81,7 +81,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsPrimary($isPrimary)
     {
@@ -89,7 +89,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -97,7 +97,7 @@ class Record extends AbstractModel implements RecordInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes

@@ -3,12 +3,12 @@ namespace Aheadworks\Langshop\Api\Data\Schema;
 
 interface ResourceInterface
 {
-    const RESOURCE = 'resource';
-    const LABEL = 'label';
-    const DESCRIPTION = 'description';
-    const FIELDS = 'fields';
-    const SORTING = 'sorting';
-    const VIEW_TYPE = 'viewType';
+    public const RESOURCE = 'resource';
+    public const LABEL = 'label';
+    public const DESCRIPTION = 'description';
+    public const FIELDS = 'fields';
+    public const SORTING = 'sorting';
+    public const VIEW_TYPE = 'viewType';
 
     /**
      * Set resource
