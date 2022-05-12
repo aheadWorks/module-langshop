@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -35,15 +36,13 @@ class Saas
     /**
      * Retrieve Langshop Saas public key
      *
-     * @return string
+     * @return string|null
      */
-    public function getPublicKey(): string
+    public function getPublicKey(): ?string
     {
-        $value = $this->scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_GENERAL_SAAS_PUBLIC_KEY
         );
-
-        return $value ?? '';
     }
 
     /**
@@ -63,9 +62,9 @@ class Saas
     /**
      * Get Langshop Saas domain
      *
-     * @return string
+     * @return string|null
      */
-    public function getDomain(): string
+    public function getDomain(): ?string
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_GENERAL_SAAS_DOMAIN

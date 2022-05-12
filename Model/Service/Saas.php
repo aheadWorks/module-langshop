@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Service;
 
 use Aheadworks\Langshop\Api\SaasManagementInterface;
@@ -9,15 +11,15 @@ class Saas implements SaasManagementInterface
     /**
      * @var SaasConfig
      */
-    private SaasConfig $config;
+    private SaasConfig $saasConfig;
 
     /**
-     * @param SaasConfig $config
+     * @param SaasConfig $saasConfig
      */
     public function __construct(
-        SaasConfig $config
+        SaasConfig $saasConfig
     ) {
-        $this->config = $config;
+        $this->saasConfig = $saasConfig;
     }
 
     /**
@@ -28,7 +30,8 @@ class Saas implements SaasManagementInterface
      */
     public function saveKey(string $publicKey): bool
     {
-        $this->config->savePublicKey($publicKey);
+        $this->saasConfig->savePublicKey($publicKey);
+
         return true;
     }
 }
