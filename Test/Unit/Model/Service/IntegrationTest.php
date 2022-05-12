@@ -7,7 +7,6 @@ use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Model\Oauth\Consumer;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -122,27 +121,12 @@ class IntegrationTest extends TestCase
     public function testGetAccessToken()
     {
         $integrationMock = $this->testGetIntegration();
-        $consumer = $this->createMock(Consumer::class);
-        $consumerKey = 'consumer_key';
-        $accessToken = [
-            'oauth_token' => 'oauth_token',
-            'oauth_token_secret' => 'oauth_token_secret'
-        ];
+        $accessToken = 'access_token';
 
         $integrationMock
             ->expects($this->once())
             ->method('getData')
-            ->with('consumer_key')
-            ->willReturn($consumerKey);
-        $this->tokenProviderMock
-            ->expects($this->once())
-            ->method('getConsumerByKey')
-            ->with($consumerKey)
-            ->willReturn($consumer);
-        $this->tokenProviderMock
-            ->expects($this->once())
-            ->method('getAccessToken')
-            ->with($consumer)
+            ->with('token')
             ->willReturn($accessToken);
         $this->assertSame($accessToken, $this->integrationService->getAccessToken());
     }

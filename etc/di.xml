@@ -6,6 +6,9 @@
     <preference for="Aheadworks\Langshop\Api\LocaleManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Locale" />
 
+    <preference for="Aheadworks\Langshop\Api\SaasManagementInterface"
+                type="Aheadworks\Langshop\Model\Service\Saas" />
+
     <preference for="Aheadworks\Langshop\Api\Data\SchemaInterface"
                 type="Aheadworks\Langshop\Model\Schema"/>
     <preference for="Aheadworks\Langshop\Api\Data\Schema\ResourceInterface"

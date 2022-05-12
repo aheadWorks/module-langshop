@@ -4,12 +4,10 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Service;
 
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Oauth\Exception;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 
 class Integration
 {
@@ -31,26 +29,18 @@ class Integration
     private OauthServiceInterface $oauthService;
 
     /**
-     * @var TokenProvider
-     */
-    private TokenProvider $tokenProvider;
-
-    /**
      * @param ConfigBasedIntegrationManager $integrationManager
      * @param IntegrationServiceInterface $integrationService
      * @param OauthServiceInterface $oauthService
-     * @param TokenProvider $tokenProvider
      */
     public function __construct(
         ConfigBasedIntegrationManager $integrationManager,
         IntegrationServiceInterface $integrationService,
-        OauthServiceInterface $oauthService,
-        TokenProvider $tokenProvider
+        OauthServiceInterface $oauthService
     ) {
         $this->integrationManager = $integrationManager;
         $this->integrationService = $integrationService;
         $this->oauthService = $oauthService;
-        $this->tokenProvider = $tokenProvider;
     }
 
     /**
@@ -96,15 +86,11 @@ class Integration
     /**
      * Get access token
      *
-     * @return array
-     * @throws Exception
+     * @return string
      * @throws IntegrationException
      */
-    public function getAccessToken(): array
+    public function getAccessToken(): string
     {
-        $integration = $this->getIntegration();
-        $consumer = $this->tokenProvider->getConsumerByKey($integration->getData('consumer_key'));
-
-        return $this->tokenProvider->getAccessToken($consumer);
+        return $this->getIntegration()->getData('token');
     }
 }
