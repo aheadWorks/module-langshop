@@ -1,43 +1,43 @@
 <?php
 declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Saas\Url\Param;
 
 use Aheadworks\Langshop\Model\Config\Store as StoreConfig;
-use Aheadworks\Langshop\Model\Service\Integration;
-use Magento\Backend\Model\Auth\Session;
+use Aheadworks\Langshop\Model\Service\Integration as IntegrationService;
+use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\HTTP\Client\CurlFactory;
 
 class Builder
 {
     /**
-     * @var Integration
+     * @var IntegrationService
      */
-    private Integration $integration;
+    private IntegrationService $integrationService;
 
     /**
-     * @var Session
+     * @var AuthSession
      */
-    private Session $session;
+    private AuthSession $authSession;
 
     /**
      * @var StoreConfig
      */
-    private StoreConfig $config;
+    private StoreConfig $storeConfig;
 
     /**
-     * @param Integration $integration
-     * @param Session $session
-     * @param StoreConfig $config
+     * @param IntegrationService $integrationService
+     * @param AuthSession $authSession
+     * @param StoreConfig $storeConfig
      */
     public function __construct(
-        Integration $integration,
-        Session $session,
-        StoreConfig $config
+        IntegrationService $integrationService,
+        AuthSession $authSession,
+        StoreConfig $storeConfig
     ) {
-        $this->integration = $integration;
-        $this->session = $session;
-        $this->config = $config;
+        $this->integrationService = $integrationService;
+        $this->authSession = $authSession;
+        $this->storeConfig = $storeConfig;
     }
 
     /**
@@ -49,13 +49,9 @@ class Builder
     public function buildForMagentoInstallRequest(): array
     {
         return [
-            'domain' => str_replace(
-                ['http://', 'https://'],
-                '',
-                $this->config->getDefaultBaseUrl()
-            ),
-            'email' => $this->session->getUser()->getEmail(),
-            'token' => $this->integration->getAccessToken(),
+            'domain' => $this->storeConfig->getDefaultBaseUrl(),
+            'email' => $this->authSession->getUser()->getEmail(),
+            'token' => $this->integrationService->getAccessToken(),
             'rest_path' => '/rest/all/V1/awLangshop'
         ];
     }

@@ -1,8 +1,9 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\ViewModel\Page;
 
-use Aheadworks\Langshop\Model\Config\Saas as SaasConfig;
+use Aheadworks\Langshop\Model\Saas\ModuleChecker;
 use Aheadworks\Langshop\Model\Saas\UrlBuilder;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -10,9 +11,9 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class Iframe implements ArgumentInterface
 {
     /**
-     * @var SaasConfig
+     * @var ModuleChecker
      */
-    private SaasConfig $config;
+    private ModuleChecker $moduleChecker;
 
     /**
      * @var UrlBuilder
@@ -20,14 +21,14 @@ class Iframe implements ArgumentInterface
     private UrlBuilder $urlBuilder;
 
     /**
-     * @param SaasConfig $config
+     * @param ModuleChecker $moduleChecker
      * @param UrlBuilder $urlBuilder
      */
     public function __construct(
-        SaasConfig $config,
+        ModuleChecker $moduleChecker,
         UrlBuilder $urlBuilder
     ) {
-        $this->config = $config;
+        $this->moduleChecker = $moduleChecker;
         $this->urlBuilder = $urlBuilder;
     }
 
@@ -39,9 +40,7 @@ class Iframe implements ArgumentInterface
      */
     public function getSourceUrl(): string
     {
-        $key = $this->config->getPublicKey();
-
-        return $key
+        return $this->moduleChecker->isConfigured()
             ? $this->urlBuilder->getApplicationUrl()
             : $this->urlBuilder->getWizardUrl();
     }
