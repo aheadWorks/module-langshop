@@ -8,11 +8,12 @@ Langshop,Langshop
 Default,Default
 Website,Website
 "Store View","Store View"
-"Resource with identifier = ""%1"" does not exist.","Resource with identifier = ""%1"" does not exist."
 "Resource with type = ""%1"" does not exist.","Resource with type = ""%1"" does not exist."
+"Resource with identifier = ""%1"" does not exist.","Resource with identifier = ""%1"" does not exist."
 "Attribute with code = ""%1"" does not exist.","Attribute with code = ""%1"" does not exist."
 "Locale with code = ""%1"" does not exist.","Locale with code = ""%1"" does not exist."
 "Option with identifier = ""%1"" does not exist.","Option with identifier = ""%1"" does not exist."
+"Attribute with code = ""%1"" is not available for translate.","Attribute with code = ""%1"" is not available for translate."
 Locales,Locales
 Schema,Schema
 Resources,Resources
