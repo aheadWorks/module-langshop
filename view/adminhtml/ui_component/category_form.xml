@@ -3,7 +3,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <settings>
         <buttons>
-            <button name="translate" class="Aheadworks\Langshop\Block\Adminhtml\Button\Product\Translate"/>
+            <button name="translate" class="Aheadworks\Langshop\Block\Adminhtml\Button\Category\Translate"/>
         </buttons>
     </settings>
 </form>

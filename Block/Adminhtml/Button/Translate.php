@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Block\Adminhtml\Product\Edit\Button;
+namespace Aheadworks\Langshop\Block\Adminhtml\Button;
 
 use Aheadworks\Langshop\Model\Saas\ModuleChecker;
 use Aheadworks\Langshop\Model\Saas\Request\Translate as TranslateRequest;
@@ -27,18 +27,26 @@ class Translate implements ButtonProviderInterface
     private RequestInterface $request;
 
     /**
+     * @var string
+     */
+    private string $resourceType;
+
+    /**
      * @param ModuleChecker $moduleChecker
      * @param TranslateRequest $translateRequest
      * @param RequestInterface $request
+     * @param string $resourceType
      */
     public function __construct(
         ModuleChecker $moduleChecker,
         TranslateRequest $translateRequest,
-        RequestInterface $request
+        RequestInterface $request,
+        string $resourceType
     ) {
         $this->moduleChecker = $moduleChecker;
         $this->translateRequest = $translateRequest;
         $this->request = $request;
+        $this->resourceType = $resourceType;
     }
 
     /**
@@ -57,7 +65,7 @@ class Translate implements ButtonProviderInterface
                         'Aheadworks_Langshop/js/translate-button' => [
                             'url' => $this->translateRequest->getUrl(),
                             'params' => $this->translateRequest->getParams(
-                                'product',
+                                $this->resourceType,
                                 $this->getResourceId()
                             )
                         ]

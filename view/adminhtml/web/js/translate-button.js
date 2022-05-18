@@ -5,6 +5,24 @@ define([
 ], function ($) {
     'use strict';
 
+    /**
+     * Shows notification in case of successful request
+     */
+    function showNotification() {
+        $('body').notification('clear').notification('add', {
+            message: $.mage.__('Translation started. Please wait.'),
+
+            /**
+             * @param {String} message
+             */
+            insertMethod: function (message) {
+                let $wrapper = $('<div></div>').html(message);
+
+                $('.page-main-actions').after($wrapper);
+            }
+        });
+    }
+
     return function (config, element) {
         $(element).on('click', function () {
             $.ajax({
@@ -12,20 +30,7 @@ define([
                 method: 'post',
                 data: config.params,
                 beforeSend: false,
-                success: function () {
-                    $('body').notification('clear').notification('add', {
-                        message: $.mage.__('Translation started. Please wait.'),
-
-                        /**
-                         * @param {String} message
-                         */
-                        insertMethod: function (message) {
-                            let $wrapper = $('<div></div>').html(message);
-
-                            $('.page-main-actions').after($wrapper);
-                        }
-                    });
-                }
+                success: showNotification
             });
 
             return false;
