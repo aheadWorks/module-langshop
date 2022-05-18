@@ -49,10 +49,9 @@ class UrlBuilder
     public function getWizardUrl(): string
     {
         $curl = $this->curlFactory->create();
-        $domain = $this->saasConfig->getDomain();
 
         $curl->post(
-            "https://$domain/magento/install",
+            sprintf('%smagento/install', $this->saasConfig->getDomain()),
             $this->paramsBuilder->buildForMagentoInstallRequest()
         );
 

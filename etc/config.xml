@@ -4,7 +4,7 @@
     <default>
         <aw_ls>
             <general>
-                <saas_domain><!--todo: add saas domain--></saas_domain>
+                <saas_domain>https://app.langshop.io/</saas_domain>
             </general>
         </aw_ls>
     </default>
