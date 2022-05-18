@@ -14,4 +14,16 @@
             <argument name="resourceType" xsi:type="string">category</argument>
         </arguments>
     </virtualType>
+
+    <virtualType name="AttributeTranslateButton" type="Aheadworks\Langshop\Block\Adminhtml\Button\Translate">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">attribute</argument>
+            <argument name="resourceIdParam" xsi:type="string">attribute_id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Aheadworks\Langshop\Block\Adminhtml\Button\Attribute\Translate">
+        <arguments>
+            <argument name="translateButton" xsi:type="object">AttributeTranslateButton</argument>
+        </arguments>
+    </type>
 </config>

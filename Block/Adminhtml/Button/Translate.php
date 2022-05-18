@@ -32,21 +32,29 @@ class Translate implements ButtonProviderInterface
     private string $resourceType;
 
     /**
+     * @var string
+     */
+    private string $resourceIdParam;
+
+    /**
      * @param ModuleChecker $moduleChecker
      * @param TranslateRequest $translateRequest
      * @param RequestInterface $request
      * @param string $resourceType
+     * @param string $resourceIdParam
      */
     public function __construct(
         ModuleChecker $moduleChecker,
         TranslateRequest $translateRequest,
         RequestInterface $request,
-        string $resourceType
+        string $resourceType,
+        string $resourceIdParam = 'id'
     ) {
         $this->moduleChecker = $moduleChecker;
         $this->translateRequest = $translateRequest;
         $this->request = $request;
         $this->resourceType = $resourceType;
+        $this->resourceIdParam = $resourceIdParam;
     }
 
     /**
@@ -85,6 +93,6 @@ class Translate implements ButtonProviderInterface
      */
     private function getResourceId(): int
     {
-        return (int) $this->request->getParam('id');
+        return (int) $this->request->getParam($this->resourceIdParam);
     }
 }
