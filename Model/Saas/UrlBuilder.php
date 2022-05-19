@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Saas;
 
-use Aheadworks\Langshop\Model\Config\Saas as SaasConfig;
-use Aheadworks\Langshop\Model\Saas\Url\Param\Builder as ParamsBuilder;
+use Aheadworks\Langshop\Model\Saas\Request\Install as InstallRequest;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
@@ -16,28 +15,20 @@ class UrlBuilder
     private CurlFactory $curlFactory;
 
     /**
-     * @var SaasConfig
+     * @var InstallRequest
      */
-    private SaasConfig $saasConfig;
+    private InstallRequest $installRequest;
 
     /**
-     * @var ParamsBuilder
-     */
-    private ParamsBuilder $paramsBuilder;
-
-    /**
-     * @param SaasConfig $saasConfig
      * @param CurlFactory $curlFactory
-     * @param ParamsBuilder $paramsBuilder
+     * @param InstallRequest $installRequest
      */
     public function __construct(
-        SaasConfig $saasConfig,
         CurlFactory $curlFactory,
-        ParamsBuilder $paramsBuilder
+        InstallRequest $installRequest
     ) {
-        $this->saasConfig = $saasConfig;
         $this->curlFactory = $curlFactory;
-        $this->paramsBuilder = $paramsBuilder;
+        $this->installRequest = $installRequest;
     }
 
     /**
@@ -51,8 +42,8 @@ class UrlBuilder
         $curl = $this->curlFactory->create();
 
         $curl->post(
-            sprintf('%smagento/install', $this->saasConfig->getDomain()),
-            $this->paramsBuilder->buildForMagentoInstallRequest()
+            $this->installRequest->getUrl(),
+            $this->installRequest->getParams()
         );
 
         return $curl->getBody();
