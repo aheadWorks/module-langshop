@@ -26,9 +26,9 @@ define([
     return function (config, element) {
         $(element).on('click', function () {
             $.ajax({
-                url: config.url,
                 method: 'post',
-                data: config.params,
+                url: config.url,
+                data: JSON.stringify(config.params),
                 beforeSend: false,
                 success: showNotification
             });
