@@ -6,7 +6,6 @@ namespace Aheadworks\Langshop\Block\Adminhtml\Button\Attribute;
 use Aheadworks\Langshop\Block\Adminhtml\Button\Translate as TranslateButton;
 use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\Exception\LocalizedException;
 
 class Translate extends Container
 {
@@ -31,8 +30,6 @@ class Translate extends Container
 
     /**
      * Adds new translate button to the layout
-     *
-     * @throws LocalizedException
      */
     protected function _construct()
     {

@@ -4,22 +4,21 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Block\Adminhtml\Button;
 
 use Aheadworks\Langshop\Model\Saas\ModuleChecker;
-use Aheadworks\Langshop\Model\Saas\Request\Translate as TranslateRequest;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 class Translate implements ButtonProviderInterface
 {
     /**
+     * @var UrlInterface
+     */
+    private UrlInterface $urlBuilder;
+
+    /**
      * @var ModuleChecker
      */
     private ModuleChecker $moduleChecker;
-
-    /**
-     * @var TranslateRequest
-     */
-    private TranslateRequest $translateRequest;
 
     /**
      * @var RequestInterface
@@ -37,21 +36,21 @@ class Translate implements ButtonProviderInterface
     private string $resourceIdParam;
 
     /**
+     * @param UrlInterface $urlBuilder
      * @param ModuleChecker $moduleChecker
-     * @param TranslateRequest $translateRequest
      * @param RequestInterface $request
      * @param string $resourceType
      * @param string $resourceIdParam
      */
     public function __construct(
+        UrlInterface $urlBuilder,
         ModuleChecker $moduleChecker,
-        TranslateRequest $translateRequest,
         RequestInterface $request,
         string $resourceType,
         string $resourceIdParam = 'id'
     ) {
+        $this->urlBuilder = $urlBuilder;
         $this->moduleChecker = $moduleChecker;
-        $this->translateRequest = $translateRequest;
         $this->request = $request;
         $this->resourceType = $resourceType;
         $this->resourceIdParam = $resourceIdParam;
@@ -61,7 +60,6 @@ class Translate implements ButtonProviderInterface
      * Retrieves button-specified settings
      *
      * @return array
-     * @throws LocalizedException
      */
     public function getButtonData()
     {
@@ -71,11 +69,11 @@ class Translate implements ButtonProviderInterface
                 'data_attribute' => [
                     'mage-init' => [
                         'Aheadworks_Langshop/js/translate-button' => [
-                            'url' => $this->translateRequest->getUrl(),
-                            'params' => $this->translateRequest->getParams(
-                                $this->resourceType,
-                                $this->getResourceId()
-                            )
+                            'url' => $this->urlBuilder->getUrl('langshop/saas/translate'),
+                            'params' => [
+                                'resource_type' => $this->resourceType,
+                                'resource_id' => $this->getResourceId()
+                            ]
                         ]
                     ]
                 ],

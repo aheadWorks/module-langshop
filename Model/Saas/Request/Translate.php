@@ -38,7 +38,7 @@ class Translate
      */
     public function getUrl(): string
     {
-        return sprintf('%swebhook', $this->saasConfig->getDomain());
+        return sprintf('%swebhooks', $this->saasConfig->getDomain());
     }
 
     /**

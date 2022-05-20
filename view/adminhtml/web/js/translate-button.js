@@ -1,16 +1,19 @@
 define([
     'jquery',
-    'mage/translate',
     'mage/backend/bootstrap'
 ], function ($) {
     'use strict';
 
     /**
-     * Shows notification in case of successful request
+     * Shows notification once the request has been processed
+     *
+     * @param {Boolean} data.error
+     * @param {String} data.message
      */
-    function showNotification() {
+    function showNotification(data) {
         $('body').notification('clear').notification('add', {
-            message: $.mage.__('Translation started. Please wait.'),
+            error: data.error,
+            message: data.message,
 
             /**
              * @param {String} message
@@ -23,15 +26,14 @@ define([
         });
     }
 
+    /**
+     * @param {String} config.url
+     * @param {Object} config.params
+     * @param {HTMLElement} element
+     */
     return function (config, element) {
         $(element).on('click', function () {
-            $.ajax({
-                method: 'post',
-                url: config.url,
-                data: JSON.stringify(config.params),
-                beforeSend: false,
-                success: showNotification
-            });
+            $.post(config.url, config.params, showNotification, 'json');
 
             return false;
         });
