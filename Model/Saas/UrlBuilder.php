@@ -5,14 +5,13 @@ namespace Aheadworks\Langshop\Model\Saas;
 
 use Aheadworks\Langshop\Model\Saas\Request\Install as InstallRequest;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\HTTP\Client\CurlFactory;
 
 class UrlBuilder
 {
     /**
-     * @var CurlFactory
+     * @var CurlSender
      */
-    private CurlFactory $curlFactory;
+    private CurlSender $curlSender;
 
     /**
      * @var InstallRequest
@@ -20,14 +19,14 @@ class UrlBuilder
     private InstallRequest $installRequest;
 
     /**
-     * @param CurlFactory $curlFactory
+     * @param CurlSender $curlSender
      * @param InstallRequest $installRequest
      */
     public function __construct(
-        CurlFactory $curlFactory,
+        CurlSender $curlSender,
         InstallRequest $installRequest
     ) {
-        $this->curlFactory = $curlFactory;
+        $this->curlSender = $curlSender;
         $this->installRequest = $installRequest;
     }
 
@@ -39,9 +38,7 @@ class UrlBuilder
      */
     public function getWizardUrl(): string
     {
-        $curl = $this->curlFactory->create();
-
-        $curl->post(
+        $curl = $this->curlSender->post(
             $this->installRequest->getUrl(),
             $this->installRequest->getParams()
         );
