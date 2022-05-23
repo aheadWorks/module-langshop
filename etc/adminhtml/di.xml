@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Aheadworks\Langshop\Block\Adminhtml\Button\Product\Translate"
+                 type="Aheadworks\Langshop\Block\Adminhtml\Button\Translate">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">product</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Block\Adminhtml\Button\Category\Translate"
+                 type="Aheadworks\Langshop\Block\Adminhtml\Button\Translate">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">category</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AttributeTranslateButton" type="Aheadworks\Langshop\Block\Adminhtml\Button\Translate">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">attribute</argument>
+            <argument name="resourceIdParam" xsi:type="string">attribute_id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Aheadworks\Langshop\Block\Adminhtml\Button\Attribute\Translate">
+        <arguments>
+            <argument name="translateButton" xsi:type="object">AttributeTranslateButton</argument>
+        </arguments>
+    </type>
+</config>
