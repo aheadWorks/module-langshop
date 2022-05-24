@@ -5,7 +5,7 @@ namespace Aheadworks\Langshop\Model\Saas\Request;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class Translate
+class Uninstall
 {
     /**
      * @var Webhook
@@ -22,7 +22,7 @@ class Translate
     }
 
     /**
-     * Retrieves URL for the translate webhook
+     * Retrieves URL for the uninstall webhook
      *
      * @return string
      */
@@ -32,20 +32,16 @@ class Translate
     }
 
     /**
-     * Retrieves parameters for the translate webhook
+     * Retrieves parameters for the uninstall webhook
      *
-     * @param string $resourceType
-     * @param int $resourceId
      * @return array
      * @throws LocalizedException
      */
-    public function getParams(string $resourceType, int $resourceId): array
+    public function getParams(): array
     {
         return array_merge($this->webhook->getParams(), [
-            'topic' => 'connector/translate',
-            'payload' => [
-                'resourceId' => sprintf('gid://%s/%d', $resourceType, $resourceId)
-            ]
+            'topic' => 'connector/uninstall',
+            'payload' => []
         ]);
     }
 }
