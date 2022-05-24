@@ -34,12 +34,12 @@ class IntegrationDetail extends BaseField
     }
 
     /**
-     * Render element value
+     * Retrieves element HTML markup
      *
      * @param AbstractElement $element
      * @return string
      */
-    protected function _renderValue(AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         $id = $element->getOriginalData('id');
         try {
@@ -49,6 +49,6 @@ class IntegrationDetail extends BaseField
             $value = '';
         }
 
-        return '<td class="value">' . $value . '</td>';
+        return $value;
     }
 }
