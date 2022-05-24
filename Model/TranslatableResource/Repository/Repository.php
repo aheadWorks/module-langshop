@@ -109,18 +109,22 @@ class Repository implements RepositoryInterface
      */
     public function save(int $entityId, array $translations): void
     {
+        $resourceModel = $this->resourceModelFactory->create();
         $translationByLocales = [];
+
         foreach ($translations as $translation) {
             $this->translationValidation->validate($translation, $this->resourceType);
             $translationByLocales[$translation->getLocale()][$translation->getKey()] = $translation->getValue();
         }
 
-        /** @var AbstractModel $item */
-        $item = $this->prepareCollectionById($entityId)->getFirstItem();
         foreach ($translationByLocales as $locale => $values) {
+            /** @var AbstractModel $item */
+            $item = $this->prepareCollectionById($entityId)
+                ->getFirstItem()
+                ->addData($values);
             foreach ($this->localeScopeRepository->getByLocale([$locale]) as $localeScope) {
-                $item->addData($values)->setData('store_id', $localeScope->getScopeId());
-                $this->resourceModelFactory->create()->save($item);
+                $item->setData('store_id', $localeScope->getScopeId());
+                $resourceModel->save($item);
             }
         }
     }
