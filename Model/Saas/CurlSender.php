@@ -51,6 +51,7 @@ class CurlSender
     public function post(string $url, array $params): Curl
     {
         $curl = $this->curlFactory->create();
+        $curl->addHeader('Content-Type', 'application/json');
 
         try {
             $curl->post($url, $this->serializer->serialize($params));
