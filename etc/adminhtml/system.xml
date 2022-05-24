@@ -33,6 +33,15 @@
                     <label>Store views to translate</label>
                     <source_model>Magento\Store\Model\System\Store</source_model>
                 </field>
+                <field id="saas_domain"
+                       translate="label"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Langshop Application domain</label>
+                </field>
             </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
                 <label>Integration details</label>
