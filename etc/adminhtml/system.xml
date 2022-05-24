@@ -40,7 +40,16 @@
                        showInDefault="1"
                        showInWebsite="0"
                        showInStore="0">
-                    <label>Langshop Application domain</label>
+                    <label>Application Domain</label>
+                </field>
+                <field id="saas_public_key"
+                       translate="label"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Application Public Key</label>
                 </field>
             </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
