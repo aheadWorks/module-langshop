@@ -40,26 +40,24 @@
                        showInDefault="1"
                        showInWebsite="0"
                        showInStore="0">
-                    <label>Langshop Application domain</label>
+                    <label>Application Domain</label>
+                </field>
+                <field id="saas_public_key"
+                       translate="label"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Application Public Key</label>
                 </field>
             </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
                 <label>Integration details</label>
-                <field id="consumer_key" translate="label" type="text" sortOrder="10" showInDefault="1">
-                    <label>Consumer Key</label>
+                <field id="token" translate="label comment" type="text" sortOrder="30" showInDefault="1">
+                    <label>Magento Access Token</label>
                     <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
-                </field>
-                <field id="consumer_secret" translate="label" type="text" sortOrder="20" showInDefault="1">
-                    <label>Consumer Secret</label>
-                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
-                </field>
-                <field id="token" translate="label" type="text" sortOrder="30" showInDefault="1">
-                    <label>Access Token</label>
-                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
-                </field>
-                <field id="token_secret" translate="label" type="text" sortOrder="40" showInDefault="1">
-                    <label>Access Token Secret</label>
-                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                    <comment>The token is being used for access to your Magento stores</comment>
                 </field>
             </group>
         </section>
