@@ -6,6 +6,7 @@ namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Locale as LocaleValidation;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Locale implements ProcessorInterface
 {
@@ -36,13 +37,17 @@ class Locale implements ProcessorInterface
      *
      * @param array $data
      * @return array
+     * @throws NoSuchEntityException
      */
     public function process(array $data): array
     {
         $locales = &$data['locale'];
 
-        array_map([$this->localeValidation, 'validate'], $locales);
-        $locales = $this->localeScopeRepository->getByLocale($locales) ?:
+        foreach ($locales as $locale) {
+            $this->localeValidation->validate($locale, true);
+        }
+
+        $locales = $this->localeScopeRepository->getByLocale($locales, true) ?:
             [$this->localeScopeRepository->getPrimary()];
 
         return $data;
