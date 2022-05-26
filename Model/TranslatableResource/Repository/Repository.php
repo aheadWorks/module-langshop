@@ -167,7 +167,9 @@ class Repository implements RepositoryInterface
         ];
         foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
             $isTranslatable = $attribute->isTranslatable() ? Field::TRANSLATABLE : Field::UNTRANSLATABLE;
-            $attributeCodes[$isTranslatable][] = $attribute->getCode();
+            if ($isTranslatable === Field::TRANSLATABLE || $attribute->isNecessary()) {
+                $attributeCodes[$isTranslatable][] = $attribute->getCode();
+            }
         }
 
         $localizedCollection = clone $collection;

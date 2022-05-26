@@ -16,6 +16,7 @@ class Field extends AbstractModel
     private const SORT_ORDER = 'sort_order';
     private const IS_SORTABLE = 'is_sortable';
     private const IS_TRANSLATABLE = 'is_translatable';
+    private const IS_NECESSARY = 'is_necessary';
 
     /**
      * Set code
@@ -183,5 +184,26 @@ class Field extends AbstractModel
     public function isTranslatable()
     {
         return $this->getData(self::IS_TRANSLATABLE);
+    }
+
+    /**
+     * Set is translatable
+     *
+     * @param bool $isNecessary
+     * @return $this
+     */
+    public function setIsNecessary($isNecessary)
+    {
+        return $this->setData(self::IS_NECESSARY, $isNecessary);
+    }
+
+    /**
+     * Is necessary
+     *
+     * @return bool
+     */
+    public function isNecessary()
+    {
+        return $this->getData(self::IS_NECESSARY);
     }
 }
