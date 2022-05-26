@@ -58,7 +58,7 @@
     </route>
     <!-- END Translatable Resources -->
 
-    <route url="/V1/awLangshop/installation/confirm/:publicKey" method="POST">
+    <route url="/V1/awLangshop/installation/confirm" method="POST">
         <service class="Aheadworks\Langshop\Api\SaasManagementInterface" method="saveKey"/>
         <resources>
             <resource ref="Aheadworks_Langshop::langshop"/>
