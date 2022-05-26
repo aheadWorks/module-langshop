@@ -38,7 +38,7 @@ class Option
     {
         if (!isset($this->options[$attributeId])) {
             $optionCollection = $this->optionCollectionFactory->create()
-                ->addFieldToFilter('attribute_id', $attributeId);
+                ->addFieldToFilter('attribute_id', (string) $attributeId);
 
             $this->options[$attributeId] = $optionCollection->getAllIds();
         }

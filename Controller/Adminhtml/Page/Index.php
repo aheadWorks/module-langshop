@@ -20,7 +20,7 @@ class Index extends Action implements HttpGetActionInterface
 
         $resultPage
             ->setActiveMenu('Aheadworks_Sarp::subscriptions')
-            ->getConfig()->getTitle()->prepend(__('Langshop'));
+            ->getConfig()->getTitle()->prepend((string) __('Langshop'));
 
         return $resultPage;
     }
