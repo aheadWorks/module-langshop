@@ -5,6 +5,7 @@ namespace Aheadworks\Langshop\Model\Locale;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
+use Aheadworks\Langshop\Model\Locale\Scope\Record as LocaleScopeRecord;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Converter as LocaleScopeRecordConverter;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -43,6 +44,7 @@ class LoadHandler
     {
         $locale = $this->localeScopeRecordConverter->toLocaleDataModel($scopeRecord);
 
+        /** @var LocaleScopeRecord $scopeRecord */
         return $this->processor->process($locale, $scopeRecord->getData());
     }
 }

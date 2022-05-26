@@ -170,6 +170,7 @@ class Repository implements RepositoryInterface
             $attributeCodes[$isTranslatable][] = $attribute->getCode();
         }
 
+        /** @var CatalogCollection $localizedCollection */
         $localizedCollection = clone $collection;
 
         if ($collection instanceof CatalogCollection) {

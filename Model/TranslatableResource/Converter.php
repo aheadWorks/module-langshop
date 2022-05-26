@@ -13,6 +13,7 @@ use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as E
 use Magento\Framework\Data\Collection\AbstractDb as Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 
 class Converter
 {
@@ -87,6 +88,7 @@ class Converter
             $fields[] = $field->getData();
         }
 
+        /** @var AbstractModel $item */
         return $this->resourceFactory->create()
             ->setResourceId((int) $item->getId())
             ->setResourceType($resourceType)
