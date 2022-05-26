@@ -25,6 +25,8 @@ class Image implements PersistorInterface
     }
 
     /**
+     * Retrieve full path to product image
+     *
      * @param Product[] $items
      * @param int $storeId
      */
