@@ -16,6 +16,8 @@ class ResourceModel extends AbstractModel implements ResourceInterface
 
     /**
      * @inheritDoc
+     *
+     * @phpstan-ignore-next-line
      */
     public function getResource()
     {

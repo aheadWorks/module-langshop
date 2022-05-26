@@ -133,6 +133,9 @@ class Options implements PersistorInterface
             ['value_id' => 'eaov.value_id']
         )->order('option_id');
 
-        return $optionCollection->getItems();
+        /** @var Option[] $options */
+        $options = $optionCollection->getItems();
+
+        return $options;
     }
 }

@@ -14,7 +14,7 @@ class Option
     private OptionCollectionFactory $optionCollectionFactory;
 
     /**
-     * @var int[]
+     * @var array<int, int[]>
      */
     private array $options;
 

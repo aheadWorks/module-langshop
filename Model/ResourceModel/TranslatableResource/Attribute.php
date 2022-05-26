@@ -62,9 +62,10 @@ class Attribute extends AttributeResourceModelProxy
      * Save object data
      *
      * @param AbstractModel $object
+     * @return $this
      * @throws AlreadyExistsException
      */
-    public function save(AbstractModel $object): void
+    public function save(AbstractModel $object): Attribute
     {
         parent::save($object);
 
@@ -74,5 +75,7 @@ class Attribute extends AttributeResourceModelProxy
         }
 
         $this->eavConfig->clear();
+
+        return $this;
     }
 }
