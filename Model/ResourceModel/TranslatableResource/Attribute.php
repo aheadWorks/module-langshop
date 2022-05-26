@@ -51,6 +51,7 @@ class Attribute extends AttributeResourceModelProxy
      */
     public function _getSubject(): AttributeResourceModel
     {
+        // @phpstan-ignore-next-line
         if (!isset($this->_subject)) {
             $this->_subject = $this->attributeResourceModelFactory->create();
         }
@@ -69,7 +70,7 @@ class Attribute extends AttributeResourceModelProxy
     {
         parent::save($object);
 
-        $storeId = (int) $object->getData('store_id') ?? Store::DEFAULT_STORE_ID;
+        $storeId = (int) $object->getData('store_id') ?: Store::DEFAULT_STORE_ID;
         foreach ($this->persistorPool->get() as $persistor) {
             $persistor->save($object, $storeId);
         }
