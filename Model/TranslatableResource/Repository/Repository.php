@@ -142,7 +142,11 @@ class Repository implements RepositoryInterface
         $collection = $this->collectionFactory->create();
 
         $fieldName = $collection->getResource()->getIdFieldName();
-        $collection->addFieldToFilter($fieldName, $entityId);
+        $collection
+            ->addFieldToFilter($fieldName, $entityId)
+            ->addAttributeToSelect(
+                $this->entityAttributeProvider->getCodesOfNecessaryFields($this->resourceType)
+            );
 
         if (!$collection->getSize()) {
             throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $entityId));
@@ -161,22 +165,13 @@ class Repository implements RepositoryInterface
      */
     private function addLocalizedAttributes(Collection $collection, array $localeScopes): Collection
     {
-        $attributeCodes = [
-            Field::TRANSLATABLE => [],
-            Field::UNTRANSLATABLE => []
-        ];
-        foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
-            $isTranslatable = $attribute->isTranslatable() ? Field::TRANSLATABLE : Field::UNTRANSLATABLE;
-            if ($isTranslatable === Field::TRANSLATABLE || $attribute->isNecessary()) {
-                $attributeCodes[$isTranslatable][] = $attribute->getCode();
-            }
-        }
-
+        $translatableAttributeCodes = $this->entityAttributeProvider->getCodesOfTranslatableFields($this->resourceType);
+        $necessaryAttributeCodes = $this->entityAttributeProvider->getCodesOfNecessaryFields($this->resourceType);
         $localizedCollection = clone $collection;
 
         if ($collection instanceof CatalogCollection) {
-            $collection->addAttributeToSelect($attributeCodes[Field::UNTRANSLATABLE]);
-            $localizedCollection->addAttributeToSelect($attributeCodes[Field::TRANSLATABLE]);
+            $collection->addAttributeToSelect($necessaryAttributeCodes);
+            $localizedCollection->addAttributeToSelect($translatableAttributeCodes);
         }
 
         foreach ($localeScopes as $localeScope) {
@@ -185,7 +180,7 @@ class Repository implements RepositoryInterface
             /** @var AbstractModel $localizedItem */
             foreach ($localizedCollection->getItems() as $localizedItem) {
                 $item = $collection->getItemById($localizedItem->getId());
-                foreach ($attributeCodes[Field::TRANSLATABLE] as $attributeCode) {
+                foreach ($translatableAttributeCodes as $attributeCode) {
                     $value = is_array($item->getData($attributeCode))
                         ? $item->getData($attributeCode)
                         : [];

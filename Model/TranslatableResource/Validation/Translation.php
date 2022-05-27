@@ -73,12 +73,6 @@ class Translation
      */
     private function isTranslatable(string $attributeCode, string $resourceType): bool
     {
-        foreach ($this->entityAttributeProvider->getList($resourceType) as $attribute) {
-            if ($attribute->getCode() === $attributeCode) {
-                return $attribute->isTranslatable();
-            }
-        }
-
-        return false;
+        return in_array($attributeCode, $this->entityAttributeProvider->getCodesOfTranslatableFields($resourceType));
     }
 }
