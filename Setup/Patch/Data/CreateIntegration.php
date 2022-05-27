@@ -27,13 +27,15 @@ class CreateIntegration implements DataPatchInterface
     /**
      * Create Langshop integration and generate access token
      *
-     * @return void
+     * @return $this
      * @throws IntegrationException
      */
     public function apply()
     {
         $this->integrationService->createIntegration();
         $this->integrationService->generateToken();
+
+        return $this;
     }
 
     /**
