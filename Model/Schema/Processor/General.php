@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Schema\Processor;
 
 use Aheadworks\Langshop\Api\Data\SchemaInterface;
+use Aheadworks\Langshop\Model\Schema;
 use Aheadworks\Langshop\Model\Schema\ProcessorInterface;
 
 class General implements ProcessorInterface
@@ -28,6 +29,8 @@ class General implements ProcessorInterface
     public function process(SchemaInterface $schema): void
     {
         foreach ($this->data as $key => $value) {
+
+            /** @var Schema $schema */
             $schema->setData($key, $value);
         }
     }
