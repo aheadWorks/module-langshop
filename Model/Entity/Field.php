@@ -187,7 +187,7 @@ class Field extends AbstractModel
     }
 
     /**
-     * Set is translatable
+     * Set is necessary
      *
      * @param bool $isNecessary
      * @return $this
@@ -199,6 +199,10 @@ class Field extends AbstractModel
 
     /**
      * Is necessary
+     *
+     * In the case when a field is not translatable
+     * but should be in the array of resource fields
+     * it should return true
      *
      * @return bool
      */
