@@ -26,11 +26,12 @@ class Locale
      * Validates locale code
      *
      * @param string $value
+     * @param bool $includePrimary
      * @throws NoSuchEntityException
      */
-    public function validate(string $value): void
+    public function validate(string $value, bool $includePrimary = false): void
     {
-        if (!$this->localeScopeRepository->getByLocale([$value])) {
+        if (!$this->localeScopeRepository->getByLocale([$value], $includePrimary)) {
             throw new NoSuchEntityException(
                 __('Locale with code = "%1" does not exist.', $value)
             );
