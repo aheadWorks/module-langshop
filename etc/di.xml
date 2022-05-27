@@ -39,6 +39,9 @@
     <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\TranslatableResource" />
 
+    <preference for="Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface"
+                type="Aheadworks\Langshop\Model\Saas\ConfirmationResult" />
+
     <!-- START Data Processor Pool -->
     <preference for="Aheadworks\Langshop\Model\Data\ProcessorInterface"
                 type="Aheadworks\Langshop\Model\Data\Processor\Composite" />
