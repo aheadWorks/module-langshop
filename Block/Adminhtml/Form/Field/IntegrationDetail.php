@@ -41,7 +41,7 @@ class IntegrationDetail extends BaseField
      */
     protected function _getElementHtml(AbstractElement $element)
     {
-        $id = $element->getOriginalData('id');
+        $id = $element->getDataByPath('original_data/id');
         try {
             $integration = $this->integrationService->getIntegration();
             $value = $integration->getData($id);

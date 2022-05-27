@@ -143,7 +143,7 @@ class Repository implements RepositoryInterface
 
         $fieldName = $collection->getResource()->getIdFieldName();
         $collection
-            ->addFieldToFilter($fieldName, $entityId)
+            ->addFieldToFilter($fieldName, (string) $entityId)
             ->addAttributeToSelect(
                 $this->entityAttributeProvider->getCodesOfNecessaryFields($this->resourceType)
             );

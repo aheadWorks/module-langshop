@@ -7,7 +7,6 @@ use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,11 +33,6 @@ class IntegrationTest extends TestCase
     private $oauthServiceMock;
 
     /**
-     * @var TokenProvider|MockObject
-     */
-    private $tokenProviderMock;
-
-    /**
      * @return void
      */
     protected function setUp(): void
@@ -46,13 +40,11 @@ class IntegrationTest extends TestCase
         $this->integrationManagerMock = $this->createMock(ConfigBasedIntegrationManager::class);
         $this->magentoIntegrationServiceMock = $this->createMock(IntegrationServiceInterface::class);
         $this->oauthServiceMock = $this->createMock(OauthServiceInterface::class);
-        $this->tokenProviderMock = $this->createMock(TokenProvider::class);
 
         $this->integrationService = new IntegrationService(
             $this->integrationManagerMock,
             $this->magentoIntegrationServiceMock,
-            $this->oauthServiceMock,
-            $this->tokenProviderMock
+            $this->oauthServiceMock
         );
     }
 

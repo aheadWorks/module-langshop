@@ -5,7 +5,6 @@ namespace Aheadworks\Langshop\Model\Service;
 
 use Aheadworks\Langshop\Api\LocaleManagementInterface;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
-use Aheadworks\Langshop\Model\Locale\SaveHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
@@ -17,28 +16,20 @@ class Locale implements LocaleManagementInterface
     private ScopeRecordRepository $scopeRecordRepository;
 
     /**
-     * @var SaveHandler
-     */
-    private SaveHandler $saveHandler;
-
-    /**
      * @var LoadHandler
      */
     private LoadHandler $loadHandler;
 
     /**
      * @param ScopeRecordRepository $scopeRecordRepository
-     * @param SaveHandler $saveHandler
      * @param LoadHandler $loadHandler
      */
     public function __construct(
         ScopeRecordRepository $scopeRecordRepository,
-        SaveHandler $saveHandler,
         LoadHandler $loadHandler
     ) {
         $this->scopeRecordRepository = $scopeRecordRepository;
         $this->loadHandler = $loadHandler;
-        $this->saveHandler = $saveHandler;
     }
 
     /**

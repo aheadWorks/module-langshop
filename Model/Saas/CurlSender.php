@@ -56,7 +56,7 @@ class CurlSender
         try {
             $curl->post($url, $this->serializer->serialize($params));
         } catch (Exception $exception) {
-            $this->logger->error($exception);
+            $this->logger->error((string) $exception);
         }
 
         return $curl;
