@@ -5,7 +5,6 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
-use Aheadworks\Langshop\Model\Source\TranslatableResource\Field;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
@@ -142,6 +141,7 @@ class Repository implements RepositoryInterface
         $collection = $this->collectionFactory->create();
 
         $fieldName = $collection->getResource()->getIdFieldName();
+        // @phpstan-ignore-next-line
         $collection
             ->addFieldToFilter($fieldName, (string) $entityId)
             ->addAttributeToSelect(
@@ -171,10 +171,12 @@ class Repository implements RepositoryInterface
 
         if ($collection instanceof CatalogCollection) {
             $collection->addAttributeToSelect($necessaryAttributeCodes);
+            // @phpstan-ignore-next-line
             $localizedCollection->addAttributeToSelect($translatableAttributeCodes);
         }
 
         foreach ($localeScopes as $localeScope) {
+            // @phpstan-ignore-next-line
             $localizedCollection->setStoreId((int) $localeScope->getScopeId())->clear();
 
             /** @var AbstractModel $localizedItem */

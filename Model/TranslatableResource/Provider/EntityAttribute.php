@@ -16,7 +16,7 @@ class EntityAttribute
     private EntityPool $entityPool;
 
     /**
-     * @var array<string, Field[]>
+     * @var array<string, array<int, array<int, Field>>>
      */
     private array $attributes;
 
@@ -121,7 +121,7 @@ class EntityAttribute
      * Split fields
      *
      * @param Field[] $fields
-     * @return Field[]
+     * @return array<int, Field[]>
      */
     private function splitFields(array $fields): array
     {

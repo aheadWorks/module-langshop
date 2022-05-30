@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\Proxy as ProductCollectionProxy;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 
 class Collection extends ProductCollectionProxy
@@ -80,10 +80,11 @@ class Collection extends ProductCollectionProxy
      * Get item by id
      *
      * @param int $id
-     * @return Product
+     * @return AbstractModel
      */
     public function getItemById($id)
     {
+        /** @var AbstractModel|null $item */
         $item = parent::getItemById($id);
 
         if ($item) {
