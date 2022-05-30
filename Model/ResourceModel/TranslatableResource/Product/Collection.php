@@ -46,6 +46,7 @@ class Collection extends ProductCollectionProxy
      */
     public function _getSubject(): ProductCollection
     {
+        // @phpstan-ignore-next-line
         if (!isset($this->_subject)) {
             $this->_subject = $this->productCollectionFactory->create();
         }
