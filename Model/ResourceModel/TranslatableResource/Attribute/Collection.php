@@ -46,6 +46,7 @@ class Collection extends AttributeCollectionProxy
      */
     public function _getSubject(): AttributeCollection
     {
+        // @phpstan-ignore-next-line
         if (!isset($this->_subject)) {
             $this->_subject = $this->attributeCollectionFactory->create();
         }

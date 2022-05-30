@@ -74,15 +74,18 @@ class DynamicAttribute implements CollectorInterface
 
         /** @var Attribute $attribute */
         foreach ($attributes as $attribute) {
-            $field = $this->entityFieldFactory->create()
-                ->setCode($attribute->getAttributeCode())
-                ->setLabel($attribute->getDefaultFrontendLabel())
-                ->setType($attribute->getFrontendInput())
-                ->setIsTranslatable($this->isTranslatable($attribute))
-                ->setIsFilterable($attribute->getIsFilterable())
-                ->setFilterType($attribute->getFrontendInput());
+            $code = $attribute->getAttributeCode();
+            if (!isset($fields[$code]) && $this->isTranslatable($attribute)) {
+                $field = $this->entityFieldFactory->create()
+                    ->setCode($code)
+                    ->setLabel($attribute->getDefaultFrontendLabel())
+                    ->setType($attribute->getFrontendInput())
+                    ->setIsTranslatable($this->isTranslatable($attribute))
+                    ->setIsFilterable($attribute->getIsFilterable())
+                    ->setFilterType($attribute->getFrontendInput());
 
-            $fields[$attribute->getAttributeCode()] = $field;
+                $fields[$code] = $field;
+            }
         }
 
         return $fields;

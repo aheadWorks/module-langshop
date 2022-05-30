@@ -8,6 +8,7 @@ use Aheadworks\Langshop\Model\Saas\Request\Translate as TranslateRequest;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -65,7 +66,10 @@ class Translate extends Action implements HttpPostActionInterface
             ];
         }
 
-        return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);
+        /** @var ResultJson $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+
+        return $resultJson->setData($result);
     }
 
     /**

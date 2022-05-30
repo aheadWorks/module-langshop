@@ -9,6 +9,7 @@ use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceM
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 
 class Url implements ProcessorInterface
 {
@@ -47,9 +48,9 @@ class Url implements ProcessorInterface
         $type = $data['scope_type'];
 
         if ($type == LocaleScopeTypeSourceModel::DEFAULT) {
-            $storeId = $this->storeManager->getWebsite()->getDefaultStore()->getStoreId();
+            $storeId = $this->getStoreId();
         } elseif ($type == LocaleScopeTypeSourceModel::WEBSITE) {
-            $storeId = $this->storeManager->getWebsite($data['scope_id'])->getDefaultStore()->getStoreId();
+            $storeId = $this->getStoreId($data['scope_id']);
         } else {
             $storeId = $data['scope_id'];
         }
@@ -58,5 +59,20 @@ class Url implements ProcessorInterface
         return $locale
             ->setPreviewUrl($url)
             ->setUrl($url);
+    }
+
+    /**
+     * Gets default store identifier for the website
+     *
+     * @param int|null $websiteId
+     * @return int
+     * @throws LocalizedException
+     */
+    private function getStoreId(?int $websiteId = null): int
+    {
+        /** @var Website $website */
+        $website = $this->storeManager->getWebsite($websiteId);
+
+        return (int) $website->getDefaultStore()->getStoreId();
     }
 }

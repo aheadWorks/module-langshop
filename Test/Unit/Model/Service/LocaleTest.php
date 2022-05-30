@@ -6,7 +6,6 @@ namespace Aheadworks\Langshop\Test\Unit\Model\Service;
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
-use Aheadworks\Langshop\Model\Locale\SaveHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Aheadworks\Langshop\Model\Service\Locale as LocaleService;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,11 +24,6 @@ class LocaleTest extends TestCase
     private $scopeRecordRepositoryMock;
 
     /**
-     * @var SaveHandler|MockObject
-     */
-    private $saveHandlerMock;
-
-    /**
      * @var LoadHandler|MockObject
      */
     private $loadHandlerMock;
@@ -40,12 +34,10 @@ class LocaleTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeRecordRepositoryMock = $this->createMock(ScopeRecordRepository::class);
-        $this->saveHandlerMock = $this->createMock(SaveHandler::class);
         $this->loadHandlerMock = $this->createMock(LoadHandler::class);
 
         $this->localeService = new LocaleService(
             $this->scopeRecordRepositoryMock,
-            $this->saveHandlerMock,
             $this->loadHandlerMock
         );
     }

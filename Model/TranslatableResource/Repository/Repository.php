@@ -142,7 +142,7 @@ class Repository implements RepositoryInterface
         $collection = $this->collectionFactory->create();
 
         $fieldName = $collection->getResource()->getIdFieldName();
-        $collection->addFieldToFilter($fieldName, $entityId);
+        $collection->addFieldToFilter($fieldName, (string) $entityId);
 
         if (!$collection->getSize()) {
             throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $entityId));
@@ -167,9 +167,12 @@ class Repository implements RepositoryInterface
         ];
         foreach ($this->entityAttributeProvider->getList($this->resourceType) as $attribute) {
             $isTranslatable = $attribute->isTranslatable() ? Field::TRANSLATABLE : Field::UNTRANSLATABLE;
-            $attributeCodes[$isTranslatable][] = $attribute->getCode();
+            if ($isTranslatable === Field::TRANSLATABLE || $attribute->isNecessary()) {
+                $attributeCodes[$isTranslatable][] = $attribute->getCode();
+            }
         }
 
+        /** @var CatalogCollection $localizedCollection */
         $localizedCollection = clone $collection;
 
         if ($collection instanceof CatalogCollection) {
