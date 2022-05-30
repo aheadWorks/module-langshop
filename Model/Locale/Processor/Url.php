@@ -73,6 +73,6 @@ class Url implements ProcessorInterface
         /** @var Website $website */
         $website = $this->storeManager->getWebsite($websiteId);
 
-        return $website->getDefaultStore()->getStoreId();
+        return (int) $website->getDefaultStore()->getStoreId();
     }
 }
