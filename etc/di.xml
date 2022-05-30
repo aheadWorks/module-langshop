@@ -458,11 +458,13 @@
         <arguments>
             <argument name="fields" xsi:type="array">
                 <item name="entity_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\EntityId</item>
+                <item name="image" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Image</item>
                 <item name="name" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Name</item>
                 <item name="sku" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Sku</item>
                 <item name="type_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\TypeId</item>
                 <item name="attribute_set_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\AttributeSetId</item>
-                <item name="image" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Image</item>
+                <item name="url_key" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\UrlKey</item>
+                <item name="url_path" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\UrlPath</item>
             </argument>
         </arguments>
     </virtualType>
@@ -567,6 +569,38 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\UrlKey"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">url_key</item>
+                <item name="label" xsi:type="string">Url Key</item>
+                <item name="type" xsi:type="string">text</item>
+                <item name="is_filterable" xsi:type="boolean">true</item>
+                <item name="filter_type" xsi:type="string">text</item>
+                <item name="sort_order" xsi:type="string">70</item>
+                <item name="is_sortable" xsi:type="boolean">true</item>
+                <item name="is_translatable" xsi:type="boolean">false</item>
+                <item name="is_necessary" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\UrlPath"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">url_path</item>
+                <item name="label" xsi:type="string">Url Path</item>
+                <item name="type" xsi:type="string">text</item>
+                <item name="is_filterable" xsi:type="boolean">true</item>
+                <item name="filter_type" xsi:type="string">text</item>
+                <item name="sort_order" xsi:type="string">80</item>
+                <item name="is_sortable" xsi:type="boolean">true</item>
+                <item name="is_translatable" xsi:type="boolean">false</item>
+                <item name="is_necessary" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <!-- END Schema Product Fields -->
 
     <!-- START Schema Category Fields -->
@@ -584,7 +618,9 @@
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute">
         <arguments>
             <argument name="fields" xsi:type="array">
-                <item name="category_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\CategoryId</item>
+                <item name="entity_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\EntityId</item>
+                <item name="url_key" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\UrlKey</item>
+                <item name="url_path" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\UrlPath</item>
             </argument>
         </arguments>
     </virtualType>
@@ -595,16 +631,48 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\CategoryId"
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\EntityId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">category_id</item>
-                <item name="label" xsi:type="string">Category Id</item>
+                <item name="code" xsi:type="string">entity_id</item>
+                <item name="label" xsi:type="string">Id</item>
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
                 <item name="sort_order" xsi:type="string">10</item>
+                <item name="is_sortable" xsi:type="boolean">true</item>
+                <item name="is_translatable" xsi:type="boolean">false</item>
+                <item name="is_necessary" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\UrlKey"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">url_key</item>
+                <item name="label" xsi:type="string">Url Key</item>
+                <item name="type" xsi:type="string">text</item>
+                <item name="is_filterable" xsi:type="boolean">true</item>
+                <item name="filter_type" xsi:type="string">text</item>
+                <item name="sort_order" xsi:type="string">20</item>
+                <item name="is_sortable" xsi:type="boolean">true</item>
+                <item name="is_translatable" xsi:type="boolean">false</item>
+                <item name="is_necessary" xsi:type="boolean">true</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\UrlPath"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">url_path</item>
+                <item name="label" xsi:type="string">Url Path</item>
+                <item name="type" xsi:type="string">text</item>
+                <item name="is_filterable" xsi:type="boolean">true</item>
+                <item name="filter_type" xsi:type="string">text</item>
+                <item name="sort_order" xsi:type="string">30</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="is_necessary" xsi:type="boolean">true</item>
