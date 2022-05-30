@@ -5,6 +5,7 @@ namespace Aheadworks\Langshop\Plugin\Framework\Data\Form\Element;
 
 use Magento\Framework\Data\Form\Element\Multiselect as MultiselectElement;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class Multiselect
 {
@@ -14,12 +15,20 @@ class Multiselect
     private SerializerInterface $serializer;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private SecureHtmlRenderer $secureHtmlRenderer;
+
+    /**
      * @param SerializerInterface $serializer
+     * @param SecureHtmlRenderer $secureHtmlRenderer
      */
     public function __construct(
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        SecureHtmlRenderer $secureHtmlRenderer
     ) {
         $this->serializer = $serializer;
+        $this->secureHtmlRenderer = $secureHtmlRenderer;
     }
 
     /**
@@ -38,16 +47,18 @@ class Multiselect
         );
 
         if ($disabledOptions) {
-            $appendJs = <<< APPENDJS
-<script type="text/x-magento-init">
-    {
-        "#{$multiselect->getHtmlId()}": {
-            "Aheadworks_Langshop/js/disable-options": {$this->serializer->serialize($disabledOptions)}
-        }
-    }
-</script>
-APPENDJS;
-            $elementHtml .= $appendJs;
+            $jsLayout = [
+                '#' . $multiselect->getHtmlId() => [
+                    'Aheadworks_Langshop/js/disable-options' => $disabledOptions
+                ]
+            ];
+
+            $elementHtml .= $this->secureHtmlRenderer->renderTag(
+                'script',
+                ['type' => 'text/x-magento-init'],
+                $this->serializer->serialize($jsLayout),
+                false
+            );
         }
 
         return $elementHtml;
