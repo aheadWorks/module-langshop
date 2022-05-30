@@ -16,6 +16,7 @@ class Field extends AbstractModel
     private const SORT_ORDER = 'sort_order';
     private const IS_SORTABLE = 'is_sortable';
     private const IS_TRANSLATABLE = 'is_translatable';
+    private const IS_NECESSARY = 'is_necessary';
 
     /**
      * Set code
@@ -183,5 +184,30 @@ class Field extends AbstractModel
     public function isTranslatable()
     {
         return $this->getData(self::IS_TRANSLATABLE);
+    }
+
+    /**
+     * Set is necessary
+     *
+     * @param bool $isNecessary
+     * @return $this
+     */
+    public function setIsNecessary($isNecessary)
+    {
+        return $this->setData(self::IS_NECESSARY, $isNecessary);
+    }
+
+    /**
+     * Is necessary
+     *
+     * In the case when a field is not translatable
+     * but should be in the array of resource fields
+     * it should return true
+     *
+     * @return bool
+     */
+    public function isNecessary()
+    {
+        return $this->getData(self::IS_NECESSARY);
     }
 }
