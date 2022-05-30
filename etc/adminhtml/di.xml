@@ -26,4 +26,8 @@
             <argument name="translateButton" xsi:type="object">AttributeTranslateButton</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Data\Form\Element\Multiselect">
+        <plugin name="aw_ls_disable_options" type="Aheadworks\Langshop\Plugin\Framework\Data\Form\Element\Multiselect" />
+    </type>
 </config>
