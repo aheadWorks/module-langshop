@@ -86,9 +86,9 @@ class UpdateTranslateStatus implements ObserverInterface
         int $storeId
     ): ?StatusInterface {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('resource_type', $resourceType)
-            ->addFilter('resource_id', $resourceId)
-            ->addFilter('store_id', $storeId)
+            ->addFilter(StatusInterface::RESOURCE_TYPE, $resourceType)
+            ->addFilter(StatusInterface::RESOURCE_ID, $resourceId)
+            ->addFilter(StatusInterface::STORE_ID, $storeId)
             ->create();
 
         $statuses = $this->statusManagement->getList($searchCriteria);

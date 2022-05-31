@@ -32,7 +32,7 @@ class Status extends AbstractModel implements StatusInterface
      */
     public function getStatusId(): int
     {
-        return $this->getData(self::STATUS_ID);
+        return (int) $this->getData(self::STATUS_ID);
     }
 
     /**
@@ -64,7 +64,7 @@ class Status extends AbstractModel implements StatusInterface
      */
     public function getResourceId(): int
     {
-        return $this->getData(self::RESOURCE_ID);
+        return (int) $this->getData(self::RESOURCE_ID);
     }
 
     /**
@@ -80,7 +80,7 @@ class Status extends AbstractModel implements StatusInterface
      */
     public function getStoreId(): int
     {
-        return $this->getData(self::STORE_ID);
+        return (int) $this->getData(self::STORE_ID);
     }
 
     /**
@@ -96,6 +96,6 @@ class Status extends AbstractModel implements StatusInterface
      */
     public function getStatus(): bool
     {
-        return $this->getData(self::STATUS);
+        return (bool) $this->getData(self::STATUS);
     }
 }
