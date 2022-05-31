@@ -24,14 +24,15 @@
                    showInStore="1">
                 <label>General Settings</label>
                 <field id="scope_list_to_translate"
-                       translate="label"
+                       translate="label comment"
                        type="multiselect"
                        sortOrder="10"
                        showInDefault="1"
                        showInWebsite="0"
                        showInStore="0">
                     <label>Store views to translate</label>
-                    <source_model>Magento\Store\Model\System\Store</source_model>
+                    <source_model>Aheadworks\Langshop\Model\Source\ListToTranslate</source_model>
+                    <comment>Some of store views are not available for select, as they have default locale</comment>
                 </field>
                 <field id="saas_domain"
                        translate="label"
