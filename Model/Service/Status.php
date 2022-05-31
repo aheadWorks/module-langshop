@@ -8,9 +8,16 @@ use Aheadworks\Langshop\Api\StatusManagementInterface;
 use Aheadworks\Langshop\Model\ResourceModel\Status\CollectionFactory as StatusCollectionFactory;
 use Aheadworks\Langshop\Model\ResourceModel\StatusFactory as StatusResourceFactory;
 use Aheadworks\Langshop\Model\Status as StatusModel;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 
 class Status implements StatusManagementInterface
 {
+    /**
+     * @var CollectionProcessorInterface
+     */
+    private CollectionProcessorInterface $collectionProcessor;
+
     /**
      * @var StatusCollectionFactory
      */
@@ -22,13 +29,16 @@ class Status implements StatusManagementInterface
     private StatusResourceFactory $statusResourceFactory;
 
     /**
+     * @param CollectionProcessorInterface $collectionProcessor
      * @param StatusCollectionFactory $statusCollectionFactory
      * @param StatusResourceFactory $statusResourceFactory
      */
     public function __construct(
+        CollectionProcessorInterface $collectionProcessor,
         StatusCollectionFactory $statusCollectionFactory,
         StatusResourceFactory $statusResourceFactory
     ) {
+        $this->collectionProcessor = $collectionProcessor;
         $this->statusCollectionFactory = $statusCollectionFactory;
         $this->statusResourceFactory = $statusResourceFactory;
     }
@@ -36,11 +46,10 @@ class Status implements StatusManagementInterface
     /**
      * @inheritDoc
      */
-    public function getList(string $resourceType, int $resourceId): array
+    public function getList(SearchCriteriaInterface $searchCriteria): array
     {
-        $statusCollection = $this->statusCollectionFactory->create()
-            ->addFieldToFilter('resource_type', $resourceType)
-            ->addFieldToFilter('resource_id', (string) $resourceId);
+        $statusCollection = $this->statusCollectionFactory->create();
+        $this->collectionProcessor->process($searchCriteria, $statusCollection);
 
         /** @var StatusInterface[] $statuses */
         $statuses = $statusCollection->getItems();

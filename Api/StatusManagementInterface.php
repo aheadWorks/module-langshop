@@ -5,17 +5,17 @@ namespace Aheadworks\Langshop\Api;
 
 use Aheadworks\Langshop\Api\Data\StatusInterface;
 use Exception;
+use Magento\Framework\Api\SearchCriteriaInterface;
 
 interface StatusManagementInterface
 {
     /**
      * Retrieves statuses by resource type and id
      *
-     * @param string $resourceType
-     * @param int $resourceId
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Aheadworks\Langshop\Api\Data\StatusInterface[]
      */
-    public function getList(string $resourceType, int $resourceId): array;
+    public function getList(SearchCriteriaInterface $searchCriteria): array;
 
     /**
      * Saves the status

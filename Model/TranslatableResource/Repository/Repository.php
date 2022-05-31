@@ -14,6 +14,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as Collection;
 use Magento\Framework\Data\Collection\AbstractDbFactory as CollectionFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
@@ -35,6 +36,11 @@ class Repository implements RepositoryInterface
      * @var TranslationValidation
      */
     private TranslationValidation $translationValidation;
+
+    /**
+     * @var EventManagerInterface
+     */
+    private EventManagerInterface $eventManager;
 
     /**
      * @var LocaleScopeRepository
@@ -60,6 +66,7 @@ class Repository implements RepositoryInterface
      * @param CollectionFactory $collectionFactory
      * @param ResourceModelFactory $resourceModelFactory
      * @param TranslationValidation $translationValidation
+     * @param EventManagerInterface $eventManager
      * @param LocaleScopeRepository $localeScopeRepository
      * @param EntityAttributeProvider $entityAttributeProvider
      * @param CollectionProcessorInterface $collectionProcessor
@@ -69,6 +76,7 @@ class Repository implements RepositoryInterface
         CollectionFactory $collectionFactory,
         ResourceModelFactory $resourceModelFactory,
         TranslationValidation $translationValidation,
+        EventManagerInterface $eventManager,
         LocaleScopeRepository $localeScopeRepository,
         EntityAttributeProvider $entityAttributeProvider,
         CollectionProcessorInterface $collectionProcessor,
@@ -77,6 +85,7 @@ class Repository implements RepositoryInterface
         $this->collectionFactory = $collectionFactory;
         $this->resourceModelFactory = $resourceModelFactory;
         $this->translationValidation = $translationValidation;
+        $this->eventManager = $eventManager;
         $this->localeScopeRepository = $localeScopeRepository;
         $this->entityAttributeProvider = $entityAttributeProvider;
         $this->collectionProcessor = $collectionProcessor;
@@ -122,9 +131,16 @@ class Repository implements RepositoryInterface
             $item = $this->prepareCollectionById($entityId)
                 ->getFirstItem()
                 ->addData($values);
+
             foreach ($this->localeScopeRepository->getByLocale([$locale]) as $localeScope) {
                 $item->setData('store_id', $localeScope->getScopeId());
                 $resourceModel->save($item);
+
+                $this->eventManager->dispatch('aw_ls_save_translatable_resource', [
+                    'resource_type' => $this->resourceType,
+                    'resource_id' => $entityId,
+                    'store_id' => $localeScope->getScopeId()
+                ]);
             }
         }
     }
