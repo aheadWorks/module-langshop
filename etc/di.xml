@@ -6,6 +6,8 @@
     <preference for="Aheadworks\Langshop\Api\LocaleManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Locale" />
 
+    <preference for="Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface"
+                type="Aheadworks\Langshop\Model\Saas\ConfirmationResult" />
     <preference for="Aheadworks\Langshop\Api\SaasManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Saas" />
 
@@ -24,6 +26,11 @@
     <preference for="Aheadworks\Langshop\Api\SchemaManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Schema" />
 
+    <preference for="Aheadworks\Langshop\Api\Data\StatusInterface"
+                type="Aheadworks\Langshop\Model\Status"/>
+    <preference for="Aheadworks\Langshop\Api\StatusManagementInterface"
+                type="Aheadworks\Langshop\Model\Service\Status"/>
+
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResourceInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource" />
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface"
@@ -38,9 +45,6 @@
                 type="Aheadworks\Langshop\Model\TranslatableResource\ResourceList" />
     <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\TranslatableResource" />
-
-    <preference for="Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface"
-                type="Aheadworks\Langshop\Model\Saas\ConfirmationResult" />
 
     <!-- START Data Processor Pool -->
     <preference for="Aheadworks\Langshop\Model\Data\ProcessorInterface"
