@@ -1,0 +1,15 @@
+{
+    "aw_ls_status": {
+        "column": {
+            "status_id": true,
+            "resource_type": true,
+            "resource_id": true,
+            "store_id": true,
+            "status": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AW_LS_STATUS_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

@@ -11,6 +11,12 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 class Translate implements ButtonProviderInterface
 {
     /**
+     * Urls for ajax requests
+     */
+    private const TRANSLATE_URL = 'langshop/saas/translate';
+    private const STATUS_URL = 'langshop/saas/status';
+
+    /**
      * @var UrlInterface
      */
     private UrlInterface $urlBuilder;
@@ -69,8 +75,9 @@ class Translate implements ButtonProviderInterface
                 'data_attribute' => [
                     'mage-init' => [
                         'Aheadworks_Langshop/js/translate-button' => [
-                            'url' => $this->urlBuilder->getUrl('langshop/saas/translate'),
-                            'params' => [
+                            'translateUrl' => $this->urlBuilder->getUrl(self::TRANSLATE_URL),
+                            'statusUrl' => $this->urlBuilder->getUrl(self::STATUS_URL),
+                            'ajaxParams' => [
                                 'resource_type' => $this->resourceType,
                                 'resource_id' => $this->getResourceId()
                             ]

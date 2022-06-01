@@ -1,7 +1,5 @@
 Translate,Translate
 Langshop,Langshop
-"Translation started. Please wait.","Translation started. Please wait."
-"A technical problem with the server created an error.","A technical problem with the server created an error."
 "Data processor must implement %1","Data processor must implement %1"
 "Sorting ""%1"" is not correct.","Sorting ""%1"" is not correct."
 "Field collector must implement %1","Field collector must implement %1"
@@ -17,6 +15,8 @@ Website,Website
 "Locale with code = ""%1"" does not exist.","Locale with code = ""%1"" does not exist."
 "Option with identifier = ""%1"" does not exist.","Option with identifier = ""%1"" does not exist."
 "Attribute with code = ""%1"" is not available for translate.","Attribute with code = ""%1"" is not available for translate."
+"A technical problem with the server created an error.","A technical problem with the server created an error."
+"Translations are ready. Enjoy!","Translations are ready. Enjoy!"
 Locales,Locales
 Schema,Schema
 Resources,Resources

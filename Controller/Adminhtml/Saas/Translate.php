@@ -50,8 +50,7 @@ class Translate extends Action implements HttpPostActionInterface
     public function execute()
     {
         $result = [
-            'error' => false,
-            'message' => __('Translation started. Please wait.')
+            'success' => true
         ];
 
         $curl = $this->curlSender->post(
@@ -60,10 +59,7 @@ class Translate extends Action implements HttpPostActionInterface
         );
 
         if ($curl->getStatus() !== 200) {
-            $result = [
-                'error' => true,
-                'message' => __('A technical problem with the server created an error.')
-            ];
+            $result['success'] = false;
         }
 
         /** @var ResultJson $resultJson */
