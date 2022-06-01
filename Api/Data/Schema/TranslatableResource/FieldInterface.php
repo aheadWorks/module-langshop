@@ -17,14 +17,14 @@ interface FieldInterface
      * @param string $key
      * @return $this
      */
-    public function setKey($key);
+    public function setKey(string $key): FieldInterface;
 
     /**
      * Get key
      *
      * @return string
      */
-    public function getKey();
+    public function getKey(): string;
 
     /**
      * Set label
@@ -32,14 +32,14 @@ interface FieldInterface
      * @param string $label
      * @return $this
      */
-    public function setLabel($label);
+    public function setLabel(string $label): FieldInterface;
 
     /**
      * Get label
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel(): string;
 
     /**
      * Set type
@@ -47,14 +47,14 @@ interface FieldInterface
      * @param string $type
      * @return $this
      */
-    public function setType($type);
+    public function setType(string $type): FieldInterface;
 
     /**
      * Get type
      *
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 
     /**
      * Set is translatable
@@ -62,14 +62,14 @@ interface FieldInterface
      * @param bool $isTranslatable
      * @return $this
      */
-    public function setIsTranslatable($isTranslatable);
+    public function setIsTranslatable(bool $isTranslatable): FieldInterface;
 
     /**
      * Is translatable
      *
      * @return bool
      */
-    public function isTranslatable();
+    public function isTranslatable(): bool;
 
     /**
      * Set visible areas for field
@@ -77,14 +77,14 @@ interface FieldInterface
      * @param string[] $areas
      * @return $this
      */
-    public function setVisibleOn(array $areas);
+    public function setVisibleOn(array $areas): FieldInterface;
 
     /**
      * Get visible areas for field
      *
      * @return string[]
      */
-    public function getVisibleOn();
+    public function getVisibleOn(): array;
 
     /**
      * Set filter
@@ -92,14 +92,14 @@ interface FieldInterface
      * @param string $filter
      * @return $this
      */
-    public function setFilter($filter);
+    public function setFilter(string $filter): FieldInterface;
 
     /**
      * Get filter
      *
      * @return string
      */
-    public function getFilter();
+    public function getFilter(): string;
 
     /**
      * Set sort order
@@ -107,12 +107,12 @@ interface FieldInterface
      * @param int $sortOrder
      * @return $this
      */
-    public function setSortOrder($sortOrder);
+    public function setSortOrder(int $sortOrder): FieldInterface;
 
     /**
      * Get sort order
      *
      * @return int
      */
-    public function getSortOrder();
+    public function getSortOrder(): int;
 }

@@ -337,7 +337,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -355,7 +355,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -373,7 +373,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -390,7 +390,7 @@
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="form" xsi:type="string">form</item>
+                    <item name="form" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
                 </item>
             </argument>
         </arguments>
@@ -408,7 +408,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -426,7 +426,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -443,7 +443,7 @@
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="form" xsi:type="string">form</item>
+                    <item name="form" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
                 </item>
             </argument>
         </arguments>
@@ -460,7 +460,7 @@
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="form" xsi:type="string">form</item>
+                    <item name="form" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
                 </item>
             </argument>
         </arguments>
@@ -512,7 +512,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -529,7 +529,7 @@
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -547,8 +547,8 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
-                    <item name="form" xsi:type="string">form</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+                    <item name="form" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
                 </item>
             </argument>
         </arguments>
@@ -566,7 +566,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -584,7 +584,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -602,7 +602,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -621,7 +621,7 @@
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <!--todo https://aheadworks.atlassian.net/browse/LSM2-151-->
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -639,7 +639,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>
@@ -689,7 +689,7 @@
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="string">grid</item>
+                    <item name="grid" xsi:type="string">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
             </argument>
         </arguments>

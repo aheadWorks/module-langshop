@@ -12,7 +12,7 @@ class Field extends AbstractModel implements FieldInterface
      * @param string $key
      * @return $this
      */
-    public function setKey($key)
+    public function setKey(string $key): FieldInterface
     {
         return $this->setData(self::KEY, $key);
     }
@@ -22,7 +22,7 @@ class Field extends AbstractModel implements FieldInterface
      *
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return  $this->getData(self::KEY);
     }
@@ -33,7 +33,7 @@ class Field extends AbstractModel implements FieldInterface
      * @param string $label
      * @return $this
      */
-    public function setLabel($label)
+    public function setLabel(string $label): FieldInterface
     {
         return $this->setData(self::LABEL, $label);
     }
@@ -43,7 +43,7 @@ class Field extends AbstractModel implements FieldInterface
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->getData(self::LABEL);
     }
@@ -54,7 +54,7 @@ class Field extends AbstractModel implements FieldInterface
      * @param string $type
      * @return $this
      */
-    public function setType($type)
+    public function setType(string $type): FieldInterface
     {
         return $this->setData(self::TYPE, $type);
     }
@@ -64,7 +64,7 @@ class Field extends AbstractModel implements FieldInterface
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->getData(self::TYPE);
     }
@@ -75,7 +75,7 @@ class Field extends AbstractModel implements FieldInterface
      * @param bool $isTranslatable
      * @return $this
      */
-    public function setIsTranslatable($isTranslatable)
+    public function setIsTranslatable(bool $isTranslatable): FieldInterface
     {
         return $this->setData(self::IS_TRANSLATABLE, $isTranslatable);
     }
@@ -85,7 +85,7 @@ class Field extends AbstractModel implements FieldInterface
      *
      * @return bool
      */
-    public function isTranslatable()
+    public function isTranslatable(): bool
     {
         return $this->getData(self::IS_TRANSLATABLE);
     }
@@ -96,7 +96,7 @@ class Field extends AbstractModel implements FieldInterface
      * @param string[] $areas
      * @return Field
      */
-    public function setVisibleOn(array $areas)
+    public function setVisibleOn(array $areas): FieldInterface
     {
         return $this->setData(self::VISIBLE_ON, $areas);
     }
@@ -106,7 +106,7 @@ class Field extends AbstractModel implements FieldInterface
      *
      * @return string[]
      */
-    public function getVisibleOn()
+    public function getVisibleOn(): array
     {
         return $this->getData(self::VISIBLE_ON);
     }
@@ -117,7 +117,7 @@ class Field extends AbstractModel implements FieldInterface
      * @param string $filter
      * @return $this
      */
-    public function setFilter($filter)
+    public function setFilter(string $filter): FieldInterface
     {
         return $this->setData(self::FILTER, $filter);
     }
@@ -127,7 +127,7 @@ class Field extends AbstractModel implements FieldInterface
      *
      * @return string
      */
-    public function getFilter()
+    public function getFilter(): string
     {
         return $this->getData(self::FILTER);
     }
@@ -138,7 +138,7 @@ class Field extends AbstractModel implements FieldInterface
      * @param int $sortOrder
      * @return $this
      */
-    public function setSortOrder($sortOrder)
+    public function setSortOrder(int $sortOrder): FieldInterface
     {
         return $this->setData(self::SORT_ORDER, $sortOrder);
     }
@@ -148,7 +148,7 @@ class Field extends AbstractModel implements FieldInterface
      *
      * @return int
      */
-    public function getSortOrder()
+    public function getSortOrder(): int
     {
         return $this->getData(self::SORT_ORDER);
     }
