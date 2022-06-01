@@ -52,13 +52,13 @@ class EntityAttribute
     }
 
     /**
-     * Get necessary fields
+     * Get untranslatable fields
      *
      * @param string $entityType
      * @return Field[]
      * @throws LocalizedException
      */
-    public function getNecessaryFields(string $entityType): array
+    public function getUntranslatableFields(string $entityType): array
     {
         if (!isset($this->attributes[$entityType])) {
             $this->getList($entityType);
@@ -68,16 +68,16 @@ class EntityAttribute
     }
 
     /**
-     * Get codes of necessary fields
+     * Get codes of untranslatable fields
      *
      * @param string $entityType
      * @return string[]
      * @throws LocalizedException
      */
-    public function getCodesOfNecessaryFields(string $entityType): array
+    public function getCodesOfUntranslatableFields(string $entityType): array
     {
         $codes = [];
-        foreach ($this->getNecessaryFields($entityType) as $field) {
+        foreach ($this->getUntranslatableFields($entityType) as $field) {
             $codes[] = $field->getCode();
         }
 
@@ -121,7 +121,7 @@ class EntityAttribute
      * Split fields
      *
      * @param Field[] $fields
-     * @return array<int, Field[]>
+     * @return array<int, array<int, Field>>
      */
     private function splitFields(array $fields): array
     {
@@ -133,7 +133,7 @@ class EntityAttribute
         foreach ($fields as $field) {
             if ($field->isTranslatable()) {
                 $result[SourceField::TRANSLATABLE][] = $field;
-            } elseif ($field->isNecessary()) {
+            } else {
                 $result[SourceField::UNTRANSLATABLE][] = $field;
             }
         }

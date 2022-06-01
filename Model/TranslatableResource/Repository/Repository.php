@@ -17,6 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelFactory;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection as AttributeCollection;
 
 class Repository implements RepositoryInterface
 {
@@ -138,16 +139,17 @@ class Repository implements RepositoryInterface
      */
     private function prepareCollectionById(int $entityId): Collection
     {
+        /** @var CatalogCollection|AttributeCollection $collection */
         $collection = $this->collectionFactory->create();
 
         $fieldName = $collection->getResource()->getIdFieldName();
-        // @phpstan-ignore-next-line
-        $collection
-            ->addFieldToFilter($fieldName, (string) $entityId)
-            ->addAttributeToSelect(
-                $this->entityAttributeProvider->getCodesOfNecessaryFields($this->resourceType)
-            );
+        $collection->addFieldToFilter($fieldName, (string) $entityId);
 
+        if ($collection instanceof CatalogCollection) {
+            $collection->addAttributeToSelect(
+                $this->entityAttributeProvider->getCodesOfUntranslatableFields($this->resourceType)
+            );
+        }
         if (!$collection->getSize()) {
             throw new NoSuchEntityException(__('Resource with identifier = "%1" does not exist.', $entityId));
         }
@@ -166,17 +168,16 @@ class Repository implements RepositoryInterface
     private function addLocalizedAttributes(Collection $collection, array $localeScopes): Collection
     {
         $translatableAttributeCodes = $this->entityAttributeProvider->getCodesOfTranslatableFields($this->resourceType);
-        $necessaryAttributeCodes = $this->entityAttributeProvider->getCodesOfNecessaryFields($this->resourceType);
+        $untranslatableAttributeCodes = $this->entityAttributeProvider->getCodesOfUntranslatableFields($this->resourceType);
+        /** @var CatalogCollection|AttributeCollection $localizedCollection */
         $localizedCollection = clone $collection;
 
         if ($collection instanceof CatalogCollection) {
-            $collection->addAttributeToSelect($necessaryAttributeCodes);
-            // @phpstan-ignore-next-line
+            $collection->addAttributeToSelect($untranslatableAttributeCodes);
             $localizedCollection->addAttributeToSelect($translatableAttributeCodes);
         }
 
         foreach ($localeScopes as $localeScope) {
-            // @phpstan-ignore-next-line
             $localizedCollection->setStoreId((int) $localeScope->getScopeId())->clear();
 
             /** @var AbstractModel $localizedItem */
