@@ -52,6 +52,7 @@ class Category extends CategoryResourceModelProxy
      */
     public function _getSubject(): CategoryResourceModel
     {
+        // @phpstan-ignore-next-line
         if (!isset($this->_subject)) {
             $this->_subject = $this->categoryResourceModelFactory->create();
         }
