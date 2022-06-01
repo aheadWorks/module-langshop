@@ -619,7 +619,7 @@
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute">
         <arguments>
             <argument name="entityTypeCode" xsi:type="const">Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE</argument>
-            <argument name="blacklist" xsi:type="array">
+            <argument name="attributeCodeBlacklist" xsi:type="array">
                 <item name="url_key" xsi:type="string">url_key</item>
                 <item name="url_path" xsi:type="string">url_path</item>
             </argument>

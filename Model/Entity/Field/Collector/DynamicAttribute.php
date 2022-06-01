@@ -22,7 +22,7 @@ class DynamicAttribute implements CollectorInterface
     /**
      * @var string[]
      */
-    private array $blacklist;
+    private array $attributeCodeBlacklist;
 
     /**
      * @var AttributeRepositoryInterface
@@ -49,20 +49,20 @@ class DynamicAttribute implements CollectorInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param EntityFieldFactory $entityFieldFactory
      * @param string $entityTypeCode
-     * @param array $blacklist
+     * @param array $attributeCodeBlacklist
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         EntityFieldFactory $entityFieldFactory,
         string $entityTypeCode,
-        array $blacklist = []
+        array $attributeCodeBlacklist = []
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->entityFieldFactory = $entityFieldFactory;
         $this->entityTypeCode = $entityTypeCode;
-        $this->blacklist = $blacklist;
+        $this->attributeCodeBlacklist = $attributeCodeBlacklist;
     }
 
     /**
@@ -113,6 +113,6 @@ class DynamicAttribute implements CollectorInterface
          */
         return !$attribute->isScopeGlobal() &&
             in_array($attribute->getFrontendInput(), self::TRANSLATABLE_TYPES) &&
-            !in_array($attribute->getAttributeCode(), $this->blacklist);
+            !in_array($attribute->getAttributeCode(), $this->attributeCodeBlacklist);
     }
 }
