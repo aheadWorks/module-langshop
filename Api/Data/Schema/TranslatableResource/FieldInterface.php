@@ -7,6 +7,7 @@ interface FieldInterface
     public const LABEL = 'label';
     public const TYPE = 'type';
     public const IS_TRANSLATABLE = 'isTranslatable';
+    public const VISIBLE_ON = 'visible_on';
     public const FILTER = 'filter';
     public const SORT_ORDER = 'sortOrder';
 
@@ -69,6 +70,21 @@ interface FieldInterface
      * @return bool
      */
     public function isTranslatable();
+
+    /**
+     * Set visible areas for field
+     *
+     * @param string[] $areas
+     * @return $this
+     */
+    public function setVisibleOn(array $areas);
+
+    /**
+     * Get visible areas for field
+     *
+     * @return string[]
+     */
+    public function getVisibleOn();
 
     /**
      * Set filter

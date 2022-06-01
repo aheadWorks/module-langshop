@@ -91,6 +91,27 @@ class Field extends AbstractModel implements FieldInterface
     }
 
     /**
+     * Set visible areas for field
+     *
+     * @param string[] $areas
+     * @return Field
+     */
+    public function setVisibleOn(array $areas)
+    {
+        return $this->setData(self::VISIBLE_ON, $areas);
+    }
+
+    /**
+     * Get visible areas for field
+     *
+     * @return string[]
+     */
+    public function getVisibleOn()
+    {
+        return $this->getData(self::VISIBLE_ON);
+    }
+
+    /**
      * Set filter
      *
      * @param string $filter

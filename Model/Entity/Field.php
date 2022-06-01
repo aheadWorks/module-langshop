@@ -16,6 +16,7 @@ class Field extends AbstractModel
     private const SORT_ORDER = 'sort_order';
     private const IS_SORTABLE = 'is_sortable';
     private const IS_TRANSLATABLE = 'is_translatable';
+    private const VISIBLE_ON = 'visible_on';
 
     /**
      * Set code
@@ -183,5 +184,27 @@ class Field extends AbstractModel
     public function isTranslatable()
     {
         return $this->getData(self::IS_TRANSLATABLE);
+    }
+
+
+    /**
+     * Set visible areas for field
+     *
+     * @param string[] $areas
+     * @return $this
+     */
+    public function setVisibleOn(array $areas)
+    {
+        return $this->setData(self::VISIBLE_ON, $areas);
+    }
+
+    /**
+     * Get visible areas for field
+     *
+     * @return string[]
+     */
+    public function getVisibleOn()
+    {
+        return $this->getData(self::VISIBLE_ON);
     }
 }
