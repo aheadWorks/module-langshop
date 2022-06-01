@@ -39,9 +39,6 @@
     <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\TranslatableResource" />
 
-    <preference for="Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface"
-                type="Aheadworks\Langshop\Model\Saas\ConfirmationResult" />
-
     <!-- START Data Processor Pool -->
     <preference for="Aheadworks\Langshop\Model\Data\ProcessorInterface"
                 type="Aheadworks\Langshop\Model\Data\Processor\Composite" />
@@ -91,6 +88,14 @@
             <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute</argument>
         </arguments>
     </type>
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category">
+        <arguments>
+            <argument name="requiredAttributes" xsi:type="array">
+                <item name="url_key" xsi:type="string">url_key</item>
+                <item name="url_path" xsi:type="string">url_path</item>
+            </argument>
+        </arguments>
+    </type>
 
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection">
         <arguments>
@@ -125,7 +130,7 @@
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CategoryFactory"
                  type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category</argument>
+            <argument name="instanceName" xsi:type="string">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\AttributeFactory"
@@ -331,7 +336,6 @@
                 <item name="sort_order" xsi:type="string">10</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -347,7 +351,6 @@
                 <item name="sort_order" xsi:type="string">20</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -363,7 +366,6 @@
                 <item name="sort_order" xsi:type="string">30</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -393,7 +395,6 @@
                 <item name="sort_order" xsi:type="string">50</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -409,7 +410,6 @@
                 <item name="sort_order" xsi:type="string">60</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -487,7 +487,6 @@
                 <item name="sort_order" xsi:type="string">10</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -502,7 +501,6 @@
                 <item name="sort_order" xsi:type="string">20</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -533,7 +531,6 @@
                 <item name="sort_order" xsi:type="string">40</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -549,7 +546,6 @@
                 <item name="sort_order" xsi:type="string">50</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -565,7 +561,6 @@
                 <item name="sort_order" xsi:type="string">60</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -581,7 +576,6 @@
                 <item name="sort_order" xsi:type="string">70</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -597,7 +591,6 @@
                 <item name="sort_order" xsi:type="string">80</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -619,8 +612,6 @@
         <arguments>
             <argument name="fields" xsi:type="array">
                 <item name="entity_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\EntityId</item>
-                <item name="url_key" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\UrlKey</item>
-                <item name="url_path" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\UrlPath</item>
             </argument>
         </arguments>
     </virtualType>
@@ -628,6 +619,10 @@
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute">
         <arguments>
             <argument name="entityTypeCode" xsi:type="const">Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE</argument>
+            <argument name="attributeCodeBlacklist" xsi:type="array">
+                <item name="url_key" xsi:type="string">url_key</item>
+                <item name="url_path" xsi:type="string">url_path</item>
+            </argument>
         </arguments>
     </virtualType>
 
@@ -643,7 +638,6 @@
                 <item name="sort_order" xsi:type="string">10</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -659,7 +653,6 @@
                 <item name="sort_order" xsi:type="string">20</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
@@ -675,7 +668,6 @@
                 <item name="sort_order" xsi:type="string">30</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_necessary" xsi:type="boolean">true</item>
             </argument>
         </arguments>
     </virtualType>
