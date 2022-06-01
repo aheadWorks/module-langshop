@@ -94,6 +94,7 @@ class Converter
                 FieldInterface::TYPE => $field->getType(),
                 FieldInterface::SORT_ORDER => $field->getSortOrder(),
                 FieldInterface::IS_TRANSLATABLE => $field->isTranslatable(),
+                FieldInterface::VISIBLE_ON => $field->getVisibleOn(),
                 FieldInterface::FILTER => $field->isFilterable()
                     ? $field->getFilterType()
                     : 'none'

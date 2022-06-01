@@ -16,6 +16,7 @@ class Field extends AbstractModel
     private const SORT_ORDER = 'sort_order';
     private const IS_SORTABLE = 'is_sortable';
     private const IS_TRANSLATABLE = 'is_translatable';
+    private const VISIBLE_ON = 'visible_on';
 
     /**
      * Set code
@@ -23,7 +24,7 @@ class Field extends AbstractModel
      * @param string $code
      * @return $this
      */
-    public function setCode($code)
+    public function setCode(string $code): Field
     {
         return $this->setData(self::CODE, $code);
     }
@@ -33,7 +34,7 @@ class Field extends AbstractModel
      *
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->getData(self::CODE);
     }
@@ -44,7 +45,7 @@ class Field extends AbstractModel
      * @param string $label
      * @return $this
      */
-    public function setLabel($label)
+    public function setLabel(string $label): Field
     {
         return $this->setData(self::LABEL, $label);
     }
@@ -54,7 +55,7 @@ class Field extends AbstractModel
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->getData(self::LABEL);
     }
@@ -65,7 +66,7 @@ class Field extends AbstractModel
      * @param string $type
      * @return $this
      */
-    public function setType($type)
+    public function setType(string $type): Field
     {
         return $this->setData(self::TYPE, $type);
     }
@@ -75,7 +76,7 @@ class Field extends AbstractModel
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->getData(self::TYPE);
     }
@@ -86,7 +87,7 @@ class Field extends AbstractModel
      * @param bool $isFilterable
      * @return $this
      */
-    public function setIsFilterable($isFilterable)
+    public function setIsFilterable(bool $isFilterable): Field
     {
         return $this->setData(self::IS_FILTERABLE, $isFilterable);
     }
@@ -96,7 +97,7 @@ class Field extends AbstractModel
      *
      * @return bool
      */
-    public function isFilterable()
+    public function isFilterable(): bool
     {
         return $this->getData(self::IS_FILTERABLE);
     }
@@ -107,7 +108,7 @@ class Field extends AbstractModel
      * @param string $filterType
      * @return $this
      */
-    public function setFilterType($filterType)
+    public function setFilterType(string $filterType): Field
     {
         return $this->setData(self::FILTER_TYPE, $filterType);
     }
@@ -117,7 +118,7 @@ class Field extends AbstractModel
      *
      * @return string
      */
-    public function getFilterType()
+    public function getFilterType(): string
     {
         return $this->getData(self::FILTER_TYPE);
     }
@@ -128,7 +129,7 @@ class Field extends AbstractModel
      * @param int $sortOrder
      * @return $this
      */
-    public function setSortOrder($sortOrder)
+    public function setSortOrder(int $sortOrder): Field
     {
         return $this->setData(self::SORT_ORDER, $sortOrder);
     }
@@ -138,7 +139,7 @@ class Field extends AbstractModel
      *
      * @return int
      */
-    public function getSortOrder()
+    public function getSortOrder(): int
     {
         return $this->getData(self::SORT_ORDER);
     }
@@ -149,7 +150,7 @@ class Field extends AbstractModel
      * @param bool $isSortable
      * @return $this
      */
-    public function setIsSortable($isSortable)
+    public function setIsSortable(bool $isSortable): Field
     {
         return $this->setData(self::IS_SORTABLE, $isSortable);
     }
@@ -159,7 +160,7 @@ class Field extends AbstractModel
      *
      * @return bool
      */
-    public function isSortable()
+    public function isSortable(): bool
     {
         return $this->getData(self::IS_SORTABLE);
     }
@@ -170,7 +171,7 @@ class Field extends AbstractModel
      * @param bool $isTranslatable
      * @return $this
      */
-    public function setIsTranslatable($isTranslatable)
+    public function setIsTranslatable(bool $isTranslatable): Field
     {
         return $this->setData(self::IS_TRANSLATABLE, $isTranslatable);
     }
@@ -180,8 +181,29 @@ class Field extends AbstractModel
      *
      * @return bool
      */
-    public function isTranslatable()
+    public function isTranslatable(): bool
     {
         return $this->getData(self::IS_TRANSLATABLE);
+    }
+
+    /**
+     * Set visible areas for field
+     *
+     * @param string[] $areas
+     * @return $this
+     */
+    public function setVisibleOn(array $areas): Field
+    {
+        return $this->setData(self::VISIBLE_ON, $areas);
+    }
+
+    /**
+     * Get visible areas for field
+     *
+     * @return string[]
+     */
+    public function getVisibleOn(): array
+    {
+        return $this->getData(self::VISIBLE_ON);
     }
 }

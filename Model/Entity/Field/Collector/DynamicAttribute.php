@@ -5,6 +5,7 @@ namespace Aheadworks\Langshop\Model\Entity\Field\Collector;
 
 use Aheadworks\Langshop\Model\Entity\Field\CollectorInterface;
 use Aheadworks\Langshop\Model\Entity\FieldFactory as EntityFieldFactory;
+use Aheadworks\Langshop\Model\Source\Schema\VisibleOn;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -89,6 +90,7 @@ class DynamicAttribute implements CollectorInterface
                     ->setLabel($attribute->getDefaultFrontendLabel())
                     ->setType($attribute->getFrontendInput())
                     ->setIsTranslatable($this->isTranslatable($attribute))
+                    ->setVisibleOn([VisibleOn::FORM])
                     ->setIsFilterable($attribute->getIsFilterable())
                     ->setFilterType($attribute->getFrontendInput());
 
