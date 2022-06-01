@@ -91,7 +91,7 @@ class DynamicAttribute implements CollectorInterface
                     ->setType($attribute->getFrontendInput())
                     ->setIsTranslatable($this->isTranslatable($attribute))
                     ->setVisibleOn([VisibleOn::FORM])
-                    ->setIsFilterable($attribute->getIsFilterable())
+                    ->setIsFilterable((bool)$attribute->getIsFilterable())
                     ->setFilterType($attribute->getFrontendInput());
 
                 $fields[$code] = $field;
