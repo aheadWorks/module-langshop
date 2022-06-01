@@ -15,6 +15,12 @@ interface StatusInterface
     public const STATUS = 'status';
 
     /**
+     * Status values
+     */
+    public const STATUS_NOT_TRANSLATED = 0;
+    public const STATUS_TRANSLATED = 1;
+
+    /**
      * Set status id
      *
      * @param int $statusId
@@ -77,15 +83,15 @@ interface StatusInterface
     /**
      * Set status
      *
-     * @param bool $status
+     * @param int $status
      * @return $this
      */
-    public function setStatus(bool $status): StatusInterface;
+    public function setStatus(int $status): StatusInterface;
 
     /**
      * Get status
      *
-     * @return bool
+     * @return int
      */
-    public function getStatus(): bool;
+    public function getStatus(): int;
 }

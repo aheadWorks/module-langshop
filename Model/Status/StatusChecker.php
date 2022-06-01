@@ -52,7 +52,7 @@ class StatusChecker
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StatusInterface::RESOURCE_TYPE, $resourceType)
             ->addFilter(StatusInterface::RESOURCE_ID, $resourceId)
-            ->addFilter(StatusInterface::STATUS, 1)
+            ->addFilter(StatusInterface::STATUS, StatusInterface::STATUS_TRANSLATED)
             ->create();
 
         $translatedStores = array_map(

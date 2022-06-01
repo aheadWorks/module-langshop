@@ -86,7 +86,7 @@ class Status extends AbstractModel implements StatusInterface
     /**
      * @inheritDoc
      */
-    public function setStatus(bool $status): StatusInterface
+    public function setStatus(int $status): StatusInterface
     {
         return $this->setData(self::STATUS, $status);
     }
@@ -94,8 +94,8 @@ class Status extends AbstractModel implements StatusInterface
     /**
      * @inheritDoc
      */
-    public function getStatus(): bool
+    public function getStatus(): int
     {
-        return (bool) $this->getData(self::STATUS);
+        return (int) $this->getData(self::STATUS);
     }
 }

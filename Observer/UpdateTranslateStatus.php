@@ -59,13 +59,15 @@ class UpdateTranslateStatus implements ObserverInterface
             $status = $this->findStatus($resourceType, $resourceId, $storeId);
 
             if ($status) {
-                $this->statusManagement->save($status->setStatus(true));
+                $this->statusManagement->save(
+                    $status->setStatus(StatusInterface::STATUS_TRANSLATED)
+                );
             } else {
                 $status = $this->statusFactory->create()
                     ->setResourceType($resourceType)
                     ->setResourceId($resourceId)
                     ->setStoreId($storeId)
-                    ->setStatus(true);
+                    ->setStatus(StatusInterface::STATUS_TRANSLATED);
 
                 $this->statusManagement->save($status);
             }
