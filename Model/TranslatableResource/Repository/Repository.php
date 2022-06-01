@@ -44,7 +44,7 @@ class Repository implements RepositoryInterface
     /**
      * @var EntityAttributeProvider
      */
-    private EntityAttributeProvider $entityAttributeProvider;
+    private EntityAttributeProvider $attributeProvider;
 
     /**
      * @var CollectionProcessorInterface
@@ -61,7 +61,7 @@ class Repository implements RepositoryInterface
      * @param ResourceModelFactory $resourceModelFactory
      * @param TranslationValidation $translationValidation
      * @param LocaleScopeRepository $localeScopeRepository
-     * @param EntityAttributeProvider $entityAttributeProvider
+     * @param EntityAttributeProvider $attributeProvider
      * @param CollectionProcessorInterface $collectionProcessor
      * @param string $resourceType
      */
@@ -70,7 +70,7 @@ class Repository implements RepositoryInterface
         ResourceModelFactory $resourceModelFactory,
         TranslationValidation $translationValidation,
         LocaleScopeRepository $localeScopeRepository,
-        EntityAttributeProvider $entityAttributeProvider,
+        EntityAttributeProvider $attributeProvider,
         CollectionProcessorInterface $collectionProcessor,
         string $resourceType
     ) {
@@ -78,7 +78,7 @@ class Repository implements RepositoryInterface
         $this->resourceModelFactory = $resourceModelFactory;
         $this->translationValidation = $translationValidation;
         $this->localeScopeRepository = $localeScopeRepository;
-        $this->entityAttributeProvider = $entityAttributeProvider;
+        $this->attributeProvider = $attributeProvider;
         $this->collectionProcessor = $collectionProcessor;
         $this->resourceType = $resourceType;
     }
@@ -147,7 +147,7 @@ class Repository implements RepositoryInterface
 
         if ($collection instanceof CatalogCollection) {
             $collection->addAttributeToSelect(
-                $this->entityAttributeProvider->getCodesOfUntranslatableFields($this->resourceType)
+                $this->attributeProvider->getCodesOfUntranslatableFields($this->resourceType)
             );
         }
         if (!$collection->getSize()) {
@@ -167,8 +167,8 @@ class Repository implements RepositoryInterface
      */
     private function addLocalizedAttributes(Collection $collection, array $localeScopes): Collection
     {
-        $translatableAttributeCodes = $this->entityAttributeProvider->getCodesOfTranslatableFields($this->resourceType);
-        $untranslatableAttributeCodes = $this->entityAttributeProvider->getCodesOfUntranslatableFields($this->resourceType);
+        $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields($this->resourceType);
+        $untranslatableAttributeCodes = $this->attributeProvider->getCodesOfUntranslatableFields($this->resourceType);
         /** @var CatalogCollection|AttributeCollection $localizedCollection */
         $localizedCollection = clone $collection;
 
