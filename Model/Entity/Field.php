@@ -186,7 +186,6 @@ class Field extends AbstractModel
         return $this->getData(self::IS_TRANSLATABLE);
     }
 
-
     /**
      * Set visible areas for field
      *
