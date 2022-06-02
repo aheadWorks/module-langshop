@@ -8,6 +8,7 @@ use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Psr\Log\LoggerInterface;
 
 class Locale implements LocaleManagementInterface
 {
@@ -22,15 +23,23 @@ class Locale implements LocaleManagementInterface
     private LoadHandler $loadHandler;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param ScopeRecordRepository $scopeRecordRepository
      * @param LoadHandler $loadHandler
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ScopeRecordRepository $scopeRecordRepository,
-        LoadHandler $loadHandler
+        LoadHandler $loadHandler,
+        LoggerInterface $logger
     ) {
         $this->scopeRecordRepository = $scopeRecordRepository;
         $this->loadHandler = $loadHandler;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,6 +94,7 @@ class Locale implements LocaleManagementInterface
                 }
             }
         } catch (LocalizedException $exception) {
+            $this->logger->error($exception->getMessage());
             throw new WebapiException(__($exception->getMessage()), 500, 500);
         }
 

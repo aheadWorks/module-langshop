@@ -13,6 +13,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Psr\Log\LoggerInterface;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
@@ -37,21 +38,29 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     private ProcessorInterface $dataProcessor;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param Converter $converter
      * @param RepositoryPool $repositoryPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ProcessorInterface $dataProcessor
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Converter $converter,
         RepositoryPool $repositoryPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ProcessorInterface $dataProcessor
+        ProcessorInterface $dataProcessor,
+        LoggerInterface $logger
     ) {
         $this->converter = $converter;
         $this->repositoryPool = $repositoryPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->dataProcessor = $dataProcessor;
+        $this->logger = $logger;
     }
 
     /**
@@ -91,6 +100,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
 
             $list = $this->converter->convertCollection($collection, $resourceType);
         } catch (LocalizedException $exception) {
+            $this->logger->error($exception->getMessage());
             throw new WebapiException(__($exception->getMessage()), 500, 500);
         }
 
@@ -114,6 +124,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
 
             $resource = $this->converter->convert($item, $resourceType);
         } catch (LocalizedException $exception) {
+            $this->logger->error($exception->getMessage());
             throw new WebapiException(__($exception->getMessage()), 500, 500);
         }
 
@@ -129,6 +140,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             $repository = $this->repositoryPool->get($resourceType);
             $repository->save($resourceId, $translations);
         } catch (LocalizedException $exception) {
+            $this->logger->error($exception->getMessage());
             throw new WebapiException(__($exception->getMessage()), 500, 500);
         }
 
