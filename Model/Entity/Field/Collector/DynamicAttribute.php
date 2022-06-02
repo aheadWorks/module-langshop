@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Entity\Field\Collector;
 
+use Aheadworks\Langshop\Model\Entity\Field;
 use Aheadworks\Langshop\Model\Entity\Field\CollectorInterface;
 use Aheadworks\Langshop\Model\Entity\FieldFactory as EntityFieldFactory;
 use Aheadworks\Langshop\Model\Source\Schema\VisibleOn;
@@ -81,6 +82,12 @@ class DynamicAttribute implements CollectorInterface
             $this->searchCriteriaBuilder->create()
         )->getItems();
 
+        if ($fields) {
+            /** @var Field $field */
+            $field = array_last($fields);
+        }
+        $sortOrder = isset($field) ? $field->getSortOrder() + 10 : 10;
+
         /** @var Attribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
@@ -89,11 +96,14 @@ class DynamicAttribute implements CollectorInterface
                     ->setCode($code)
                     ->setLabel($attribute->getDefaultFrontendLabel())
                     ->setType($attribute->getFrontendInput())
+                    ->setSortOrder($sortOrder)
+                    ->setIsSortable(true)
                     ->setIsTranslatable($this->isTranslatable($attribute))
                     ->setVisibleOn([VisibleOn::FORM])
                     ->setIsFilterable((bool)$attribute->getIsFilterable())
                     ->setFilterType($attribute->getFrontendInput());
 
+                $sortOrder += 10;
                 $fields[$code] = $field;
             }
         }
