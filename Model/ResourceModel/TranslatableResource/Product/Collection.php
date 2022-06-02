@@ -8,7 +8,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\Proxy as ProductCollectionProxy;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\Store;
 
 class Collection extends ProductCollectionProxy
 {
@@ -21,11 +20,6 @@ class Collection extends ProductCollectionProxy
      * @var PersistorPool
      */
     private PersistorPool $persistorPool;
-
-    /**
-     * @var int
-     */
-    private int $storeId = Store::DEFAULT_STORE_ID;
 
     /**
      * @param ProductCollectionFactory $productCollectionFactory
@@ -52,29 +46,6 @@ class Collection extends ProductCollectionProxy
         }
 
         return $this->_subject;
-    }
-
-    /**
-     * Set store scope
-     *
-     * @param int $storeId
-     * @return $this
-     */
-    public function setStoreId($storeId): Collection
-    {
-        $this->storeId = $storeId;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve store scope
-     *
-     * @return int
-     */
-    public function getStoreId(): int
-    {
-        return $this->storeId;
     }
 
     /**
