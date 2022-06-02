@@ -6,6 +6,7 @@ namespace Aheadworks\Langshop\Model\Service;
 use Aheadworks\Langshop\Api\LocaleManagementInterface;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
 class Locale implements LocaleManagementInterface
@@ -67,20 +68,24 @@ class Locale implements LocaleManagementInterface
      */
     public function getList(): array
     {
-        $scopeRecords = array_merge(
-            [$this->scopeRecordRepository->getPrimary()],
-            $this->scopeRecordRepository->getList()
-        );
+        try {
+            $scopeRecords = array_merge(
+                [$this->scopeRecordRepository->getPrimary()],
+                $this->scopeRecordRepository->getList()
+            );
 
-        $existingLocales = [];
-        $locales = [];
+            $existingLocales = [];
+            $locales = [];
 
-        foreach ($scopeRecords as $scopeRecord) {
-            $localeCode = $scopeRecord->getLocaleCode();
-            if (!in_array($localeCode, $existingLocales)) {
-                $locales[] = $this->loadHandler->load($scopeRecord);
-                $existingLocales[] = $localeCode;
+            foreach ($scopeRecords as $scopeRecord) {
+                $localeCode = $scopeRecord->getLocaleCode();
+                if (!in_array($localeCode, $existingLocales)) {
+                    $locales[] = $this->loadHandler->load($scopeRecord);
+                    $existingLocales[] = $localeCode;
+                }
             }
+        } catch (LocalizedException $exception) {
+            throw new WebapiException(__($exception->getMessage()), 500, 500);
         }
 
         return $locales;

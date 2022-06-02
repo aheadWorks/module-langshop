@@ -10,6 +10,7 @@ use Aheadworks\Langshop\Model\ResourceModel\StatusFactory as StatusResourceFacto
 use Aheadworks\Langshop\Model\Status as StatusModel;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 class Status implements StatusManagementInterface
 {
@@ -62,8 +63,12 @@ class Status implements StatusManagementInterface
      */
     public function save(StatusInterface $status): void
     {
-        /** @var StatusModel $status */
-        $this->statusResourceFactory->create()->save($status);
+        try {
+            /** @var StatusModel $status */
+            $this->statusResourceFactory->create()->save($status);
+        } catch (\Exception $exception) {
+            throw new WebapiException(__($exception->getMessage()), 500, 500);
+        }
     }
 
     /**
@@ -71,7 +76,11 @@ class Status implements StatusManagementInterface
      */
     public function delete(StatusInterface $status): void
     {
-        /** @var StatusModel $status */
-        $this->statusResourceFactory->create()->delete($status);
+        try {
+            /** @var StatusModel $status */
+            $this->statusResourceFactory->create()->delete($status);
+        } catch (\Exception $exception) {
+            throw new WebapiException(__($exception->getMessage()), 500, 500);
+        }
     }
 }

@@ -7,6 +7,8 @@ use Aheadworks\Langshop\Api\Data\SchemaInterface;
 use Aheadworks\Langshop\Api\Data\SchemaInterfaceFactory;
 use Aheadworks\Langshop\Api\SchemaManagementInterface;
 use Aheadworks\Langshop\Model\Schema\ProcessorInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 class Schema implements SchemaManagementInterface
 {
@@ -38,7 +40,12 @@ class Schema implements SchemaManagementInterface
     public function get(): SchemaInterface
     {
         $schema = $this->schemaFactory->create();
-        $this->processor->process($schema);
+
+        try {
+            $this->processor->process($schema);
+        } catch (LocalizedException $exception) {
+            throw new WebapiException(__($exception->getMessage()), 500, 500);
+        }
 
         return $schema;
     }
