@@ -95,7 +95,6 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         }
 
         return $list;
-
     }
 
     /**
