@@ -9,6 +9,7 @@ interface LocaleManagementInterface
      * Add locale
      *
      * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function add();
 
@@ -17,6 +18,7 @@ interface LocaleManagementInterface
      *
      * @param string $locale
      * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function update($locale);
 
@@ -25,6 +27,7 @@ interface LocaleManagementInterface
      *
      * @param string $locale
      * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function delete($locale);
 
@@ -32,6 +35,7 @@ interface LocaleManagementInterface
      * Retrieve locales
      *
      * @return \Aheadworks\Langshop\Api\Data\LocaleInterface[]
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function getList(): array;
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Api;
 
 use Aheadworks\Langshop\Api\Data\StatusInterface;
-use Exception;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 interface StatusManagementInterface
@@ -21,7 +20,7 @@ interface StatusManagementInterface
      * Saves the status
      *
      * @param \Aheadworks\Langshop\Api\Data\StatusInterface $status
-     * @throws Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function save(StatusInterface $status): void;
 
@@ -29,7 +28,7 @@ interface StatusManagementInterface
      * Deletes the status
      *
      * @param \Aheadworks\Langshop\Api\Data\StatusInterface $status
-     * @throws Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function delete(StatusInterface $status): void;
 }

@@ -11,6 +11,9 @@ use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool as RepositoryPool;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception as WebapiException;
+use Psr\Log\LoggerInterface;
 
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
@@ -35,21 +38,29 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     private ProcessorInterface $dataProcessor;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param Converter $converter
      * @param RepositoryPool $repositoryPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ProcessorInterface $dataProcessor
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Converter $converter,
         RepositoryPool $repositoryPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ProcessorInterface $dataProcessor
+        ProcessorInterface $dataProcessor,
+        LoggerInterface $logger
     ) {
         $this->converter = $converter;
         $this->repositoryPool = $repositoryPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->dataProcessor = $dataProcessor;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,30 +74,37 @@ class TranslatableResource implements TranslatableResourceManagementInterface
         ?string $sortBy = null,
         ?array $filter = []
     ): ResourceListInterface {
-        $repository = $this->repositoryPool->get($resourceType);
+        try {
+            $repository = $this->repositoryPool->get($resourceType);
 
-        $params = $this->dataProcessor->process([
-            'resourceType' => $resourceType,
-            'locale' => $locale,
-            'page' => $page,
-            'pageSize' => $pageSize,
-            'sortBy' => $sortBy,
-            'filter' => $filter
-        ]);
+            $params = $this->dataProcessor->process([
+                'resourceType' => $resourceType,
+                'locale' => $locale,
+                'page' => $page,
+                'pageSize' => $pageSize,
+                'sortBy' => $sortBy,
+                'filter' => $filter
+            ]);
 
-        $searchCriteriaBuilder = $this->searchCriteriaBuilder
-            ->setCurrentPage($params['page'])
-            ->setPageSize($params['pageSize'])
-            ->setSortOrders($params['sortBy']);
+            $searchCriteriaBuilder = $this->searchCriteriaBuilder
+                ->setCurrentPage($params['page'])
+                ->setPageSize($params['pageSize'])
+                ->setSortOrders($params['sortBy']);
 
-        /** @var Filter $filter */
-        foreach ($params['filter'] as $filter) {
-            $searchCriteriaBuilder->addFilters([$filter]);
+            /** @var Filter $filter */
+            foreach ($params['filter'] as $filter) {
+                $searchCriteriaBuilder->addFilters([$filter]);
+            }
+
+            $collection = $repository->getList($searchCriteriaBuilder->create(), $params['locale']);
+
+            $list = $this->converter->convertCollection($collection, $resourceType);
+        } catch (LocalizedException $exception) {
+            $this->logger->error($exception->getMessage());
+            throw new WebapiException(__($exception->getMessage()), 500, 500);
         }
 
-        $collection = $repository->getList($searchCriteriaBuilder->create(), $params['locale']);
-
-        return $this->converter->convertCollection($collection, $resourceType);
+        return $list;
     }
 
     /**
@@ -94,16 +112,23 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function getById(string $resourceType, int $resourceId, array $locale = []): TranslatableResourceInterface
     {
-        $repository = $this->repositoryPool->get($resourceType);
+        try {
+            $repository = $this->repositoryPool->get($resourceType);
 
-        $params = $this->dataProcessor->process([
-            'resourceType' => $resourceType,
-            'locale' => $locale
-        ]);
+            $params = $this->dataProcessor->process([
+                'resourceType' => $resourceType,
+                'locale' => $locale
+            ]);
 
-        $item = $repository->get($resourceId, $params['locale']);
+            $item = $repository->get($resourceId, $params['locale']);
 
-        return $this->converter->convert($item, $resourceType);
+            $resource = $this->converter->convert($item, $resourceType);
+        } catch (LocalizedException $exception) {
+            $this->logger->error($exception->getMessage());
+            throw new WebapiException(__($exception->getMessage()), 500, 500);
+        }
+
+        return $resource;
     }
 
     /**
@@ -111,8 +136,13 @@ class TranslatableResource implements TranslatableResourceManagementInterface
      */
     public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface
     {
-        $repository = $this->repositoryPool->get($resourceType);
-        $repository->save($resourceId, $translations);
+        try {
+            $repository = $this->repositoryPool->get($resourceType);
+            $repository->save($resourceId, $translations);
+        } catch (LocalizedException $exception) {
+            $this->logger->error($exception->getMessage());
+            throw new WebapiException(__($exception->getMessage()), 500, 500);
+        }
 
         return $this->getById($resourceType, $resourceId);
     }

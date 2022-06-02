@@ -11,6 +11,7 @@ interface SchemaManagementInterface
      * Retrieves the data schema for translatable resources
      *
      * @return \Aheadworks\Langshop\Api\Data\SchemaInterface
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function get(): SchemaInterface;
 }
