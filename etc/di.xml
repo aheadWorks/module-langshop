@@ -122,7 +122,7 @@
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\ProductFactory"
                  type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product</argument>
+            <argument name="instanceName" xsi:type="string">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CategoryFactory"
@@ -485,8 +485,6 @@
                 <item name="sku" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Sku</item>
                 <item name="type_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\TypeId</item>
                 <item name="attribute_set_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\AttributeSetId</item>
-                <item name="url_key" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\UrlKey</item>
-                <item name="url_path" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\UrlPath</item>
             </argument>
         </arguments>
     </virtualType>
@@ -494,6 +492,10 @@
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector\DynamicAttribute">
         <arguments>
             <argument name="entityTypeCode" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</argument>
+            <argument name="attributeCodeBlacklist" xsi:type="array">
+                <item name="url_key" xsi:type="string">url_key</item>
+                <item name="url_path" xsi:type="string">url_path</item>
+            </argument>
         </arguments>
     </virtualType>
 
@@ -597,43 +599,6 @@
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
                 <item name="sort_order" xsi:type="string">60</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\UrlKey"
-                 type="Aheadworks\Langshop\Model\Entity\Field">
-        <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">url_key</item>
-                <item name="label" xsi:type="string">Url Key</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">70</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <!--todo https://aheadworks.atlassian.net/browse/LSM2-151-->
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\UrlPath"
-                 type="Aheadworks\Langshop\Model\Entity\Field">
-        <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">url_path</item>
-                <item name="label" xsi:type="string">Url Path</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">80</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
