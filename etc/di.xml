@@ -99,6 +99,7 @@
         <arguments>
             <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Product</argument>
         </arguments>
+        <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Read"/>
     </type>
 
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\CollectionFactory"
@@ -485,6 +486,7 @@
                 <item name="sku" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Sku</item>
                 <item name="type_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\TypeId</item>
                 <item name="attribute_set_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\AttributeSetId</item>
+                <item name="options" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Options</item>
             </argument>
         </arguments>
     </virtualType>
@@ -603,6 +605,23 @@
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
                     <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\Options"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">options</item>
+                <item name="label" xsi:type="string">Options</item>
+                <item name="type" xsi:type="string">array</item>
+                <item name="is_filterable" xsi:type="boolean">false</item>
+                <item name="sort_order" xsi:type="string">70</item>
+                <item name="is_sortable" xsi:type="boolean">false</item>
+                <item name="is_translatable" xsi:type="boolean">true</item>
+                <item name="visible_on" xsi:type="array">
+                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
                 </item>
             </argument>
         </arguments>
