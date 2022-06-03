@@ -122,7 +122,7 @@
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\ProductFactory"
                  type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product</argument>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CategoryFactory"
