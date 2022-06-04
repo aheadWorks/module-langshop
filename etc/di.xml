@@ -101,6 +101,9 @@
         </arguments>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Read"/>
     </type>
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product">
+        <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Save"/>
+    </type>
 
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\CollectionFactory"
                  type="Magento\Framework\Data\Collection\AbstractDbFactory">
@@ -123,7 +126,7 @@
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\ProductFactory"
                  type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Product</argument>
+            <argument name="instanceName" xsi:type="string">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CategoryFactory"
