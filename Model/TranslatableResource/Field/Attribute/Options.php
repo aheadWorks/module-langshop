@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute;
 
 use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorInterface;
-use Aheadworks\Langshop\Model\TranslatableResource\Validation\Option as OptionValidation;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Attribute\Option as OptionValidation;
 use Magento\Eav\Model\Entity\Attribute\Option;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\Framework\App\ResourceConnection;

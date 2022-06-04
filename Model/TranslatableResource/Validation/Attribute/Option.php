@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\TranslatableResource\Validation;
+namespace Aheadworks\Langshop\Model\TranslatableResource\Validation\Attribute;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
