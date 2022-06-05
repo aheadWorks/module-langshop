@@ -13,7 +13,7 @@ class Read
     /**
      * Field to process
      */
-    private const FIELD = 'options';
+    private const KEY_FIELD = 'options';
 
     /**
      * @var OptionCollectionFactory
@@ -49,8 +49,8 @@ class Read
             foreach ($options as $optionId => $option) {
                 $product = $products[$option->getProductId()];
 
-                $product->setData(self::FIELD, array_replace(
-                    $product->getData(self::FIELD) ?? [],
+                $product->setData(self::KEY_FIELD, array_replace(
+                    $product->getData(self::KEY_FIELD) ?? [],
                     [$optionId => $option->getTitle()]
                 ));
             }

@@ -76,14 +76,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Product"
-                 type="Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool">
-        <arguments>
-            <argument name="persistors" xsi:type="array">
-                <item name="image" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Product\Image</item>
-            </argument>
-        </arguments>
-    </virtualType>
 
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection">
         <arguments>
@@ -95,10 +87,9 @@
             <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute</argument>
         </arguments>
     </type>
+
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection">
-        <arguments>
-            <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Product</argument>
-        </arguments>
+        <plugin name="aw_ls_image_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Image"/>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Read"/>
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product">

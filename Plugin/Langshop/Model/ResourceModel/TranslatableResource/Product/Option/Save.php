@@ -14,7 +14,7 @@ class Save
     /**
      * Field to process
      */
-    private const FIELD = 'options';
+    private const KEY_FIELD = 'options';
 
     /**
      * @var OptionValidation
@@ -50,7 +50,7 @@ class Save
         ProductResource $productResource,
         Product $product
     ): array {
-        $options = $product->getData(self::FIELD);
+        $options = $product->getData(self::KEY_FIELD);
         if (is_array($options) && $options) {
             foreach ($options as $optionId => $title) {
                 $this->optionValidation->validate((int) $optionId, (int) $product->getId());
@@ -76,7 +76,7 @@ class Save
         ProductResource $result,
         Product $product
     ): ProductResource {
-        $options = $product->getData(self::FIELD);
+        $options = $product->getData(self::KEY_FIELD);
         if (is_array($options) && $options) {
             $toInsert = [];
             foreach ($options as $optionId => $title) {
