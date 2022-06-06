@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option;
 
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection as ProductCollection;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\Product\Option as OptionProvider;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory as OptionCollectionFactory;
 
 class Read
 {
@@ -16,17 +15,17 @@ class Read
     private const KEY_FIELD = 'options';
 
     /**
-     * @var OptionCollectionFactory
+     * @var OptionProvider
      */
-    private OptionCollectionFactory $optionCollectionFactory;
+    private OptionProvider $optionProvider;
 
     /**
-     * @param OptionCollectionFactory $optionCollectionFactory
+     * @param OptionProvider $optionProvider
      */
     public function __construct(
-        OptionCollectionFactory $optionCollectionFactory
+        OptionProvider $optionProvider
     ) {
-        $this->optionCollectionFactory = $optionCollectionFactory;
+        $this->optionProvider = $optionProvider;
     }
 
     /**
@@ -41,7 +40,7 @@ class Read
         array $products
     ): array {
         if ($products) {
-            $options = $this->getOptions(
+            $options = $this->optionProvider->get(
                 array_keys($products),
                 $productCollection->getStoreId()
             );
@@ -57,24 +56,5 @@ class Read
         }
 
         return $products;
-    }
-
-    /**
-     * Retrieves options from database
-     *
-     * @param int[] $productIds
-     * @param int $storeId
-     * @return Option[]
-     */
-    private function getOptions(array $productIds, int $storeId): array
-    {
-        $optionCollection = $this->optionCollectionFactory->create()
-            ->addProductToFilter($productIds)
-            ->addTitleToResult($storeId);
-
-        /** @var Option[] $options */
-        $options = $optionCollection->getItems();
-
-        return $options;
     }
 }
