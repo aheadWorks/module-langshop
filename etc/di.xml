@@ -78,19 +78,14 @@
     </virtualType>
 
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection">
-        <arguments>
-            <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute</argument>
-        </arguments>
+        <plugin name="aw_ls_store_label_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Read"/>
     </type>
-    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute">
-        <arguments>
-            <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute</argument>
-        </arguments>
-    </type>
-
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection">
         <plugin name="aw_ls_image_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Image"/>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Read"/>
+    </type>
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute">
+        <plugin name="aw_ls_store_label_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Save"/>
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product">
         <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Save"/>
