@@ -90,7 +90,7 @@ class Converter
 
         /** @var AbstractModel $item */
         return $this->resourceFactory->create()
-            ->setResourceId((int) $item->getId())
+            ->setResourceId((string) $item->getId())
             ->setResourceType($resourceType)
             ->setFields($fields);
     }

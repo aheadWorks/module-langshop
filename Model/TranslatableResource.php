@@ -11,15 +11,15 @@ class TranslatableResource extends AbstractModel implements TranslatableResource
     /**
      * @inheritDoc
      */
-    public function getResourceId(): ?int
+    public function getResourceId(): ?string
     {
-        return (int) $this->getData(self::RESOURCE_ID);
+        return (string) $this->getData(self::RESOURCE_ID);
     }
 
     /**
      * @inheritDoc
      */
-    public function setResourceId(int $resourceId): TranslatableResourceInterface
+    public function setResourceId(string $resourceId): TranslatableResourceInterface
     {
         return $this->setData(self::RESOURCE_ID, $resourceId);
     }

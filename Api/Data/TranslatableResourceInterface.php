@@ -15,17 +15,17 @@ interface TranslatableResourceInterface
     /**
      * Get resource id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getResourceId(): ?int;
+    public function getResourceId(): ?string;
 
     /**
      * Set resource id
      *
-     * @param int $resourceId
+     * @param string $resourceId
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      */
-    public function setResourceId(int $resourceId): TranslatableResourceInterface;
+    public function setResourceId(string $resourceId): TranslatableResourceInterface;
 
     /**
      * Get resource type

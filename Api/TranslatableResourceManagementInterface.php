@@ -33,21 +33,25 @@ interface TranslatableResourceManagementInterface
      * Retrieves translatable resource by type and identifier
      *
      * @param string $resourceType
-     * @param int $resourceId
+     * @param string $resourceId
      * @param string[] $locale
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      * @throws \Magento\Framework\Webapi\Exception
      */
-    public function getById(string $resourceType, int $resourceId, array $locale = []): TranslatableResourceInterface;
+    public function getById(
+        string $resourceType,
+        string $resourceId,
+        array $locale = []
+    ): TranslatableResourceInterface;
 
     /**
      * Saves translatable resource
      *
      * @param string $resourceType
-     * @param int $resourceId
+     * @param string $resourceId
      * @param \Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface[] $translations
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      * @throws \Magento\Framework\Webapi\Exception
      */
-    public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface;
+    public function save(string $resourceType, string $resourceId, array $translations): TranslatableResourceInterface;
 }
