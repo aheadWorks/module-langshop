@@ -66,17 +66,6 @@
         </arguments>
     </type>
 
-    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute"
-                 type="Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool">
-        <arguments>
-            <argument name="persistors" xsi:type="array">
-                <item name="options" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Options</item>
-                <item name="store_label" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\StoreLabel</item>
-                <item name="swatches" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Swatches</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection">
         <plugin name="aw_ls_store_label_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Read"/>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Option\Read"/>
