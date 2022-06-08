@@ -106,7 +106,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function get(int $entityId, array $localeScopes): DataObject
+    public function get(string $entityId, array $localeScopes): DataObject
     {
         $collection = $this->prepareCollectionById($entityId);
 
@@ -116,7 +116,7 @@ class Repository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function save(int $entityId, array $translations): void
+    public function save(string $entityId, array $translations): void
     {
         $resourceModel = $this->resourceModelFactory->create();
         $translationByLocales = [];
@@ -148,12 +148,12 @@ class Repository implements RepositoryInterface
     /**
      * Filters collection by incoming id, throws exception if nothing is found
      *
-     * @param int $entityId
+     * @param string $entityId
      * @return Collection
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    private function prepareCollectionById(int $entityId): Collection
+    private function prepareCollectionById(string $entityId): Collection
     {
         /** @var CatalogCollection|AttributeCollection $collection */
         $collection = $this->collectionFactory->create();

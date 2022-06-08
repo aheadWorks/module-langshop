@@ -26,21 +26,21 @@ interface RepositoryInterface
     /**
      * Get entity
      *
-     * @param int $entityId
+     * @param string $entityId
      * @param RecordInterface[] $localeScopes
      * @return DataObject
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function get(int $entityId, array $localeScopes): DataObject;
+    public function get(string $entityId, array $localeScopes): DataObject;
 
     /**
      * Save entity
      *
-     * @param int $entityId
+     * @param string $entityId
      * @param TranslationInterface[] $translations
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function save(int $entityId, array $translations): void;
+    public function save(string $entityId, array $translations): void;
 }

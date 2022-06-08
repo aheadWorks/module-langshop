@@ -110,7 +110,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function getById(string $resourceType, int $resourceId, array $locale = []): TranslatableResourceInterface
+    public function getById(string $resourceType, string $resourceId, array $locale = []): TranslatableResourceInterface
     {
         try {
             $repository = $this->repositoryPool->get($resourceType);
@@ -134,7 +134,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface
+    public function save(string $resourceType, string $resourceId, array $translations): TranslatableResourceInterface
     {
         try {
             $repository = $this->repositoryPool->get($resourceType);
