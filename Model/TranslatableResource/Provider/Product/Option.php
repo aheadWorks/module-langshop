@@ -27,10 +27,10 @@ class Option
      * Retrieves options for particular products
      *
      * @param int[] $productIds
-     * @param int|null $storeId
+     * @param int $storeId
      * @return ProductOption[]
      */
-    public function get(array $productIds, ?int $storeId = Store::DEFAULT_STORE_ID): array
+    public function get(array $productIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
         $optionCollection = $this->optionCollectionFactory->create()
             ->addProductToFilter($productIds)

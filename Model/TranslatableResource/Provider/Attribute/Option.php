@@ -27,10 +27,10 @@ class Option
      * Retrieves options for particular attributes
      *
      * @param array $attributeIds
-     * @param int|null $storeId
+     * @param int $storeId
      * @return AttributeOption[]
      */
-    public function get(array $attributeIds, ?int $storeId = Store::DEFAULT_STORE_ID): array
+    public function get(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
         $optionCollection = $this->optionCollectionFactory->create()
             ->addFieldToFilter('main_table.attribute_id', $attributeIds)

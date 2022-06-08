@@ -26,10 +26,10 @@ class StoreLabel
      * Retrieves store labels for particular attributes
      *
      * @param int[] $attributeIds
-     * @param int|null $storeId
+     * @param int $storeId
      * @return array
      */
-    public function get(array $attributeIds, ?int $storeId = Store::DEFAULT_STORE_ID): array
+    public function get(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('eav_attribute_label');

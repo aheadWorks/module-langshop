@@ -27,10 +27,10 @@ class Swatch
      * Retrieves swatches for particular attributes
      *
      * @param int[] $attributeIds
-     * @param int|null $storeId
+     * @param int $storeId
      * @return AttributeSwatch[]
      */
-    public function get(array $attributeIds, ?int $storeId = Store::DEFAULT_STORE_ID): array
+    public function get(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
         $swatches = [];
 
