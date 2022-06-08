@@ -38,7 +38,11 @@ interface TranslatableResourceManagementInterface
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      * @throws \Magento\Framework\Webapi\Exception
      */
-    public function getById(string $resourceType, string $resourceId, array $locale = []): TranslatableResourceInterface;
+    public function getById(
+        string $resourceType,
+        string $resourceId,
+        array $locale = []
+    ): TranslatableResourceInterface;
 
     /**
      * Saves translatable resource
