@@ -365,7 +365,7 @@
             <argument name="data" xsi:type="array">
                 <item name="code" xsi:type="string">store_label</item>
                 <item name="label" xsi:type="string">Store Label</item>
-                <item name="type" xsi:type="string">array</item>
+                <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">false</item>
                 <item name="sort_order" xsi:type="string">40</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
