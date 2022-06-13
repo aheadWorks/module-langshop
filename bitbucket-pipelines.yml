@@ -261,7 +261,6 @@ pipelines:
           - step: *unitTestPHP81
           - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
       - step: *ecommerce_build
       - step: *swaggerWebApiDocBuild
       - step: *deployToDevComposer
@@ -277,7 +276,6 @@ pipelines:
           - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *integrationTest-2.4.4
-          - step: *installMagento-2.4.4
       - step: *deployToDevComposer
     feature/*:
         - step: *eqpTest-2.3.7
@@ -287,7 +285,6 @@ pipelines:
         - step: *PHPStan-2.4.4
         - step: *unitTestPHP74
         - step: *integrationTest-2.4.4
-        - step: *installMagento-2.4.4
     bugfix/*:
         - step: *eqpTest-2.3.7
         - step: *eqpTest-2.4.4
@@ -296,7 +293,6 @@ pipelines:
         - step: *PHPStan-2.4.4
         - step: *unitTestPHP74
         - step: *integrationTest-2.4.4
-        - step: *installMagento-2.4.4
     release/*:
       - step: *build
       - step: *validatePackage-2.3.7
@@ -311,7 +307,6 @@ pipelines:
           - step: *unitTestPHP81
           - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
 
   custom:
     # Upload to AW composer manually
@@ -342,7 +337,6 @@ pipelines:
           - step: *unitTestPHP81
           - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
@@ -355,7 +349,6 @@ pipelines:
           - step: *unitTestPHP81
           - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
 
     # set composer permissions
     set_permissions:
