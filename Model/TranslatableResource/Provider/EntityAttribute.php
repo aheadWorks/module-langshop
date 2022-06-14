@@ -121,7 +121,7 @@ class EntityAttribute
      * Split fields
      *
      * @param Field[] $fields
-     * @return array<int, array<int, Field>>
+     * @return array<int, array<string, Field>>
      */
     private function splitFields(array $fields): array
     {
@@ -130,11 +130,11 @@ class EntityAttribute
             SourceField::UNTRANSLATABLE => []
         ];
 
-        foreach ($fields as $field) {
+        foreach ($fields as $code => $field) {
             if ($field->isTranslatable()) {
-                $result[SourceField::TRANSLATABLE][] = $field;
+                $result[SourceField::TRANSLATABLE][$code] = $field;
             } else {
-                $result[SourceField::UNTRANSLATABLE][] = $field;
+                $result[SourceField::UNTRANSLATABLE][$code] = $field;
             }
         }
 
