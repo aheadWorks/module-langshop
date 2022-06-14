@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\Saas;
+namespace Aheadworks\Langshop\Model\Saas\Result;
 
 use Aheadworks\Langshop\Api\Data\Saas\UrlResultInterface;
 
-class UrlResult implements UrlResultInterface
+class Url implements UrlResultInterface
 {
     /**
      * @var string|null

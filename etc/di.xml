@@ -7,9 +7,9 @@
                 type="Aheadworks\Langshop\Model\Service\Locale" />
 
     <preference for="Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface"
-                type="Aheadworks\Langshop\Model\Saas\ConfirmationResult" />
+                type="Aheadworks\Langshop\Model\Saas\Result\Confirmation" />
     <preference for="Aheadworks\Langshop\Api\Data\Saas\UrlResultInterface"
-                type="Aheadworks\Langshop\Model\Saas\UrlResult" />
+                type="Aheadworks\Langshop\Model\Saas\Result\Url" />
     <preference for="Aheadworks\Langshop\Api\SaasManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Saas" />
 
