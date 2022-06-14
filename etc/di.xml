@@ -726,4 +726,10 @@
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <plugin name="aw_ls_disable_body_overriding" type="Aheadworks\Langshop\Plugin\Webapi\Controller\Rest\ParamsOverrider" />
     </type>
+
+    <type name="Aheadworks\Langshop\Model\Config\Saas">
+        <arguments>
+            <argument name="configType" xsi:type="object">Magento\Config\App\Config\Type\System</argument>
+        </arguments>
+    </type>
 </config>
