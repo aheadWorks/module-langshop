@@ -5,31 +5,50 @@ namespace Aheadworks\Langshop\Model\Service;
 
 use Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface;
 use Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterfaceFactory;
+use Aheadworks\Langshop\Api\Data\Saas\UrlResultInterface;
+use Aheadworks\Langshop\Api\Data\Saas\UrlResultInterfaceFactory;
 use Aheadworks\Langshop\Api\SaasManagementInterface;
 use Aheadworks\Langshop\Model\Config\Saas as SaasConfig;
+use Magento\Backend\Model\UrlInterface;
 
 class Saas implements SaasManagementInterface
 {
+    /**
+     * @var ConfirmationResultInterfaceFactory
+     */
+    private ConfirmationResultInterfaceFactory $confirmationResultFactory;
+
+    /**
+     * @var UrlResultInterfaceFactory
+     */
+    private UrlResultInterfaceFactory $urlResultFactory;
+
+    /**
+     * @var UrlInterface
+     */
+    private UrlInterface $urlBuilder;
+
     /**
      * @var SaasConfig
      */
     private SaasConfig $saasConfig;
 
     /**
-     * @var ConfirmationResultInterfaceFactory
-     */
-    private ConfirmationResultInterfaceFactory $resultFactory;
-
-    /**
+     * @param ConfirmationResultInterfaceFactory $confirmationResultFactory
+     * @param UrlResultInterfaceFactory $urlResultFactory
+     * @param UrlInterface $urlBuilder
      * @param SaasConfig $saasConfig
-     * @param ConfirmationResultInterfaceFactory $resultFactory
      */
     public function __construct(
-        SaasConfig $saasConfig,
-        ConfirmationResultInterfaceFactory $resultFactory
+        ConfirmationResultInterfaceFactory $confirmationResultFactory,
+        UrlResultInterfaceFactory $urlResultFactory,
+        UrlInterface $urlBuilder,
+        SaasConfig $saasConfig
     ) {
+        $this->confirmationResultFactory = $confirmationResultFactory;
+        $this->urlResultFactory = $urlResultFactory;
+        $this->urlBuilder = $urlBuilder;
         $this->saasConfig = $saasConfig;
-        $this->resultFactory = $resultFactory;
     }
 
     /**
@@ -40,10 +59,24 @@ class Saas implements SaasManagementInterface
      */
     public function saveKey(string $publicKey): ConfirmationResultInterface
     {
-        /** @var ConfirmationResultInterface $result */
-        $result = $this->resultFactory->create();
         $this->saasConfig->savePublicKey($publicKey);
 
-        return $result->setSuccess(true);
+        return $this->confirmationResultFactory->create()
+            ->setSuccess(true);
+    }
+
+    /**
+     * Get admin dashboard URL
+     *
+     * @return UrlResultInterface
+     */
+    public function getDashboardUrl(): UrlResultInterface
+    {
+        $dashboardUrl = $this->urlBuilder
+            ->turnOffSecretKey()
+            ->getUrl('admin/dashboard');
+
+        return $this->urlResultFactory->create()
+            ->setUrl($dashboardUrl);
     }
 }
