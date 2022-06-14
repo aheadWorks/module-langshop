@@ -136,6 +136,22 @@ definitions:
           - python3 /m2test.py unit ${PWD} test-results/test-unit.xml
         artifacts:
           - "test-results/**"
+    - step: &integrationTest-2.4.4
+        name: Integration tests on Magento 2.4.4
+        image: aheadworks/m2test-new:2.4.4-without-dump-8.1
+        script:
+          - apk add procps
+          - export MODULE_DIR=app/code/Aheadworks/Langshop
+          - cd /var/www/html
+          - mkdir -p $MODULE_DIR
+          - cp -r $BITBUCKET_CLONE_DIR/* $MODULE_DIR
+          - cd dev/tests/integration
+          - sed -i -e s/localhost/127.0.0.1/ -e s/123123q// -e s/magento_integration_tests/magento/ etc/install-config-mysql.php.dist
+          - sleep 5 # wait until all services are ready to use
+          - ../../../vendor/bin/phpunit ../../../$MODULE_DIR/Test/Integration
+        services:
+          - mariadb
+          - amqp
     - step: &installMagento-2.3.7
         name: Install Magento 2.3.7 test
         image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
@@ -218,6 +234,13 @@ definitions:
   services:
     m24-74:
       image: aheadworks/m2test-new:test-2.4-7.4
+    mariadb:
+      image: mariadb:10.4
+      variables:
+        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+        MARIADB_DATABASE: 'magento'
+    amqp:
+      image: rabbitmq:latest
 pipelines:
   tags:
     '*.*.*':
@@ -236,8 +259,8 @@ pipelines:
           - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
+          - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
       - step: *ecommerce_build
       - step: *swaggerWebApiDocBuild
       - step: *deployToDevComposer
@@ -252,7 +275,7 @@ pipelines:
           - step: *staticTest-2.4.4
           - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
-          - step: *installMagento-2.4.4
+          - step: *integrationTest-2.4.4
       - step: *deployToDevComposer
     feature/*:
         - step: *eqpTest-2.3.7
@@ -261,7 +284,7 @@ pipelines:
         - step: *staticTest-2.4.4
         - step: *PHPStan-2.4.4
         - step: *unitTestPHP74
-        - step: *installMagento-2.4.4
+        - step: *integrationTest-2.4.4
     bugfix/*:
         - step: *eqpTest-2.3.7
         - step: *eqpTest-2.4.4
@@ -269,7 +292,7 @@ pipelines:
         - step: *staticTest-2.4.4
         - step: *PHPStan-2.4.4
         - step: *unitTestPHP74
-        - step: *installMagento-2.4.4
+        - step: *integrationTest-2.4.4
     release/*:
       - step: *build
       - step: *validatePackage-2.3.7
@@ -282,8 +305,8 @@ pipelines:
           - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
+          - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
 
   custom:
     # Upload to AW composer manually
@@ -312,8 +335,8 @@ pipelines:
           - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
+          - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
@@ -324,8 +347,8 @@ pipelines:
           - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
+          - step: *integrationTest-2.4.4
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
 
     # set composer permissions
     set_permissions:
