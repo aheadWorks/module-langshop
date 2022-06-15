@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Locale\Scope;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Record extends AbstractModel implements RecordInterface
+class Record extends DataObject implements RecordInterface
 {
     /**
      * @inheritdoc

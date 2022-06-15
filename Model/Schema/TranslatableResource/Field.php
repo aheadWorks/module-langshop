@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Field extends AbstractModel implements FieldInterface
+class Field extends DataObject implements FieldInterface
 {
     /**
      * Set key

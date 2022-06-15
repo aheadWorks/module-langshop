@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Saas\Result;
 
 use Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Confirmation extends AbstractModel implements ConfirmationResultInterface
+class Confirmation extends DataObject implements ConfirmationResultInterface
 {
     /**
      * @inheritDoc

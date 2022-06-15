@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Entity;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Field extends AbstractModel
+class Field extends DataObject
 {
     /**
      * Constants for internal keys

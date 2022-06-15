@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model;
 
 use Aheadworks\Langshop\Api\Data\SchemaInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Schema extends AbstractModel implements SchemaInterface
+class Schema extends DataObject implements SchemaInterface
 {
     /**
      * @inheritDoc

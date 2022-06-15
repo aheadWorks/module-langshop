@@ -5,9 +5,9 @@ namespace Aheadworks\Langshop\Model\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class ResourceList extends AbstractModel implements ResourceListInterface
+class ResourceList extends DataObject implements ResourceListInterface
 {
     /**
      * @inheritDoc
