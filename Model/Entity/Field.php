@@ -18,6 +18,7 @@ class Field extends DataObject
     private const SORT_ORDER = 'sort_order';
     private const IS_SORTABLE = 'is_sortable';
     private const IS_TRANSLATABLE = 'is_translatable';
+    private const IS_TITLE = 'is_title';
     private const VISIBLE_ON = 'visible_on';
 
     /**
@@ -186,6 +187,27 @@ class Field extends DataObject
     public function isTranslatable(): bool
     {
         return $this->getData(self::IS_TRANSLATABLE);
+    }
+
+    /**
+     * Set is title
+     *
+     * @param bool $isTitle
+     * @return $this
+     */
+    public function setIsTitle(bool $isTitle): Field
+    {
+        return $this->setData(self::IS_TITLE, $isTitle);
+    }
+
+    /**
+     * Is title
+     *
+     * @return bool
+     */
+    public function isTitle(): bool
+    {
+        return (bool) $this->getData(self::IS_TITLE);
     }
 
     /**

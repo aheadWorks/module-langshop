@@ -380,6 +380,7 @@
                 <item name="sort_order" xsi:type="number">50</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
+                <item name="is_title" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
                     <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                 </item>
@@ -522,6 +523,7 @@
                 <item name="sort_order" xsi:type="number">30</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
+                <item name="is_title" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
                     <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
                     <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
@@ -618,6 +620,7 @@
         <arguments>
             <argument name="fields" xsi:type="array">
                 <item name="entity_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\EntityId</item>
+                <item name="name" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category\Field\Name</item>
             </argument>
         </arguments>
     </virtualType>
@@ -646,6 +649,26 @@
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
                     <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\Name"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code" xsi:type="string">name</item>
+                <item name="label" xsi:type="string">Name</item>
+                <item name="type" xsi:type="string">text</item>
+                <item name="is_filterable" xsi:type="boolean">true</item>
+                <item name="filter_type" xsi:type="string">text</item>
+                <item name="sort_order" xsi:type="number">20</item>
+                <item name="is_sortable" xsi:type="boolean">true</item>
+                <item name="is_translatable" xsi:type="boolean">true</item>
+                <item name="is_title" xsi:type="boolean">true</item>
+                <item name="visible_on" xsi:type="array">
+                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
                 </item>
             </argument>
         </arguments>
