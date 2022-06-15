@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Api\Data\Locale\Scope;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -9,27 +11,11 @@ interface RecordInterface extends ExtensibleDataInterface
      * Constants defined for keys of the data array.
      * Identical to the name of the getter in snake case
      */
-    public const RECORD_ID = 'record_id';
     public const SCOPE_ID = 'scope_id';
     public const SCOPE_TYPE = 'scope_type';
     public const LOCALE_CODE = 'locale_code';
     public const IS_PRIMARY = 'is_primary';
     /**#@-*/
-
-    /**
-     * Get record id
-     *
-     * @return int
-     */
-    public function getRecordId();
-
-    /**
-     * Set record id
-     *
-     * @param int $recordId
-     * @return $this
-     */
-    public function setRecordId($recordId);
 
     /**
      * Get scope id

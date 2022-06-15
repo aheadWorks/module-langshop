@@ -11,22 +11,6 @@ class Record extends DataObject implements RecordInterface
     /**
      * @inheritdoc
      */
-    public function getRecordId()
-    {
-        return $this->getData(self::RECORD_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setRecordId($recordId)
-    {
-        return $this->setData(self::RECORD_ID, $recordId);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getScopeId()
     {
         return $this->getData(self::SCOPE_ID);

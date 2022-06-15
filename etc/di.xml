@@ -151,16 +151,6 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Framework\EntityManager\MetadataPool">
-        <arguments>
-            <argument name="metadata" xsi:type="array">
-                <item name="Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface" xsi:type="array">
-                    <item name="identifierField" xsi:type="const">Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface::RECORD_ID</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-
     <type name="Aheadworks\Langshop\Model\Locale\LoadHandler">
         <arguments>
             <argument name="processor" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Composite</argument>
