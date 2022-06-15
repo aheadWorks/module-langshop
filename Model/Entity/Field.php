@@ -143,7 +143,7 @@ class Field extends DataObject
      */
     public function getSortOrder(): int
     {
-        return $this->getData(self::SORT_ORDER);
+        return (int) $this->getData(self::SORT_ORDER);
     }
 
     /**
