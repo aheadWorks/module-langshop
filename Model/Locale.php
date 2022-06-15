@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model;
 
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Locale extends AbstractModel implements LocaleInterface
+class Locale extends DataObject implements LocaleInterface
 {
     /**
      * @inheritdoc

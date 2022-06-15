@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema;
 
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class TranslatableResource extends AbstractModel implements ResourceInterface
+class TranslatableResource extends DataObject implements ResourceInterface
 {
     /**
      * @inheritDoc
@@ -16,8 +18,6 @@ class TranslatableResource extends AbstractModel implements ResourceInterface
 
     /**
      * @inheritDoc
-     *
-     * @phpstan-ignore-next-line
      */
     public function getResource()
     {
