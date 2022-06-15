@@ -16,7 +16,7 @@ class EntityAttribute
     private EntityPool $entityPool;
 
     /**
-     * @var array<int, array<string, Field>>
+     * @var  array<string, array<int, array<string, Field>>>
      */
     private array $attributes;
 
