@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\Saas;
+namespace Aheadworks\Langshop\Model\Saas\Result;
 
 use Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface;
 use Magento\Framework\Model\AbstractModel;
 
-class ConfirmationResult extends AbstractModel implements ConfirmationResultInterface
+class Confirmation extends AbstractModel implements ConfirmationResultInterface
 {
     /**
      * @inheritDoc
