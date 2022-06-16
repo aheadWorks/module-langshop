@@ -70,6 +70,7 @@ class Csv implements RepositoryInterface
 
     /**
      * @inheritDoc
+     * @codeCoverageIgnore
      */
     public function save(string $entityId, array $translations): void
     {

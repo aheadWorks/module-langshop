@@ -14,6 +14,7 @@ class Sorting implements ProcessorInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param Collection $collection
      * @return void
+     * @codeCoverageIgnore
      */
     public function process(SearchCriteriaInterface $searchCriteria, Collection $collection): void
     {
