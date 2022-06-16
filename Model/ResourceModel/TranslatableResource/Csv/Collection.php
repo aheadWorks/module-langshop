@@ -86,7 +86,7 @@ class Collection extends DataCollection
 
     /**
      * @inheritDoc
-     * @return Model[]|DataObject[]
+     * @return Model[]
      * @throws \Exception
      */
     public function getItems()
@@ -101,7 +101,8 @@ class Collection extends DataCollection
                 $model->setLines([]);
             }
         }
-        return parent::getItems();
+        $this->load();
+        return $this->_items;
     }
 
     /**
