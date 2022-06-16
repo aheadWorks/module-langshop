@@ -68,14 +68,15 @@ class Csv implements RepositoryInterface
         return $this->addLocalizedAttributes($collection, $localeScopes)->getFirstItem();
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @inheritDoc
-     * @codeCoverageIgnore
      */
     public function save(string $entityId, array $translations): void
     {
         // TODO: https://aheadworks.atlassian.net/browse/LSM2-172
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Adds localized attribute values to the collection
