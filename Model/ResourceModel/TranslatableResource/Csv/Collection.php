@@ -86,7 +86,7 @@ class Collection extends DataCollection
 
     /**
      * @inheritDoc
-     * @return Model[]|DataObject
+     * @return Model[]|DataObject[]
      * @throws \Exception
      */
     public function getItems()
