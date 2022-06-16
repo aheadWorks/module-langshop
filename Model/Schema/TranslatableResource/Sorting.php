@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Sorting extends AbstractModel implements SortingInterface
+class Sorting extends DataObject implements SortingInterface
 {
     /**
      * Set key
