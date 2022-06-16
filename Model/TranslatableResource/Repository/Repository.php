@@ -10,8 +10,8 @@ use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as Tra
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\Collection\AbstractDb as Collection;
-use Magento\Framework\Data\Collection\AbstractDbFactory as CollectionFactory;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -159,7 +159,7 @@ class Repository implements RepositoryInterface
         $collection = $this->collectionFactory->create();
 
         $fieldName = $collection->getResource()->getIdFieldName();
-        $collection->addFieldToFilter($fieldName, (string) $entityId);
+        $collection->addFieldToFilter($fieldName, $entityId);
 
         if ($collection instanceof CatalogCollection) {
             $collection->addAttributeToSelect(

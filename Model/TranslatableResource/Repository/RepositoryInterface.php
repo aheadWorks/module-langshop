@@ -6,7 +6,7 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\Collection\AbstractDb as Collection;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
