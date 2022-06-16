@@ -7,6 +7,7 @@ use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
+use Magento\Framework\DataObject;
 use Magento\Framework\File\Csv;
 use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
@@ -85,7 +86,7 @@ class Collection extends DataCollection
 
     /**
      * @inheritDoc
-     * @return Model[]
+     * @return Model[]|DataObject
      * @throws \Exception
      */
     public function getItems()
@@ -204,7 +205,7 @@ class Collection extends DataCollection
      * Set store id
      *
      * @param int $storeId
-     * @return $this
+     * @return Collection
      */
     public function setStoreId(int $storeId): Collection
     {

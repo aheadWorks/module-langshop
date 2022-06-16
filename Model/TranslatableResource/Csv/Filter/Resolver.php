@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\DataObject;
 
 class Resolver
@@ -25,7 +26,7 @@ class Resolver
     /**
      * Resolve
      *
-     * @param DataObject[] $filters
+     * @param DataObject[]|Filter[] $filters
      * @param DataObject $object
      * @return bool
      */
@@ -34,6 +35,7 @@ class Resolver
         $result = true;
 
         foreach ($filters as $filter) {
+            /** @var string|array $value */
             $value = $filter->getValue();
             if (is_array($value)) {
                 foreach ($value as $condition => $conditionValue) {

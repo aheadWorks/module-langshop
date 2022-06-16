@@ -11,7 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as Catalog
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
-use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Data\Collection\AbstractDbFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -23,9 +23,9 @@ use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Colle
 class Repository implements RepositoryInterface
 {
     /**
-     * @var CollectionFactory
+     * @var AbstractDbFactory
      */
-    private CollectionFactory $collectionFactory;
+    private AbstractDbFactory $collectionFactory;
 
     /**
      * @var ResourceModelFactory
@@ -63,7 +63,7 @@ class Repository implements RepositoryInterface
     private string $resourceType;
 
     /**
-     * @param CollectionFactory $collectionFactory
+     * @param AbstractDbFactory $collectionFactory
      * @param ResourceModelFactory $resourceModelFactory
      * @param TranslationValidation $translationValidation
      * @param EventManagerInterface $eventManager
@@ -73,7 +73,7 @@ class Repository implements RepositoryInterface
      * @param string $resourceType
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
+        AbstractDbFactory $collectionFactory,
         ResourceModelFactory $resourceModelFactory,
         TranslationValidation $translationValidation,
         EventManagerInterface $eventManager,
