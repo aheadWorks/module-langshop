@@ -10,9 +10,9 @@ use Magento\Catalog\Model\Product;
 class Read
 {
     /**
-     * Field to process
+     * The model fields to work with
      */
-    private const KEY_FIELD = 'options';
+    private const KEY_OPTIONS = 'options';
 
     /**
      * @var OptionProvider
@@ -48,8 +48,8 @@ class Read
             foreach ($options as $optionId => $option) {
                 $product = $products[$option->getProductId()];
 
-                $product->setData(self::KEY_FIELD, array_replace(
-                    $product->getData(self::KEY_FIELD) ?? [],
+                $product->setData(self::KEY_OPTIONS, array_replace(
+                    $product->getData(self::KEY_OPTIONS) ?? [],
                     [$optionId => $option->getTitle()]
                 ));
             }

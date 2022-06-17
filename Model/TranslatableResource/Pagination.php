@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Pagination extends AbstractModel implements PaginationInterface
+class Pagination extends DataObject implements PaginationInterface
 {
     /**
      * @inheritDoc

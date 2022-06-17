@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResource\FilterInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Filter extends AbstractModel implements FilterInterface
+class Filter extends DataObject implements FilterInterface
 {
     /**
      * @inheritDoc

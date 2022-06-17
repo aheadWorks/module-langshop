@@ -64,4 +64,10 @@
             <resource ref="Aheadworks_Langshop::langshop"/>
         </resources>
     </route>
+    <route url="/V1/awLangshop/url/admin/dashboard" method="GET">
+        <service class="Aheadworks\Langshop\Api\SaasManagementInterface" method="getDashboardUrl"/>
+        <resources>
+            <resource ref="Aheadworks_Langshop::langshop"/>
+        </resources>
+    </route>
 </routes>

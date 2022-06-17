@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Translation extends AbstractModel implements TranslationInterface
+class Translation extends DataObject implements TranslationInterface
 {
     /**
      * @inheritDoc

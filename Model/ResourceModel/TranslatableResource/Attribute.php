@@ -3,80 +3,8 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource;
 
-use Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool;
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResourceModel;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Proxy as AttributeResourceModelProxy;
-use Magento\Eav\Model\ResourceModel\Entity\AttributeFactory as AttributeResourceModelFactory;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\Store;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
 
-class Attribute extends AttributeResourceModelProxy
+class Attribute extends AttributeResource
 {
-    /**
-     * @var AttributeResourceModelFactory
-     */
-    private AttributeResourceModelFactory $attributeResourceModelFactory;
-
-    /**
-     * @var PersistorPool
-     */
-    private PersistorPool $persistorPool;
-
-    /**
-     * @var EavConfig
-     */
-    private EavConfig $eavConfig;
-
-    /**
-     * @param AttributeResourceModelFactory $attributeResourceModelFactory
-     * @param PersistorPool $persistorPool
-     * @param EavConfig $eavConfig
-     */
-    public function __construct(
-        AttributeResourceModelFactory $attributeResourceModelFactory,
-        PersistorPool $persistorPool,
-        EavConfig $eavConfig
-    ) {
-        $this->attributeResourceModelFactory = $attributeResourceModelFactory;
-        $this->persistorPool = $persistorPool;
-        $this->eavConfig = $eavConfig;
-    }
-
-    /**
-     * Get proxied instance
-     *
-     * @return AttributeResourceModel
-     */
-    public function _getSubject(): AttributeResourceModel
-    {
-        // @phpstan-ignore-next-line
-        if (!isset($this->_subject)) {
-            $this->_subject = $this->attributeResourceModelFactory->create();
-        }
-
-        return $this->_subject;
-    }
-
-    /**
-     * Save object data
-     *
-     * @param AbstractModel $object
-     * @return $this
-     * @throws AlreadyExistsException
-     */
-    public function save(AbstractModel $object): Attribute
-    {
-        parent::save($object);
-
-        $storeId = (int) $object->getData('store_id') ?: Store::DEFAULT_STORE_ID;
-        foreach ($this->persistorPool->get() as $persistor) {
-            $persistor->save($object, $storeId);
-        }
-
-        $this->eavConfig->clear();
-
-        return $this;
-    }
 }

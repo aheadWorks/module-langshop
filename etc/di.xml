@@ -7,7 +7,9 @@
                 type="Aheadworks\Langshop\Model\Service\Locale" />
 
     <preference for="Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface"
-                type="Aheadworks\Langshop\Model\Saas\ConfirmationResult" />
+                type="Aheadworks\Langshop\Model\Saas\Result\Confirmation" />
+    <preference for="Aheadworks\Langshop\Api\Data\Saas\UrlResultInterface"
+                type="Aheadworks\Langshop\Model\Saas\Result\Url" />
     <preference for="Aheadworks\Langshop\Api\SaasManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Saas" />
 
@@ -66,31 +68,19 @@
         </arguments>
     </type>
 
-    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute"
-                 type="Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool">
-        <arguments>
-            <argument name="persistors" xsi:type="array">
-                <item name="options" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Options</item>
-                <item name="store_label" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\StoreLabel</item>
-                <item name="swatches" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\Attribute\Swatches</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection">
-        <arguments>
-            <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute</argument>
-        </arguments>
+        <plugin name="aw_ls_store_label_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Read"/>
+        <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Option\Read"/>
+        <plugin name="aw_ls_swatch_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Swatch\Read"/>
     </type>
-    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute">
-        <arguments>
-            <argument name="persistorPool" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Field\PersistorPool\Attribute</argument>
-        </arguments>
-    </type>
-
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection">
         <plugin name="aw_ls_image_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Image"/>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Read"/>
+    </type>
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute">
+        <plugin name="aw_ls_store_label_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Save"/>
+        <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Option\Save"/>
+        <plugin name="aw_ls_swatch_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Swatch\Save"/>
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product">
         <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Save"/>
@@ -160,16 +150,6 @@
             <argument name="resourceType" xsi:type="string">attribute</argument>
         </arguments>
     </virtualType>
-
-    <type name="Magento\Framework\EntityManager\MetadataPool">
-        <arguments>
-            <argument name="metadata" xsi:type="array">
-                <item name="Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface" xsi:type="array">
-                    <item name="identifierField" xsi:type="const">Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface::RECORD_ID</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
 
     <type name="Aheadworks\Langshop\Model\Locale\LoadHandler">
         <arguments>
@@ -337,7 +317,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sort_order" xsi:type="number">10</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -355,7 +335,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">20</item>
+                <item name="sort_order" xsi:type="number">20</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -373,7 +353,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">30</item>
+                <item name="sort_order" xsi:type="number">30</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -388,9 +368,9 @@
             <argument name="data" xsi:type="array">
                 <item name="code" xsi:type="string">store_label</item>
                 <item name="label" xsi:type="string">Store Label</item>
-                <item name="type" xsi:type="string">array</item>
+                <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="string">40</item>
+                <item name="sort_order" xsi:type="number">40</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
@@ -408,7 +388,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">50</item>
+                <item name="sort_order" xsi:type="number">50</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -426,7 +406,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">60</item>
+                <item name="sort_order" xsi:type="number">60</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -443,7 +423,7 @@
                 <item name="label" xsi:type="string">Options</item>
                 <item name="type" xsi:type="string">array</item>
                 <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="string">70</item>
+                <item name="sort_order" xsi:type="number">70</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
@@ -460,7 +440,7 @@
                 <item name="label" xsi:type="string">Swatches</item>
                 <item name="type" xsi:type="string">array</item>
                 <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="string">80</item>
+                <item name="sort_order" xsi:type="number">80</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
@@ -515,7 +495,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sort_order" xsi:type="number">10</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -532,7 +512,7 @@
                 <item name="label" xsi:type="string">Image</item>
                 <item name="type" xsi:type="string">image</item>
                 <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="string">20</item>
+                <item name="sort_order" xsi:type="number">20</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -550,7 +530,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">30</item>
+                <item name="sort_order" xsi:type="number">30</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
@@ -569,7 +549,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">40</item>
+                <item name="sort_order" xsi:type="number">40</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -587,7 +567,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">50</item>
+                <item name="sort_order" xsi:type="number">50</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -605,7 +585,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">60</item>
+                <item name="sort_order" xsi:type="number">60</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -622,7 +602,7 @@
                 <item name="label" xsi:type="string">Options</item>
                 <item name="type" xsi:type="string">array</item>
                 <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="string">70</item>
+                <item name="sort_order" xsi:type="number">70</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
@@ -672,7 +652,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sort_order" xsi:type="number">10</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -832,5 +812,11 @@
 
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <plugin name="aw_ls_disable_body_overriding" type="Aheadworks\Langshop\Plugin\Webapi\Controller\Rest\ParamsOverrider" />
+    </type>
+
+    <type name="Aheadworks\Langshop\Model\Config\Saas">
+        <arguments>
+            <argument name="configType" xsi:type="object">Magento\Config\App\Config\Type\System</argument>
+        </arguments>
     </type>
 </config>

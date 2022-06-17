@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema;
 
 use Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class TranslatableResourceGroup extends AbstractModel implements ResourceGroupInterface
+class TranslatableResourceGroup extends DataObject implements ResourceGroupInterface
 {
     /**
      * @inheritDoc
