@@ -57,6 +57,11 @@ class Collection extends DataCollection
     private int $storeId = 0;
 
     /**
+     * @var Model[]
+     */
+    protected $_items = [];
+
+    /**
      * @param EntityFactoryInterface $entityFactory
      * @param Csv $csvFile
      * @param DirReader $dirReader
