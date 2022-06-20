@@ -88,18 +88,15 @@ class Converter
      */
     private function getFieldSchema(Field $field): FieldInterface
     {
-        return $this->fieldSchemaFactory->create(['data' => [
-                FieldInterface::KEY => $field->getCode(),
-                FieldInterface::LABEL => $field->getLabel(),
-                FieldInterface::TYPE => $field->getType(),
-                FieldInterface::SORT_ORDER => $field->getSortOrder(),
-                FieldInterface::IS_TRANSLATABLE => $field->isTranslatable(),
-                FieldInterface::VISIBLE_ON => $field->getVisibleOn(),
-                FieldInterface::FILTER => $field->isFilterable()
-                    ? $field->getFilterType()
-                    : 'none'
-            ]
-        ]);
+        return $this->fieldSchemaFactory->create()
+            ->setKey($field->getCode())
+            ->setLabel($field->getLabel())
+            ->setType($field->getType())
+            ->setIsTranslatable($field->isTranslatable())
+            ->setIsTitle($field->isTitle())
+            ->setVisibleOn($field->getVisibleOn())
+            ->setFilter($field->isFilterable() ? $field->getFilterType() : 'none')
+            ->setSortOrder($field->getSortOrder());
     }
 
     /**

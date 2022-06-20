@@ -93,6 +93,27 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
+     * Set is title
+     *
+     * @param bool $isTitle
+     * @return $this
+     */
+    public function setIsTitle(bool $isTitle): FieldInterface
+    {
+        return $this->setData(self::IS_TITLE, $isTitle);
+    }
+
+    /**
+     * Is title
+     *
+     * @return bool
+     */
+    public function isTitle(): bool
+    {
+        return $this->getData(self::IS_TITLE);
+    }
+
+    /**
      * Set visible areas for field
      *
      * @param string[] $areas

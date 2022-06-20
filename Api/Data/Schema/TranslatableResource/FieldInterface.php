@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Api\Data\Schema\TranslatableResource;
 
 interface FieldInterface
@@ -7,6 +9,7 @@ interface FieldInterface
     public const LABEL = 'label';
     public const TYPE = 'type';
     public const IS_TRANSLATABLE = 'isTranslatable';
+    public const IS_TITLE = 'is_title';
     public const VISIBLE_ON = 'visible_on';
     public const FILTER = 'filter';
     public const SORT_ORDER = 'sortOrder';
@@ -70,6 +73,21 @@ interface FieldInterface
      * @return bool
      */
     public function isTranslatable(): bool;
+
+    /**
+     * Set is title
+     *
+     * @param bool $isTitle
+     * @return $this
+     */
+    public function setIsTitle(bool $isTitle): FieldInterface;
+
+    /**
+     * Is title
+     *
+     * @return bool
+     */
+    public function isTitle(): bool;
 
     /**
      * Set visible areas for field
