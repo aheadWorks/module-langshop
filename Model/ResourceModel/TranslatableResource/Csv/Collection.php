@@ -7,7 +7,6 @@ use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
-use Magento\Framework\DataObject;
 use Magento\Framework\File\Csv;
 use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
@@ -57,6 +56,11 @@ class Collection extends DataCollection
     private int $storeId = 0;
 
     /**
+     * @var int
+     */
+    protected $_pageSize = 20;
+
+    /**
      * @var Model[]
      */
     protected $_items = [];
@@ -96,16 +100,6 @@ class Collection extends DataCollection
      */
     public function getItems()
     {
-        foreach ($this->moduleList->getNames() as $packageName) {
-            $model = $this->getItemById($packageName);
-            try {
-                $dir = $this->dirReader->getModuleDir('i18n', $packageName) . '/' . $this->fileName;
-                $lines = $this->csvFile->getData($dir);
-                $model->setLines($this->prepareLines($lines));
-            } catch (\Exception $e) {
-                $model->setLines([]);
-            }
-        }
         $this->load();
         return $this->_items;
     }
@@ -123,13 +117,33 @@ class Collection extends DataCollection
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
-        parent::loadData($printQuery, $logQuery);
+        foreach ($this->moduleList->getNames() as $packageName) {
+            $model = $this->modelFactory->create();
+            $names = explode('_', $packageName);
+            $model
+                ->setId($packageName)
+                ->setVendorName($names[0])
+                ->setModuleName($names[1]);
+            if ($this->filterResolver->resolve($this->_filters, $model)) {
+                try {
+                    $dir = $this->dirReader->getModuleDir('i18n', $packageName) . '/' . $this->fileName;
+                    $lines = $this->csvFile->getData($dir);
+                    $model->setLines($this->prepareLines($lines));
+                } catch (\Exception $e) {
+                    $model->setLines([]);
+                }
+                $this->addItem($model);
+            }
+        }
+
         $this->_totalRecords = count($this->_items);
         $this->applyPagination();
         $this->_setIsLoaded();
+
         return $this;
     }
 
@@ -140,17 +154,8 @@ class Collection extends DataCollection
      */
     public function getItemById($id)
     {
-        $names = explode('_', $id);
-        $model = $this->modelFactory->create(['data' => [
-            Model::ID => $id,
-            Model::VENDOR_NAME => $names[0],
-            Model::MODULE_NAME => $names[1]
-        ]]);
-        if ($this->filterResolver->resolve($this->_filters, $model)) {
-            $this->addItem($model);
-        }
-
-        return $model;
+        $this->load();
+        return $this->_items[$id] ?? null;
     }
 
     /**

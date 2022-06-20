@@ -37,14 +37,10 @@ class Resolver
         foreach ($filters as $filter) {
             /** @var string|array $value */
             $value = $filter->getValue();
-            if (is_array($value)) {
-                foreach ($value as $condition => $conditionValue) {
-                    $applier = $this->filterAppliers[$condition] ?? $this->filterAppliers[self::DEFAULT_FILTER];
-                    $result =  $result && $applier->apply($object->getData($filter->getField()), $conditionValue);
-                }
-            } else {
-                $applier = $this->filterAppliers[self::DEFAULT_FILTER];
-                $result = $result && $applier->apply($object->getData($filter->getField()), $value);
+            $preparedValueList = is_array($value) ? $value : [$value];
+            foreach ($preparedValueList as $condition => $conditionValue) {
+                $applier = $this->filterAppliers[$condition] ?? $this->filterAppliers[self::DEFAULT_FILTER];
+                $result =  $result && $applier->apply($object->getData($filter->getField()), $conditionValue);
             }
         }
 
