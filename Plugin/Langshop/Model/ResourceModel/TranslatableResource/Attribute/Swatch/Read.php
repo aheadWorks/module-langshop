@@ -46,11 +46,11 @@ class Read
             );
 
             foreach ($swatches as $optionId => $swatch) {
-                $attribute = $attributes[$swatch->getData('attribute_id')];
+                $attribute = $attributes[$swatch->getAttributeId()];
 
                 $attribute->setData(self::KEY_SWATCHES, array_replace(
                     $attribute->getData(self::KEY_SWATCHES) ?? [],
-                    [$optionId => $swatch->getData('value')]
+                    [$optionId => $swatch->getValue()]
                 ));
             }
         }

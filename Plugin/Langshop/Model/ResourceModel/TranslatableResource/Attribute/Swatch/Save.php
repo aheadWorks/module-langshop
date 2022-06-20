@@ -92,10 +92,8 @@ class Save
 
             $toInsert = [];
             foreach ($swatches as $optionId => $value) {
-                $existingSwatch = $existingSwatches[$optionId] ?? null;
-
                 $toInsert[] = [
-                    'swatch_id' => $existingSwatch ? $existingSwatch->getId() : null,
+                    'swatch_id' => $existingSwatches[$optionId]->getData('swatch_id'),
                     'option_id' => $optionId,
                     'store_id' => $storeId,
                     'value' => $value
