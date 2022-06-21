@@ -6,6 +6,7 @@ namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableRe
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection as AttributeCollection;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\Attribute\StoreLabel as StoreLabelProvider;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Store\Model\Store;
 
 class Read
 {
@@ -40,15 +41,15 @@ class Read
         array $attributes
     ): array {
         if ($attributes) {
-            foreach ($attributes as $attribute) {
-                $attribute->setData(self::KEY_STORE_LABEL, $attribute->getDefaultFrontendLabel());
+            $storeId = $attributeCollection->getStoreId();
+
+            if ($storeId === Store::DEFAULT_STORE_ID) {
+                foreach ($attributes as $attribute) {
+                    $attribute->setData(self::KEY_STORE_LABEL, $attribute->getDefaultFrontendLabel());
+                }
             }
 
-            $storeLabels = $this->storeLabelProvider->get(
-                array_keys($attributes),
-                $attributeCollection->getStoreId()
-            );
-
+            $storeLabels = $this->storeLabelProvider->get(array_keys($attributes), $storeId);
             foreach ($storeLabels as $storeLabel) {
                 $attributes[$storeLabel['attribute_id']]->setData(self::KEY_STORE_LABEL, $storeLabel['value']);
             }
