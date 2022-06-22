@@ -126,13 +126,14 @@ class Collection extends DataCollection
     }
 
     /**
-     * Add lines to result collection
+     * Set is need to add lines to result collection
      *
+     * @param bool $isNeed
      * @return $this
      */
-    public function addLinesAttribute(): Collection
+    public function setIsNeedToAddLinesAttribute(bool $isNeed): Collection
     {
-        $this->needToAddLines = true;
+        $this->needToAddLines = $isNeed;
         return $this;
     }
 
