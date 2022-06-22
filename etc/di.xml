@@ -58,12 +58,16 @@
                 type="Aheadworks\Langshop\Model\Locale\Scope\Record"/>
     <!-- END Scope Record Configuration -->
 
+    <preference for="Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface"
+                type="Aheadworks\Langshop\Model\ResourceModel\Collection\Composite"/>
+
     <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool">
         <arguments>
             <argument name="repositories" xsi:type="array">
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
+                <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Csv</item>
             </argument>
         </arguments>
     </type>
@@ -150,6 +154,24 @@
             <argument name="resourceType" xsi:type="string">attribute</argument>
         </arguments>
     </virtualType>
+
+    <type name="Aheadworks\Langshop\Model\ResourceModel\Collection\Composite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\Collection\Processor\Filter</item>
+                <item name="pagination" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\Collection\Processor\Pagination</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\Collection\Processor\Sorting</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver">
+        <arguments>
+            <argument name="filterAppliers" xsi:type="array">
+                <item name="eq" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Eq</item>
+                <item name="like" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Like</item>
+            </argument>
+        </arguments>
+    </type>
 
     <type name="Aheadworks\Langshop\Model\Locale\LoadHandler">
         <arguments>
@@ -693,7 +715,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sort_order" xsi:type="number">10</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -711,7 +733,7 @@
                 <item name="type" xsi:type="string">text</item>
                 <item name="is_filterable" xsi:type="boolean">true</item>
                 <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="string">20</item>
+                <item name="sort_order" xsi:type="number">20</item>
                 <item name="is_sortable" xsi:type="boolean">true</item>
                 <item name="is_translatable" xsi:type="boolean">false</item>
                 <item name="visible_on" xsi:type="array">
@@ -728,7 +750,7 @@
                 <item name="label" xsi:type="string">Lines</item>
                 <item name="type" xsi:type="string">array</item>
                 <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="string">30</item>
+                <item name="sort_order" xsi:type="number">30</item>
                 <item name="is_sortable" xsi:type="boolean">false</item>
                 <item name="is_translatable" xsi:type="boolean">true</item>
                 <item name="visible_on" xsi:type="array">
