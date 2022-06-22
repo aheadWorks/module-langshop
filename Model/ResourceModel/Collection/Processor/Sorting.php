@@ -8,7 +8,6 @@ use Magento\Framework\Data\Collection;
 
 class Sorting implements ProcessorInterface
 {
-    // @codingStandardsIgnoreStart
     /**
      * Apply Search Criteria Sorting Orders to collection
      *
@@ -16,9 +15,9 @@ class Sorting implements ProcessorInterface
      * @param Collection $collection
      * @return void
      */
+    //phpcs:ignore
     public function process(SearchCriteriaInterface $searchCriteria, Collection $collection): void
     {
         //todo https://aheadworks.atlassian.net/browse/LSM2-171
     }
-    // @codingStandardsIgnoreEnd
 }

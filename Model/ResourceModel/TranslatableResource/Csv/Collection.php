@@ -2,28 +2,22 @@
 declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv;
 
-use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
+use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
-use Magento\Framework\File\Csv;
 use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Magento\Framework\Module\Dir\Reader as DirReader;
 use Magento\Framework\Module\ModuleListInterface;
+use Psr\Log\LoggerInterface;
 
 class Collection extends DataCollection
 {
     /**
-     * @var Csv
+     * @var CsvReader
      */
-    private Csv $csvFile;
-
-    /**
-     * @var DirReader
-     */
-    private DirReader $dirReader;
+    private CsvReader $csvReader;
 
     /**
      * @var ModuleListInterface
@@ -31,24 +25,14 @@ class Collection extends DataCollection
     private ModuleListInterface $moduleList;
 
     /**
-     * @var LocaleConfig
-     */
-    private LocaleConfig $localeConfig;
-
-    /**
-     * @var ModelFactory
-     */
-    private ModelFactory $modelFactory;
-
-    /**
      * @var Resolver
      */
     private Resolver $filterResolver;
 
     /**
-     * @var string
+     * @var LoggerInterface
      */
-    private string $fileName;
+    private LoggerInterface $logger;
 
     /**
      * @var int
@@ -66,42 +50,34 @@ class Collection extends DataCollection
     protected $_items = [];
 
     /**
+     * @var string
+     */
+    protected $_itemObjectClass = Model::class;
+
+    /**
+     * @var bool
+     */
+    private bool $needToAddLines = false;
+
+    /**
      * @param EntityFactoryInterface $entityFactory
-     * @param Csv $csvFile
-     * @param DirReader $dirReader
+     * @param CsvReader $csvReader
      * @param ModuleListInterface $moduleList
-     * @param LocaleConfig $localeConfig
-     * @param ModelFactory $modelFactory
+     * @param LoggerInterface $logger
      * @param Resolver $filterResolver
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
-        Csv $csvFile,
-        DirReader $dirReader,
+        CsvReader $csvReader,
         ModuleListInterface $moduleList,
-        LocaleConfig $localeConfig,
-        ModelFactory $modelFactory,
+        LoggerInterface $logger,
         Resolver $filterResolver
     ) {
         parent::__construct($entityFactory);
-        $this->csvFile = $csvFile;
-        $this->dirReader = $dirReader;
+        $this->csvReader = $csvReader;
         $this->moduleList = $moduleList;
-        $this->localeConfig = $localeConfig;
-        $this->modelFactory = $modelFactory;
+        $this->logger = $logger;
         $this->filterResolver = $filterResolver;
-        $this->updateFilename();
-    }
-
-    /**
-     * @inheritDoc
-     * @return Model[]
-     * @throws \Exception
-     */
-    public function getItems()
-    {
-        $this->load();
-        return $this->_items;
     }
 
     /**
@@ -122,19 +98,21 @@ class Collection extends DataCollection
     public function loadData($printQuery = false, $logQuery = false)
     {
         foreach ($this->moduleList->getNames() as $packageName) {
-            $model = $this->modelFactory->create();
+            $model = $this->_entityFactory->create($this->_itemObjectClass);
             $names = explode('_', $packageName);
             $model
                 ->setId($packageName)
                 ->setVendorName($names[0])
                 ->setModuleName($names[1]);
             if ($this->filterResolver->resolve($this->_filters, $model)) {
-                try {
-                    $dir = $this->dirReader->getModuleDir('i18n', $packageName) . '/' . $this->fileName;
-                    $lines = $this->csvFile->getData($dir);
-                    $model->setLines($this->prepareLines($lines));
-                } catch (\Exception $e) {
-                    $model->setLines([]);
+                if ($this->needToAddLines) {
+                    try {
+                        $lines = $this->csvReader->getCsvData($packageName, $this->getStoreId());
+                        $model->setLines($this->prepareLines($lines));
+                    } catch (\Exception $e) {
+                        $this->logger->error($e->getMessage());
+                        $model->setLines([]);
+                    }
                 }
                 $this->addItem($model);
             }
@@ -148,14 +126,14 @@ class Collection extends DataCollection
     }
 
     /**
-     * @inheritDoc
-     * @return Model
-     * @throws \Exception
+     * Add lines to result collection
+     *
+     * @return $this
      */
-    public function getItemById($id)
+    public function addLinesAttribute(): Collection
     {
-        $this->load();
-        return $this->_items[$id] ?? null;
+        $this->needToAddLines = true;
+        return $this;
     }
 
     /**
@@ -167,8 +145,8 @@ class Collection extends DataCollection
     private function prepareLines(array $lines): array
     {
         $result = [];
-        foreach ($lines as $index => $value) {
-            $result[$index] = $value[CsvFile::TRANSLATION_INDEX];
+        foreach ($lines as $value) {
+            $result[$value[CsvFile::ORIGINAL_INDEX]] = $value[CsvFile::TRANSLATION_INDEX];
         }
 
         return $result;
@@ -222,7 +200,7 @@ class Collection extends DataCollection
     {
         $this->storeId = $storeId;
 
-        return $this->updateFilename();
+        return $this;
     }
 
     /**
@@ -233,18 +211,6 @@ class Collection extends DataCollection
     public function getStoreId(): int
     {
         return $this->storeId;
-    }
-
-    /**
-     * Update filename for current store id
-     *
-     * @return Collection
-     */
-    private function updateFilename(): Collection
-    {
-        $this->fileName = $this->localeConfig->getValue($this->getStoreId()) . '.csv';
-
-        return $this;
     }
 
     /**

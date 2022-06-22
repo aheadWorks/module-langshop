@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -68,15 +69,14 @@ class Csv implements RepositoryInterface
         return $this->addLocalizedAttributes($collection, $localeScopes)->getFirstItem();
     }
 
-    // @codingStandardsIgnoreStart
     /**
      * @inheritDoc
      */
+    //phpcs:ignore
     public function save(string $entityId, array $translations): void
     {
         // TODO: https://aheadworks.atlassian.net/browse/LSM2-172
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Adds localized attribute values to the collection
@@ -91,12 +91,15 @@ class Csv implements RepositoryInterface
     {
         $localizedCollection = clone $collection;
         $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields('csv');
+        $localizedCollection->addLinesAttribute();
 
         foreach ($localeScopes as $localeScope) {
             $localizedCollection->setStoreId((int)$localeScope->getScopeId())->clear();
+            /** @var Model[] $localizedItems */
             $localizedItems = $localizedCollection->getItems();
             //todo https://aheadworks.atlassian.net/browse/LSM2-173
             foreach ($localizedItems as $localizedItem) {
+                /** @var Model $item */
                 $item = $collection->getItemById($localizedItem->getId());
                 foreach ($translatableAttributeCodes as $attributeCode) {
                     $value = is_array($item->getData($attributeCode))
