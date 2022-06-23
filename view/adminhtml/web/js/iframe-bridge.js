@@ -19,18 +19,20 @@ define([], function () {
         },
 
         dispatchEvent: function (data) {
-            if (data.eventName) {
-                let event = new CustomEvent(data.eventName, {detail: data});
+            if (data.event) {
+                let event = new CustomEvent(data.event, {detail: data.data});
                 window.dispatchEvent(event);
             }
         }
     };
 
     window.addEventListener('message', function (e) {
-        let event = e.data.event;
+        let messageObject = JSON.parse(e.data);
+        let eventName = messageObject.event || '';
+        let eventData = messageObject.data || {};
 
-        if (iframeBridge[event]) {
-            iframeBridge[event](e.data);
+        if (iframeBridge[eventName]) {
+            iframeBridge[eventName](eventData);
         }
     });
 });
