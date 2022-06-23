@@ -300,142 +300,104 @@
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\AttributeId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">attribute_id</item>
-                <item name="label" xsi:type="string">Attribute Id</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">10</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">attribute_id</argument>
+            <argument name="label" xsi:type="string">Attribute Id</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">10</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\EntityTypeId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">entity_type_id</item>
-                <item name="label" xsi:type="string">Entity Type</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">20</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">entity_type_id</argument>
+            <argument name="label" xsi:type="string">Entity Type</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">20</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\AttributeCode"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">attribute_code</item>
-                <item name="label" xsi:type="string">Attribute Code</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">30</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">attribute_code</argument>
+            <argument name="label" xsi:type="string">Attribute Code</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">30</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\StoreLabel"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">store_label</item>
-                <item name="label" xsi:type="string">Store Label</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="number">40</item>
-                <item name="is_sortable" xsi:type="boolean">false</item>
-                <item name="is_translatable" xsi:type="boolean">true</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
-                </item>
+            <argument name="code" xsi:type="string">store_label</argument>
+            <argument name="label" xsi:type="string">Store Label</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">40</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendLabel"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">frontend_label</item>
-                <item name="label" xsi:type="string">Default Label</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">50</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="is_title" xsi:type="boolean">true</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">frontend_label</argument>
+            <argument name="label" xsi:type="string">Default Label</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="isTitle" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">50</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendInput"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">frontend_input</item>
-                <item name="label" xsi:type="string">Attribute Type</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">60</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">frontend_input</argument>
+            <argument name="label" xsi:type="string">Attribute Type</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">60</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\Options"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">options</item>
-                <item name="label" xsi:type="string">Options</item>
-                <item name="type" xsi:type="string">array</item>
-                <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="number">70</item>
-                <item name="is_sortable" xsi:type="boolean">false</item>
-                <item name="is_translatable" xsi:type="boolean">true</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
-                </item>
+            <argument name="code" xsi:type="string">options</argument>
+            <argument name="label" xsi:type="string">Options</argument>
+            <argument name="type" xsi:type="string">array</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">70</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\Swatches"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">swatches</item>
-                <item name="label" xsi:type="string">Swatches</item>
-                <item name="type" xsi:type="string">array</item>
-                <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="number">80</item>
-                <item name="is_sortable" xsi:type="boolean">false</item>
-                <item name="is_translatable" xsi:type="boolean">true</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
-                </item>
+            <argument name="code" xsi:type="string">swatches</argument>
+            <argument name="label" xsi:type="string">Swatches</argument>
+            <argument name="type" xsi:type="string">array</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">80</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
         </arguments>
     </virtualType>
@@ -479,126 +441,93 @@
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\EntityId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">entity_id</item>
-                <item name="label" xsi:type="string">Id</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">10</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">entity_id</argument>
+            <argument name="label" xsi:type="string">Id</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">10</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\Image"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">image</item>
-                <item name="label" xsi:type="string">Image</item>
-                <item name="type" xsi:type="string">image</item>
-                <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="number">20</item>
-                <item name="is_sortable" xsi:type="boolean">false</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">image</argument>
+            <argument name="label" xsi:type="string">Image</argument>
+            <argument name="type" xsi:type="string">image</argument>
+            <argument name="sortOrder" xsi:type="number">20</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\Name"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">name</item>
-                <item name="label" xsi:type="string">Name</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">30</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">true</item>
-                <item name="is_title" xsi:type="boolean">true</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
-                </item>
+            <argument name="code" xsi:type="string">name</argument>
+            <argument name="label" xsi:type="string">Name</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="isTitle" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">30</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\Sku"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">sku</item>
-                <item name="label" xsi:type="string">Sku</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">40</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">sku</argument>
+            <argument name="label" xsi:type="string">Sku</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">40</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\TypeId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">type_id</item>
-                <item name="label" xsi:type="string">Type</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">50</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">type_id</argument>
+            <argument name="label" xsi:type="string">Type</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">50</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\AttributeSetId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">attribute_set_id</item>
-                <item name="label" xsi:type="string">Attribute Set</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">60</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">attribute_set_id</argument>
+            <argument name="label" xsi:type="string">Attribute Set</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">60</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\Options"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">options</item>
-                <item name="label" xsi:type="string">Options</item>
-                <item name="type" xsi:type="string">array</item>
-                <item name="is_filterable" xsi:type="boolean">false</item>
-                <item name="sort_order" xsi:type="number">70</item>
-                <item name="is_sortable" xsi:type="boolean">false</item>
-                <item name="is_translatable" xsi:type="boolean">true</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
-                </item>
+            <argument name="code" xsi:type="string">options</argument>
+            <argument name="label" xsi:type="string">Options</argument>
+            <argument name="type" xsi:type="string">array</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">70</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
         </arguments>
     </virtualType>
@@ -638,38 +567,29 @@
     <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\EntityId"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">entity_id</item>
-                <item name="label" xsi:type="string">Id</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">10</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">false</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                </item>
+            <argument name="code" xsi:type="string">entity_id</argument>
+            <argument name="label" xsi:type="string">Id</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">10</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Category\Field\Name"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="code" xsi:type="string">name</item>
-                <item name="label" xsi:type="string">Name</item>
-                <item name="type" xsi:type="string">text</item>
-                <item name="is_filterable" xsi:type="boolean">true</item>
-                <item name="filter_type" xsi:type="string">text</item>
-                <item name="sort_order" xsi:type="number">20</item>
-                <item name="is_sortable" xsi:type="boolean">true</item>
-                <item name="is_translatable" xsi:type="boolean">true</item>
-                <item name="is_title" xsi:type="boolean">true</item>
-                <item name="visible_on" xsi:type="array">
-                    <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-                    <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
-                </item>
+            <argument name="code" xsi:type="string">name</argument>
+            <argument name="label" xsi:type="string">Name</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="isTitle" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">20</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
         </arguments>
     </virtualType>
