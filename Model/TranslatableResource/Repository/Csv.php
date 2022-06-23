@@ -97,7 +97,7 @@ class Csv implements RepositoryInterface
             $localizedCollection->setStoreId((int)$localeScope->getScopeId())->clear();
             /** @var Model[] $localizedItems */
             $localizedItems = $localizedCollection->getItems();
-            //todo https://aheadworks.atlassian.net/browse/LSM2-173
+
             foreach ($localizedItems as $localizedItem) {
                 /** @var Model $item */
                 $item = $collection->getItemById($localizedItem->getId());

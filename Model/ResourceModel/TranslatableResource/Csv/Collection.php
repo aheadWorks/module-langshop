@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv;
 
+use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
 use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
+use Aheadworks\Langshop\Model\Translation;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
 use Magento\Framework\Data\Collection as DataCollection;
@@ -14,6 +16,11 @@ use Psr\Log\LoggerInterface;
 
 class Collection extends DataCollection
 {
+    /**
+     * @var LocaleConfig
+     */
+    private LocaleConfig $localeConfig;
+
     /**
      * @var CsvReader
      */
@@ -28,6 +35,11 @@ class Collection extends DataCollection
      * @var Resolver
      */
     private Resolver $filterResolver;
+
+    /**
+     * @var Translation
+     */
+    private Translation $translation;
 
     /**
      * @var LoggerInterface
@@ -61,21 +73,27 @@ class Collection extends DataCollection
 
     /**
      * @param EntityFactoryInterface $entityFactory
+     * @param LocaleConfig $localeConfig
      * @param CsvReader $csvReader
      * @param ModuleListInterface $moduleList
+     * @param Translation $translation
      * @param LoggerInterface $logger
      * @param Resolver $filterResolver
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
+        LocaleConfig $localeConfig,
         CsvReader $csvReader,
         ModuleListInterface $moduleList,
+        Translation $translation,
         LoggerInterface $logger,
         Resolver $filterResolver
     ) {
         parent::__construct($entityFactory);
+        $this->localeConfig = $localeConfig;
         $this->csvReader = $csvReader;
         $this->moduleList = $moduleList;
+        $this->translation = $translation;
         $this->logger = $logger;
         $this->filterResolver = $filterResolver;
     }
@@ -97,6 +115,8 @@ class Collection extends DataCollection
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
+        $locale = $this->localeConfig->getValue($this->getStoreId());
+        $this->translation->setLocale($locale)->loadData(null, true);
         foreach ($this->moduleList->getNames() as $packageName) {
             $model = $this->_entityFactory->create($this->_itemObjectClass);
             $names = explode('_', $packageName);
@@ -107,7 +127,7 @@ class Collection extends DataCollection
             if ($this->filterResolver->resolve($this->_filters, $model)) {
                 if ($this->needToAddLines) {
                     try {
-                        $lines = $this->csvReader->getCsvData($packageName, $this->getStoreId());
+                        $lines = $this->csvReader->getCsvData($packageName);
                         $model->setLines($this->prepareLines($lines));
                     } catch (\Exception $e) {
                         $this->logger->error($e->getMessage());
@@ -146,8 +166,17 @@ class Collection extends DataCollection
     private function prepareLines(array $lines): array
     {
         $result = [];
+        $translationData = $this->translation->getData();
+        $localeCode = $this->localeConfig->getValue($this->getStoreId());
         foreach ($lines as $value) {
-            $result[$value[CsvFile::ORIGINAL_INDEX]] = $value[CsvFile::TRANSLATION_INDEX];
+            $originalValue = $value[CsvFile::ORIGINAL_INDEX];
+            $result[$originalValue] = $localeCode === 'en_US' ? $originalValue : '';
+
+            foreach ($translationData as $translationValue) {
+                if (isset($translationValue[$originalValue])) {
+                    $result[$originalValue] = $translationValue[$originalValue];
+                }
+            }
         }
 
         return $result;

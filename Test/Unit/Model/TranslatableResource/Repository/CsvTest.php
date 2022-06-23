@@ -137,7 +137,7 @@ class CsvTest extends TestCase
             ->willReturn($translatableAttributeCodes);
         $localizedCollection
             ->expects($this->once())
-            ->method('addLinesAttribute');
+            ->method('setIsNeedToAddLinesAttribute');
 
         foreach ($localeScopes as $localeScope) {
             $scopeId = 0;
