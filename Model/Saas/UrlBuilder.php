@@ -5,6 +5,7 @@ namespace Aheadworks\Langshop\Model\Saas;
 
 use Aheadworks\Langshop\Model\Saas\Request\Install as InstallRequest;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class UrlBuilder
 {
@@ -19,15 +20,23 @@ class UrlBuilder
     private InstallRequest $installRequest;
 
     /**
+     * @var SerializerInterface
+     */
+    private SerializerInterface $serializer;
+
+    /**
      * @param CurlSender $curlSender
      * @param InstallRequest $installRequest
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         CurlSender $curlSender,
-        InstallRequest $installRequest
+        InstallRequest $installRequest,
+        SerializerInterface $serializer
     ) {
         $this->curlSender = $curlSender;
         $this->installRequest = $installRequest;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -43,7 +52,11 @@ class UrlBuilder
             $this->installRequest->getParams()
         );
 
-        return $curl->getBody();
+        $body = $this->serializer->unserialize(
+            $curl->getBody()
+        );
+
+        return $body['url'] ?? '';
     }
 
     /**
