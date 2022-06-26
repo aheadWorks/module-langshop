@@ -10,9 +10,10 @@ interface FieldInterface
     public const TYPE = 'type';
     public const IS_TRANSLATABLE = 'isTranslatable';
     public const IS_TITLE = 'is_title';
-    public const VISIBLE_ON = 'visible_on';
     public const FILTER = 'filter';
+    public const FILTER_OPTIONS = 'filter_options';
     public const SORT_ORDER = 'sortOrder';
+    public const VISIBLE_ON = 'visible_on';
 
     /**
      * Set key
@@ -90,21 +91,6 @@ interface FieldInterface
     public function isTitle(): bool;
 
     /**
-     * Set visible areas for field
-     *
-     * @param string[] $areas
-     * @return $this
-     */
-    public function setVisibleOn(array $areas): FieldInterface;
-
-    /**
-     * Get visible areas for field
-     *
-     * @return string[]
-     */
-    public function getVisibleOn(): array;
-
-    /**
      * Set filter
      *
      * @param string $filter
@@ -120,6 +106,21 @@ interface FieldInterface
     public function getFilter(): string;
 
     /**
+     * Set filter options
+     *
+     * @param \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldOptionInterface[] $filterOptions
+     * @return $this
+     */
+    public function setFilterOptions(array $filterOptions): FieldInterface;
+
+    /**
+     * Get filter options
+     *
+     * @return \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldOptionInterface[]
+     */
+    public function getFilterOptions(): array;
+
+    /**
      * Set sort order
      *
      * @param int $sortOrder
@@ -133,4 +134,19 @@ interface FieldInterface
      * @return int
      */
     public function getSortOrder(): int;
+
+    /**
+     * Set visible areas for field
+     *
+     * @param string[] $areas
+     * @return $this
+     */
+    public function setVisibleOn(array $areas): FieldInterface;
+
+    /**
+     * Get visible areas for field
+     *
+     * @return string[]
+     */
+    public function getVisibleOn(): array;
 }

@@ -9,10 +9,7 @@ use Magento\Framework\DataObject;
 class Field extends DataObject implements FieldInterface
 {
     /**
-     * Set key
-     *
-     * @param string $key
-     * @return $this
+     * @inheritDoc
      */
     public function setKey(string $key): FieldInterface
     {
@@ -20,9 +17,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Get key
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getKey(): string
     {
@@ -30,10 +25,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Set label
-     *
-     * @param string $label
-     * @return $this
+     * @inheritDoc
      */
     public function setLabel(string $label): FieldInterface
     {
@@ -41,9 +33,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Get label
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getLabel(): string
     {
@@ -51,10 +41,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     * @return $this
+     * @inheritDoc
      */
     public function setType(string $type): FieldInterface
     {
@@ -62,9 +49,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Get type
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getType(): string
     {
@@ -72,10 +57,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Set is translatable
-     *
-     * @param bool $isTranslatable
-     * @return $this
+     * @inheritDoc
      */
     public function setIsTranslatable(bool $isTranslatable): FieldInterface
     {
@@ -83,9 +65,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Is translatable
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function isTranslatable(): bool
     {
@@ -93,10 +73,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Set is title
-     *
-     * @param bool $isTitle
-     * @return $this
+     * @inheritDoc
      */
     public function setIsTitle(bool $isTitle): FieldInterface
     {
@@ -104,9 +81,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Is title
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function isTitle(): bool
     {
@@ -114,31 +89,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Set visible areas for field
-     *
-     * @param string[] $areas
-     * @return Field
-     */
-    public function setVisibleOn(array $areas): FieldInterface
-    {
-        return $this->setData(self::VISIBLE_ON, $areas);
-    }
-
-    /**
-     * Get visible areas for field
-     *
-     * @return string[]
-     */
-    public function getVisibleOn(): array
-    {
-        return $this->getData(self::VISIBLE_ON);
-    }
-
-    /**
-     * Set filter
-     *
-     * @param string $filter
-     * @return $this
+     * @inheritDoc
      */
     public function setFilter(string $filter): FieldInterface
     {
@@ -146,9 +97,7 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Get filter
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getFilter(): string
     {
@@ -156,10 +105,23 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Set sort order
-     *
-     * @param int $sortOrder
-     * @return $this
+     * @inheritDoc
+     */
+    public function setFilterOptions(array $filterOptions): FieldInterface
+    {
+        return $this->setData(self::FILTER_OPTIONS, $filterOptions);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFilterOptions(): array
+    {
+        return $this->getData(self::FILTER_OPTIONS);
+    }
+
+    /**
+     * @inheritDoc
      */
     public function setSortOrder(int $sortOrder): FieldInterface
     {
@@ -167,12 +129,26 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Get sort order
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getSortOrder(): int
     {
         return $this->getData(self::SORT_ORDER);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setVisibleOn(array $areas): FieldInterface
+    {
+        return $this->setData(self::VISIBLE_ON, $areas);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getVisibleOn(): array
+    {
+        return $this->getData(self::VISIBLE_ON);
     }
 }

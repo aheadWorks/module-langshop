@@ -94,9 +94,10 @@ class Converter
             ->setType($field->getType())
             ->setIsTranslatable($field->getIsTranslatable())
             ->setIsTitle($field->getIsTitle())
-            ->setVisibleOn($field->getVisibleOn())
             ->setFilter($field->getIsFilterable() ? $field->getFilterType() : 'none')
-            ->setSortOrder($field->getSortOrder());
+            ->setFilterOptions($field->getFilterOptions() ? $field->getFilterOptions()->toOptionArray() : [])
+            ->setSortOrder($field->getSortOrder())
+            ->setVisibleOn($field->getVisibleOn());
     }
 
     /**

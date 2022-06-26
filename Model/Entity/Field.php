@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Entity;
 
+use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\DataObject;
 
 /**
@@ -14,6 +15,7 @@ use Magento\Framework\DataObject;
  * @method $this setIsSortable(bool $isSortable)
  * @method $this setIsTitle(bool $isTitle)
  * @method $this setFilterType(string $filterType)
+ * @method $this setFilterOptions(OptionSourceInterface $filterOptions)
  * @method $this setSortOrder(int $sortOrder)
  * @method $this setVisibleOn(string[] $visibleOn)
  *
@@ -25,6 +27,7 @@ use Magento\Framework\DataObject;
  * @method bool getIsSortable()
  * @method bool getIsTitle()
  * @method string getFilterType()
+ * @method OptionSourceInterface|null getFilterOptions()
  * @method int getSortOrder()
  * @method string[] getVisibleOn()
  */
@@ -39,6 +42,7 @@ class Field extends DataObject
      * @param bool $isSortable
      * @param bool $isTitle
      * @param string $filterType
+     * @param OptionSourceInterface|null $filterOptions
      * @param int $sortOrder
      * @param array $visibleOn
      * @param array $data
@@ -52,6 +56,7 @@ class Field extends DataObject
         bool $isSortable = false,
         bool $isTitle = false,
         string $filterType = 'text',
+        OptionSourceInterface $filterOptions = null,
         int $sortOrder = 0,
         array $visibleOn = [],
         array $data = []
@@ -67,6 +72,10 @@ class Field extends DataObject
             ->setFilterType($filterType)
             ->setSortOrder($sortOrder)
             ->setVisibleOn($visibleOn);
+
+        if ($filterOptions) {
+            $this->setFilterOptions($filterOptions);
+        }
 
         if ($data) {
             parent::__construct($data);
