@@ -37,7 +37,7 @@ class Reader
      * @return array
      * @throws \Exception
      */
-    public function getCsvData(string $moduleName, string $localeCode = 'en_US'): array
+    public function getCsvData(string $moduleName, string $localeCode): array
     {
         $dir = $this->dirReader->getModuleDir('i18n', $moduleName) . "/$localeCode.csv";
 
