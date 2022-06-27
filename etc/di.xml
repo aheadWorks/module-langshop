@@ -319,6 +319,10 @@
             <argument name="label" xsi:type="string">Entity Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
             <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="filterType" xsi:type="string">select</argument>
+            <argument name="filterOptions" xsi:type="object">
+                Aheadworks\Langshop\Model\Source\Schema\Attribute\EntityType
+            </argument>
             <argument name="sortOrder" xsi:type="number">20</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
@@ -371,6 +375,10 @@
             <argument name="label" xsi:type="string">Attribute Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
             <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="filterType" xsi:type="string">select</argument>
+            <argument name="filterOptions" xsi:type="object">
+                Aheadworks\Langshop\Model\Source\Schema\Attribute\FrontendInput
+            </argument>
             <argument name="sortOrder" xsi:type="number">60</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
@@ -502,6 +510,8 @@
             <argument name="isFilterable" xsi:type="boolean">true</argument>
             <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="sortOrder" xsi:type="number">50</argument>
+            <argument name="filterType" xsi:type="string">select</argument>
+            <argument name="filterOptions" xsi:type="object">Magento\Catalog\Model\Product\Type</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
@@ -514,6 +524,10 @@
             <argument name="label" xsi:type="string">Attribute Set</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
             <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="filterType" xsi:type="string">select</argument>
+            <argument name="filterOptions" xsi:type="object">
+                Magento\Catalog\Model\Product\AttributeSet\Options
+            </argument>
             <argument name="sortOrder" xsi:type="number">60</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
@@ -667,4 +681,111 @@
             <argument name="configType" xsi:type="object">Magento\Config\App\Config\Type\System</argument>
         </arguments>
     </type>
+
+    <virtualType name="Aheadworks\Langshop\Model\Source\Schema\Attribute\EntityType"
+                 type="Aheadworks\Langshop\Model\Source\Schema\FilterOptions">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="100" xsi:type="array">
+                    <item name="value" xsi:type="const">
+                        Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER
+                    </item>
+                    <item name="label" xsi:type="string">Customer</item>
+                </item>
+                <item name="200" xsi:type="array">
+                    <item name="value" xsi:type="const">
+                        Magento\Customer\Api\AddressMetadataInterface::ENTITY_TYPE_ADDRESS
+                    </item>
+                    <item name="label" xsi:type="string">Customer Address</item>
+                </item>
+                <item name="300" xsi:type="array">
+                    <item name="value" xsi:type="const">Magento\Catalog\Model\Category::ENTITY</item>
+                    <item name="label" xsi:type="string">Category</item>
+                </item>
+                <item name="400" xsi:type="array">
+                    <item name="value" xsi:type="const">Magento\Catalog\Model\Product::ENTITY</item>
+                    <item name="label" xsi:type="string">Product</item>
+                </item>
+                <item name="500" xsi:type="array">
+                    <item name="value" xsi:type="string">order</item>
+                    <item name="label" xsi:type="string">Order</item>
+                </item>
+                <item name="600" xsi:type="array">
+                    <item name="value" xsi:type="string">invoice</item>
+                    <item name="label" xsi:type="string">Invoice</item>
+                </item>
+                <item name="700" xsi:type="array">
+                    <item name="value" xsi:type="string">creditmemo</item>
+                    <item name="label" xsi:type="string">Credit Memo</item>
+                </item>
+                <item name="800" xsi:type="array">
+                    <item name="value" xsi:type="string">shipment</item>
+                    <item name="label" xsi:type="string">Shipment</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Source\Schema\Attribute\FrontendInput"
+                 type="Aheadworks\Langshop\Model\Source\Schema\FilterOptions">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="100" xsi:type="array">
+                    <item name="value" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string">Text Field</item>
+                </item>
+                <item name="200" xsi:type="array">
+                    <item name="value" xsi:type="string">textarea</item>
+                    <item name="label" xsi:type="string">Text Area</item>
+                </item>
+                <item name="300" xsi:type="array">
+                    <item name="value" xsi:type="string">texteditor</item>
+                    <item name="label" xsi:type="string">Text Editor</item>
+                </item>
+                <item name="400" xsi:type="array">
+                    <item name="value" xsi:type="string">pagebuilder</item>
+                    <item name="label" xsi:type="string">Page Builder</item>
+                </item>
+                <item name="500" xsi:type="array">
+                    <item name="value" xsi:type="string">date</item>
+                    <item name="label" xsi:type="string">Date</item>
+                </item>
+                <item name="450" xsi:type="array">
+                    <item name="value" xsi:type="string">datetime</item>
+                    <item name="label" xsi:type="string">Date and Time</item>
+                </item>
+                <item name="600" xsi:type="array">
+                    <item name="value" xsi:type="string">boolean</item>
+                    <item name="label" xsi:type="string">Yes/No</item>
+                </item>
+                <item name="700" xsi:type="array">
+                    <item name="value" xsi:type="string">multiselect</item>
+                    <item name="label" xsi:type="string">Multiple Select</item>
+                </item>
+                <item name="800" xsi:type="array">
+                    <item name="value" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string">Dropdown</item>
+                </item>
+                <item name="900" xsi:type="array">
+                    <item name="value" xsi:type="string">price</item>
+                    <item name="label" xsi:type="string">Price</item>
+                </item>
+                <item name="1000" xsi:type="array">
+                    <item name="value" xsi:type="string">media_image</item>
+                    <item name="label" xsi:type="string">Media Image</item>
+                </item>
+                <item name="1100" xsi:type="array">
+                    <item name="value" xsi:type="string">wee</item>
+                    <item name="label" xsi:type="string">Fixed Product Tax</item>
+                </item>
+                <item name="1200" xsi:type="array">
+                    <item name="value" xsi:type="string">swatch_visual</item>
+                    <item name="label" xsi:type="string">Visual Swatch</item>
+                </item>
+                <item name="1300" xsi:type="array">
+                    <item name="value" xsi:type="string">swatch_text</item>
+                    <item name="label" xsi:type="string">Text Swatch</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
