@@ -12,7 +12,10 @@ class FieldOption extends DataObject implements FieldOptionInterface
     private const LABEL = 'label';
 
     /**
-     * @inheritDoc
+     * Set value
+     *
+     * @param string $value
+     * @return $this
      */
     public function setValue(string $value): FieldOptionInterface
     {
@@ -20,7 +23,9 @@ class FieldOption extends DataObject implements FieldOptionInterface
     }
 
     /**
-     * @inheritDoc
+     * Get value
+     *
+     * @return string
      */
     public function getValue(): string
     {
@@ -28,7 +33,10 @@ class FieldOption extends DataObject implements FieldOptionInterface
     }
 
     /**
-     * @inheritDoc
+     * Set label
+     *
+     * @param string $label
+     * @return $this
      */
     public function setLabel(string $label): FieldOptionInterface
     {
@@ -36,7 +44,9 @@ class FieldOption extends DataObject implements FieldOptionInterface
     }
 
     /**
-     * @inheritDoc
+     * Get label
+     *
+     * @return string
      */
     public function getLabel(): string
     {
