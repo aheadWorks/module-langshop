@@ -92,11 +92,12 @@ class Converter
             ->setKey($field->getCode())
             ->setLabel($field->getLabel())
             ->setType($field->getType())
-            ->setIsTranslatable($field->isTranslatable())
-            ->setIsTitle($field->isTitle())
-            ->setVisibleOn($field->getVisibleOn())
-            ->setFilter($field->isFilterable() ? $field->getFilterType() : 'none')
-            ->setSortOrder($field->getSortOrder());
+            ->setIsTranslatable($field->getIsTranslatable())
+            ->setIsTitle($field->getIsTitle())
+            ->setFilter($field->getIsFilterable() ? $field->getFilterType() : 'none')
+            ->setFilterOptions($field->getFilterOptions() ? $field->getFilterOptions()->toOptionArray() : [])
+            ->setSortOrder($field->getSortOrder())
+            ->setVisibleOn($field->getVisibleOn());
     }
 
     /**
@@ -108,7 +109,7 @@ class Converter
     private function getSortingElements(Field $field): array
     {
         $sortingElements = [];
-        if ($field->isSortable()) {
+        if ($field->getIsSortable()) {
             foreach ($this->directionList->get($field->getType()) as $direction => $labelEnding) {
                 $sortingElements[] = $this->sortingElementFactory->create(['data' => [
                         SortingInterface::FIELD => $field->getCode(),
