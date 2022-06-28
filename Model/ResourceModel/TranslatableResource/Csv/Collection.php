@@ -6,7 +6,6 @@ use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
 use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
-use Aheadworks\Langshop\Model\Translation;
 use Aheadworks\Langshop\Model\TranslationFactory;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
@@ -40,9 +39,9 @@ class Collection extends DataCollection
     private Resolver $filterResolver;
 
     /**
-     * @var Translation
+     * @var TranslationFactory
      */
-    private Translation $translation;
+    private TranslationFactory $translationFactory;
 
     /**
      * @var LoggerInterface
@@ -96,7 +95,7 @@ class Collection extends DataCollection
         $this->localeConfig = $localeConfig;
         $this->csvReader = $csvReader;
         $this->moduleList = $moduleList;
-        $this->translation = $translationFactory->create();
+        $this->translationFactory = $translationFactory;
         $this->logger = $logger;
         $this->filterResolver = $filterResolver;
     }
@@ -118,8 +117,9 @@ class Collection extends DataCollection
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
+        $translation = $this->translationFactory->create();
         $locale = $this->localeConfig->getValue($this->getStoreId());
-        $translationData = $this->translation->setLocale($locale)->loadData(null, true)->getData();
+        $translationData = $translation->setLocale($locale)->loadData(null, true)->getData();
 
         foreach ($this->moduleList->getNames() as $packageName) {
             $model = $this->_entityFactory->create($this->_itemObjectClass);

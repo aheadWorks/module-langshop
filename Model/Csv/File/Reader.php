@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Csv\File;
 
 use Magento\Framework\File\Csv;
+use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader as DirReader;
 
 class Reader
@@ -39,7 +40,7 @@ class Reader
      */
     public function getCsvData(string $moduleName, string $localeCode): array
     {
-        $dir = $this->dirReader->getModuleDir('i18n', $moduleName) . "/$localeCode.csv";
+        $dir = $this->dirReader->getModuleDir(Dir::MODULE_I18N_DIR, $moduleName) . "/$localeCode.csv";
 
         return $this->csvFile->getData($dir);
     }
