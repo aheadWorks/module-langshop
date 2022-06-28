@@ -213,8 +213,8 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="asc" xsi:type="string"/>
-                    <item name="desc" xsi:type="string"/>
+                    <item name="asc" xsi:type="string">A-Z</item>
+                    <item name="desc" xsi:type="string">Z-A</item>
                 </item>
             </argument>
         </arguments>
@@ -318,7 +318,6 @@
             <argument name="code" xsi:type="string">entity_type_id</argument>
             <argument name="label" xsi:type="string">Entity Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="filterType" xsi:type="string">select</argument>
             <argument name="filterOptions" xsi:type="object">
                 Aheadworks\Langshop\Model\Source\Schema\Attribute\EntityType
@@ -374,7 +373,6 @@
             <argument name="code" xsi:type="string">frontend_input</argument>
             <argument name="label" xsi:type="string">Attribute Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="filterType" xsi:type="string">select</argument>
             <argument name="filterOptions" xsi:type="object">
                 Aheadworks\Langshop\Model\Source\Schema\Attribute\FrontendInput
@@ -508,7 +506,6 @@
             <argument name="code" xsi:type="string">type_id</argument>
             <argument name="label" xsi:type="string">Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="sortOrder" xsi:type="number">50</argument>
             <argument name="filterType" xsi:type="string">select</argument>
             <argument name="filterOptions" xsi:type="object">Magento\Catalog\Model\Product\Type</argument>
@@ -523,7 +520,6 @@
             <argument name="code" xsi:type="string">attribute_set_id</argument>
             <argument name="label" xsi:type="string">Attribute Set</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="filterType" xsi:type="string">select</argument>
             <argument name="filterOptions" xsi:type="object">
                 Magento\Catalog\Model\Product\AttributeSet\Options
