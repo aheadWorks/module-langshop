@@ -157,6 +157,7 @@ class Repository implements RepositoryInterface
     {
         /** @var CatalogCollection|CollectionInterface $collection */
         $collection = $this->collectionFactory->create();
+        $collection->setResourceType($this->resourceType);
 
         $fieldName = $collection->getResource()->getIdFieldName();
         $collection->addFieldToFilter($fieldName, (string) $entityId);

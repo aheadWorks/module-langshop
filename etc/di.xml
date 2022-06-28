@@ -88,6 +88,10 @@
         <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Save"/>
     </type>
 
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface">
+        <plugin name="aw_ls_select_label" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Collection\SelectLabel"/>
+    </type>
+
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\CollectionFactory"
                  type="Magento\Framework\Data\Collection\AbstractDbFactory">
         <arguments>
@@ -688,38 +692,50 @@
             <argument name="options" xsi:type="array">
                 <item name="100" xsi:type="array">
                     <item name="value" xsi:type="const">
-                        Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER
+                        Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
                     </item>
                     <item name="label" xsi:type="string">Customer</item>
                 </item>
                 <item name="200" xsi:type="array">
                     <item name="value" xsi:type="const">
-                        Magento\Customer\Api\AddressMetadataInterface::ENTITY_TYPE_ADDRESS
+                        Magento\Customer\Api\AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS
                     </item>
                     <item name="label" xsi:type="string">Customer Address</item>
                 </item>
                 <item name="300" xsi:type="array">
-                    <item name="value" xsi:type="const">Magento\Catalog\Model\Category::ENTITY</item>
+                    <item name="value" xsi:type="const">
+                        Magento\Catalog\Setup\CategorySetup::CATEGORY_ENTITY_TYPE_ID
+                    </item>
                     <item name="label" xsi:type="string">Category</item>
                 </item>
                 <item name="400" xsi:type="array">
-                    <item name="value" xsi:type="const">Magento\Catalog\Model\Product::ENTITY</item>
+                    <item name="value" xsi:type="const">
+                        Magento\Catalog\Setup\CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID
+                    </item>
                     <item name="label" xsi:type="string">Product</item>
                 </item>
                 <item name="500" xsi:type="array">
-                    <item name="value" xsi:type="string">order</item>
+                    <item name="value" xsi:type="const">
+                        Magento\Sales\Setup\SalesSetup::ORDER_ENTITY_TYPE_ID
+                    </item>
                     <item name="label" xsi:type="string">Order</item>
                 </item>
                 <item name="600" xsi:type="array">
-                    <item name="value" xsi:type="string">invoice</item>
+                    <item name="value" xsi:type="const">
+                        Magento\Sales\Setup\SalesSetup::INVOICE_PRODUCT_ENTITY_TYPE_ID
+                    </item>
                     <item name="label" xsi:type="string">Invoice</item>
                 </item>
                 <item name="700" xsi:type="array">
-                    <item name="value" xsi:type="string">creditmemo</item>
+                    <item name="value" xsi:type="const">
+                        Magento\Sales\Setup\SalesSetup::CREDITMEMO_PRODUCT_ENTITY_TYPE_ID
+                    </item>
                     <item name="label" xsi:type="string">Credit Memo</item>
                 </item>
                 <item name="800" xsi:type="array">
-                    <item name="value" xsi:type="string">shipment</item>
+                    <item name="value" xsi:type="const">
+                        Magento\Sales\Setup\SalesSetup::SHIPMENT_PRODUCT_ENTITY_TYPE_ID
+                    </item>
                     <item name="label" xsi:type="string">Shipment</item>
                 </item>
             </argument>
