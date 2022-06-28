@@ -97,7 +97,7 @@
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category\CollectionFactory"
                  type="Magento\Framework\Data\Collection\AbstractDbFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\ResourceModel\Category\Collection</argument>
+            <argument name="instanceName" xsi:type="string">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category\Collection</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\CollectionFactory"
