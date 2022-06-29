@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Aheadworks\Langshop\Model\ResourceModel\Collection\Processor;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor;
 
-use Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\Collection;
-use Magento\Framework\Exception\LocalizedException;
 
 class Filter implements ProcessorInterface
 {
@@ -16,7 +15,6 @@ class Filter implements ProcessorInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param Collection $collection
      * @return void
-     * @throws LocalizedException
      */
     public function process(SearchCriteriaInterface $searchCriteria, Collection $collection): void
     {
@@ -31,7 +29,6 @@ class Filter implements ProcessorInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @throws LocalizedException
      */
     private function addFilterGroupToCollection(
         FilterGroup $filterGroup,

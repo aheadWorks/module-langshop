@@ -58,8 +58,8 @@
                 type="Aheadworks\Langshop\Model\Locale\Scope\Record"/>
     <!-- END Scope Record Configuration -->
 
-    <preference for="Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface"
-                type="Aheadworks\Langshop\Model\ResourceModel\Collection\Composite"/>
+    <preference for="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface"
+                type="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Composite"/>
 
     <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool">
         <arguments>
@@ -155,12 +155,12 @@
         </arguments>
     </virtualType>
 
-    <type name="Aheadworks\Langshop\Model\ResourceModel\Collection\Composite">
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Composite">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\Collection\Processor\Filter</item>
-                <item name="pagination" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\Collection\Processor\Pagination</item>
-                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\Collection\Processor\Sorting</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor\Filter</item>
+                <item name="pagination" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor\Pagination</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor\Sorting</item>
             </argument>
         </arguments>
     </type>

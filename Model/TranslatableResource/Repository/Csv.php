@@ -4,13 +4,13 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
-use Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\CollectionFactory;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
-use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
-use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 class Csv implements RepositoryInterface

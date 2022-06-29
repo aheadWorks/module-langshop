@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Aheadworks\Langshop\Model\ResourceModel\Collection\Processor;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor;
 
-use Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Data\Collection;
 
 class Sorting implements ProcessorInterface
 {
@@ -33,9 +33,7 @@ class Sorting implements ProcessorInterface
     private function applyOrders(array $sortOrders, Collection $collection): void
     {
         foreach ($sortOrders as $sortOrder) {
-            $field = $sortOrder->getField();
-            $order = $sortOrder->getDirection() ?? SortOrder::SORT_ASC;
-            $collection->addOrder($field, $order);
+            $collection->addOrder($sortOrder->getField(), $sortOrder->getDirection());
         }
     }
 }
