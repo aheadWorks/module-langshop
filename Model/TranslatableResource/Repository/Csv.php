@@ -4,17 +4,24 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
+use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
 use Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\CollectionFactory;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
+use Magento\Translation\Model\ResourceModel\StringUtils;
 
 class Csv implements RepositoryInterface
 {
+    private const RESOURCE_TYPE = 'csv';
+
     /**
      * @var CollectionFactory
      */
@@ -31,18 +38,50 @@ class Csv implements RepositoryInterface
     private ProcessorInterface $collectionProcessor;
 
     /**
+     * @var ResourceModelFactory
+     */
+    private ResourceModelFactory $resourceModelFactory;
+
+    /**
+     * @var TranslationValidation
+     */
+    private TranslationValidation $translationValidation;
+
+    /**
+     * @var EventManagerInterface
+     */
+    private EventManagerInterface $eventManager;
+
+    /**
+     * @var LocaleCodeConverter
+     */
+    private LocaleCodeConverter $localeCodeConverter;
+
+    /**
      * @param EntityAttributeProvider $attributeProvider
      * @param ProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
+     * @param ResourceModelFactory $resourceModelFactory
+     * @param TranslationValidation $translationValidation
+     * @param EventManagerInterface $eventManager
+     * @param LocaleCodeConverter $localeCodeConverter
      */
     public function __construct(
         EntityAttributeProvider $attributeProvider,
         ProcessorInterface $collectionProcessor,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        ResourceModelFactory $resourceModelFactory,
+        TranslationValidation $translationValidation,
+        EventManagerInterface $eventManager,
+        LocaleCodeConverter $localeCodeConverter
     ) {
         $this->attributeProvider = $attributeProvider;
         $this->collectionProcessor = $collectionProcessor;
         $this->collectionFactory = $collectionFactory;
+        $this->resourceModelFactory = $resourceModelFactory;
+        $this->translationValidation = $translationValidation;
+        $this->eventManager = $eventManager;
+        $this->localeCodeConverter = $localeCodeConverter;
     }
 
     /**
@@ -72,10 +111,38 @@ class Csv implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    //phpcs:ignore
     public function save(string $entityId, array $translations): void
     {
-        // TODO: https://aheadworks.atlassian.net/browse/LSM2-172
+        /** @var StringUtils $resourceModel */
+        $resourceModel = $this->resourceModelFactory->create();
+        $translationByLocales = [];
+
+        foreach ($translations as $translation) {
+            $this->translationValidation->validate($translation, self::RESOURCE_TYPE);
+            $translationByLocales[$translation->getLocale()] = $translation->getValue();
+        }
+
+        foreach ($translationByLocales as $locale => $values) {
+            $locale = $this->localeCodeConverter->toMagento($locale);
+            foreach ($values as $original => $translation) {
+                if ($translation) {
+                    $resourceModel->saveTranslate(
+                        $original,
+                        $translation,
+                        $locale,
+                        0
+                    );
+                } else {
+                    $resourceModel->deleteTranslate($original, $locale);
+                }
+            }
+        }
+
+        $this->eventManager->dispatch('aw_ls_save_translatable_resource', [
+            'resource_type' => self::RESOURCE_TYPE,
+            'resource_id' => $entityId,
+            'store_id' => 0
+        ]);
     }
 
     /**
