@@ -97,7 +97,10 @@ class Repository implements RepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria, array $localeScopes): Collection
     {
+        /** @var Collection|CollectionInterface $collection */
         $collection = $this->collectionFactory->create();
+        $collection->setResourceType($this->resourceType);
+
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         return $this->addLocalizedAttributes($collection, $localeScopes);
