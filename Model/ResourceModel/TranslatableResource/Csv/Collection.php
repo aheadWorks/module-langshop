@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv;
 
+use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
 use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
+use Aheadworks\Langshop\Model\TranslationFactory;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
 use Magento\Framework\Data\Collection as DataCollection;
@@ -14,6 +16,13 @@ use Psr\Log\LoggerInterface;
 
 class Collection extends DataCollection
 {
+    public const BASE_LOCALE = 'en_US';
+
+    /**
+     * @var LocaleConfig
+     */
+    private LocaleConfig $localeConfig;
+
     /**
      * @var CsvReader
      */
@@ -28,6 +37,11 @@ class Collection extends DataCollection
      * @var Resolver
      */
     private Resolver $filterResolver;
+
+    /**
+     * @var TranslationFactory
+     */
+    private TranslationFactory $translationFactory;
 
     /**
      * @var LoggerInterface
@@ -61,21 +75,27 @@ class Collection extends DataCollection
 
     /**
      * @param EntityFactoryInterface $entityFactory
+     * @param LocaleConfig $localeConfig
      * @param CsvReader $csvReader
      * @param ModuleListInterface $moduleList
+     * @param TranslationFactory $translationFactory
      * @param LoggerInterface $logger
      * @param Resolver $filterResolver
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
+        LocaleConfig $localeConfig,
         CsvReader $csvReader,
         ModuleListInterface $moduleList,
+        TranslationFactory $translationFactory,
         LoggerInterface $logger,
         Resolver $filterResolver
     ) {
         parent::__construct($entityFactory);
+        $this->localeConfig = $localeConfig;
         $this->csvReader = $csvReader;
         $this->moduleList = $moduleList;
+        $this->translationFactory = $translationFactory;
         $this->logger = $logger;
         $this->filterResolver = $filterResolver;
     }
@@ -97,6 +117,10 @@ class Collection extends DataCollection
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
+        $translation = $this->translationFactory->create();
+        $locale = $this->localeConfig->getValue($this->getStoreId());
+        $translationData = $translation->setLocale($locale)->loadData(null, true)->getData();
+
         foreach ($this->moduleList->getNames() as $packageName) {
             $model = $this->_entityFactory->create($this->_itemObjectClass);
             $names = explode('_', $packageName);
@@ -107,8 +131,9 @@ class Collection extends DataCollection
             if ($this->filterResolver->resolve($this->_filters, $model)) {
                 if ($this->needToAddLines) {
                     try {
-                        $lines = $this->csvReader->getCsvData($packageName, $this->getStoreId());
-                        $model->setLines($this->prepareLines($lines));
+                        $data = $this->csvReader->getCsvData($packageName, self::BASE_LOCALE);
+                        $lines = $this->getTranslationLines($this->getOriginalLines($data), $translationData, $locale);
+                        $model->setLines($lines);
                     } catch (\Exception $e) {
                         $this->logger->error($e->getMessage());
                         $model->setLines([]);
@@ -138,16 +163,40 @@ class Collection extends DataCollection
     }
 
     /**
-     * Prepare lines
+     * Get translation lines
      *
      * @param string[] $lines
+     * @param array $translationData
+     * @param string $localeCode
      * @return string[]
      */
-    private function prepareLines(array $lines): array
+    private function getTranslationLines(array $lines, array $translationData, string $localeCode): array
     {
         $result = [];
-        foreach ($lines as $value) {
-            $result[$value[CsvFile::ORIGINAL_INDEX]] = $value[CsvFile::TRANSLATION_INDEX];
+        foreach ($lines as $line) {
+            $result[$line] = $localeCode === self::BASE_LOCALE ? $line : '';
+
+            foreach ($translationData as $translationValue) {
+                if (isset($translationValue[$line])) {
+                    $result[$line] = $translationValue[$line];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get original lines
+     *
+     * @param array $csvData
+     * @return array
+     */
+    private function getOriginalLines(array $csvData): array
+    {
+        $result = [];
+        foreach ($csvData as $data) {
+            $result[] = $data[CsvFile::ORIGINAL_INDEX];
         }
 
         return $result;
