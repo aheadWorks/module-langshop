@@ -349,7 +349,6 @@
             <argument name="code" xsi:type="string">frontend_input</argument>
             <argument name="label" xsi:type="string">Attribute Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="filterType" xsi:type="string">select</argument>
             <argument name="filterOptions" xsi:type="object">
                 Aheadworks\Langshop\Model\Source\Schema\Attribute\FrontendInput
@@ -366,7 +365,6 @@
             <argument name="code" xsi:type="string">entity_type_id</argument>
             <argument name="label" xsi:type="string">Entity Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="filterType" xsi:type="string">select</argument>
             <argument name="filterOptions" xsi:type="object">
                 Aheadworks\Langshop\Model\Source\Schema\Attribute\EntityType
@@ -528,7 +526,6 @@
             <argument name="code" xsi:type="string">type_id</argument>
             <argument name="label" xsi:type="string">Product Type</argument>
             <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
             <argument name="sortOrder" xsi:type="number">60</argument>
             <argument name="filterType" xsi:type="string">select</argument>
             <argument name="filterOptions" xsi:type="object">Magento\Catalog\Model\Product\Type</argument>
