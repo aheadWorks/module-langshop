@@ -5,6 +5,7 @@ namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
@@ -18,7 +19,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelFactory;
-use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection as AttributeCollection;
 
 class Repository implements RepositoryInterface
 {
@@ -97,7 +97,10 @@ class Repository implements RepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria, array $localeScopes): Collection
     {
+        /** @var Collection|CollectionInterface $collection */
         $collection = $this->collectionFactory->create();
+        $collection->setResourceType($this->resourceType);
+
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         return $this->addLocalizedAttributes($collection, $localeScopes);
@@ -155,8 +158,9 @@ class Repository implements RepositoryInterface
      */
     private function prepareCollectionById(string $entityId): Collection
     {
-        /** @var CatalogCollection|AttributeCollection $collection */
+        /** @var CatalogCollection|CollectionInterface $collection */
         $collection = $this->collectionFactory->create();
+        $collection->setResourceType($this->resourceType);
 
         $fieldName = $collection->getResource()->getIdFieldName();
         $collection->addFieldToFilter($fieldName, $entityId);
@@ -185,7 +189,8 @@ class Repository implements RepositoryInterface
     {
         $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields($this->resourceType);
         $untranslatableAttributeCodes = $this->attributeProvider->getCodesOfUntranslatableFields($this->resourceType);
-        /** @var CatalogCollection|AttributeCollection $localizedCollection */
+
+        /** @var CatalogCollection|CollectionInterface $localizedCollection */
         $localizedCollection = clone $collection;
 
         if ($collection instanceof CatalogCollection) {

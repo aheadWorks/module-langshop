@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Api\Data\Schema\TranslatableResource;
 
 interface FieldInterface
@@ -7,9 +9,11 @@ interface FieldInterface
     public const LABEL = 'label';
     public const TYPE = 'type';
     public const IS_TRANSLATABLE = 'isTranslatable';
-    public const VISIBLE_ON = 'visible_on';
+    public const IS_TITLE = 'is_title';
     public const FILTER = 'filter';
+    public const FILTER_OPTIONS = 'filter_options';
     public const SORT_ORDER = 'sortOrder';
+    public const VISIBLE_ON = 'visible_on';
 
     /**
      * Set key
@@ -72,19 +76,19 @@ interface FieldInterface
     public function isTranslatable(): bool;
 
     /**
-     * Set visible areas for field
+     * Set is title
      *
-     * @param string[] $areas
+     * @param bool $isTitle
      * @return $this
      */
-    public function setVisibleOn(array $areas): FieldInterface;
+    public function setIsTitle(bool $isTitle): FieldInterface;
 
     /**
-     * Get visible areas for field
+     * Is title
      *
-     * @return string[]
+     * @return bool
      */
-    public function getVisibleOn(): array;
+    public function isTitle(): bool;
 
     /**
      * Set filter
@@ -102,6 +106,21 @@ interface FieldInterface
     public function getFilter(): string;
 
     /**
+     * Set filter options
+     *
+     * @param \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldOptionInterface[] $filterOptions
+     * @return $this
+     */
+    public function setFilterOptions(array $filterOptions): FieldInterface;
+
+    /**
+     * Get filter options
+     *
+     * @return \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldOptionInterface[]
+     */
+    public function getFilterOptions(): array;
+
+    /**
      * Set sort order
      *
      * @param int $sortOrder
@@ -115,4 +134,19 @@ interface FieldInterface
      * @return int
      */
     public function getSortOrder(): int;
+
+    /**
+     * Set visible areas for field
+     *
+     * @param string[] $areas
+     * @return $this
+     */
+    public function setVisibleOn(array $areas): FieldInterface;
+
+    /**
+     * Get visible areas for field
+     *
+     * @return string[]
+     */
+    public function getVisibleOn(): array;
 }

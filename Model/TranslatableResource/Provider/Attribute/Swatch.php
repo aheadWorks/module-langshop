@@ -3,24 +3,24 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\TranslatableResource\Provider\Attribute;
 
+use Magento\Eav\Model\Entity\Attribute\Option as AttributeOption;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\Store\Model\Store;
-use Magento\Swatches\Model\Swatch as AttributeSwatch;
-use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 
 class Swatch
 {
     /**
-     * @var SwatchCollectionFactory
+     * @var OptionCollectionFactory
      */
-    private SwatchCollectionFactory $swatchCollectionFactory;
+    private OptionCollectionFactory $optionCollectionFactory;
 
     /**
-     * @param SwatchCollectionFactory $swatchCollectionFactory
+     * @param OptionCollectionFactory $optionCollectionFactory
      */
     public function __construct(
-        SwatchCollectionFactory $swatchCollectionFactory
+        OptionCollectionFactory $optionCollectionFactory
     ) {
-        $this->swatchCollectionFactory = $swatchCollectionFactory;
+        $this->optionCollectionFactory = $optionCollectionFactory;
     }
 
     /**
@@ -28,25 +28,21 @@ class Swatch
      *
      * @param int[] $attributeIds
      * @param int $storeId
-     * @return AttributeSwatch[]
+     * @return AttributeOption[]
      */
     public function get(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
-        $swatches = [];
+        $optionCollection = $this->optionCollectionFactory->create()
+            ->addFieldToFilter('main_table.attribute_id', $attributeIds);
 
-        $swatchCollection = $this->swatchCollectionFactory->create()
-            ->addStoreFilter($storeId);
+        $optionCollection->getSelect()->joinLeft(
+            ['eaov' => $optionCollection->getTable('eav_attribute_option_swatch')],
+            "eaov.option_id = main_table.option_id and eaov.store_id = $storeId",
+            ['swatch_id', 'value']
+        );
 
-        $swatchCollection->join(
-            ['eao' => 'eav_attribute_option'],
-            'eao.option_id = main_table.option_id',
-            ['attribute_id' => 'eao.attribute_id']
-        )->addFieldToFilter('eao.attribute_id', $attributeIds);
-
-        /** @var AttributeSwatch $swatch */
-        foreach ($swatchCollection as $swatch) {
-            $swatches[$swatch->getData('option_id')] = $swatch;
-        }
+        /** @var AttributeOption[] $swatches */
+        $swatches = $optionCollection->getItems();
 
         return $swatches;
     }

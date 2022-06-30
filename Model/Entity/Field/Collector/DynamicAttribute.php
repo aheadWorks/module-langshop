@@ -97,7 +97,6 @@ class DynamicAttribute implements CollectorInterface
                     ->setLabel($attribute->getDefaultFrontendLabel())
                     ->setType($attribute->getFrontendInput())
                     ->setSortOrder($sortOrder)
-                    ->setIsSortable(true)
                     ->setIsTranslatable($this->isTranslatable($attribute))
                     ->setVisibleOn([VisibleOn::FORM])
                     ->setIsFilterable((bool)$attribute->getIsFilterable())

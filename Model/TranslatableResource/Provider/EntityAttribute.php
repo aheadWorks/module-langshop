@@ -131,7 +131,7 @@ class EntityAttribute
         ];
 
         foreach ($fields as $code => $field) {
-            if ($field->isTranslatable()) {
+            if ($field->getIsTranslatable()) {
                 $result[SourceField::TRANSLATABLE][$code] = $field;
             } else {
                 $result[SourceField::UNTRANSLATABLE][$code] = $field;

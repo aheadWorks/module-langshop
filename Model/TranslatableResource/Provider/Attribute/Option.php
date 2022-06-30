@@ -33,14 +33,13 @@ class Option
     public function get(array $attributeIds, int $storeId = Store::DEFAULT_STORE_ID): array
     {
         $optionCollection = $this->optionCollectionFactory->create()
-            ->addFieldToFilter('main_table.attribute_id', $attributeIds)
-            ->setStoreFilter($storeId);
+            ->addFieldToFilter('main_table.attribute_id', $attributeIds);
 
         $optionCollection->getSelect()->joinLeft(
             ['eaov' => $optionCollection->getTable('eav_attribute_option_value')],
             "eaov.option_id = main_table.option_id and eaov.store_id = $storeId",
-            ['value_id' => 'eaov.value_id']
-        )->order('option_id');
+            ['value_id', 'value']
+        );
 
         /** @var AttributeOption[] $options */
         $options = $optionCollection->getItems();
