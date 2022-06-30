@@ -1,11 +1,16 @@
 <?php
 /**
- * @var $block \Magento\Backend\Block\Template
- * @var $viewModel \Aheadworks\Langshop\ViewModel\Page\Iframe
+ * Embedded iframe with Langshop application
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Aheadworks\Langshop\ViewModel\Page\Iframe $viewModel
+ * @var \Magento\Framework\Escaper $escaper
  */
 $viewModel = $block->getViewModel();
 ?>
-<iframe src="<?= /* @noEscape */ $viewModel->getSourceUrl() ?>"
-        frameborder="0" width="100%" height="1000px"
+<iframe src="<?= $escaper->escapeUrl($viewModel->getSourceUrl()) ?>"
+        width="100%"
+        frameborder="0"
         sandbox="allow-same-origin allow-scripts"
-        data-mage-init='{"Aheadworks_Langshop/js/iframe-bridge": {}}'></iframe>
+        data-mage-init='{"Aheadworks_Langshop/js/iframe-bridge": {}}'
+></iframe>
