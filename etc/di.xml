@@ -297,8 +297,8 @@
                  type="Aheadworks\Langshop\Model\Entity">
         <arguments>
             <argument name="resourceType" xsi:type="string">csv</argument>
-            <argument name="label" xsi:type="string">Csv file</argument>
-            <argument name="description" xsi:type="string">Csv file</argument>
+            <argument name="label" xsi:type="string">Store Localizations</argument>
+            <argument name="description" xsi:type="string">Store Localizations</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Csv</argument>
         </arguments>
