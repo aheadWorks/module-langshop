@@ -63,9 +63,9 @@
     <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool">
         <arguments>
             <argument name="repositories" xsi:type="array">
-                <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
+                <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
             </argument>
         </arguments>
     </type>
@@ -238,9 +238,9 @@
     <type name="Aheadworks\Langshop\Model\Entity\Pool">
         <arguments>
             <argument name="entityList" xsi:type="array">
-                <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute</item>
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category</item>
+                <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute</item>
             </argument>
         </arguments>
     </type>
@@ -250,8 +250,8 @@
                  type="Aheadworks\Langshop\Model\Entity">
         <arguments>
             <argument name="resourceType" xsi:type="string">attribute</argument>
-            <argument name="label" xsi:type="string">Attribute</argument>
-            <argument name="description" xsi:type="string">Attribute</argument>
+            <argument name="label" xsi:type="string">Attributes</argument>
+            <argument name="description" xsi:type="string">Attributes</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Attribute</argument>
         </arguments>
@@ -260,8 +260,8 @@
                  type="Aheadworks\Langshop\Model\Entity">
         <arguments>
             <argument name="resourceType" xsi:type="string">product</argument>
-            <argument name="label" xsi:type="string">Product</argument>
-            <argument name="description" xsi:type="string">Product</argument>
+            <argument name="label" xsi:type="string">Products</argument>
+            <argument name="description" xsi:type="string">Products</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Product</argument>
         </arguments>
@@ -270,8 +270,8 @@
                  type="Aheadworks\Langshop\Model\Entity">
         <arguments>
             <argument name="resourceType" xsi:type="string">category</argument>
-            <argument name="label" xsi:type="string">Category</argument>
-            <argument name="description" xsi:type="string">Category</argument>
+            <argument name="label" xsi:type="string">Categories</argument>
+            <argument name="description" xsi:type="string">Categories</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Category</argument>
         </arguments>
@@ -637,19 +637,10 @@
                 <item name="title" xsi:type="string">General</item>
                 <item name="sortOrder" xsi:type="string">1</item>
                 <item name="resources" xsi:type="array">
-                    <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Attribute</item>
                     <item name="product" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Product</item>
                     <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Category</item>
+                    <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Attribute</item>
                 </item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Attribute"
-                 type="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel">
-        <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="resource" xsi:type="string">attribute</item>
-                <item name="sort_order" xsi:type="string">10</item>
             </argument>
         </arguments>
     </virtualType>
@@ -658,7 +649,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">product</item>
-                <item name="sort_order" xsi:type="string">20</item>
+                <item name="sort_order" xsi:type="string">10</item>
             </argument>
         </arguments>
     </virtualType>
@@ -667,6 +658,15 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">category</item>
+                <item name="sort_order" xsi:type="string">20</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Attribute"
+                 type="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="resource" xsi:type="string">attribute</item>
                 <item name="sort_order" xsi:type="string">30</item>
             </argument>
         </arguments>
