@@ -4,14 +4,18 @@ namespace Aheadworks\Langshop\Test\Unit\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
-use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
-use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
+use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\CollectionFactory;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
+use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Repository\Csv as CsvRepository;
+use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +42,26 @@ class CsvTest extends TestCase
     private $collectionProcessorMock;
 
     /**
+     * @var ResourceModelFactory|MockObject
+     */
+    private $resourceModelFactoryMock;
+
+    /**
+     * @var TranslationValidation|MockObject
+     */
+    private $translationValidationMock;
+
+    /**
+     * @var EventManagerInterface|MockObject
+     */
+    private $eventManagerMock;
+
+    /**
+     * @var LocaleCodeConverter|MockObject
+     */
+    private $localeCodeConverterMock;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -46,11 +70,19 @@ class CsvTest extends TestCase
         $this->attributeProviderMock = $this->createMock(EntityAttributeProvider::class);
         $this->collectionProcessorMock = $this->createMock(ProcessorInterface::class);
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $this->resourceModelFactoryMock = $this->createMock(ResourceModelFactory::class);
+        $this->translationValidationMock = $this->createMock(TranslationValidation::class);
+        $this->eventManagerMock = $this->createMock(EventManagerInterface::class);
+        $this->localeCodeConverterMock = $this->createMock(LocaleCodeConverter::class);
 
         $this->csvRepository = new CsvRepository(
             $this->attributeProviderMock,
             $this->collectionProcessorMock,
-            $this->collectionFactoryMock
+            $this->collectionFactoryMock,
+            $this->resourceModelFactoryMock,
+            $this->translationValidationMock,
+            $this->eventManagerMock,
+            $this->localeCodeConverterMock
         );
     }
 
