@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Aheadworks\Langshop\Model\ResourceModel\Collection;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\Collection;
 
 class Composite implements ProcessorInterface
 {

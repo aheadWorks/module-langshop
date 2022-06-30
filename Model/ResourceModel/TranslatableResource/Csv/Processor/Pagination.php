@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Aheadworks\Langshop\Model\ResourceModel\Collection\Processor;
+namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor;
 
-use Aheadworks\Langshop\Model\ResourceModel\Collection\ProcessorInterface;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Data\Collection;
 
 class Pagination implements ProcessorInterface
 {

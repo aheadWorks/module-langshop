@@ -6,9 +6,10 @@ use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
 use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
-use Aheadworks\Langshop\Model\TranslationFactory;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\SortingApplier;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
+use Aheadworks\Langshop\Model\TranslationFactory;
 use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Module\ModuleListInterface;
@@ -42,6 +43,11 @@ class Collection extends DataCollection
      * @var TranslationFactory
      */
     private TranslationFactory $translationFactory;
+
+    /**
+     * @var SortingApplier
+     */
+    private SortingApplier $sortingApplier;
 
     /**
      * @var LoggerInterface
@@ -79,6 +85,7 @@ class Collection extends DataCollection
      * @param CsvReader $csvReader
      * @param ModuleListInterface $moduleList
      * @param TranslationFactory $translationFactory
+     * @param SortingApplier $sortingApplier
      * @param LoggerInterface $logger
      * @param Resolver $filterResolver
      */
@@ -88,6 +95,7 @@ class Collection extends DataCollection
         CsvReader $csvReader,
         ModuleListInterface $moduleList,
         TranslationFactory $translationFactory,
+        SortingApplier $sortingApplier,
         LoggerInterface $logger,
         Resolver $filterResolver
     ) {
@@ -96,6 +104,7 @@ class Collection extends DataCollection
         $this->csvReader = $csvReader;
         $this->moduleList = $moduleList;
         $this->translationFactory = $translationFactory;
+        $this->sortingApplier = $sortingApplier;
         $this->logger = $logger;
         $this->filterResolver = $filterResolver;
     }
@@ -144,6 +153,7 @@ class Collection extends DataCollection
         }
 
         $this->_totalRecords = count($this->_items);
+        $this->sortingApplier->apply($this->_items, $this->_orders);
         $this->applyPagination();
         $this->_setIsLoaded();
 
@@ -261,6 +271,19 @@ class Collection extends DataCollection
     public function getStoreId(): int
     {
         return $this->storeId;
+    }
+
+    /**
+     * Add order
+     *
+     * @param string $field
+     * @param string $direction
+     * @return $this
+     */
+    public function addOrder(string $field, string $direction = 'ASC'): Collection
+    {
+        $this->_orders[$field] = $direction;
+        return $this;
     }
 
     /**
