@@ -746,7 +746,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">product</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sort_order" xsi:type="number">10</item>
             </argument>
         </arguments>
     </virtualType>
@@ -755,7 +755,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">category</item>
-                <item name="sort_order" xsi:type="string">20</item>
+                <item name="sort_order" xsi:type="number">20</item>
             </argument>
         </arguments>
     </virtualType>
@@ -764,7 +764,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">attribute</item>
-                <item name="sort_order" xsi:type="string">30</item>
+                <item name="sort_order" xsi:type="number">30</item>
             </argument>
         </arguments>
     </virtualType>
@@ -773,7 +773,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">csv</item>
-                <item name="sort_order" xsi:type="string">40</item>
+                <item name="sort_order" xsi:type="number">40</item>
             </argument>
         </arguments>
     </virtualType>

@@ -11,7 +11,7 @@ class ResourceModel extends DataObject implements ResourceInterface
     /**
      * @inheritDoc
      */
-    public function setResource($resource)
+    public function setResource(string $resource): ResourceInterface
     {
         return $this->setData(self::RESOURCE, $resource);
     }
@@ -19,7 +19,7 @@ class ResourceModel extends DataObject implements ResourceInterface
     /**
      * @inheritDoc
      */
-    public function getResource()
+    public function getResource(): string
     {
         return $this->getData(self::RESOURCE);
     }
@@ -27,7 +27,7 @@ class ResourceModel extends DataObject implements ResourceInterface
     /**
      * @inheritDoc
      */
-    public function setSortOrder($sortOrder)
+    public function setSortOrder(int $sortOrder): ResourceInterface
     {
         return $this->setData(self::SORT_ORDER, $sortOrder);
     }
@@ -35,7 +35,7 @@ class ResourceModel extends DataObject implements ResourceInterface
     /**
      * @inheritDoc
      */
-    public function getSortOrder()
+    public function getSortOrder(): int
     {
         return $this->getData(self::SORT_ORDER);
     }
