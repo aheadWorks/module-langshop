@@ -6,17 +6,22 @@ use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
 use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionTrait;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\SortingApplier;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
 use Aheadworks\Langshop\Model\TranslationFactory;
+use Exception;
 use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Psr\Log\LoggerInterface;
 
-class Collection extends DataCollection
+class Collection extends DataCollection implements CollectionInterface
 {
+    use CollectionTrait;
+
     public const BASE_LOCALE = 'en_US';
 
     /**
@@ -53,11 +58,6 @@ class Collection extends DataCollection
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-
-    /**
-     * @var int
-     */
-    private int $storeId = 0;
 
     /**
      * @var int
@@ -110,7 +110,11 @@ class Collection extends DataCollection
     }
 
     /**
-     * @inheritdoc
+     * Load data
+     *
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return DataCollection
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -121,8 +125,13 @@ class Collection extends DataCollection
     }
 
     /**
-     * @inheritdoc
-     * @throws \Exception
+     * Load data
+     *
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return DataCollection
+     * @throws Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -143,7 +152,7 @@ class Collection extends DataCollection
                         $data = $this->csvReader->getCsvData($packageName, self::BASE_LOCALE);
                         $lines = $this->getTranslationLines($this->getOriginalLines($data), $translationData, $locale);
                         $model->setLines($lines);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $this->logger->error($e->getMessage());
                         $model->setLines([]);
                     }
@@ -248,29 +257,6 @@ class Collection extends DataCollection
     public function addEntityIdFilter(string $id): Collection
     {
         return $this->addFilter(Model::ID, $id);
-    }
-
-    /**
-     * Set store id
-     *
-     * @param int $storeId
-     * @return Collection
-     */
-    public function setStoreId(int $storeId): Collection
-    {
-        $this->storeId = $storeId;
-
-        return $this;
-    }
-
-    /**
-     * Get store id
-     *
-     * @return int
-     */
-    public function getStoreId(): int
-    {
-        return $this->storeId;
     }
 
     /**

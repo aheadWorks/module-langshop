@@ -6,9 +6,9 @@ namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableRe
 use Aheadworks\Langshop\Model\Entity\Field;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
-use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Model\AbstractModel;
 
 class SelectLabel
 {
@@ -29,16 +29,16 @@ class SelectLabel
     /**
      * Replace select identifiers to labels
      *
-     * @param AbstractDb $collection
-     * @param AbstractModel $model
-     * @return AbstractModel
+     * @param Collection $collection
+     * @param DataObject $model
+     * @return DataObject
      * @throws LocalizedException
      */
     public function afterGetItemById(
-        AbstractDb $collection,
-        AbstractModel $model
-    ): AbstractModel {
-        /** @var AbstractDb|CollectionInterface $collection */
+        Collection $collection,
+        DataObject $model
+    ): DataObject {
+        /** @var Collection|CollectionInterface $collection */
         $resourceType = $collection->getResourceType();
 
         if ($resourceType) {

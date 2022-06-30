@@ -9,7 +9,10 @@ use Magento\Framework\DataObject;
 class ResourceModel extends DataObject implements ResourceInterface
 {
     /**
-     * @inheritDoc
+     * Set resource
+     *
+     * @param string $resource
+     * @return $this
      */
     public function setResource(string $resource): ResourceInterface
     {
@@ -17,7 +20,9 @@ class ResourceModel extends DataObject implements ResourceInterface
     }
 
     /**
-     * @inheritDoc
+     * Get resource
+     *
+     * @return string
      */
     public function getResource(): string
     {
@@ -25,7 +30,10 @@ class ResourceModel extends DataObject implements ResourceInterface
     }
 
     /**
-     * @inheritDoc
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return $this
      */
     public function setSortOrder(int $sortOrder): ResourceInterface
     {
@@ -33,10 +41,12 @@ class ResourceModel extends DataObject implements ResourceInterface
     }
 
     /**
-     * @inheritDoc
+     * Get sort order
+     *
+     * @return int
      */
     public function getSortOrder(): int
     {
-        return $this->getData(self::SORT_ORDER);
+        return (int)$this->getData(self::SORT_ORDER);
     }
 }

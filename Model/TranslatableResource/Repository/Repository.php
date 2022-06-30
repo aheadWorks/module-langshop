@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
@@ -93,7 +94,12 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Retrieve entities matching the specified criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param RecordInterface[] $localeScopes
+     * @return Collection
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria, array $localeScopes): Collection
     {
@@ -107,7 +113,13 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Get entity
+     *
+     * @param string $entityId
+     * @param RecordInterface[] $localeScopes
+     * @return DataObject
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function get(string $entityId, array $localeScopes): DataObject
     {
@@ -117,7 +129,12 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Save entity
+     *
+     * @param string $entityId
+     * @param TranslationInterface[] $translations
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function save(string $entityId, array $translations): void
     {

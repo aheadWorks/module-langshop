@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
@@ -15,6 +16,7 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Translation\Model\ResourceModel\StringUtils;
 use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
 
@@ -85,7 +87,12 @@ class Csv implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Retrieve entities matching the specified criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param RecordInterface[] $localeScopes
+     * @return Collection
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria, array $localeScopes): Collection
     {
@@ -97,7 +104,12 @@ class Csv implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Get entity
+     *
+     * @param string $entityId
+     * @param RecordInterface[] $localeScopes
+     * @return DataObject
+     * @throws LocalizedException
      */
     public function get(string $entityId, array $localeScopes): DataObject
     {
@@ -109,7 +121,12 @@ class Csv implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * Save entity
+     *
+     * @param string $entityId
+     * @param TranslationInterface[] $translations
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function save(string $entityId, array $translations): void
     {
@@ -157,7 +174,7 @@ class Csv implements RepositoryInterface
     private function addLocalizedAttributes(CsvCollection $collection, array $localeScopes): Collection
     {
         $localizedCollection = clone $collection;
-        $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields('csv');
+        $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields(self::RESOURCE_TYPE);
         $localizedCollection->setIsNeedToAddLinesAttribute(true);
 
         foreach ($localeScopes as $localeScope) {
