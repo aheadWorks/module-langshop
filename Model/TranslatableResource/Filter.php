@@ -9,7 +9,16 @@ use Magento\Framework\DataObject;
 class Filter extends DataObject implements FilterInterface
 {
     /**
-     * @inheritDoc
+     * Constants for internal keys
+     */
+    private const FIELD = 'field';
+    private const VALUE = 'value';
+
+    /**
+     * Set field
+     *
+     * @param string $field
+     * @return $this
      */
     public function setField(string $field): FilterInterface
     {
@@ -17,7 +26,9 @@ class Filter extends DataObject implements FilterInterface
     }
 
     /**
-     * @inheritDoc
+     * Get field
+     *
+     * @return string
      */
     public function getField(): string
     {
@@ -25,17 +36,22 @@ class Filter extends DataObject implements FilterInterface
     }
 
     /**
-     * @inheritDoc
+     * Set value
+     *
+     * @param mixed $value
+     * @return $this
      */
-    public function setValue(string $value): FilterInterface
+    public function setValue($value): FilterInterface
     {
         return $this->setData(self::VALUE, $value);
     }
 
     /**
-     * @inheritDoc
+     * Get value
+     *
+     * @return mixed
      */
-    public function getValue(): string
+    public function getValue()
     {
         return $this->getData(self::VALUE);
     }

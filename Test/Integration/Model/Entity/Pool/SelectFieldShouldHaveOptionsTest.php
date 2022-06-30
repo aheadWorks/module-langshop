@@ -11,6 +11,14 @@ use PHPUnit\Framework\TestCase;
 class SelectFieldShouldHaveOptionsTest extends TestCase
 {
     /**
+     * Attribute types to check
+     */
+    private const SELECT_FILTER_TYPES = [
+        'select',
+        'multiselect'
+    ];
+
+    /**
      * @var EntityPool|null
      */
     private ?EntityPool $entityPool;
@@ -35,7 +43,7 @@ class SelectFieldShouldHaveOptionsTest extends TestCase
 
         foreach ($entities as $entity) {
             foreach ($entity->getFields() as $field) {
-                if ($field->getFilterType() === 'select') {
+                if (in_array($field->getFilterType(), self::SELECT_FILTER_TYPES)) {
                     $this->assertNotNull($field->getFilterOptions());
 
                     if ($field->getFilterOptions()) {
