@@ -191,7 +191,8 @@ definitions:
           - *cleanTestResults
           - *toggleSatisRebuild
     - step: &deployToStagingStore
-        name: Deploy to Staging store http://157.245.123.44:1280/
+        name: Deploy to Staging store
+        deployment: Staging
         script:
           - *cleanTestResults
           - printenv
