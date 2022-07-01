@@ -194,8 +194,8 @@ definitions:
         name: Deploy to Staging store
         deployment: Staging
         script:
-          - *cleanTestResults
           - printenv
+          - ls -la ~/.ssh/
           - rsync -az --delete-after -e "ssh -i ~/.ssh/id_rsa -p ${STAGING_PORT}" . ${STAGING_USER}@${STAGING_HOST}:/var/www/html/app2
           - echo http://$STAGING_HOST:$STAGING_PORT/admin
     - step: &deployToAwComposer
@@ -326,12 +326,13 @@ pipelines:
       - step: *deployToAwComposer
 
     deploy-to-dev-composer:
-      - step:
-          script:
-            - *cleanSource
       - step: *deployToDevComposer
 
     deploy-to-staging-store:
+      - step:
+          name: Clean source
+          script:
+            - *cleanSource
       - step: *deployToStagingStore
 
     # Build pack manually
