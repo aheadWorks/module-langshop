@@ -195,8 +195,8 @@ definitions:
         script:
           - *cleanTestResults
           - printenv
-          - ls -la
-          - #rsync -avz -e 'ssh -p '${SSH_PORT} .env ${SSH_USER}@$SSH_HOST:$APP_PATH
+          - rsync -az --delete-after -e 'ssh -p '${STAGING_PORT} . ${STAGING_USER}@STAGING_HOST:/var/www/html/app2/code/Aheadworks/Langshop
+          - echo http://$STAGING_HOST:$STAGING_PORT/admin
     - step: &deployToAwComposer
         name: Deploy to composer repository
         image: aheadworks/deploy
