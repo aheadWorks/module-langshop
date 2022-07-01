@@ -190,6 +190,13 @@ definitions:
         script:
           - *cleanTestResults
           - *toggleSatisRebuild
+    - step: &deployToStagingStore
+        name: Deploy to Staging store http://157.245.123.44:1280/
+        script:
+          - *cleanTestResults
+          - printenv
+          - ls -la
+          - #rsync -avz -e 'ssh -p '${SSH_PORT} .env ${SSH_USER}@$SSH_HOST:$APP_PATH
     - step: &deployToAwComposer
         name: Deploy to composer repository
         image: aheadworks/deploy
@@ -276,6 +283,7 @@ pipelines:
           - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *integrationTest-2.4.4
+      - step: *deployToStagingStore
       - step: *deployToDevComposer
     feature/*:
         - step: *eqpTest-2.3.7
@@ -318,6 +326,9 @@ pipelines:
 
     deploy-to-dev-composer:
       - step: *deployToDevComposer
+
+    deploy-to-staging-store:
+      - step: *deployToStagingStore
 
     # Build pack manually
     build-marketplace-package:
