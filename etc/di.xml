@@ -60,12 +60,16 @@
                 type="Aheadworks\Langshop\Model\Locale\Scope\Record"/>
     <!-- END Scope Record Configuration -->
 
+    <preference for="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface"
+                type="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Composite"/>
+
     <type name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool">
         <arguments>
             <argument name="repositories" xsi:type="array">
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
+                <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Csv</item>
             </argument>
         </arguments>
     </type>
@@ -157,6 +161,24 @@
         </arguments>
     </virtualType>
 
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Composite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor\Filter</item>
+                <item name="pagination" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor\Pagination</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Processor\Sorting</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver">
+        <arguments>
+            <argument name="filterAppliers" xsi:type="array">
+                <item name="eq" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Eq</item>
+                <item name="like" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Like</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Aheadworks\Langshop\Model\Locale\LoadHandler">
         <arguments>
             <argument name="processor" xsi:type="object">Aheadworks\Langshop\Model\Locale\Processor\Composite</argument>
@@ -241,6 +263,7 @@
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute</item>
+                <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\Entity\Csv</item>
             </argument>
         </arguments>
     </type>
@@ -274,6 +297,16 @@
             <argument name="description" xsi:type="string">Categories</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Category</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Csv"
+                 type="Aheadworks\Langshop\Model\Entity">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">csv</argument>
+            <argument name="label" xsi:type="string">Store Localizations</argument>
+            <argument name="description" xsi:type="string">Store Localizations</argument>
+            <argument name="viewType" xsi:type="string">grid</argument>
+            <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Csv</argument>
         </arguments>
     </virtualType>
     <!-- END Schema Entities -->
@@ -611,6 +644,69 @@
     </virtualType>
     <!-- END Schema Category Fields -->
 
+    <!-- START Schema Csv Fields -->
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\Csv"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector">
+        <arguments>
+            <argument name="collectorList" xsi:type="array">
+                <item name="static" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\Csv</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\Csv"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="module_name" xsi:type="object">Aheadworks\Langshop\Model\Entity\Csv\Field\ModuleName</item>
+                <item name="vendor_name" xsi:type="object">Aheadworks\Langshop\Model\Entity\Csv\Field\VendorName</item>
+                <item name="lines" xsi:type="object">Aheadworks\Langshop\Model\Entity\Csv\Field\Lines</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Csv\Field\ModuleName"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">module_name</argument>
+            <argument name="label" xsi:type="string">Module Name</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">10</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="isTitle" xsi:type="boolean">true</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Csv\Field\VendorName"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">vendor_name</argument>
+            <argument name="label" xsi:type="string">Vendor Name</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">20</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Csv\Field\Lines"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">lines</argument>
+            <argument name="label" xsi:type="string">Lines</argument>
+            <argument name="type" xsi:type="string">array</argument>
+            <argument name="sortOrder" xsi:type="number">30</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Schema Csv Fields -->
+
     <type name="Aheadworks\Langshop\Model\Schema\ResourceGroup\Pool">
         <arguments>
             <argument name="groupList" xsi:type="array">
@@ -640,6 +736,7 @@
                     <item name="product" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Product</item>
                     <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Category</item>
                     <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Attribute</item>
+                    <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Csv</item>
                 </item>
             </argument>
         </arguments>
@@ -649,7 +746,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">product</item>
-                <item name="sort_order" xsi:type="string">10</item>
+                <item name="sort_order" xsi:type="number">10</item>
             </argument>
         </arguments>
     </virtualType>
@@ -658,7 +755,7 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">category</item>
-                <item name="sort_order" xsi:type="string">20</item>
+                <item name="sort_order" xsi:type="number">20</item>
             </argument>
         </arguments>
     </virtualType>
@@ -667,7 +764,16 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="resource" xsi:type="string">attribute</item>
-                <item name="sort_order" xsi:type="string">30</item>
+                <item name="sort_order" xsi:type="number">30</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel\Csv"
+                 type="Aheadworks\Langshop\Model\Schema\ResourceGroup\ResourceModel">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="resource" xsi:type="string">csv</item>
+                <item name="sort_order" xsi:type="number">40</item>
             </argument>
         </arguments>
     </virtualType>
