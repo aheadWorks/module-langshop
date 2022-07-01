@@ -196,7 +196,7 @@ definitions:
         script:
           - printenv
           - cat ~/.ssh/config
-          - rsync -az --delete-after -e "ssh -p ${STAGING_PORT}" . ${STAGING_USER}@${STAGING_HOST}:/var/www/html/app2
+          - rsync -az --delete-after -e "ssh -i /opt/atlassian/pipelines/agent/ssh/id_rsa -p ${STAGING_PORT}" . ${STAGING_USER}@${STAGING_HOST}:/var/www/html/app2
           - echo http://$STAGING_HOST:$STAGING_PORT/admin
     - step: &deployToAwComposer
         name: Deploy to composer repository
