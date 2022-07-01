@@ -194,8 +194,8 @@ definitions:
         name: Deploy to Staging store
         deployment: Staging
         script:
-          - rsync -azv --delete-after -e "ssh -i /opt/atlassian/pipelines/agent/ssh/id_rsa -p ${STAGING_PORT}" . ${STAGING_USER}@${STAGING_HOST}:/var/www/html/app2
-          - ssh -T ${STAGING_USER}@${STAGING_HOST} -p ${STAGING_PORT} "cd /var/www/html && bin/magento set:up && bin/magento set:static-content:deploy -f && bin/magento set:di:compile"
+          - rsync -azv --delete-after -e "ssh -i /opt/atlassian/pipelines/agent/ssh/id_rsa -p ${STAGING_PORT}" . ${STAGING_USER}@${STAGING_HOST}:${STAGING_MODULE_DIR}
+          - ssh -T ${STAGING_USER}@${STAGING_HOST} -p ${STAGING_PORT} "cd /var/www/html && bin/magento set:up && bin/magento set:di:compile"
           - echo http://$STAGING_HOST:$STAGING_PORT/admin
     - step: &deployToAwComposer
         name: Deploy to composer repository
@@ -284,7 +284,7 @@ pipelines:
           - step: *unitTestPHP74
           - step: *integrationTest-2.4.4
       - step: *deployToStagingStore
-      - step: *deployToDevComposer
+#      - step: *deployToDevComposer
     feature/*:
         - step: *eqpTest-2.3.7
         - step: *eqpTest-2.4.4
@@ -318,20 +318,16 @@ pipelines:
 
   custom:
     # Upload to AW composer manually
-    deploy-to-aw-composer:
-      - step: *build
-      - step: *validatePackage-2.3.7
-      - step: *validatePackage-2.4.4
-      - step: *deployToAwComposer
+#    deploy-to-aw-composer:
+#      - step: *build
+#      - step: *validatePackage-2.3.7
+#      - step: *validatePackage-2.4.4
+#      - step: *deployToAwComposer
 
-    deploy-to-dev-composer:
-      - step: *deployToDevComposer
+#    deploy-to-dev-composer:
+#      - step: *deployToDevComposer
 
     deploy-to-staging-store:
-      - step:
-          name: Clean source
-          script:
-            - *cleanSource
       - step: *deployToStagingStore
 
     # Build pack manually
