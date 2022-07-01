@@ -196,7 +196,7 @@ definitions:
         script:
           - *cleanTestResults
           - printenv
-          - rsync -az --delete-after -e 'ssh -p '${STAGING_PORT} . ${STAGING_USER}@${STAGING_HOST}:/var/www/html/app2
+          - rsync -az --delete-after -e "ssh -i ~/.ssh/id_rsa -p ${STAGING_PORT}" . ${STAGING_USER}@${STAGING_HOST}:/var/www/html/app2
           - echo http://$STAGING_HOST:$STAGING_PORT/admin
     - step: &deployToAwComposer
         name: Deploy to composer repository
@@ -326,6 +326,9 @@ pipelines:
       - step: *deployToAwComposer
 
     deploy-to-dev-composer:
+      - step:
+          script:
+            - *cleanSource
       - step: *deployToDevComposer
 
     deploy-to-staging-store:
