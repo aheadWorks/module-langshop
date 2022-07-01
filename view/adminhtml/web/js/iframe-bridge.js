@@ -47,10 +47,6 @@ define([], function () {
          */
         updateIframeSize: function (data) {
             if (this.iframe) {
-                if (data.width) {
-                    this.iframe.style.width = data.width + 'px';
-                }
-
                 if (data.height) {
                     this.iframe.style.height = data.height + 'px';
                 }
