@@ -275,6 +275,7 @@
             <argument name="resourceType" xsi:type="string">attribute</argument>
             <argument name="label" xsi:type="string">Attributes</argument>
             <argument name="description" xsi:type="string">Attributes</argument>
+            <argument name="icon" xsi:type="string">ListMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Attribute</argument>
         </arguments>
@@ -285,6 +286,7 @@
             <argument name="resourceType" xsi:type="string">product</argument>
             <argument name="label" xsi:type="string">Products</argument>
             <argument name="description" xsi:type="string">Products</argument>
+            <argument name="icon" xsi:type="string">ProductsMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Product</argument>
         </arguments>
@@ -295,6 +297,7 @@
             <argument name="resourceType" xsi:type="string">category</argument>
             <argument name="label" xsi:type="string">Categories</argument>
             <argument name="description" xsi:type="string">Categories</argument>
+            <argument name="icon" xsi:type="string">CategoriesMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Category</argument>
         </arguments>
@@ -305,6 +308,7 @@
             <argument name="resourceType" xsi:type="string">csv</argument>
             <argument name="label" xsi:type="string">Store Localizations</argument>
             <argument name="description" xsi:type="string">Store Localizations</argument>
+            <argument name="icon" xsi:type="string">StoreMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Csv</argument>
         </arguments>
