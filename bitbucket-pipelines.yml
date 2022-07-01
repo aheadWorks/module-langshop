@@ -195,6 +195,7 @@ definitions:
         deployment: Staging
         script:
           - printenv
+          - ssh -T ${STAGING_USER}@${STAGING_HOST} -p ${STAGING_PORT} "ls -la"
           - cat ~/.ssh/config
           - rsync -az --delete-after -e "ssh -i /opt/atlassian/pipelines/agent/ssh/id_rsa -p ${STAGING_PORT}" . ${STAGING_USER}@${STAGING_HOST}:/var/www/html/app2
           - echo http://$STAGING_HOST:$STAGING_PORT/admin
