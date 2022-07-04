@@ -8,16 +8,16 @@ interface PreparerInterface
     /**
      * Get prepared condition type
      *
-     * @param string|array $value
+     * @param string[] $value
      * @return string
      */
-    public function getPreparedConditionType($value): string;
+    public function getPreparedConditionType(array $value): string;
 
     /**
      * Get prepared value
      *
-     * @param string|array $value
-     * @return string|array
+     * @param string[] $value
+     * @return string|string[]
      */
-    public function getPreparedValue($value);
+    public function getPreparedValue(array $value);
 }
