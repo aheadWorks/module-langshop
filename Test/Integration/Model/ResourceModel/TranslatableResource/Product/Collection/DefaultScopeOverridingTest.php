@@ -4,25 +4,25 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Test\Integration\Model\ResourceModel\TranslatableResource\Product\Collection;
 
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection as ProductCollection;
-use Aheadworks\Langshop\Test\Integration\Fixture\Store as StoreFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\App\Emulation as StoreEmulation;
 use PHPUnit\Framework\TestCase;
 
 class DefaultScopeOverridingTest extends TestCase
 {
     /**
-     * @var StoreFixture|null
-     */
-    private ?StoreFixture $storeFixture;
-
-    /**
      * @var StoreEmulation|null
      */
     private ?StoreEmulation $storeEmulation;
+
+    /**
+     * @var StoreRepositoryInterface|null
+     */
+    private ?StoreRepositoryInterface $storeRepository;
 
     /**
      * @var ProductRepositoryInterface|null
@@ -41,8 +41,8 @@ class DefaultScopeOverridingTest extends TestCase
     {
         $objectManager = ObjectManager::getInstance();
 
-        $this->storeFixture = $objectManager->create(StoreFixture::class);
         $this->storeEmulation = $objectManager->create(StoreEmulation::class);
+        $this->storeRepository = $objectManager->create(StoreRepositoryInterface::class);
         $this->productRepository = $objectManager->create(ProductRepositoryInterface::class);
         $this->productCollection = $objectManager->create(ProductCollection::class);
     }
@@ -50,14 +50,15 @@ class DefaultScopeOverridingTest extends TestCase
     /**
      * Store-specific values should not be overridden by default scope
      *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      *
-     * @return void
      * @throws LocalizedException
      */
     public function testGetItems(): void
     {
-        $store = $this->storeFixture->create();
+        $store = $this->storeRepository->get('fixturestore');
         $this->storeEmulation->startEnvironmentEmulation($store->getId());
 
         $product = $this->productRepository->get('simple');
