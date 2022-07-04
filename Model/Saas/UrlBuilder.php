@@ -3,11 +3,18 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Saas;
 
+use Aheadworks\Langshop\Model\Config\Saas as SaasConfig;
 use Aheadworks\Langshop\Model\Saas\Request\Install as InstallRequest;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class UrlBuilder
 {
+    /**
+     * @var SaasConfig
+     */
+    private SaasConfig $saasConfig;
+
     /**
      * @var CurlSender
      */
@@ -19,15 +26,26 @@ class UrlBuilder
     private InstallRequest $installRequest;
 
     /**
+     * @var SerializerInterface
+     */
+    private SerializerInterface $serializer;
+
+    /**
+     * @param SaasConfig $saasConfig
      * @param CurlSender $curlSender
      * @param InstallRequest $installRequest
+     * @param SerializerInterface $serializer
      */
     public function __construct(
+        SaasConfig $saasConfig,
         CurlSender $curlSender,
-        InstallRequest $installRequest
+        InstallRequest $installRequest,
+        SerializerInterface $serializer
     ) {
+        $this->saasConfig = $saasConfig;
         $this->curlSender = $curlSender;
         $this->installRequest = $installRequest;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -43,17 +61,24 @@ class UrlBuilder
             $this->installRequest->getParams()
         );
 
-        return $curl->getBody();
+        $body = $this->serializer->unserialize(
+            $curl->getBody()
+        );
+
+        return $body['url'] ?? '';
     }
 
     /**
      * Get application url
      *
-     * @todo: when Saas will be work set actual url
      * @return string
      */
     public function getApplicationUrl(): string
     {
-        return 'https://langshop.io/';
+        return sprintf(
+            '%slogin?token=%s',
+            $this->saasConfig->getDomain(),
+            $this->saasConfig->getPublicKey()
+        );
     }
 }

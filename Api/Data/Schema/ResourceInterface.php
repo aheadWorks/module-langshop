@@ -6,6 +6,7 @@ interface ResourceInterface
     public const RESOURCE = 'resource';
     public const LABEL = 'label';
     public const DESCRIPTION = 'description';
+    public const ICON = 'icon';
     public const FIELDS = 'fields';
     public const SORTING = 'sorting';
     public const VIEW_TYPE = 'viewType';
@@ -16,14 +17,14 @@ interface ResourceInterface
      * @param string $resource
      * @return $this
      */
-    public function setResource($resource);
+    public function setResource(string $resource): ResourceInterface;
 
     /**
      * Get resource
      *
      * @return string
      */
-    public function getResource();
+    public function getResource(): string;
 
     /**
      * Set label
@@ -31,14 +32,14 @@ interface ResourceInterface
      * @param string $label
      * @return $this
      */
-    public function setLabel($label);
+    public function setLabel(string $label): ResourceInterface;
 
     /**
      * Get label
      *
      * @return string
      */
-    public function getLabel();
+    public function getLabel(): string;
 
     /**
      * Set description
@@ -46,14 +47,29 @@ interface ResourceInterface
      * @param string $description
      * @return $this
      */
-    public function setDescription($description);
+    public function setDescription(string $description): ResourceInterface;
 
     /**
      * Get description
      *
      * @return string
      */
-    public function getDescription();
+    public function getDescription(): string;
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     * @return $this
+     */
+    public function setIcon(string $icon): ResourceInterface;
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon(): string;
 
     /**
      * Set fields
@@ -61,14 +77,14 @@ interface ResourceInterface
      * @param \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface[] $fields
      * @return $this
      */
-    public function setFields($fields);
+    public function setFields(array $fields): ResourceInterface;
 
     /**
      * Get fields
      *
      * @return \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface[]
      */
-    public function getFields();
+    public function getFields(): array;
 
     /**
      * Set sorting
@@ -76,14 +92,14 @@ interface ResourceInterface
      * @param \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface[] $sorting
      * @return $this
      */
-    public function setSorting(array $sorting);
+    public function setSorting(array $sorting): ResourceInterface;
 
     /**
      * Get sorting
      *
      * @return \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface[]
      */
-    public function getSorting();
+    public function getSorting(): array;
 
     /**
      * Set view type
@@ -91,12 +107,12 @@ interface ResourceInterface
      * @param string $viewType
      * @return $this
      */
-    public function setViewType($viewType);
+    public function setViewType(string $viewType): ResourceInterface;
 
     /**
      * Get view type
      *
      * @return string
      */
-    public function getViewType();
+    public function getViewType(): string;
 }

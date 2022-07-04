@@ -5,7 +5,7 @@ namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource;
 
 use Magento\Framework\DB\Select;
 
-trait CatalogCollectionTrait
+trait EavCollectionTrait
 {
     /**
      * Do not override store-specific attribute values by default ones

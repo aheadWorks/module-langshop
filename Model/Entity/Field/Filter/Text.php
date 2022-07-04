@@ -6,21 +6,27 @@ namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 class Text implements PreparerInterface
 {
     /**
-     * @inheritDoc
+     * Get prepared condition type
+     *
+     * @param string[] $value
+     * @return string
      */
-    public function getPreparedConditionType($value): string
+    public function getPreparedConditionType(array $value): string
     {
         return 'like';
     }
 
     /**
-     * @inheritDoc
+     * Get prepared value
+     *
+     * @param string[] $value
+     * @return string
      */
-    public function getPreparedValue($value)
+    public function getPreparedValue(array $value)
     {
         return sprintf(
             '%%%s%%',
-            str_replace(['%', '_'], ['\%', '\_'], $value)
+            str_replace(['%', '_'], ['\%', '\_'], current($value))
         );
     }
 }

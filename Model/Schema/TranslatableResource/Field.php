@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Schema\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldOptionInterface;
 use Magento\Framework\DataObject;
 
 class Field extends DataObject implements FieldInterface
@@ -114,27 +115,6 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * Set visible areas for field
-     *
-     * @param string[] $areas
-     * @return Field
-     */
-    public function setVisibleOn(array $areas): FieldInterface
-    {
-        return $this->setData(self::VISIBLE_ON, $areas);
-    }
-
-    /**
-     * Get visible areas for field
-     *
-     * @return string[]
-     */
-    public function getVisibleOn(): array
-    {
-        return $this->getData(self::VISIBLE_ON);
-    }
-
-    /**
      * Set filter
      *
      * @param string $filter
@@ -156,6 +136,27 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
+     * Set filter options
+     *
+     * @param FieldOptionInterface[] $filterOptions
+     * @return $this
+     */
+    public function setFilterOptions(array $filterOptions): FieldInterface
+    {
+        return $this->setData(self::FILTER_OPTIONS, $filterOptions);
+    }
+
+    /**
+     * Get filter options
+     *
+     * @return FieldOptionInterface[]
+     */
+    public function getFilterOptions(): array
+    {
+        return $this->getData(self::FILTER_OPTIONS);
+    }
+
+    /**
      * Set sort order
      *
      * @param int $sortOrder
@@ -174,5 +175,26 @@ class Field extends DataObject implements FieldInterface
     public function getSortOrder(): int
     {
         return $this->getData(self::SORT_ORDER);
+    }
+
+    /**
+     * Set visible areas for field
+     *
+     * @param string[] $areas
+     * @return $this
+     */
+    public function setVisibleOn(array $areas): FieldInterface
+    {
+        return $this->setData(self::VISIBLE_ON, $areas);
+    }
+
+    /**
+     * Get visible areas for field
+     *
+     * @return string[]
+     */
+    public function getVisibleOn(): array
+    {
+        return $this->getData(self::VISIBLE_ON);
     }
 }

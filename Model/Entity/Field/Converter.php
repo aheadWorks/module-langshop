@@ -10,6 +10,7 @@ use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterfaceFactory;
 use Aheadworks\Langshop\Model\Entity\Field;
 use Aheadworks\Langshop\Model\Entity\Field\Sorting\DirectionList;
+use Aheadworks\Langshop\Model\Schema\TranslatableResource\Sorting;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
 class Converter
@@ -92,11 +93,12 @@ class Converter
             ->setKey($field->getCode())
             ->setLabel($field->getLabel())
             ->setType($field->getType())
-            ->setIsTranslatable($field->isTranslatable())
-            ->setIsTitle($field->isTitle())
-            ->setVisibleOn($field->getVisibleOn())
-            ->setFilter($field->isFilterable() ? $field->getFilterType() : 'none')
-            ->setSortOrder($field->getSortOrder());
+            ->setIsTranslatable($field->getIsTranslatable())
+            ->setIsTitle($field->getIsTitle())
+            ->setFilter($field->getIsFilterable() ? $field->getFilterType() : 'none')
+            ->setFilterOptions($field->getFilterOptions() ? $field->getFilterOptions()->toOptionArray() : [])
+            ->setSortOrder($field->getSortOrder())
+            ->setVisibleOn($field->getVisibleOn());
     }
 
     /**
@@ -108,15 +110,18 @@ class Converter
     private function getSortingElements(Field $field): array
     {
         $sortingElements = [];
-        if ($field->isSortable()) {
+        if ($field->getIsSortable()) {
             foreach ($this->directionList->get($field->getType()) as $direction => $labelEnding) {
-                $sortingElements[] = $this->sortingElementFactory->create(['data' => [
-                        SortingInterface::FIELD => $field->getCode(),
-                        SortingInterface::LABEL => $field->getLabel() . ' ' . $labelEnding,
-                        SortingInterface::DIRECTION => $direction,
-                        SortingInterface::KEY => $field->getCode() . '_' . $direction
-                    ]
-                ]);
+                /** @var Sorting $sortingElement */
+                $sortingElement = $this->sortingElementFactory->create();
+
+                $sortingElement
+                    ->setKey(sprintf('%s_%s', $field->getCode(), $direction))
+                    ->setLabel(sprintf('%s (%s)', $field->getLabel(), $labelEnding))
+                    ->setField($field->getCode())
+                    ->setDirection($direction);
+
+                $sortingElements[] = $sortingElement;
             }
         }
 

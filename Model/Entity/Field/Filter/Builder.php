@@ -11,7 +11,7 @@ class Builder
     /**
      * @var FilterBuilder
      */
-    protected FilterBuilder $filterBuilder;
+    private FilterBuilder $filterBuilder;
 
     /**
      * @var PreparerInterface[]
@@ -20,7 +20,7 @@ class Builder
 
     /**
      * @param FilterBuilder $filterBuilder
-     * @param array $preparers
+     * @param PreparerInterface[] $preparers
      */
     public function __construct(
         FilterBuilder $filterBuilder,
@@ -34,15 +34,16 @@ class Builder
      * Create filter
      *
      * @param string $field
-     * @param string|array $value
+     * @param string[] $value
      * @param string $filterType
      * @return Filter
      */
-    public function create($field, $value, $filterType = 'text'): Filter
-    {
-        $preparer = isset($this->preparers[$filterType])
-            ? $this->preparers[$filterType]
-            : $this->preparers['text'];
+    public function create(
+        string $field,
+        array $value,
+        string $filterType = 'text'
+    ): Filter {
+        $preparer = $this->preparers[$filterType] ?? $this->preparers['text'];
 
         $conditionType = $preparer->getPreparedConditionType($value);
         $value = $preparer->getPreparedValue($value);

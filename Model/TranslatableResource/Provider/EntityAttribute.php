@@ -16,7 +16,7 @@ class EntityAttribute
     private EntityPool $entityPool;
 
     /**
-     * @var  array<string, array<int, array<string, Field>>>
+     * @var array<string, array<int, array<string, Field>>>
      */
     private array $attributes;
 
@@ -131,7 +131,7 @@ class EntityAttribute
         ];
 
         foreach ($fields as $code => $field) {
-            if ($field->isTranslatable()) {
+            if ($field->getIsTranslatable()) {
                 $result[SourceField::TRANSLATABLE][$code] = $field;
             } else {
                 $result[SourceField::UNTRANSLATABLE][$code] = $field;
