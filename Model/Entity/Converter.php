@@ -48,6 +48,7 @@ class Converter
                 ResourceInterface::RESOURCE => $entity->getResourceType(),
                 ResourceInterface::LABEL => $entity->getLabel(),
                 ResourceInterface::DESCRIPTION => $entity->getDescription(),
+                ResourceInterface::ICON => $entity->getIcon(),
                 ResourceInterface::VIEW_TYPE => $entity->getViewType(),
                 ResourceInterface::FIELDS => $fieldsElements[ResourceInterface::FIELDS],
                 ResourceInterface::SORTING => $fieldsElements[ResourceInterface::SORTING]
