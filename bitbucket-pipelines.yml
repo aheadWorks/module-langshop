@@ -139,6 +139,7 @@ definitions:
     - step: &integrationTest-2.4.4
         name: Integration tests on Magento 2.4.4
         image: aheadworks/m2test-new:2.4.4-without-dump-8.1
+        size: 2x
         script:
           - apk add procps
           - export MODULE_DIR=app/code/Aheadworks/Langshop
@@ -146,11 +147,12 @@ definitions:
           - mkdir -p $MODULE_DIR
           - cp -r $BITBUCKET_CLONE_DIR/* $MODULE_DIR
           - cd dev/tests/integration
-          - sed -i -e s/localhost/127.0.0.1/ -e s/123123q// -e s/magento_integration_tests/magento/ etc/install-config-mysql.php.dist
+          - sed -i -e s/localhost/127.0.0.1/ -e s/123123q// -e s/magento_integration_tests/magento/ -e s/9200/9250/ etc/install-config-mysql.php.dist
           - sleep 5 # wait until all services are ready to use
           - ../../../vendor/bin/phpunit ../../../$MODULE_DIR/Test/Integration
         services:
           - mariadb
+          - elasticsearch
           - amqp
     - step: &installMagento-2.3.7
         name: Install Magento 2.3.7 test
@@ -246,6 +248,9 @@ definitions:
       variables:
         MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
         MARIADB_DATABASE: 'magento'
+    elasticsearch:
+      image: xiting/elasticsearch-bitbucket-pipeline:latest
+      memory: 2048
     amqp:
       image: rabbitmq:latest
 pipelines:
@@ -286,21 +291,23 @@ pipelines:
       - step: *deployToStagingStore
 #      - step: *deployToDevComposer
     feature/*:
-        - step: *eqpTest-2.3.7
-        - step: *eqpTest-2.4.4
-        - step: *staticTest-2.3.7
-        - step: *staticTest-2.4.4
-        - step: *PHPStan-2.4.4
-        - step: *unitTestPHP74
-        - step: *integrationTest-2.4.4
+      - parallel:
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
+          - step: *unitTestPHP74
+          - step: *integrationTest-2.4.4
     bugfix/*:
-        - step: *eqpTest-2.3.7
-        - step: *eqpTest-2.4.4
-        - step: *staticTest-2.3.7
-        - step: *staticTest-2.4.4
-        - step: *PHPStan-2.4.4
-        - step: *unitTestPHP74
-        - step: *integrationTest-2.4.4
+      - parallel:
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
+          - step: *unitTestPHP74
+          - step: *integrationTest-2.4.4
     release/*:
       - step: *build
       - step: *validatePackage-2.3.7
