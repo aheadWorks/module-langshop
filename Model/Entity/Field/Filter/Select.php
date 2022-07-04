@@ -6,17 +6,23 @@ namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 class Select implements PreparerInterface
 {
     /**
-     * @inheritDoc
+     * Get prepared condition type
+     *
+     * @param string[] $value
+     * @return string
      */
-    public function getPreparedConditionType($value): string
+    public function getPreparedConditionType(array $value): string
     {
-        return is_array($value) ? 'in' : 'eq';
+        return 'in';
     }
 
     /**
-     * @inheritDoc
+     * Get prepared value
+     *
+     * @param string[] $value
+     * @return string[]
      */
-    public function getPreparedValue($value)
+    public function getPreparedValue(array $value)
     {
         return $value;
     }

@@ -38,10 +38,10 @@ class Filter extends DataObject implements FilterInterface
     /**
      * Set value
      *
-     * @param mixed $value
+     * @param string[] $value
      * @return $this
      */
-    public function setValue($value): FilterInterface
+    public function setValue(array $value): FilterInterface
     {
         return $this->setData(self::VALUE, $value);
     }
@@ -49,9 +49,9 @@ class Filter extends DataObject implements FilterInterface
     /**
      * Get value
      *
-     * @return mixed
+     * @return string[]
      */
-    public function getValue()
+    public function getValue(): array
     {
         return $this->getData(self::VALUE);
     }

@@ -246,6 +246,9 @@
         </arguments>
     </type>
 
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Filter\Multiselect"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Filter\Select"/>
+
     <type name="Aheadworks\Langshop\Model\Entity\Field\Filter\Builder">
         <arguments>
             <argument name="preparers" xsi:type="array">
