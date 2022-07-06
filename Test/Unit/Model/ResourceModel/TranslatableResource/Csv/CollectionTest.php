@@ -117,26 +117,26 @@ class CollectionTest extends TestCase
             ->willReturn($translation);
 
         $this->localeConfigMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getValue')
             ->with($storeId)
             ->willReturn($locale);
         $translation
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('setLocale')
             ->with($locale)
             ->willReturnSelf();
         $translation
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('loadData')
             ->with(null, true)
             ->willReturnSelf();
         $translation
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getData')
             ->willReturn($data);
         $this->moduleListMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getNames')
             ->willReturn($moduleNames);
         foreach ($moduleNames as $packageName) {
@@ -181,7 +181,7 @@ class CollectionTest extends TestCase
         }
 
         $this->sortingApplierMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('apply')
             ->with($items, $sortOrders);
 

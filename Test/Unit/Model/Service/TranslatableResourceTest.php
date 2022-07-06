@@ -4,6 +4,7 @@ namespace Aheadworks\Langshop\Test\Unit\Model\Service;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResource\FilterInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
+use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\Service\TranslatableResource as TranslatableResourceService;
@@ -257,7 +258,7 @@ class TranslatableResourceTest extends TestCase
         $repository = $this->createMock(RepositoryInterface::class);
         $result = $resource = $this->createMock(TranslatableResourceInterface::class);
         $item = $this->createMock(DataObject::class);
-        $translation = ['locale'=> 'en-US', 'key' => 'key', 'value' => 'value'];
+        $translation = [$this->createMock(TranslationInterface::class)];
         $resourceType = 'resourceType';
         $resourceId = 'resourceId';
         $exceptionMessage = 'message';
