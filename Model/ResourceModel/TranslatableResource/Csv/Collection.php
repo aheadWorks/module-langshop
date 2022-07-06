@@ -163,8 +163,8 @@ class Collection extends DataCollection implements CollectionInterface
 
         $this->_totalRecords = count($this->_items);
         $this->sortingApplier->apply($this->_items, $this->_orders);
-        $this->applyPagination();
         $this->_setIsLoaded();
+        $this->applyPagination();
 
         return $this;
     }
