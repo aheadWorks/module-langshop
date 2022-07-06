@@ -109,6 +109,7 @@ class CollectionTest extends TestCase
         $moduleNames = ['Aheadworks_Lanshop'];
         $isFilterResolved = true;
         $csvData = [[CsvFile::ORIGINAL_INDEX => 'original', CsvFile::TRANSLATION_INDEX => 'translation']];
+        $translationData = ['original'=> 'translation'];
         $storeId = 0;
 
         $this->translationFactoryMock
@@ -173,10 +174,12 @@ class CollectionTest extends TestCase
                 ->method('getCsvData')
                 ->with($packageName, Collection::BASE_LOCALE)
                 ->willReturn($csvData);
-
+            $originalLines = $this->getOriginalLines($csvData);
+            $lines = $this->getTranslationLines($originalLines, $translationData, Collection::BASE_LOCALE);
             $model
                 ->expects($this->any())
                 ->method('setLines')
+                ->with($lines)
                 ->willReturnSelf();
         }
 
@@ -188,5 +191,45 @@ class CollectionTest extends TestCase
         $this->collection
             ->setIsNeedToAddLinesAttribute(true)
             ->loadData();
+    }
+
+    /**
+     * Get translation lines
+     *
+     * @param string[] $lines
+     * @param array $translationData
+     * @param string $localeCode
+     * @return string[]
+     */
+    private function getTranslationLines(array $lines, array $translationData, string $localeCode): array
+    {
+        $result = [];
+        foreach ($lines as $line) {
+            $result[$line] = $localeCode === Collection::BASE_LOCALE ? $line : '';
+
+            foreach ($translationData as $translationValue) {
+                if (isset($translationValue[$line])) {
+                    $result[$line] = $translationValue[$line];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get original lines
+     *
+     * @param array $csvData
+     * @return array
+     */
+    private function getOriginalLines(array $csvData): array
+    {
+        $result = [];
+        foreach ($csvData as $data) {
+            $result[] = $data[CsvFile::ORIGINAL_INDEX];
+        }
+
+        return $result;
     }
 }
