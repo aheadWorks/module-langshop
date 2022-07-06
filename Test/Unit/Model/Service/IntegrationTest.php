@@ -20,17 +20,17 @@ class IntegrationTest extends TestCase
     /**
      * @var ConfigBasedIntegrationManager|MockObject
      */
-    private MockObject $integrationManagerMock;
+    private $integrationManagerMock;
 
     /**
      * @var IntegrationServiceInterface|MockObject
      */
-    private MockObject $magentoIntegrationServiceMock;
+    private $magentoIntegrationServiceMock;
 
     /**
      * @var OauthServiceInterface|MockObject
      */
-    private MockObject $oauthServiceMock;
+    private $oauthServiceMock;
 
     /**
      * @return void

@@ -27,22 +27,22 @@ class Status extends TestCase
     /**
      * @var CollectionProcessorInterface|MockObject
      */
-    private MockObject $collectionProcessorMock;
+    private $collectionProcessorMock;
 
     /**
      * @var MockObject|StatusCollectionFactory
      */
-    private MockObject $statusCollectionFactoryMock;
+    private $statusCollectionFactoryMock;
 
     /**
      * @var MockObject|StatusResourceFactory
      */
-    private MockObject $statusResourceFactoryMock;
+    private $statusResourceFactoryMock;
 
     /**
      * @var MockObject|LoggerInterface
      */
-    private MockObject $loggerMock;
+    private $loggerMock;
 
     /**
      * @return void
@@ -126,7 +126,7 @@ class Status extends TestCase
                 ->expects($this->once())
                 ->method('save')
                 ->with($status)
-                ->willReturn( $statusResource);
+                ->willReturn($statusResource);
         }
 
         $this->statusService->save($status);

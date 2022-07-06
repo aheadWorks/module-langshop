@@ -28,27 +28,27 @@ class CollectionTest extends TestCase
     /**
      * @var EntityFactoryInterface|MockObject
      */
-    private MockObject $entityFactory;
+    private $entityFactory;
 
     /**
      * @var LocaleConfig|MockObject
      */
-    private MockObject $localeConfigMock;
+    private $localeConfigMock;
 
     /**
      * @var CsvReader|MockObject
      */
-    private MockObject $csvReaderMock;
+    private $csvReaderMock;
 
     /**
      * @var ModuleListInterface|MockObject
      */
-    private MockObject $moduleListMock;
+    private $moduleListMock;
 
     /**
      * @var Resolver|MockObject
      */
-    private MockObject $filterResolverMock;
+    private $filterResolverMock;
 
     /**
      * @var MockObject
@@ -58,12 +58,12 @@ class CollectionTest extends TestCase
     /**
      * @var SortingApplier|MockObject
      */
-    private MockObject $sortingApplierMock;
+    private $sortingApplierMock;
 
     /**
      * @var MockObject|LoggerInterface
      */
-    private MockObject $loggerMock;
+    private $loggerMock;
 
     /**
      * @return void
@@ -112,7 +112,7 @@ class CollectionTest extends TestCase
         $storeId = 0;
 
         $this->translationFactoryMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('create')
             ->willReturn($translation);
 
@@ -169,7 +169,7 @@ class CollectionTest extends TestCase
                 ->willReturn($isFilterResolved);
 
             $this->csvReaderMock
-                ->expects($this->once())
+                ->expects($this->any())
                 ->method('getCsvData')
                 ->with($packageName, Collection::BASE_LOCALE)
                 ->willReturn($csvData);

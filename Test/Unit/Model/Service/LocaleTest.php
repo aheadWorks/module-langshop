@@ -23,17 +23,17 @@ class LocaleTest extends TestCase
     /**
      * @var ScopeRecordRepository|MockObject
      */
-    private MockObject $scopeRecordRepositoryMock;
+    private $scopeRecordRepositoryMock;
 
     /**
      * @var LoadHandler|MockObject
      */
-    private MockObject $loadHandlerMock;
+    private $loadHandlerMock;
 
     /**
      * @var LoggerInterface|MockObject
      */
-    private MockObject $loggerMock;
+    private $loggerMock;
 
     /**
      * @return void

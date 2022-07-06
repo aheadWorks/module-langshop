@@ -31,27 +31,27 @@ class TranslatableResourceTest extends TestCase
     /**
      * @var Converter|MockObject
      */
-    private MockObject $converterMock;
+    private $converterMock;
 
     /**
      * @var RepositoryPool|MockObject
      */
-    private MockObject $repositoryPoolMock;
+    private $repositoryPoolMock;
 
     /**
      * @var SearchCriteriaBuilder|MockObject
      */
-    private MockObject $searchCriteriaBuilderMock;
+    private $searchCriteriaBuilderMock;
 
     /**
      * @var ProcessorInterface|MockObject
      */
-    private MockObject $dataProcessorMock;
+    private $dataProcessorMock;
 
     /**
      * @var MockObject|LoggerInterface
      */
-    private MockObject $loggerMock;
+    private $loggerMock;
 
     /**
      * @return void

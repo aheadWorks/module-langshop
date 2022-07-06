@@ -33,37 +33,37 @@ class RepositoryTest extends TestCase
     /**
      * @var CollectionFactory|MockObject
      */
-    private MockObject $collectionFactoryMock;
+    private $collectionFactoryMock;
 
     /**
      * @var ResourceModelFactory|MockObject
      */
-    private MockObject $resourceModelFactoryMock;
+    private $resourceModelFactoryMock;
 
     /**
      * @var TranslationValidation|MockObject
      */
-    private MockObject $translationValidationMock;
+    private $translationValidationMock;
 
     /**
      * @var EventManagerInterface|MockObject
      */
-    private MockObject $eventManagerMock;
+    private $eventManagerMock;
 
     /**
      * @var LocaleScopeRepository|MockObject
      */
-    private MockObject $localeScopeRepositoryMock;
+    private $localeScopeRepositoryMock;
 
     /**
      * @var EntityAttributeProvider|MockObject
      */
-    private MockObject $attributeProviderMock;
+    private $attributeProviderMock;
 
     /**
      * @var CollectionProcessorInterface|MockObject
      */
-    private MockObject $collectionProcessorMock;
+    private $collectionProcessorMock;
 
     /**
      * @var string
@@ -209,50 +209,51 @@ class RepositoryTest extends TestCase
             $translationByLocales[$locale][$key] = $value;
         }
 
-         foreach ($translationByLocales as $locale => $values) {
-             $collection = $this->prepareCollectionById($entityId, $collectionType);
-             $collection
-                 ->expects($this->any())
-                 ->method('getFirstItem')
-                 ->willReturn($item);
-             $item
-                 ->expects($this->any())
-                 ->method('addData')
-                 ->with($values)
-                 ->willReturnSelf();
-             $this->localeScopeRepositoryMock
-                 ->expects($this->any())
-                 ->method('getByLocale')
-                 ->with([$locale])
-                 ->willReturn($localeScopes);
-             /** @var MockObject $localeScope */
-             foreach ($localeScopes as $localeScope) {
-                 $localeScope
-                     ->expects($this->any())
-                     ->method('getScopeId')
-                     ->willReturn($scopeId);
-                 $item
-                     ->expects($this->any())
-                     ->method('setData')
-                     ->with('store_id', $scopeId)
-                     ->willReturnSelf();
-                 $resourceModel
-                     ->expects($this->any())
-                     ->method('save')
-                     ->with($item)
-                     ->willReturnSelf();
-                 $this->eventManagerMock
-                     ->expects($this->any())
-                     ->method('dispatch')
-                     ->with('aw_ls_save_translatable_resource', [
-                         'resource_type' => $this->resourceType,
-                         'resource_id' => $entityId,
-                         'store_id' => $scopeId
-                     ]);
-             }
-         }
+        foreach ($translationByLocales as $locale => $values) {
+            $collection = $this->prepareCollectionById($entityId, $collectionType);
+            $collection
+                ->expects($this->any())
+                ->method('getFirstItem')
+                ->willReturn($item);
+            $item
+                ->expects($this->any())
+                ->method('addData')
+                ->with($values)
+                ->willReturnSelf();
+            $this->localeScopeRepositoryMock
+                ->expects($this->any())
+                ->method('getByLocale')
+                ->with([$locale])
+                ->willReturn($localeScopes);
 
-         $this->repository->save($entityId, $translations);
+            /** @var MockObject $localeScope */
+            foreach ($localeScopes as $localeScope) {
+                $localeScope
+                    ->expects($this->any())
+                    ->method('getScopeId')
+                    ->willReturn($scopeId);
+                $item
+                    ->expects($this->any())
+                    ->method('setData')
+                    ->with('store_id', $scopeId)
+                    ->willReturnSelf();
+                $resourceModel
+                    ->expects($this->any())
+                    ->method('save')
+                    ->with($item)
+                    ->willReturnSelf();
+                $this->eventManagerMock
+                    ->expects($this->any())
+                    ->method('dispatch')
+                    ->with('aw_ls_save_translatable_resource', [
+                        'resource_type' => $this->resourceType,
+                        'resource_id' => $entityId,
+                        'store_id' => $scopeId
+                    ]);
+            }
+        }
+
+        $this->repository->save($entityId, $translations);
     }
 
     /**

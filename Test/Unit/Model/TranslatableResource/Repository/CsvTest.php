@@ -30,37 +30,37 @@ class CsvTest extends TestCase
     /**
      * @var CollectionFactory|MockObject
      */
-    private MockObject $collectionFactoryMock;
+    private $collectionFactoryMock;
 
     /**
      * @var EntityAttributeProvider|MockObject
      */
-    private MockObject $attributeProviderMock;
+    private $attributeProviderMock;
 
     /**
      * @var ProcessorInterface|MockObject
      */
-    private MockObject $collectionProcessorMock;
+    private $collectionProcessorMock;
 
     /**
      * @var ResourceModelFactory|MockObject
      */
-    private MockObject $resourceModelFactoryMock;
+    private $resourceModelFactoryMock;
 
     /**
      * @var TranslationValidation|MockObject
      */
-    private MockObject $translationValidationMock;
+    private $translationValidationMock;
 
     /**
      * @var EventManagerInterface|MockObject
      */
-    private MockObject $eventManagerMock;
+    private $eventManagerMock;
 
     /**
      * @var LocaleCodeConverter|MockObject
      */
-    private MockObject $localeCodeConverterMock;
+    private $localeCodeConverterMock;
 
     private const RESOURCE_TYPE = 'csv';
 

@@ -20,24 +20,24 @@ class Saas extends TestCase
     private SaasService $saasService;
 
     /**
-     * @var MockObject
+     * @var MockObject|ConfirmationResultInterfaceFactory
      */
-    private MockObject $confirmationResultFactoryMock;
+    private $confirmationResultFactoryMock;
 
     /**
-     * @var MockObject
+     * @var MockObject|UrlResultInterfaceFactory
      */
-    private MockObject $urlResultFactoryMock;
+    private $urlResultFactoryMock;
 
     /**
      * @var UrlInterface|MockObject
      */
-    private MockObject $urlBuilderMock;
+    private $urlBuilderMock;
 
     /**
      * @var SaasConfig|MockObject
      */
-    private MockObject $saasConfigMock;
+    private $saasConfigMock;
 
     /**
      * @return void

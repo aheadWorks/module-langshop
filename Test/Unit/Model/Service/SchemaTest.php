@@ -22,17 +22,17 @@ class SchemaTest extends TestCase
     /**
      * @var ProcessorInterface|MockObject
      */
-    private MockObject $processorMock;
+    private $processorMock;
 
     /**
      * @var SchemaInterfaceFactory|MockObject
      */
-    private MockObject $schemaFactoryMock;
+    private $schemaFactoryMock;
 
     /**
      * @var MockObject|LoggerInterface
      */
-    private MockObject $loggerMock;
+    private $loggerMock;
 
     /**
      * @return void
