@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Test\Unit\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
+use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
@@ -14,7 +15,7 @@ use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as Tra
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Translation\Model\ResourceModel\StringUtils;
 use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,44 +30,45 @@ class CsvTest extends TestCase
     /**
      * @var CollectionFactory|MockObject
      */
-    private $collectionFactoryMock;
+    private MockObject $collectionFactoryMock;
 
     /**
      * @var EntityAttributeProvider|MockObject
      */
-    private $attributeProviderMock;
+    private MockObject $attributeProviderMock;
 
     /**
      * @var ProcessorInterface|MockObject
      */
-    private $collectionProcessorMock;
+    private MockObject $collectionProcessorMock;
 
     /**
      * @var ResourceModelFactory|MockObject
      */
-    private $resourceModelFactoryMock;
+    private MockObject $resourceModelFactoryMock;
 
     /**
      * @var TranslationValidation|MockObject
      */
-    private $translationValidationMock;
+    private MockObject $translationValidationMock;
 
     /**
      * @var EventManagerInterface|MockObject
      */
-    private $eventManagerMock;
+    private MockObject $eventManagerMock;
 
     /**
      * @var LocaleCodeConverter|MockObject
      */
-    private $localeCodeConverterMock;
+    private MockObject $localeCodeConverterMock;
+
+    private const RESOURCE_TYPE = 'csv';
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-
         $this->attributeProviderMock = $this->createMock(EntityAttributeProvider::class);
         $this->collectionProcessorMock = $this->createMock(ProcessorInterface::class);
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
@@ -116,7 +118,6 @@ class CsvTest extends TestCase
      *
      * @return void
      * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function testGet(): void
     {
@@ -141,6 +142,97 @@ class CsvTest extends TestCase
             ->willReturn($model);
 
         $this->assertSame($model, $this->csvRepository->get($entityId, $localeScopes));
+    }
+
+    /**
+     * Test 'save' method
+     *
+     * @param array $value
+     *
+     * @return void
+     * @dataProvider saveDataProvider
+     * @throws LocalizedException
+     */
+    public function testSave(array $value): void
+    {
+        $entityId = 'entityId';
+        $translations = [
+            $this->createMock(TranslationInterface::class)
+        ];
+        $resourceModel = $this->createMock(StringUtils::class);
+        $translationByLocales = [];
+        $locale = 'en-US';
+        $convertedLocale = 'en_US';
+
+        $this->resourceModelFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($resourceModel);
+
+        /** @var MockObject $translation */
+        foreach ($translations as $index => $translation) {
+            $this->translationValidationMock
+                ->expects($this->any())
+                ->method('validate')
+                ->with($translation, self::RESOURCE_TYPE);
+
+            $translation
+                ->expects($this->any())
+                ->method('getLocale')
+                ->willReturn($locale);
+            $translation
+                ->expects($this->any())
+                ->method('getValue')
+                ->willReturn($value);
+            $translationByLocales[$locale] = $value;
+        }
+
+        foreach ($translationByLocales as $locale => $values) {
+            $this->localeCodeConverterMock
+                ->expects($this->any())
+                ->method('toMagento')
+                ->with($locale)
+                ->willReturn($convertedLocale);
+            foreach ($values as $original => $translation) {
+                if ($translation) {
+                    $resourceModel
+                        ->expects($this->any())
+                        ->method('saveTranslate')
+                        ->with($original, $translation, $convertedLocale, 0)
+                        ->willReturn($resourceModel);
+                } else {
+                    $resourceModel
+                        ->expects($this->any())
+                        ->method('deleteTranslate')
+                        ->with($original, $convertedLocale)
+                        ->willReturn($resourceModel);
+                }
+            }
+        }
+
+        $this->eventManagerMock
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with('aw_ls_save_translatable_resource', [
+                'resource_type' => self::RESOURCE_TYPE,
+                'resource_id' => $entityId,
+                'store_id' => 0
+            ]);
+
+        $this->csvRepository->save($entityId, $translations);
+    }
+
+    /**
+     * Data provider for save method
+     *
+     * @return array
+     */
+    public function saveDataProvider(): array
+    {
+        return [
+            [['original' => 'translation']],
+            [['original' => '']],
+        ];
     }
 
     /**
