@@ -101,9 +101,6 @@ class CollectionTest extends TestCase
     {
         $translation = $this->createMock(Translation::class);
         $model = $this->createMock(Model::class);
-        $collection = $this->createMock(Collection::class);
-        $items = [$model];
-        $sortOrders = [];
         $filters = [];
         $locale = 'en_US';
         $data = [];
@@ -182,17 +179,7 @@ class CollectionTest extends TestCase
                 ->method('setLines')
                 ->with($lines)
                 ->willReturnSelf();
-            $collection
-                ->expects($this->any())
-                ->method('addItem')
-                ->with($model)
-                ->willReturnSelf();
         }
-
-        $this->sortingApplierMock
-            ->expects($this->any())
-            ->method('apply')
-            ->with($items, $sortOrders);
 
         $this->collection
             ->setIsNeedToAddLinesAttribute(true)
