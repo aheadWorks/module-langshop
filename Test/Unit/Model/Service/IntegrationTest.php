@@ -15,7 +15,7 @@ class IntegrationTest extends TestCase
     /**
      * @var IntegrationService
      */
-    private $integrationService;
+    private IntegrationService $integrationService;
 
     /**
      * @var ConfigBasedIntegrationManager|MockObject
