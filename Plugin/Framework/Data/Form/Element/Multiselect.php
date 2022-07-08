@@ -49,7 +49,7 @@ class Multiselect
         if ($disabledOptions) {
             $jsLayout = [
                 '#' . $multiselect->getHtmlId() => [
-                    'Aheadworks_Langshop/js/disable-options' => $disabledOptions
+                    'Aheadworks_Langshop/js/disable-options' => array_values($disabledOptions)
                 ]
             ];
 
@@ -78,7 +78,7 @@ class Multiselect
             if (is_array($option['value'])) {
                 $disabledOptions += $this->getDisabledOptions($option['value']);
             } elseif (isset($option['disabled']) && $option['disabled']) {
-                $disabledOptions[] = $option['value'];
+                $disabledOptions[$option['value']] = $option['value'];
             }
         }
 

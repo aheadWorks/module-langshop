@@ -78,7 +78,7 @@ class ListToTranslate implements OptionSourceInterface
                 $locale = $this->localeConfig->getValue((int) $option['value']);
 
                 $option['label'] = sprintf('%s - %s', $option['label'], $this->getLocaleName($locale));
-                $option['disabled'] = $locale === $defaultLocale;
+                $option['disabled'] = $this->isDisabled($locale, $defaultLocale);
             }
         }
 
@@ -100,5 +100,17 @@ class ListToTranslate implements OptionSourceInterface
         }
 
         return '';
+    }
+
+    /**
+     * Is disabled
+     *
+     * @param string $locale
+     * @param string $defaultLocale
+     * @return bool
+     */
+    private function isDisabled(string $locale, string $defaultLocale): bool
+    {
+        return $locale === $defaultLocale || $locale === 'sr_Latn_RS';
     }
 }
