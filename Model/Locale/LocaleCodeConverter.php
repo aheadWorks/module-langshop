@@ -6,12 +6,12 @@ namespace Aheadworks\Langshop\Model\Locale;
 class LocaleCodeConverter
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     private array $threeplyLocales;
 
     /**
-     * @param array $threeplyLocales
+     * @param array<string, string> $threeplyLocales
      */
     public function __construct(
         array $threeplyLocales = []
@@ -40,9 +40,8 @@ class LocaleCodeConverter
      */
     public function toMagento(string $localeCode): string
     {
-        $localeCode = array_search($localeCode, $this->threeplyLocales)
-            ? array_search($localeCode, $this->threeplyLocales)
-            : $localeCode;
+        $localeCode = array_search($localeCode, $this->threeplyLocales) ?: $localeCode;
+
         return str_replace('-', '_', $localeCode);
     }
 }

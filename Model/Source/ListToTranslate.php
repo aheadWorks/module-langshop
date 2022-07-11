@@ -32,21 +32,29 @@ class ListToTranslate implements OptionSourceInterface
     private LocaleResolverInterface $localeResolver;
 
     /**
+     * @var array<string, string>
+     */
+    private array $unsupportedLocales;
+
+    /**
      * @param StoreOptions $storeOptions
      * @param LocaleConfig $localeConfig
      * @param LocaleListsInterface $localeLists
      * @param LocaleResolverInterface $localeResolver
+     * @param array<string, string> $unsupportedLocales
      */
     public function __construct(
         StoreOptions $storeOptions,
         LocaleConfig $localeConfig,
         LocaleListsInterface $localeLists,
-        LocaleResolverInterface $localeResolver
+        LocaleResolverInterface $localeResolver,
+        array $unsupportedLocales = []
     ) {
         $this->storeOptions = $storeOptions;
         $this->localeConfig = $localeConfig;
         $this->localeLists = $localeLists;
         $this->localeResolver = $localeResolver;
+        $this->unsupportedLocales = $unsupportedLocales;
     }
 
     /**
@@ -111,6 +119,6 @@ class ListToTranslate implements OptionSourceInterface
      */
     private function isDisabled(string $locale, string $defaultLocale): bool
     {
-        return $locale === $defaultLocale || $locale === 'sr_Latn_RS';
+        return $locale === $defaultLocale || in_array($locale, $this->unsupportedLocales);
     }
 }
