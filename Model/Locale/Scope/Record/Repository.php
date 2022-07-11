@@ -46,9 +46,9 @@ class Repository
     private LocaleConfig $localeConfig;
 
     /**
-     * @var array
+     * @var array|null
      */
-    private array $localeScopes;
+    private ?array $localeScopes;
 
     /**
      * @param LocaleResolverInterface $localeResolver
@@ -139,5 +139,13 @@ class Repository
             ->setScopeType(LocaleScopeType::DEFAULT)
             ->setLocaleCode($localeCode)
             ->setIsPrimary(true);
+    }
+
+    /**
+     * Clears scopes caches, required after changing configuration
+     */
+    public function clearCache(): void
+    {
+        $this->localeScopes = null;
     }
 }
