@@ -192,6 +192,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Aheadworks\Langshop\Model\Locale\LocaleCodeConverter">
+        <arguments>
+            <argument name="threeplyLocales" xsi:type="array">
+                <item name="zh_Hans_CN" xsi:type="string">zh-CN</item>
+                <item name="zh_Hant_HK" xsi:type="string">zh-HK</item>
+                <item name="zh_Hant_TW" xsi:type="string">zh-TW</item>
+                <item name="bs_Latn_BA" xsi:type="string">bs-BA</item>
+                <item name="az_Latn_AZ" xsi:type="string">az-AZ</item>
+                <item name="sr_Cyrl_RS" xsi:type="string">sr-RS</item>
+            </argument>
+        </arguments>
+    </type>
 
     <type name="Aheadworks\Langshop\Model\Service\TranslatableResource">
         <arguments>
