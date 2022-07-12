@@ -11,7 +11,7 @@ class LocaleCodeConverter
     private array $threeplyLocales;
 
     /**
-     * @param array<string, string> $threeplyLocales
+     * @param array $threeplyLocales
      */
     public function __construct(
         array $threeplyLocales = []

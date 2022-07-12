@@ -41,7 +41,7 @@ class ListToTranslate implements OptionSourceInterface
      * @param LocaleConfig $localeConfig
      * @param LocaleListsInterface $localeLists
      * @param LocaleResolverInterface $localeResolver
-     * @param array<string, string> $unsupportedLocales
+     * @param array $unsupportedLocales
      */
     public function __construct(
         StoreOptions $storeOptions,
