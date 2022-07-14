@@ -174,6 +174,7 @@ class RepositoryTest extends TestCase
         ];
 
         $resourceModel = $this->createMock(ResourceModel::class);
+        $collection = $this->createMock($collectionType);
         $item = $this->createMock(AbstractModel::class);
         $translationByLocales = [];
         $locale = 'en-US';
@@ -186,6 +187,10 @@ class RepositoryTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($resourceModel);
+        $this->collectionFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($collection);
 
         /** @var MockObject $translation */
         foreach ($translations as $index => $translation) {
@@ -210,11 +215,16 @@ class RepositoryTest extends TestCase
         }
 
         foreach ($translationByLocales as $locale => $values) {
-            $collection = $this->prepareCollectionById($entityId, $collectionType);
             $collection
                 ->expects($this->any())
-                ->method('getFirstItem')
+                ->method('getNewEmptyItem')
                 ->willReturn($item);
+            $resourceModel
+                ->expects($this->any())
+                ->method('load')
+                ->with($item, $entityId)
+                ->willReturnSelf();
+
             $item
                 ->expects($this->any())
                 ->method('addData')

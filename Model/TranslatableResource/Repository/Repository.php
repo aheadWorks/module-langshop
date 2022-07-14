@@ -139,6 +139,7 @@ class Repository implements RepositoryInterface
     public function save(string $entityId, array $translations): void
     {
         $resourceModel = $this->resourceModelFactory->create();
+        $collection = $this->collectionFactory->create();
         $translationByLocales = [];
 
         foreach ($translations as $translation) {
@@ -148,9 +149,9 @@ class Repository implements RepositoryInterface
 
         foreach ($translationByLocales as $locale => $values) {
             /** @var AbstractModel $item */
-            $item = $this->prepareCollectionById($entityId)
-                ->getFirstItem()
-                ->addData($values);
+            $item = $collection->getNewEmptyItem();
+            $resourceModel->load($item, $entityId);
+            $item->addData($values);
 
             foreach ($this->localeScopeRepository->getByLocale([$locale]) as $localeScope) {
                 $item->setData('store_id', $localeScope->getScopeId());
