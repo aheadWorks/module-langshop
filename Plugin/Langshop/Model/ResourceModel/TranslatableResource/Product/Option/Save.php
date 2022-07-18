@@ -53,13 +53,8 @@ class Save
     ): array {
         $options = $product->getData(self::KEY_OPTIONS);
         if (is_array($options) && $options) {
-            $option = reset($options);
-            if ($option instanceof Option) {
-                $product->setData(self::KEY_OPTIONS, null);
-            } else {
-                foreach ($options as $optionId => $title) {
-                    $this->optionValidation->validate((int) $optionId, (int) $product->getId());
-                }
+            foreach ($options as $optionId => $title) {
+                $this->optionValidation->validate((int) $optionId, (int) $product->getId());
             }
         }
 
