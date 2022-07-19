@@ -91,6 +91,9 @@
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product">
         <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Save"/>
     </type>
+    <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category">
+        <plugin name="aw_ls_category_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Category\Save"/>
+    </type>
 
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface">
         <plugin name="aw_ls_select_label" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Collection\SelectLabel"/>

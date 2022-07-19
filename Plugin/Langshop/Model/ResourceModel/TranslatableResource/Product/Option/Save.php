@@ -6,6 +6,7 @@ namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableRe
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product as ProductResource;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Product\Option as OptionValidation;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 
