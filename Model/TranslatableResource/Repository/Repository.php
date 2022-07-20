@@ -143,7 +143,7 @@ class Repository implements RepositoryInterface
 
         foreach ($translations as $translation) {
             $this->translationValidation->validate($translation, $this->resourceType);
-            $value = $translation->getValue() === '' ? false : $translation->getValue();
+            $value = $translation->getValue() ?? false;
             $translationByLocales[$translation->getLocale()][$translation->getKey()] = $value;
         }
 
