@@ -501,6 +501,16 @@
             <argument name="attributeCodeBlacklist" xsi:type="array">
                 <item name="url_key" xsi:type="string">url_key</item>
                 <item name="url_path" xsi:type="string">url_path</item>
+                <item name="tier_price" xsi:type="string">tier_price</item>
+                <item name="custom_layout_update" xsi:type="string">custom_layout_update</item>
+                <item name="is_redeemable" xsi:type="string">is_redeemable</item>
+                <item name="use_config_is_redeemable" xsi:type="string">use_config_is_redeemable</item>
+                <item name="lifetime" xsi:type="string">lifetime</item>
+                <item name="use_config_lifetime" xsi:type="string">use_config_lifetime</item>
+                <item name="email_template" xsi:type="string">email_template</item>
+                <item name="use_config_email_template" xsi:type="string">use_config_email_template</item>
+                <item name="allow_message" xsi:type="string">allow_message</item>
+                <item name="use_config_allow_message" xsi:type="string">use_config_allow_message</item>
             </argument>
         </arguments>
     </virtualType>
@@ -631,6 +641,9 @@
             <argument name="attributeCodeBlacklist" xsi:type="array">
                 <item name="url_key" xsi:type="string">url_key</item>
                 <item name="url_path" xsi:type="string">url_path</item>
+                <item name="custom_layout_update" xsi:type="string">custom_layout_update</item>
+                <item name="filter_price_range" xsi:type="string">filter_price_range</item>
+                <item name="automatic_sorting" xsi:type="string">automatic_sorting</item>
             </argument>
         </arguments>
     </virtualType>
