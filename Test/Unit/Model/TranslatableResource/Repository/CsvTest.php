@@ -66,7 +66,7 @@ class CsvTest extends TestCase
     /**
      * @var ScopeRecordRepository|MockObject
      */
-    private ScopeRecordRepository $scopeRecordRepositoryMock;
+    private $scopeRecordRepositoryMock;
 
     private const RESOURCE_TYPE = 'csv';
 
@@ -267,10 +267,14 @@ class CsvTest extends TestCase
      *
      * @param MockObject $collection
      * @param MockObject[] $localeScopes
+     * @param string $defaultLocaleCode
      * @return MockObject
      */
-    private function addLocalizedAttributes(MockObject $collection, array $localeScopes, string $defaultLocaleCode): MockObject
-    {
+    private function addLocalizedAttributes(
+        MockObject $collection,
+        array $localeScopes,
+        string $defaultLocaleCode
+    ): MockObject {
         $localizedCollection = $collection;
         $translatableAttributeCodes = ['code'];
 
