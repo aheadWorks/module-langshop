@@ -6,6 +6,7 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\CollectionFactory;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
@@ -60,6 +61,11 @@ class Csv implements RepositoryInterface
     private LocaleCodeConverter $localeCodeConverter;
 
     /**
+     * @var ScopeRecordRepository
+     */
+    private ScopeRecordRepository $scopeRecordRepository;
+
+    /**
      * @param EntityAttributeProvider $attributeProvider
      * @param ProcessorInterface $collectionProcessor
      * @param CollectionFactory $collectionFactory
@@ -67,6 +73,7 @@ class Csv implements RepositoryInterface
      * @param TranslationValidation $translationValidation
      * @param EventManagerInterface $eventManager
      * @param LocaleCodeConverter $localeCodeConverter
+     * @param ScopeRecordRepository $scopeRecordRepository
      */
     public function __construct(
         EntityAttributeProvider $attributeProvider,
@@ -75,7 +82,8 @@ class Csv implements RepositoryInterface
         ResourceModelFactory $resourceModelFactory,
         TranslationValidation $translationValidation,
         EventManagerInterface $eventManager,
-        LocaleCodeConverter $localeCodeConverter
+        LocaleCodeConverter $localeCodeConverter,
+        ScopeRecordRepository $scopeRecordRepository
     ) {
         $this->attributeProvider = $attributeProvider;
         $this->collectionProcessor = $collectionProcessor;
@@ -84,6 +92,7 @@ class Csv implements RepositoryInterface
         $this->translationValidation = $translationValidation;
         $this->eventManager = $eventManager;
         $this->localeCodeConverter = $localeCodeConverter;
+        $this->scopeRecordRepository = $scopeRecordRepository;
     }
 
     /**
@@ -173,6 +182,14 @@ class Csv implements RepositoryInterface
      */
     private function addLocalizedAttributes(CsvCollection $collection, array $localeScopes): Collection
     {
+        $defaultLocaleScope = $this->scopeRecordRepository->getPrimary();
+        if ($defaultLocaleScope->getLocaleCode() !== 'en-US') {
+            throw new LocalizedException(
+                __('We are sorry. Currently, we only support the default locale to be en_US.'
+                    . ' We are working to support other default locales.')
+            );
+        }
+
         $localizedCollection = clone $collection;
         $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields(self::RESOURCE_TYPE);
         $localizedCollection->setIsNeedToAddLinesAttribute(true);

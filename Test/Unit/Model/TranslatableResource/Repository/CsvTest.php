@@ -6,6 +6,7 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\CollectionFactory;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
@@ -62,6 +63,11 @@ class CsvTest extends TestCase
      */
     private $localeCodeConverterMock;
 
+    /**
+     * @var ScopeRecordRepository|MockObject
+     */
+    private ScopeRecordRepository $scopeRecordRepositoryMock;
+
     private const RESOURCE_TYPE = 'csv';
 
     /**
@@ -76,6 +82,7 @@ class CsvTest extends TestCase
         $this->translationValidationMock = $this->createMock(TranslationValidation::class);
         $this->eventManagerMock = $this->createMock(EventManagerInterface::class);
         $this->localeCodeConverterMock = $this->createMock(LocaleCodeConverter::class);
+        $this->scopeRecordRepositoryMock = $this->createMock(ScopeRecordRepository::class);
 
         $this->csvRepository = new CsvRepository(
             $this->attributeProviderMock,
@@ -84,17 +91,21 @@ class CsvTest extends TestCase
             $this->resourceModelFactoryMock,
             $this->translationValidationMock,
             $this->eventManagerMock,
-            $this->localeCodeConverterMock
+            $this->localeCodeConverterMock,
+            $this->scopeRecordRepositoryMock
         );
     }
 
     /**
      * Test 'getList' method
      *
+     * @param string $defaultLocaleCode
+     *
      * @return void
+     * @dataProvider getDataProvider
      * @throws LocalizedException
      */
-    public function testGetList(): void
+    public function testGetList(string $defaultLocaleCode): void
     {
         $collection = $this->createMock(CsvCollection::class);
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
@@ -109,17 +120,20 @@ class CsvTest extends TestCase
             ->method('process')
             ->with($searchCriteria, $collection);
 
-        $collection = $this->addLocalizedAttributes($collection, $localeScopes);
+        $collection = $this->addLocalizedAttributes($collection, $localeScopes, $defaultLocaleCode);
         $this->assertSame($collection, $this->csvRepository->getList($searchCriteria, $localeScopes));
     }
 
     /**
      * Test 'get' method
      *
+     * @param string $defaultLocaleCode
+     *
      * @return void
+     * @dataProvider getDataProvider
      * @throws LocalizedException
      */
-    public function testGet(): void
+    public function testGet(string $defaultLocaleCode): void
     {
         $collection = $this->createMock(CsvCollection::class);
         $model = $this->createMock(Model::class);
@@ -135,9 +149,9 @@ class CsvTest extends TestCase
             ->method('addEntityIdFilter')
             ->with($entityId);
 
-        $collection = $this->addLocalizedAttributes($collection, $localeScopes);
+        $collection = $this->addLocalizedAttributes($collection, $localeScopes, $defaultLocaleCode);
         $collection
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getFirstItem')
             ->willReturn($model);
 
@@ -227,6 +241,19 @@ class CsvTest extends TestCase
      *
      * @return array
      */
+    public function getDataProvider(): array
+    {
+        return [
+            ['en-US'],
+            ['en-GB'],
+        ];
+    }
+
+    /**
+     * Data provider for save method
+     *
+     * @return array
+     */
     public function saveDataProvider(): array
     {
         return [
@@ -242,11 +269,12 @@ class CsvTest extends TestCase
      * @param MockObject[] $localeScopes
      * @return MockObject
      */
-    private function addLocalizedAttributes(MockObject $collection, array $localeScopes): MockObject
+    private function addLocalizedAttributes(MockObject $collection, array $localeScopes, string $defaultLocaleCode): MockObject
     {
         $localizedCollection = $collection;
         $translatableAttributeCodes = ['code'];
 
+        $defaultLocaleScope = $this->createMock(RecordInterface::class);
         $item = $this->createMock(Model::class);
         $localizedItems = [$this->createMock(Model::class)];
         $value = [];
@@ -254,13 +282,29 @@ class CsvTest extends TestCase
         $localizedValue = [];
         $collectionSize = 1;
 
+        $this->scopeRecordRepositoryMock
+            ->expects($this->any())
+            ->method('getPrimary')
+            ->willReturn($defaultLocaleScope);
+        $defaultLocaleScope
+            ->expects($this->any())
+            ->method('getLocaleCode')
+            ->willReturn($defaultLocaleCode);
+        if ($defaultLocaleCode !== 'en-US') {
+            $exception = new LocalizedException(
+                __('We are sorry. Currently, we only support the default locale to be en_US.'
+                    . ' We are working to support other default locales.')
+            );
+            $this->expectExceptionObject($exception);
+        }
+
         $this->attributeProviderMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getCodesOfTranslatableFields')
             ->with('csv')
             ->willReturn($translatableAttributeCodes);
         $localizedCollection
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('setIsNeedToAddLinesAttribute');
 
         foreach ($localeScopes as $localeScope) {
@@ -318,11 +362,11 @@ class CsvTest extends TestCase
             }
         }
         $localizedCollection
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getSize')
             ->willReturn($collectionSize);
         $collection
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('setSize')
             ->with($collectionSize);
 
