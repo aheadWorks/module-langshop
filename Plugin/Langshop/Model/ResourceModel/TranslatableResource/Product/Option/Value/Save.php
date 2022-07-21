@@ -79,7 +79,7 @@ class Save
                 );
                 // we should insert record into not default store only of if it does not exist in default store
                 if (($storeId === Store::DEFAULT_STORE_ID && !$existInDefaultStore)
-                    || ($storeId !== Store::DEFAULT_STORE_ID && !$existInCurrentStore)
+                    || $storeId !== Store::DEFAULT_STORE_ID
                 ) {
                     $bind = [
                         'option_type_id' => $optionTypeId,
@@ -89,7 +89,7 @@ class Save
                     $this->resourceConnection->getConnection()->insert($titleTable, $bind);
                 }
             }
-        } else if ($storeId && $optionTypeId && $storeId > Store::DEFAULT_STORE_ID) {
+        } elseif ($storeId && $optionTypeId && $storeId > Store::DEFAULT_STORE_ID) {
             $where = [
                 'option_type_id = ?' => $optionTypeId,
                 'store_id = ?' => $storeId,
