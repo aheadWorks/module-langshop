@@ -29,3 +29,4 @@ Resources,Resources
 "Integration details","Integration details"
 "Magento Access Token","Magento Access Token"
 "The token is being used for access to your Magento stores","The token is being used for access to your Magento stores"
+"We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales.","We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales."
