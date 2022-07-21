@@ -47,11 +47,23 @@ class Read
 
             foreach ($options as $optionId => $option) {
                 $product = $products[$option->getProductId()];
+                $optionsValues = [];
 
                 $product->setData(self::KEY_OPTIONS, array_replace(
                     $product->getData(self::KEY_OPTIONS) ?? [],
                     [$optionId => $option->getTitle()]
                 ));
+
+                $values = $option->getValues();
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        $optionsValues[$value->getOptionTypeId()] = $value->getTitle();
+                    }
+                    $product->setData('options_values', array_replace(
+                        $product->getData('options_values') ?? [],
+                        $optionsValues
+                    ));
+                }
             }
         }
 
