@@ -25,10 +25,16 @@ class Save
                 ["url_key", "is_anchor"],
                 $category->getStoreId()
             );
-            foreach ($data as $key => $value) {
-                $category
-                    ->setData($key, $value)
-                    ->setOrigData($key, $value);
+            if (is_array($data)) {
+                foreach ($data as $key => $value) {
+                    $category
+                        ->setData($key, $value)
+                        ->setOrigData($key, $value);
+                }
+            } else {
+                $category->setData('use_default', [
+                    'url_key' => true
+                ]);
             }
         }
         return [
