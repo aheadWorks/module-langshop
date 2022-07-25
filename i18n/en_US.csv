@@ -30,3 +30,6 @@ Resources,Resources
 "Magento Access Token","Magento Access Token"
 "The token is being used for access to your Magento stores","The token is being used for access to your Magento stores"
 "We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales.","We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales."
+"Translation successfully completed","Translation successfully completed"
+"Translation of %1 with identifier = '%2' successfully completed.","Translation of %1 with identifier = '%2' successfully completed."
+"Processing %1 translation.","Processing %1 translation."

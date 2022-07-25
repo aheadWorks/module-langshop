@@ -34,6 +34,8 @@
                 type="Aheadworks\Langshop\Model\Status"/>
     <preference for="Aheadworks\Langshop\Api\StatusManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\Status"/>
+    <preference for="Aheadworks\Langshop\Api\NotificationManagementInterface"
+                type="Aheadworks\Langshop\Model\Service\Notification"/>
 
     <preference for="Aheadworks\Langshop\Api\Data\TranslatableResourceInterface"
                 type="Aheadworks\Langshop\Model\TranslatableResource" />

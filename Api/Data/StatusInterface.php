@@ -19,6 +19,7 @@ interface StatusInterface
      */
     public const STATUS_NOT_TRANSLATED = 0;
     public const STATUS_TRANSLATED = 1;
+    public const STATUS_PROCESSING = 2;
 
     /**
      * Set status id
