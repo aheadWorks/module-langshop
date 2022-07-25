@@ -99,6 +99,9 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             $collection = $repository->getList($searchCriteriaBuilder->create(), $params['locale']);
 
             $list = $this->converter->convertCollection($collection, $resourceType);
+        } catch (WebapiException $exception) {
+            $this->logger->error($exception->getMessage());
+            throw $exception;
         } catch (LocalizedException $exception) {
             $this->logger->error($exception->getMessage());
             throw new WebapiException(__($exception->getMessage()), 500, 500);
