@@ -43,7 +43,8 @@ class Notification implements NotificationManagementInterface
         if ($this->statusChecker->isTranslated($resourceType, $resourceId)) {
             $this->notificationService->addNotice(
                 __("Translation successfully completed")->render(),
-                __("Translation of %1 with identifier = '%2' successfully completed.",
+                __(
+                    "Translation of %1 with identifier = '%2' successfully completed.",
                     $resourceType,
                     $resourceId
                 )->render()
