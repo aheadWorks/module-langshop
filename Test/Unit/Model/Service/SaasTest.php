@@ -12,7 +12,7 @@ use Magento\Backend\Model\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class Saas extends TestCase
+class SaasTest extends TestCase
 {
     /**
      * @var SaasService
@@ -85,14 +85,14 @@ class Saas extends TestCase
     }
 
     /**
-     * Test 'getDashboardUrl' method
+     * Test 'getLangshopUrl' method
      *
      * @return void
      */
-    public function testGetDashboardUrl(): void
+    public function testGetLangshopUrl(): void
     {
         $result = $this->createMock(UrlResultInterface::class);
-        $routePath = 'admin/dashboard';
+        $routePath = 'langshop/page';
         $url = 'url';
 
         $this->urlBuilderMock
@@ -114,6 +114,6 @@ class Saas extends TestCase
             ->with($url)
             ->willReturn($result);
 
-        $this->assertSame($result, $this->saasService->getDashboardUrl());
+        $this->assertSame($result, $this->saasService->getLangshopUrl());
     }
 }

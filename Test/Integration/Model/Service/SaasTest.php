@@ -47,13 +47,13 @@ class SaasTest extends TestCase
     /**
      * @return void
      */
-    public function testGetDashboardUrl(): void
+    public function testGetLangshopUrl(): void
     {
-        $dashboardUrl = $this->saasService->getDashboardUrl()->getUrl();
+        $langshopUrl = $this->saasService->getLangshopUrl()->getUrl();
 
         $this->assertStringContainsString(
-            '/admin/dashboard',
-            $dashboardUrl
+            '/langshop/page',
+            $langshopUrl
         );
     }
 }

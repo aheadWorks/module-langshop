@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class Status extends TestCase
+class StatusTest extends TestCase
 {
     /**
      * @var StatusService

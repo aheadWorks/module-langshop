@@ -11,6 +11,15 @@ use Magento\Framework\Controller\ResultFactory;
 class Index extends Action implements HttpGetActionInterface
 {
     /**
+     * Actions processed without secret key validation
+     *
+     * @var string[]
+     */
+    protected $_publicActions = [
+        'index'
+    ];
+
+    /**
      * @inheritDoc
      */
     public function execute()

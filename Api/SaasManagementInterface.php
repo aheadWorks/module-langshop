@@ -17,9 +17,9 @@ interface SaasManagementInterface
     public function saveKey(string $publicKey): ConfirmationResultInterface;
 
     /**
-     * Get admin dashboard URL
+     * Get admin Langshop URL
      *
      * @return \Aheadworks\Langshop\Api\Data\Saas\UrlResultInterface
      */
-    public function getDashboardUrl(): UrlResultInterface;
+    public function getLangshopUrl(): UrlResultInterface;
 }
