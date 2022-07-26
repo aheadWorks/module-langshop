@@ -70,4 +70,10 @@
             <resource ref="Aheadworks_Langshop::langshop"/>
         </resources>
     </route>
+    <route url="/V1/awLangshop/notification/create" method="PUT">
+        <service class="Aheadworks\Langshop\Api\NotificationManagementInterface" method="create"/>
+        <resources>
+            <resource ref="Aheadworks_Langshop::langshop"/>
+        </resources>
+    </route>
 </routes>
