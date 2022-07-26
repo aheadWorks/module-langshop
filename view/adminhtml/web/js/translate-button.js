@@ -15,9 +15,9 @@ define([
         },
 
         _create: function () {
-            document.getElementById('translate').disabled = this.options.isDisabled;
+            this.element.context.disabled = this.options.isDisabled;
             this.element.on('click', function () {
-                document.getElementById('translate').disabled = true;
+                this.element.context.disabled = true;
                 this.sendTranslate();
             }.bind(this));
         },
