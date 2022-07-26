@@ -82,6 +82,7 @@
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection">
         <plugin name="aw_ls_image_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Image"/>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Read"/>
+        <plugin name="aw_ls_options_values_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Value\Read"/>
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute">
         <plugin name="aw_ls_store_label_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Save"/>

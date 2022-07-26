@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option;
+namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Value;
 
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection as ProductCollection;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\Product\Option as OptionProvider;
@@ -12,7 +12,7 @@ class Read
     /**
      * The model fields to work with
      */
-    private const KEY_OPTIONS = 'options';
+    private const KEY_OPTIONS = 'options_values';
 
     /**
      * @var OptionProvider
@@ -47,11 +47,18 @@ class Read
 
             foreach ($options as $optionId => $option) {
                 $product = $products[$option->getProductId()];
+                $optionsValues = [];
+                $values = $option->getValues();
 
-                $product->setData(self::KEY_OPTIONS, array_replace(
-                    $product->getData(self::KEY_OPTIONS) ?? [],
-                    [$optionId => $option->getTitle()]
-                ));
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        $optionsValues[$value->getOptionTypeId()] = $value->getTitle();
+                    }
+                    $product->setData(self::KEY_OPTIONS, array_replace(
+                        $product->getData(self::KEY_OPTIONS) ?? [],
+                        $optionsValues
+                    ));
+                }
             }
         }
 

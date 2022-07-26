@@ -5,7 +5,6 @@ namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableRe
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product as ProductResource;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\Store;
 
 class Save
 {
@@ -43,8 +42,56 @@ class Save
     ): ProductResource {
         $values = $product->getData(self::KEY_OPTIONS_VALUES);
         if (is_array($values)) {
-            foreach ($values as $optionTypeId => $title) {
-                $this->save($title, (int)$optionTypeId, $product->getStoreId());
+            $titleTable = $this->resourceConnection->getTableName('catalog_product_option_type_title');
+            $storeId = $product->getStoreId();
+            $items = [];
+
+            foreach ($values as $id => $title) {
+                if ($title) {
+                    $items[] = [
+                        'option_type_id' => $id,
+                        'title' => $title
+                    ];
+                } else {
+                    $where = [
+                        'option_type_id = ?' => $id,
+                        'store_id = ?' => $storeId,
+                    ];
+                    $this->resourceConnection->getConnection()->delete($titleTable, $where);
+                }
+            }
+
+            $valuesIds = $this->getOptionIdsByStoreId($storeId);
+            $newItems = [];
+            $oldItems = [];
+
+            foreach ($items as $item) {
+                $optionTypeId = $item['option_type_id'];
+                $optionTypeTitleId = $valuesIds[$optionTypeId] ?? null;
+                if ($optionTypeTitleId) {
+                    $item['option_type_title_id'] = $optionTypeTitleId;
+                    $oldItems[] = $item;
+                } else {
+                    $newItems[] = [
+                        'option_type_id' => $optionTypeId,
+                        'title' => $item['title'],
+                        'store_id' => $storeId
+                    ];
+                }
+            }
+
+            if (!empty($oldItems)) {
+                $this->resourceConnection->getConnection()->insertOnDuplicate(
+                    $titleTable,
+                    $oldItems
+                );
+            }
+
+            if (!empty($newItems)) {
+                $this->resourceConnection->getConnection()->insertMultiple(
+                    $titleTable,
+                    $newItems
+                );
             }
         }
 
@@ -52,74 +99,29 @@ class Save
     }
 
     /**
-     * Save option value title
+     * Get option ids by story id
      *
-     * @param string|null $title
-     * @param int $optionTypeId
      * @param int $storeId
+     * @return array
      */
-    private function save($title, int $optionTypeId, int $storeId): void
+    private function getOptionIdsByStoreId(int $storeId): array
     {
         $titleTable = $this->resourceConnection->getTableName('catalog_product_option_type_title');
-        if ($title) {
-            $existInCurrentStore = $this->getOptionIdFromOptionTable($titleTable, $optionTypeId, $storeId);
-
-            if ($existInCurrentStore) {
-                $where = [
-                    'option_type_id = ?' => $optionTypeId,
-                    'store_id = ?' => $storeId,
-                ];
-                $bind = ['title' => $title];
-                $this->resourceConnection->getConnection()->update($titleTable, $bind, $where);
-            } else {
-                $existInDefaultStore = $this->getOptionIdFromOptionTable(
-                    $titleTable,
-                    $optionTypeId,
-                    Store::DEFAULT_STORE_ID
-                );
-                // we should insert record into not default store only of if it does not exist in default store
-                if (($storeId === Store::DEFAULT_STORE_ID && !$existInDefaultStore)
-                    || $storeId !== Store::DEFAULT_STORE_ID
-                ) {
-                    $bind = [
-                        'option_type_id' => $optionTypeId,
-                        'store_id' => $storeId,
-                        'title' => $title,
-                    ];
-                    $this->resourceConnection->getConnection()->insert($titleTable, $bind);
-                }
-            }
-        } elseif ($storeId && $optionTypeId && $storeId > Store::DEFAULT_STORE_ID) {
-            $where = [
-                'option_type_id = ?' => $optionTypeId,
-                'store_id = ?' => $storeId,
-            ];
-            $this->resourceConnection->getConnection()->delete($titleTable, $where);
-        }
-    }
-
-    /**
-     * Get first col from first row for option table
-     *
-     * @param string $tableName
-     * @param int $optionId
-     * @param int $storeId
-     * @return string
-     */
-    private function getOptionIdFromOptionTable(string $tableName, int $optionId, int $storeId): string
-    {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()->from(
-            $tableName,
-            ['option_type_id']
-        )->where(
-            'option_type_id = ?',
-            $optionId
+            $titleTable,
+            ['option_type_title_id', 'option_type_id']
         )->where(
             'store_id = ?',
             $storeId
         );
+        $values = $connection->fetchAll($select);
 
-        return (string)$connection->fetchOne($select);
+        $result = [];
+        foreach ($values as $value) {
+            $result[$value['option_type_id']] = $value['option_type_title_id'];
+        }
+
+        return $result;
     }
 }
