@@ -16,6 +16,7 @@ use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as Tra
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Translation\Model\ResourceModel\StringUtils;
 use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -295,9 +296,11 @@ class CsvTest extends TestCase
             ->method('getLocaleCode')
             ->willReturn($defaultLocaleCode);
         if ($defaultLocaleCode !== 'en-US') {
-            $exception = new LocalizedException(
+            $exception = new WebapiException(
                 __('We are sorry. Currently, we only support the default locale to be en_US.'
-                    . ' We are working to support other default locales.')
+                    . ' We are working to support other default locales.'),
+                501,
+                501
             );
             $this->expectExceptionObject($exception);
         }
