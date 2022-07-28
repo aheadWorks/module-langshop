@@ -77,6 +77,7 @@
     </type>
 
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Collection">
+        <plugin name="aw_ls_frontend_input_read"  type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\FrontendInput\Read"/>
         <plugin name="aw_ls_store_label_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Read"/>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Option\Read"/>
         <plugin name="aw_ls_swatch_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\Swatch\Read"/>
@@ -100,7 +101,7 @@
     </type>
 
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface">
-        <plugin name="aw_ls_select_label" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Collection\SelectLabel"/>
+        <plugin name="aw_ls_select_label" sortOrder="15" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Collection\SelectLabel"/>
     </type>
 
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\CollectionFactory"
@@ -949,11 +950,11 @@
                     <item name="label" xsi:type="string">Fixed Product Tax</item>
                 </item>
                 <item name="1200" xsi:type="array">
-                    <item name="value" xsi:type="string">swatch_visual</item>
+                    <item name="value" xsi:type="string">visual</item>
                     <item name="label" xsi:type="string">Visual Swatch</item>
                 </item>
                 <item name="1300" xsi:type="array">
-                    <item name="value" xsi:type="string">swatch_text</item>
+                    <item name="value" xsi:type="string">text</item>
                     <item name="label" xsi:type="string">Text Swatch</item>
                 </item>
             </argument>
