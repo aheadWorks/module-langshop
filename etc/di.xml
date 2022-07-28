@@ -84,6 +84,7 @@
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection">
         <plugin name="aw_ls_image_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Image"/>
         <plugin name="aw_ls_option_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Read"/>
+        <plugin name="aw_ls_options_values_read" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Value\Read"/>
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute">
         <plugin name="aw_ls_store_label_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Attribute\StoreLabel\Save"/>
@@ -92,6 +93,7 @@
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product">
         <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Save"/>
+        <plugin name="aw_ls_option_values_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Value\Save"/>
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category">
         <plugin name="aw_ls_category_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Category\Save"/>
@@ -493,6 +495,7 @@
                 <item name="attribute_set_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\AttributeSetId</item>
                 <item name="type_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\TypeId</item>
                 <item name="options" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Options</item>
+                <item name="options_values" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\OptionsValues</item>
             </argument>
         </arguments>
     </virtualType>
@@ -609,6 +612,19 @@
             <argument name="type" xsi:type="string">array</argument>
             <argument name="isTranslatable" xsi:type="boolean">true</argument>
             <argument name="sortOrder" xsi:type="number">70</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\OptionsValues"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">options_values</argument>
+            <argument name="label" xsi:type="string">Options Values</argument>
+            <argument name="type" xsi:type="string">array</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">80</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
