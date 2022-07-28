@@ -9,7 +9,9 @@ interface NotificationManagementInterface
      *
      * @param string $resourceType
      * @param string $resourceId
+     * @param int $status
+     * @param string $errorMessage
      * @return bool
      */
-    public function create(string $resourceType, string $resourceId): bool;
+    public function create(string $resourceType, string $resourceId, int $status, string $errorMessage = ''): bool;
 }

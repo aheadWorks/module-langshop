@@ -35,12 +35,14 @@ class Notification implements NotificationManagementInterface
      *
      * @param string $resourceType
      * @param string $resourceId
+     * @param int $status
+     * @param string $errorMessage
      * @return bool
      */
-    public function create(string $resourceType, string $resourceId): bool
+    public function create(string $resourceType, string $resourceId, int $status, string $errorMessage = ''): bool
     {
         $result = false;
-        if ($this->statusChecker->isTranslated($resourceType, $resourceId)) {
+        if ($status === 1 && $this->statusChecker->isTranslated($resourceType, $resourceId)) {
             $this->notificationService->addNotice(
                 __("Translation successfully completed")->render(),
                 __(
@@ -50,6 +52,11 @@ class Notification implements NotificationManagementInterface
                 )->render()
             );
             $result = true;
+        } else {
+            $this->notificationService->addNotice(
+                __("Translation failed")->render(),
+                $errorMessage
+            );
         }
 
         return $result;

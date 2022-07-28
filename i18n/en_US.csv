@@ -33,3 +33,4 @@ Resources,Resources
 "Translation successfully completed","Translation successfully completed"
 "Translation of %1 with identifier = '%2' successfully completed.","Translation of %1 with identifier = '%2' successfully completed."
 "Processing %1 translation.","Processing %1 translation."
+"Translation failed","Translation failed"
