@@ -87,7 +87,7 @@ class DynamicAttribute implements CollectorInterface
 
         if ($fields) {
             /** @var Field $field */
-            $field = array_last($fields);
+            $field = end($fields);
         }
         $sortOrder = isset($field) ? $field->getSortOrder() + 10 : 10;
 
