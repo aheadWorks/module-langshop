@@ -66,17 +66,17 @@ class Saas implements SaasManagementInterface
     }
 
     /**
-     * Get admin dashboard URL
+     * Get admin Langshop URL
      *
      * @return UrlResultInterface
      */
-    public function getDashboardUrl(): UrlResultInterface
+    public function getLangshopUrl(): UrlResultInterface
     {
-        $dashboardUrl = $this->urlBuilder
+        $langshopUrl = $this->urlBuilder
             ->turnOffSecretKey()
-            ->getUrl('admin/dashboard');
+            ->getUrl('langshop/page');
 
         return $this->urlResultFactory->create()
-            ->setUrl($dashboardUrl);
+            ->setUrl($langshopUrl);
     }
 }
