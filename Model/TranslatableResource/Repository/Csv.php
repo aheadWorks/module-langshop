@@ -18,6 +18,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Translation\Model\ResourceModel\StringUtils;
 use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
 
@@ -184,9 +185,11 @@ class Csv implements RepositoryInterface
     {
         $defaultLocaleScope = $this->scopeRecordRepository->getPrimary();
         if ($defaultLocaleScope->getLocaleCode() !== 'en-US') {
-            throw new LocalizedException(
+            throw new WebapiException(
                 __('We are sorry. Currently, we only support the default locale to be en_US.'
-                    . ' We are working to support other default locales.')
+                    . ' We are working to support other default locales.'),
+                501,
+                501
             );
         }
 

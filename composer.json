@@ -1,5 +1,5 @@
 {
-    "name": "aheadworks/langshop",
+    "name": "aheadworks/module-langshop",
     "require": {
         "php": "~7.4.0||~8.1.0",
         "magento/module-backend": ">100.0",

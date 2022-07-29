@@ -34,7 +34,8 @@ class Option
     {
         $optionCollection = $this->optionCollectionFactory->create()
             ->addProductToFilter($productIds)
-            ->addTitleToResult($storeId);
+            ->addTitleToResult($storeId)
+            ->addValuesToResult($storeId);
 
         /** @var ProductOption[] $options */
         $options = $optionCollection->getItems();
