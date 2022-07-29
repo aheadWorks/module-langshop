@@ -91,19 +91,36 @@ class Save
             $existingSwatches = $this->swatchProvider->get([$attribute->getId()], $storeId);
 
             $toInsert = [];
+            $toDelete = [];
+
             foreach ($swatches as $optionId => $value) {
-                $toInsert[] = [
-                    'swatch_id' => $existingSwatches[$optionId]->getData('swatch_id'),
-                    'option_id' => $optionId,
-                    'store_id' => $storeId,
-                    'value' => $value
-                ];
+                if ($value) {
+                    $toInsert[] = [
+                        'swatch_id' => $existingSwatches[$optionId]->getData('swatch_id'),
+                        'option_id' => $optionId,
+                        'store_id' => $storeId,
+                        'value' => $value
+                    ];
+                } else {
+                    $toDelete[] = $existingSwatches[$optionId]->getData('swatch_id');
+                }
             }
 
-            $this->resourceConnection->getConnection()->insertOnDuplicate(
-                $this->resourceConnection->getTableName('eav_attribute_option_swatch'),
-                $toInsert
-            );
+            if ($toInsert) {
+                $this->resourceConnection->getConnection()->insertOnDuplicate(
+                    $this->resourceConnection->getTableName('eav_attribute_option_swatch'),
+                    $toInsert
+                );
+            }
+
+            if ($toDelete) {
+                $toDelete = implode(',', $toDelete);
+                $this->resourceConnection->getConnection()->delete(
+                    $this->resourceConnection->getTableName('eav_attribute_option_swatch'),
+                    "swatch_id IN ($toDelete)"
+                );
+            }
+
         }
 
         return $result;
