@@ -79,18 +79,29 @@ class Save
         $options = $product->getData(self::KEY_OPTIONS);
         if (is_array($options) && $options) {
             $toInsert = [];
+            $storeId = $product->getStoreId();
+
             foreach ($options as $optionId => $title) {
-                $toInsert[] = [
-                    'option_id' => $optionId,
-                    'store_id' => $product->getStoreId(),
-                    'title' => $title
-                ];
+                if ($title) {
+                    $toInsert[] = [
+                        'option_id' => $optionId,
+                        'store_id' => $storeId,
+                        'title' => $title
+                    ];
+                } else {
+                    $this->resourceConnection->getConnection()->delete(
+                        $this->resourceConnection->getTableName('catalog_product_option_title'),
+                        "option_id = $optionId AND store_id = $storeId"
+                    );
+                }
             }
 
-            $this->resourceConnection->getConnection()->insertOnDuplicate(
-                $this->resourceConnection->getTableName('catalog_product_option_title'),
-                $toInsert
-            );
+            if ($toInsert) {
+                $this->resourceConnection->getConnection()->insertOnDuplicate(
+                    $this->resourceConnection->getTableName('catalog_product_option_title'),
+                    $toInsert
+                );
+            }
         }
 
         return $result;
