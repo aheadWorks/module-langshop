@@ -352,7 +352,6 @@
             <argument name="fields" xsi:type="array">
                 <item name="attribute_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\AttributeId</item>
                 <item name="attribute_code" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\AttributeCode</item>
-                <item name="frontend_label" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendLabel</item>
                 <item name="frontend_input" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendInput</item>
                 <item name="entity_type_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\EntityTypeId</item>
                 <item name="store_label" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute\Field\StoreLabel</item>
@@ -388,20 +387,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendLabel"
-                 type="Aheadworks\Langshop\Model\Entity\Field">
-        <arguments>
-            <argument name="code" xsi:type="string">frontend_label</argument>
-            <argument name="label" xsi:type="string">Default Label</argument>
-            <argument name="isFilterable" xsi:type="boolean">true</argument>
-            <argument name="isSortable" xsi:type="boolean">true</argument>
-            <argument name="isTitle" xsi:type="boolean">true</argument>
-            <argument name="sortOrder" xsi:type="number">30</argument>
-            <argument name="visibleOn" xsi:type="array">
-                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Attribute\Field\FrontendInput"
                  type="Aheadworks\Langshop\Model\Entity\Field">
         <arguments>
@@ -412,7 +397,7 @@
             <argument name="filterOptions" xsi:type="object">
                 Aheadworks\Langshop\Model\Source\Schema\Attribute\FrontendInput
             </argument>
-            <argument name="sortOrder" xsi:type="number">40</argument>
+            <argument name="sortOrder" xsi:type="number">30</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
@@ -428,7 +413,7 @@
             <argument name="filterOptions" xsi:type="object">
                 Aheadworks\Langshop\Model\Source\Schema\Attribute\EntityType
             </argument>
-            <argument name="sortOrder" xsi:type="number">50</argument>
+            <argument name="sortOrder" xsi:type="number">40</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
@@ -440,9 +425,10 @@
             <argument name="code" xsi:type="string">store_label</argument>
             <argument name="label" xsi:type="string">Store Label</argument>
             <argument name="isTranslatable" xsi:type="boolean">true</argument>
-            <argument name="sortOrder" xsi:type="number">60</argument>
+            <argument name="sortOrder" xsi:type="number">50</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
             </argument>
         </arguments>
     </virtualType>
@@ -453,7 +439,7 @@
             <argument name="label" xsi:type="string">Options</argument>
             <argument name="type" xsi:type="string">array</argument>
             <argument name="isTranslatable" xsi:type="boolean">true</argument>
-            <argument name="sortOrder" xsi:type="number">70</argument>
+            <argument name="sortOrder" xsi:type="number">60</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
@@ -466,7 +452,7 @@
             <argument name="label" xsi:type="string">Swatches</argument>
             <argument name="type" xsi:type="string">array</argument>
             <argument name="isTranslatable" xsi:type="boolean">true</argument>
-            <argument name="sortOrder" xsi:type="number">80</argument>
+            <argument name="sortOrder" xsi:type="number">70</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
