@@ -15,9 +15,9 @@ define([
         },
 
         _create: function () {
-            this.element.context.disabled = this.options.isDisabled;
+            this.element.attr('disabled', this.options.isDisabled);
             this.element.on('click', function () {
-                this.element.context.disabled = true;
+                this.element.attr('disabled', true);
                 this.sendTranslate();
             }.bind(this));
         },
