@@ -122,6 +122,17 @@ definitions:
           - python3 -m aheadworks_test_manager static ${PWD} test-results/static
         artifacts:
           - "test-results/**"
+    - step: &PHPStan-2.4.4
+        name: PHPStan running on Magento 2.4.4
+        image: aheadworks/m2test-new:2.4.4-without-dump-8.1
+        script:
+          - export MODULE_DIR=app/code/Aheadworks/Langshop
+          - cd /var/www/html
+          - mkdir -p $MODULE_DIR
+          - cp -r $BITBUCKET_CLONE_DIR/* $MODULE_DIR
+          - bin/magento module:enable --all
+          - bin/magento setup:di:compile
+          - vendor/bin/phpstan analyze -c $MODULE_DIR/phpstan.neon $MODULE_DIR
     - step: &unitTestPHP74
         name: Unit tests PHP 7.4
         image: aheadworks/m2test-new:2.3.7-p3-with-dump-7.4
@@ -245,6 +256,7 @@ pipelines:
           - step: *eqpTest-2.4.4
           - step: *staticTest-2.3.7
           - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
@@ -261,23 +273,28 @@ pipelines:
           - step: *eqpTest-2.4.4
           - step: *staticTest-2.3.7
           - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *installMagento-2.4.4
       - step: *deployToDevComposer
     feature/*:
-        - step: *eqpTest-2.3.7
-        - step: *eqpTest-2.4.4
-        - step: *staticTest-2.3.7
-        - step: *staticTest-2.4.4
-        - step: *unitTestPHP74
-        - step: *installMagento-2.4.4
+      - parallel:
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
+          - step: *unitTestPHP74
+          - step: *installMagento-2.4.4
     bugfix/*:
-        - step: *eqpTest-2.3.7
-        - step: *eqpTest-2.4.4
-        - step: *staticTest-2.3.7
-        - step: *staticTest-2.4.4
-        - step: *unitTestPHP74
-        - step: *installMagento-2.4.4
+      - parallel:
+          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.4
+          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
+          - step: *unitTestPHP74
+          - step: *installMagento-2.4.4
     release/*:
       - step: *build
       - step: *validatePackage-2.3.7
@@ -287,6 +304,7 @@ pipelines:
           - step: *eqpTest-2.4.4
           - step: *staticTest-2.3.7
           - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
@@ -316,6 +334,7 @@ pipelines:
           - step: *eqpTest-2.4.4
           - step: *staticTest-2.3.7
           - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
@@ -327,6 +346,7 @@ pipelines:
           - step: *eqpTest-2.4.4
           - step: *staticTest-2.3.7
           - step: *staticTest-2.4.4
+          - step: *PHPStan-2.4.4
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
