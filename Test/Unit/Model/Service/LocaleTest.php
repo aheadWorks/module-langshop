@@ -11,7 +11,6 @@ use Aheadworks\Langshop\Model\Service\Locale as LocaleService;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class LocaleTest extends TestCase
 {
@@ -31,23 +30,16 @@ class LocaleTest extends TestCase
     private $loadHandlerMock;
 
     /**
-     * @var LoggerInterface|MockObject
-     */
-    private $loggerMock;
-
-    /**
      * @return void
      */
     protected function setUp(): void
     {
         $this->scopeRecordRepositoryMock = $this->createMock(ScopeRecordRepository::class);
         $this->loadHandlerMock = $this->createMock(LoadHandler::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->localeService = new LocaleService(
             $this->scopeRecordRepositoryMock,
-            $this->loadHandlerMock,
-            $this->loggerMock
+            $this->loadHandlerMock
         );
     }
 

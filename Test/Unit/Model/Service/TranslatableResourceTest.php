@@ -16,11 +16,9 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class TranslatableResourceTest extends TestCase
 {
@@ -50,11 +48,6 @@ class TranslatableResourceTest extends TestCase
     private $dataProcessorMock;
 
     /**
-     * @var MockObject|LoggerInterface
-     */
-    private $loggerMock;
-
-    /**
      * @return void
      */
     protected function setUp(): void
@@ -63,27 +56,22 @@ class TranslatableResourceTest extends TestCase
         $this->repositoryPoolMock = $this->createMock(RepositoryPool::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->dataProcessorMock = $this->createMock(ProcessorInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->translatableResourceService = new TranslatableResourceService(
             $this->converterMock,
             $this->repositoryPoolMock,
             $this->searchCriteriaBuilderMock,
-            $this->dataProcessorMock,
-            $this->loggerMock
+            $this->dataProcessorMock
         );
     }
 
     /**
      * Test 'getList' method
      *
-     * @param bool $throwException
-     *
      * @return void
-     * @dataProvider dataProvider
      * @throws WebapiException
      */
-    public function testGetList(bool $throwException): void
+    public function testGetList(): void
     {
         $resourceType = 'resourceType';
         $locale = ['en_US'];
@@ -99,10 +87,6 @@ class TranslatableResourceTest extends TestCase
             'sortBy' => $sortBy,
             'filter' => $filter
         ];
-
-        $exceptionMessage = 'message';
-        $localizedException = new LocalizedException(__($exceptionMessage));
-        $webapiException = new WebapiException(__($exceptionMessage), 500, 500);
 
         $repositoryMock = $this->createMock(RepositoryInterface::class);
         $collectionMock = $this->createMock(Collection::class);
@@ -155,25 +139,11 @@ class TranslatableResourceTest extends TestCase
             ->with($searchCriteriaMock, $processedParams['locale'])
             ->willReturn($collectionMock);
 
-        if ($throwException) {
-            $this->converterMock
-                ->expects($this->once())
-                ->method('convertCollection')
-                ->with($collectionMock, $resourceType)
-                ->willThrowException($localizedException);
-            $this->loggerMock
-                ->expects($this->once())
-                ->method('error')
-                ->with($exceptionMessage);
-            $this->expectExceptionObject($webapiException);
-            $result = $webapiException;
-        } else {
-            $this->converterMock
-                ->expects($this->once())
-                ->method('convertCollection')
-                ->with($collectionMock, $resourceType)
-                ->willReturn($resourceListMock);
-        }
+        $this->converterMock
+            ->expects($this->once())
+            ->method('convertCollection')
+            ->with($collectionMock, $resourceType)
+            ->willReturn($resourceListMock);
 
         $this->assertSame(
             $result,
@@ -184,20 +154,14 @@ class TranslatableResourceTest extends TestCase
     /**
      * Test 'getById' method
      *
-     * @param bool $throwException
-     *
      * @return void
-     * @dataProvider dataProvider
      * @throws WebapiException
      */
-    public function testGetById(bool $throwException): void
+    public function testGetById(): void
     {
         $resourceType = 'resourceType';
         $resourceId = 'resourceId';
         $locale = [];
-        $exceptionMessage = 'message';
-        $localizedException = new LocalizedException(__($exceptionMessage));
-        $webapiException = new WebapiException(__($exceptionMessage), 500, 500);
         $repository = $this->createMock(RepositoryInterface::class);
         $result = $resource = $this->createMock(TranslatableResourceInterface::class);
         $item = $this->createMock(DataObject::class);
@@ -221,25 +185,11 @@ class TranslatableResourceTest extends TestCase
             ->method('get')
             ->with($resourceId, $params['locale'])
             ->willReturn($item);
-        if ($throwException) {
-            $this->converterMock
-                ->expects($this->once())
-                ->method('convert')
-                ->with($item, $resourceType)
-                ->willThrowException($localizedException);
-            $this->loggerMock
-                ->expects($this->once())
-                ->method('error')
-                ->with($exceptionMessage);
-            $this->expectExceptionObject($webapiException);
-            $result = $webapiException;
-        } else {
-            $this->converterMock
-                ->expects($this->once())
-                ->method('convert')
-                ->with($item, $resourceType)
-                ->willReturn($resource);
-        }
+        $this->converterMock
+            ->expects($this->once())
+            ->method('convert')
+            ->with($item, $resourceType)
+            ->willReturn($resource);
 
         $this->assertSame($result, $this->translatableResourceService->getById($resourceType, $resourceId, $locale));
     }
@@ -247,13 +197,10 @@ class TranslatableResourceTest extends TestCase
     /**
      * Test 'getById' method
      *
-     * @param bool $throwException
-     *
      * @return void
-     * @dataProvider dataProvider
      * @throws WebapiException
      */
-    public function testSave(bool $throwException): void
+    public function testSave(): void
     {
         $repository = $this->createMock(RepositoryInterface::class);
         $result = $resource = $this->createMock(TranslatableResourceInterface::class);
@@ -261,72 +208,50 @@ class TranslatableResourceTest extends TestCase
         $translation = [$this->createMock(TranslationInterface::class)];
         $resourceType = 'resourceType';
         $resourceId = 'resourceId';
-        $exceptionMessage = 'message';
-        $localizedException = new LocalizedException(__($exceptionMessage));
-        $webapiException = new WebapiException(__($exceptionMessage), 500, 500);
 
         $this->repositoryPoolMock
             ->expects($this->any())
             ->method('get')
             ->with($resourceType)
             ->willReturn($repository);
-        if ($throwException) {
-            $repository
-                ->expects($this->once())
-                ->method('save')
-                ->with($resourceId, $translation)
-                ->willThrowException($localizedException);
-            $this->loggerMock
-                ->expects($this->once())
-                ->method('error')
-                ->with($exceptionMessage);
-            $this->expectExceptionObject($webapiException);
-            $result = $webapiException;
-        } else {
-            $repository
-                ->expects($this->once())
-                ->method('save')
-                ->with($resourceId, $translation);
-            $params = [
-                'resourceType' => $resourceType,
-                'locale' => []
-            ];
 
-            $this->repositoryPoolMock
-                ->expects($this->any())
-                ->method('get')
-                ->with($resourceType)
-                ->willReturn($repository);
-            $this->dataProcessorMock
-                ->expects($this->once())
-                ->method('process')
-                ->with($params)
-                ->willReturn($params);
-            $repository
-                ->expects($this->once())
-                ->method('get')
-                ->with($resourceId, $params['locale'])
-                ->willReturn($item);
-            $this->converterMock
-                ->expects($this->once())
-                ->method('convert')
-                ->with($item, $resourceType)
-                ->willReturn($resource);
-        }
+        $repository
+            ->expects($this->once())
+            ->method('save')
+            ->with($resourceId, $translation);
+
+        $params = [
+            'resourceType' => $resourceType,
+            'locale' => []
+        ];
+
+        $this->repositoryPoolMock
+            ->expects($this->any())
+            ->method('get')
+            ->with($resourceType)
+            ->willReturn($repository);
+
+        $this->dataProcessorMock
+            ->expects($this->once())
+            ->method('process')
+            ->with($params)
+            ->willReturn($params);
+
+        $repository
+            ->expects($this->once())
+            ->method('get')
+            ->with($resourceId, $params['locale'])
+            ->willReturn($item);
+
+        $this->converterMock
+            ->expects($this->once())
+            ->method('convert')
+            ->with($item, $resourceType)
+            ->willReturn($resource);
 
         $this->assertSame(
             $result,
             $this->translatableResourceService->save($resourceType, $resourceId, $translation)
         );
-    }
-
-    /**
-     * Data provider
-     *
-     * @return array
-     */
-    public function dataProvider(): array
-    {
-        return [[true], [false]];
     }
 }

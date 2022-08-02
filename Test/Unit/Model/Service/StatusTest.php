@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Test\Unit\Model\Service;
 
 use Aheadworks\Langshop\Api\Data\StatusInterface;
@@ -9,13 +10,11 @@ use Aheadworks\Langshop\Model\ResourceModel\Status\CollectionFactory as StatusCo
 use Aheadworks\Langshop\Model\ResourceModel\StatusFactory as StatusResourceFactory;
 use Aheadworks\Langshop\Model\Service\Status as StatusService;
 use Aheadworks\Langshop\Model\Status as StatusModel;
-use Exception;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class StatusTest extends TestCase
 {
@@ -40,11 +39,6 @@ class StatusTest extends TestCase
     private $statusResourceFactoryMock;
 
     /**
-     * @var MockObject|LoggerInterface
-     */
-    private $loggerMock;
-
-    /**
      * @return void
      */
     protected function setUp(): void
@@ -52,13 +46,11 @@ class StatusTest extends TestCase
         $this->collectionProcessorMock = $this->createMock(CollectionProcessorInterface::class);
         $this->statusCollectionFactoryMock = $this->createMock(StatusCollectionFactory::class);
         $this->statusResourceFactoryMock= $this->createMock(StatusResourceFactory::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->statusService = new StatusService(
             $this->collectionProcessorMock,
             $this->statusCollectionFactoryMock,
-            $this->statusResourceFactoryMock,
-            $this->loggerMock
+            $this->statusResourceFactoryMock
         );
     }
 
@@ -92,42 +84,24 @@ class StatusTest extends TestCase
     /**
      * Test 'save' method
      *
-     * @param bool $throwException
-     *
      * @return void
-     * @dataProvider dataProvider
      * @throws WebapiException
      */
-    public function testSave(bool $throwException): void
+    public function testSave(): void
     {
         $statusResource = $this->createMock(StatusResource::class);
         $status = $this->createMock(StatusModel::class);
-        $exceptionMessage = 'message';
-        $exception = new Exception($exceptionMessage);
-        $webapiException = new WebapiException(__($exceptionMessage), 500, 500);
 
         $this->statusResourceFactoryMock
             ->expects($this->once())
             ->method('create')
             ->willReturn($statusResource);
-        if ($throwException) {
-            $statusResource
-                ->expects($this->once())
-                ->method('save')
-                ->with($status)
-                ->willThrowException($exception);
-            $this->loggerMock
-                ->expects($this->once())
-                ->method('error')
-                ->with($exceptionMessage);
-            $this->expectExceptionObject($webapiException);
-        } else {
-            $statusResource
-                ->expects($this->once())
-                ->method('save')
-                ->with($status)
-                ->willReturn($statusResource);
-        }
+
+        $statusResource
+            ->expects($this->once())
+            ->method('save')
+            ->with($status)
+            ->willReturn($statusResource);
 
         $this->statusService->save($status);
     }
@@ -135,53 +109,25 @@ class StatusTest extends TestCase
     /**
      * Test 'delete' method
      *
-     * @param bool $throwException
-     *
      * @return void
-     * @dataProvider dataProvider
      * @throws WebapiException
      */
-    public function testDelete(bool $throwException): void
+    public function testDelete(): void
     {
         $statusResource = $this->createMock(StatusResource::class);
         $status = $this->createMock(StatusModel::class);
-        $exceptionMessage = 'message';
-        $exception = new Exception($exceptionMessage);
-        $webapiException = new WebapiException(__($exceptionMessage), 500, 500);
 
         $this->statusResourceFactoryMock
             ->expects($this->once())
             ->method('create')
             ->willReturn($statusResource);
-        if ($throwException) {
-            $statusResource
-                ->expects($this->once())
-                ->method('delete')
-                ->with($status)
-                ->willThrowException($exception);
-            $this->loggerMock
-                ->expects($this->once())
-                ->method('error')
-                ->with($exceptionMessage);
-            $this->expectExceptionObject($webapiException);
-        } else {
-            $statusResource
-                ->expects($this->once())
-                ->method('delete')
-                ->with($status)
-                ->willReturn($statusResource);
-        }
+
+        $statusResource
+            ->expects($this->once())
+            ->method('delete')
+            ->with($status)
+            ->willReturn($statusResource);
 
         $this->statusService->delete($status);
-    }
-
-    /**
-     * Data provider
-     *
-     * @return array
-     */
-    public function dataProvider(): array
-    {
-        return [[true], [false]];
     }
 }
