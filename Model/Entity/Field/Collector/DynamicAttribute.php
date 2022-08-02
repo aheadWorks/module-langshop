@@ -77,14 +77,17 @@ class DynamicAttribute implements CollectorInterface
          * in terms of being able to compile different filters for entity types
          * or ignore some service attributes
          */
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(Attribute::ATTRIBUTE_CODE, $this->attributeCodeBlacklist, 'nin')
+            ->create();
         $attributes = $this->attributeRepository->getList(
             $this->entityTypeCode,
-            $this->searchCriteriaBuilder->create()
+            $searchCriteria
         )->getItems();
 
         if ($fields) {
             /** @var Field $field */
-            $field = array_last($fields);
+            $field = end($fields);
         }
         $sortOrder = isset($field) ? $field->getSortOrder() + 10 : 10;
 
@@ -97,7 +100,6 @@ class DynamicAttribute implements CollectorInterface
                     ->setLabel($attribute->getDefaultFrontendLabel())
                     ->setType($attribute->getFrontendInput())
                     ->setSortOrder($sortOrder)
-                    ->setIsSortable(true)
                     ->setIsTranslatable($this->isTranslatable($attribute))
                     ->setVisibleOn([VisibleOn::FORM])
                     ->setIsFilterable((bool)$attribute->getIsFilterable())
@@ -124,7 +126,6 @@ class DynamicAttribute implements CollectorInterface
          * used entity type, that probably has to come from di
          */
         return !$attribute->isScopeGlobal() &&
-            in_array($attribute->getFrontendInput(), self::TRANSLATABLE_TYPES) &&
-            !in_array($attribute->getAttributeCode(), $this->attributeCodeBlacklist);
+            in_array($attribute->getFrontendInput(), self::TRANSLATABLE_TYPES);
     }
 }

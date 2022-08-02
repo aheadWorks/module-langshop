@@ -8,6 +8,7 @@ use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Model\Locale\LoadHandler;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Aheadworks\Langshop\Model\Service\Locale as LocaleService;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -17,7 +18,7 @@ class LocaleTest extends TestCase
     /**
      * @var LocaleService
      */
-    private $localeService;
+    private LocaleService $localeService;
 
     /**
      * @var ScopeRecordRepository|MockObject
@@ -50,7 +51,13 @@ class LocaleTest extends TestCase
         );
     }
 
-    public function testGetList()
+    /**
+     * Test 'getList' method
+     *
+     * @return void
+     * @throws WebapiException
+     */
+    public function testGetList(): void
     {
         $scopeRecord = $this->createMock(RecordInterface::class);
         $locale = $this->createMock(LocaleInterface::class);

@@ -5,7 +5,6 @@ namespace Aheadworks\Langshop\Plugin\Framework\Data\Form\Element;
 
 use Magento\Framework\Data\Form\Element\Multiselect as MultiselectElement;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class Multiselect
 {
@@ -15,20 +14,12 @@ class Multiselect
     private SerializerInterface $serializer;
 
     /**
-     * @var SecureHtmlRenderer
-     */
-    private SecureHtmlRenderer $secureHtmlRenderer;
-
-    /**
      * @param SerializerInterface $serializer
-     * @param SecureHtmlRenderer $secureHtmlRenderer
      */
     public function __construct(
-        SerializerInterface $serializer,
-        SecureHtmlRenderer $secureHtmlRenderer
+        SerializerInterface $serializer
     ) {
         $this->serializer = $serializer;
-        $this->secureHtmlRenderer = $secureHtmlRenderer;
     }
 
     /**
@@ -49,16 +40,13 @@ class Multiselect
         if ($disabledOptions) {
             $jsLayout = [
                 '#' . $multiselect->getHtmlId() => [
-                    'Aheadworks_Langshop/js/disable-options' => $disabledOptions
+                    'Aheadworks_Langshop/js/disable-options' => array_values($disabledOptions)
                 ]
             ];
 
-            $elementHtml .= $this->secureHtmlRenderer->renderTag(
-                'script',
-                ['type' => 'text/x-magento-init'],
-                $this->serializer->serialize($jsLayout),
-                false
-            );
+            $elementHtml .= '<script type="text/x-magento-init">'
+                . $this->serializer->serialize($jsLayout)
+                . '</script>';
         }
 
         return $elementHtml;
@@ -78,7 +66,7 @@ class Multiselect
             if (is_array($option['value'])) {
                 $disabledOptions += $this->getDisabledOptions($option['value']);
             } elseif (isset($option['disabled']) && $option['disabled']) {
-                $disabledOptions[] = $option['value'];
+                $disabledOptions[$option['value']] = $option['value'];
             }
         }
 

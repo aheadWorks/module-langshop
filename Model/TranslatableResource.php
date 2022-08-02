@@ -4,22 +4,22 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class TranslatableResource extends AbstractModel implements TranslatableResourceInterface
+class TranslatableResource extends DataObject implements TranslatableResourceInterface
 {
     /**
      * @inheritDoc
      */
-    public function getResourceId(): ?int
+    public function getResourceId(): ?string
     {
-        return (int) $this->getData(self::RESOURCE_ID);
+        return (string) $this->getData(self::RESOURCE_ID);
     }
 
     /**
      * @inheritDoc
      */
-    public function setResourceId(int $resourceId): TranslatableResourceInterface
+    public function setResourceId(string $resourceId): TranslatableResourceInterface
     {
         return $this->setData(self::RESOURCE_ID, $resourceId);
     }

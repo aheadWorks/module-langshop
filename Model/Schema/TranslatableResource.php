@@ -1,105 +1,158 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\Schema;
 
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
-use Magento\Framework\Model\AbstractModel;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
+use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
+use Magento\Framework\DataObject;
 
-class TranslatableResource extends AbstractModel implements ResourceInterface
+class TranslatableResource extends DataObject implements ResourceInterface
 {
     /**
-     * @inheritDoc
+     * Set resource
+     *
+     * @param string $resource
+     * @return $this
      */
-    public function setResource($resource)
+    public function setResource(string $resource): ResourceInterface
     {
         return $this->setData(self::RESOURCE, $resource);
     }
 
     /**
-     * @inheritDoc
+     * Get resource
      *
-     * @phpstan-ignore-next-line
+     * @return string
      */
-    public function getResource()
+    public function getResource(): string
     {
         return $this->getData(self::RESOURCE);
     }
 
     /**
-     * @inheritDoc
+     * Set label
+     *
+     * @param string $label
+     * @return $this
      */
-    public function setLabel($label)
+    public function setLabel(string $label): ResourceInterface
     {
         return $this->setData(self::LABEL, $label);
     }
 
     /**
-     * @inheritDoc
+     * Get label
+     *
+     * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->getData(self::LABEL);
     }
 
     /**
-     * @inheritDoc
+     * Set description
+     *
+     * @param string $description
+     * @return $this
      */
-    public function setDescription($description)
+    public function setDescription(string $description): ResourceInterface
     {
         return $this->setData(self::DESCRIPTION, $description);
     }
 
     /**
-     * @inheritDoc
+     * Get description
+     *
+     * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->getData(self::DESCRIPTION);
     }
 
     /**
-     * @inheritDoc
+     * Set icon
+     *
+     * @param string $icon
+     * @return $this
      */
-    public function setFields($fields)
+    public function setIcon(string $icon): ResourceInterface
+    {
+        return $this->setData(self::ICON, $icon);
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon(): string
+    {
+        return $this->getData(self::ICON);
+    }
+
+    /**
+     * Set fields
+     *
+     * @param FieldInterface[] $fields
+     * @return $this
+     */
+    public function setFields(array $fields): ResourceInterface
     {
         return $this->setData(self::FIELDS, $fields);
     }
 
     /**
-     * @inheritDoc
+     * Get fields
+     *
+     * @return FieldInterface[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->getData(self::FIELDS);
     }
 
     /**
-     * @inheritDoc
+     * Set sorting
+     *
+     * @param SortingInterface[] $sorting
+     * @return $this
      */
-    public function setSorting(array $sorting)
+    public function setSorting(array $sorting): ResourceInterface
     {
         return $this->setData(self::SORTING, $sorting);
     }
 
     /**
-     * @inheritDoc
+     * Get sorting
+     *
+     * @return SortingInterface[]
      */
-    public function getSorting()
+    public function getSorting(): array
     {
         return $this->getData(self::SORTING);
     }
 
     /**
-     * @inheritDoc
+     * Set view type
+     *
+     * @param string $viewType
+     * @return $this
      */
-    public function setViewType($viewType)
+    public function setViewType(string $viewType): ResourceInterface
     {
         return $this->setData(self::VIEW_TYPE, $viewType);
     }
 
     /**
-     * @inheritDoc
+     * Get view type
+     *
+     * @return string
      */
-    public function getViewType()
+    public function getViewType(): string
     {
         return $this->getData(self::VIEW_TYPE);
     }

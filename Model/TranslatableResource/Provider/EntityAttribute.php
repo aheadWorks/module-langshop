@@ -16,7 +16,7 @@ class EntityAttribute
     private EntityPool $entityPool;
 
     /**
-     * @var array<string, array<int, array<int, Field>>>
+     * @var array<string, array<int, array<string, Field>>>
      */
     private array $attributes;
 
@@ -121,7 +121,7 @@ class EntityAttribute
      * Split fields
      *
      * @param Field[] $fields
-     * @return array<int, array<int, Field>>
+     * @return array<int, array<string, Field>>
      */
     private function splitFields(array $fields): array
     {
@@ -130,11 +130,11 @@ class EntityAttribute
             SourceField::UNTRANSLATABLE => []
         ];
 
-        foreach ($fields as $field) {
-            if ($field->isTranslatable()) {
-                $result[SourceField::TRANSLATABLE][] = $field;
+        foreach ($fields as $code => $field) {
+            if ($field->getIsTranslatable()) {
+                $result[SourceField::TRANSLATABLE][$code] = $field;
             } else {
-                $result[SourceField::UNTRANSLATABLE][] = $field;
+                $result[SourceField::UNTRANSLATABLE][$code] = $field;
             }
         }
 

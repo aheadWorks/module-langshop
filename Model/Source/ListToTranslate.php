@@ -32,21 +32,29 @@ class ListToTranslate implements OptionSourceInterface
     private LocaleResolverInterface $localeResolver;
 
     /**
+     * @var array<string, string>
+     */
+    private array $unsupportedLocales;
+
+    /**
      * @param StoreOptions $storeOptions
      * @param LocaleConfig $localeConfig
      * @param LocaleListsInterface $localeLists
      * @param LocaleResolverInterface $localeResolver
+     * @param array $unsupportedLocales
      */
     public function __construct(
         StoreOptions $storeOptions,
         LocaleConfig $localeConfig,
         LocaleListsInterface $localeLists,
-        LocaleResolverInterface $localeResolver
+        LocaleResolverInterface $localeResolver,
+        array $unsupportedLocales = []
     ) {
         $this->storeOptions = $storeOptions;
         $this->localeConfig = $localeConfig;
         $this->localeLists = $localeLists;
         $this->localeResolver = $localeResolver;
+        $this->unsupportedLocales = $unsupportedLocales;
     }
 
     /**
@@ -78,7 +86,7 @@ class ListToTranslate implements OptionSourceInterface
                 $locale = $this->localeConfig->getValue((int) $option['value']);
 
                 $option['label'] = sprintf('%s - %s', $option['label'], $this->getLocaleName($locale));
-                $option['disabled'] = $locale === $defaultLocale;
+                $option['disabled'] = $this->isDisabled($locale, $defaultLocale);
             }
         }
 
@@ -100,5 +108,17 @@ class ListToTranslate implements OptionSourceInterface
         }
 
         return '';
+    }
+
+    /**
+     * Is disabled
+     *
+     * @param string $locale
+     * @param string $defaultLocale
+     * @return bool
+     */
+    private function isDisabled(string $locale, string $defaultLocale): bool
+    {
+        return $locale === $defaultLocale || in_array($locale, $this->unsupportedLocales);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Api;
 
 use Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface;
+use Aheadworks\Langshop\Api\Data\Saas\UrlResultInterface;
 
 interface SaasManagementInterface
 {
@@ -14,4 +15,11 @@ interface SaasManagementInterface
      * @return \Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface
      */
     public function saveKey(string $publicKey): ConfirmationResultInterface;
+
+    /**
+     * Get admin Langshop URL
+     *
+     * @return \Aheadworks\Langshop\Api\Data\Saas\UrlResultInterface
+     */
+    public function getLangshopUrl(): UrlResultInterface;
 }

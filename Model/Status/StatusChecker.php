@@ -44,15 +44,40 @@ class StatusChecker
      * Checks if the particular resource is fully translated
      *
      * @param string $resourceType
-     * @param int $resourceId
+     * @param string $resourceId
      * @return bool
      */
-    public function isTranslated(string $resourceType, int $resourceId): bool
+    public function isTranslated(string $resourceType, string $resourceId): bool
+    {
+        return $this->checkResourceStatus($resourceType, $resourceId, StatusInterface::STATUS_TRANSLATED);
+    }
+
+    /**
+     * Checks if the particular resource is fully processing
+     *
+     * @param string $resourceType
+     * @param string $resourceId
+     * @return bool
+     */
+    public function isProcessing(string $resourceType, string $resourceId): bool
+    {
+        return $this->checkResourceStatus($resourceType, $resourceId, StatusInterface::STATUS_PROCESSING);
+    }
+
+    /**
+     * Checks the status of a specific resource
+     *
+     * @param string $resourceType
+     * @param string $resourceId
+     * @param int $status
+     * @return bool
+     */
+    private function checkResourceStatus(string $resourceType, string $resourceId, int $status): bool
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StatusInterface::RESOURCE_TYPE, $resourceType)
             ->addFilter(StatusInterface::RESOURCE_ID, $resourceId)
-            ->addFilter(StatusInterface::STATUS, StatusInterface::STATUS_TRANSLATED)
+            ->addFilter(StatusInterface::STATUS, $status)
             ->create();
 
         $translatedStores = array_map(

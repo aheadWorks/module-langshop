@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Config;
 
+use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 
@@ -17,19 +18,27 @@ class Saas
     private ScopeConfigInterface $scopeConfig;
 
     /**
+     * @var ConfigTypeInterface
+     */
+    private ConfigTypeInterface $configType;
+
+    /**
      * @var WriterInterface
      */
     private WriterInterface $configWriter;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param ConfigTypeInterface $configType
      * @param WriterInterface $configWriter
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
+        ConfigTypeInterface $configType,
         WriterInterface $configWriter
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->configType = $configType;
         $this->configWriter = $configWriter;
     }
 
@@ -57,6 +66,8 @@ class Saas
             self::XML_PATH_GENERAL_SAAS_PUBLIC_KEY,
             $publicKey
         );
+
+        $this->configType->clean();
     }
 
     /**

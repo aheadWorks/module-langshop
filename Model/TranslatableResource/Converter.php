@@ -10,7 +10,7 @@ use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterfaceFacto
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterfaceFactory;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
-use Magento\Framework\Data\Collection\AbstractDb as Collection;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
@@ -90,7 +90,7 @@ class Converter
 
         /** @var AbstractModel $item */
         return $this->resourceFactory->create()
-            ->setResourceId((int) $item->getId())
+            ->setResourceId((string) $item->getId())
             ->setResourceType($resourceType)
             ->setFields($fields);
     }

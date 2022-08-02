@@ -99,6 +99,9 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             $collection = $repository->getList($searchCriteriaBuilder->create(), $params['locale']);
 
             $list = $this->converter->convertCollection($collection, $resourceType);
+        } catch (WebapiException $exception) {
+            $this->logger->error($exception->getMessage());
+            throw $exception;
         } catch (LocalizedException $exception) {
             $this->logger->error($exception->getMessage());
             throw new WebapiException(__($exception->getMessage()), 500, 500);
@@ -110,7 +113,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function getById(string $resourceType, int $resourceId, array $locale = []): TranslatableResourceInterface
+    public function getById(string $resourceType, string $resourceId, array $locale = []): TranslatableResourceInterface
     {
         try {
             $repository = $this->repositoryPool->get($resourceType);
@@ -123,6 +126,9 @@ class TranslatableResource implements TranslatableResourceManagementInterface
             $item = $repository->get($resourceId, $params['locale']);
 
             $resource = $this->converter->convert($item, $resourceType);
+        } catch (WebapiException $exception) {
+            $this->logger->error($exception->getMessage());
+            throw $exception;
         } catch (LocalizedException $exception) {
             $this->logger->error($exception->getMessage());
             throw new WebapiException(__($exception->getMessage()), 500, 500);
@@ -134,7 +140,7 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     /**
      * @inheritDoc
      */
-    public function save(string $resourceType, int $resourceId, array $translations): TranslatableResourceInterface
+    public function save(string $resourceType, string $resourceId, array $translations): TranslatableResourceInterface
     {
         try {
             $repository = $this->repositoryPool->get($resourceType);

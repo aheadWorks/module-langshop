@@ -6,20 +6,24 @@ namespace Aheadworks\Langshop\Model\Entity\Field\Filter;
 class Date implements PreparerInterface
 {
     /**
-     * @inheritDoc
+     * Get prepared condition type
+     *
+     * @param string[] $value
+     * @return string
      */
-    public function getPreparedConditionType($value): string
+    public function getPreparedConditionType(array $value): string
     {
         return 'eq';
     }
 
     /**
-     * @inheritDoc
+     * Get prepared value
      *
-     * @todo: when the frontend is ready, we will need to check the date format
+     * @param string[] $value
+     * @return string
      */
-    public function getPreparedValue($value)
+    public function getPreparedValue(array $value)
     {
-        return $value;
+        return current($value);
     }
 }

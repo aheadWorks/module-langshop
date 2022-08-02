@@ -4,12 +4,21 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\TranslatableResource;
 
 use Aheadworks\Langshop\Api\Data\TranslatableResource\FilterInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
-class Filter extends AbstractModel implements FilterInterface
+class Filter extends DataObject implements FilterInterface
 {
     /**
-     * @inheritDoc
+     * Constants for internal keys
+     */
+    private const FIELD = 'field';
+    private const VALUE = 'value';
+
+    /**
+     * Set field
+     *
+     * @param string $field
+     * @return $this
      */
     public function setField(string $field): FilterInterface
     {
@@ -17,7 +26,9 @@ class Filter extends AbstractModel implements FilterInterface
     }
 
     /**
-     * @inheritDoc
+     * Get field
+     *
+     * @return string
      */
     public function getField(): string
     {
@@ -25,17 +36,22 @@ class Filter extends AbstractModel implements FilterInterface
     }
 
     /**
-     * @inheritDoc
+     * Set value
+     *
+     * @param string[] $value
+     * @return $this
      */
-    public function setValue(string $value): FilterInterface
+    public function setValue(array $value): FilterInterface
     {
         return $this->setData(self::VALUE, $value);
     }
 
     /**
-     * @inheritDoc
+     * Get value
+     *
+     * @return string[]
      */
-    public function getValue(): string
+    public function getValue(): array
     {
         return $this->getData(self::VALUE);
     }

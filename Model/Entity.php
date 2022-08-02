@@ -32,6 +32,11 @@ class Entity
     /**
      * @var string
      */
+    private string $icon;
+
+    /**
+     * @var string
+     */
     private string $viewType;
 
     /**
@@ -44,6 +49,7 @@ class Entity
      * @param string $resourceType
      * @param string $label
      * @param string $description
+     * @param string $icon
      * @param string $viewType
      */
     public function __construct(
@@ -51,12 +57,14 @@ class Entity
         string $resourceType = '',
         string $label = '',
         string $description = '',
+        string $icon = '',
         string $viewType = ''
     ) {
         $this->fieldCollector = $fieldCollector;
         $this->resourceType = $resourceType;
         $this->label = $label;
         $this->description = $description;
+        $this->icon = $icon;
         $this->viewType = $viewType;
     }
 
@@ -88,6 +96,16 @@ class Entity
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon(): string
+    {
+        return $this->icon;
     }
 
     /**

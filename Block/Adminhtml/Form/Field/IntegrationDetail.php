@@ -8,7 +8,6 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field as BaseField;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class IntegrationDetail extends BaseField
 {
@@ -20,16 +19,14 @@ class IntegrationDetail extends BaseField
     /**
      * @param Context $context
      * @param IntegrationService $integrationService
-     * @param SecureHtmlRenderer|null $secureRenderer
      * @param array $data
      */
     public function __construct(
         Context $context,
         IntegrationService $integrationService,
-        SecureHtmlRenderer $secureRenderer = null,
         array $data = []
     ) {
-        parent::__construct($context, $data, $secureRenderer);
+        parent::__construct($context, $data);
         $this->integrationService = $integrationService;
     }
 
