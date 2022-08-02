@@ -909,43 +909,35 @@
                     <item name="label" xsi:type="string">Text Area</item>
                 </item>
                 <item name="300" xsi:type="array">
-                    <item name="value" xsi:type="string">texteditor</item>
-                    <item name="label" xsi:type="string">Text Editor</item>
-                </item>
-                <item name="400" xsi:type="array">
-                    <item name="value" xsi:type="string">pagebuilder</item>
-                    <item name="label" xsi:type="string">Page Builder</item>
-                </item>
-                <item name="500" xsi:type="array">
                     <item name="value" xsi:type="string">date</item>
                     <item name="label" xsi:type="string">Date</item>
                 </item>
-                <item name="450" xsi:type="array">
+                <item name="400" xsi:type="array">
                     <item name="value" xsi:type="string">datetime</item>
                     <item name="label" xsi:type="string">Date and Time</item>
                 </item>
-                <item name="600" xsi:type="array">
+                <item name="500" xsi:type="array">
                     <item name="value" xsi:type="string">boolean</item>
                     <item name="label" xsi:type="string">Yes/No</item>
                 </item>
-                <item name="700" xsi:type="array">
+                <item name="600" xsi:type="array">
                     <item name="value" xsi:type="string">multiselect</item>
                     <item name="label" xsi:type="string">Multiple Select</item>
                 </item>
-                <item name="800" xsi:type="array">
+                <item name="700" xsi:type="array">
                     <item name="value" xsi:type="string">select</item>
                     <item name="label" xsi:type="string">Dropdown</item>
                 </item>
-                <item name="900" xsi:type="array">
+                <item name="800" xsi:type="array">
                     <item name="value" xsi:type="string">price</item>
                     <item name="label" xsi:type="string">Price</item>
                 </item>
-                <item name="1000" xsi:type="array">
+                <item name="900" xsi:type="array">
                     <item name="value" xsi:type="string">media_image</item>
                     <item name="label" xsi:type="string">Media Image</item>
                 </item>
-                <item name="1100" xsi:type="array">
-                    <item name="value" xsi:type="string">wee</item>
+                <item name="1000" xsi:type="array">
+                    <item name="value" xsi:type="string">weee</item>
                     <item name="label" xsi:type="string">Fixed Product Tax</item>
                 </item>
             </argument>
