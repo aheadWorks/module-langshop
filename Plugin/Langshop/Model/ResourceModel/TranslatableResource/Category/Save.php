@@ -22,10 +22,11 @@ class Save
         if ($entityId) {
             $data = $categoryResource->getAttributeRawValue(
                 $entityId,
-                ["url_key", "is_anchor"],
+                ['url_key', 'is_anchor'],
                 $category->getStoreId()
             );
-            if (is_array($data)) {
+
+            if (is_array($data) && $data) {
                 foreach ($data as $key => $value) {
                     $category
                         ->setData($key, $value)
@@ -37,6 +38,7 @@ class Save
                 ]);
             }
         }
+
         return [
             $category
         ];
