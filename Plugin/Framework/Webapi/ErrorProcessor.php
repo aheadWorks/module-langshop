@@ -45,14 +45,34 @@ class ErrorProcessor
         WebapiErrorProcessor $errorProcessor,
         Exception $exception
     ): array {
-        if (str_starts_with(
-            $this->inputParamsResolver->getRoute()->getServiceClass(),
-            'Aheadworks\\Langshop'
-        )) {
-            $exception = new WebapiException(__($exception->getMessage()), 500, 500);
+        if ($this->isOurNamespace()) {
+            if (!$exception instanceof WebapiException) {
+                $exception = new WebapiException(
+                    __($exception->getMessage()),
+                    WebapiException::HTTP_INTERNAL_ERROR,
+                    WebapiException::HTTP_INTERNAL_ERROR
+                );
+            }
+
             $this->logger->error((string) $exception);
         }
 
         return [$exception];
+    }
+
+    /**
+     * Checks if we have to process the incoming exception
+     *
+     * @return bool
+     * @throws WebapiException
+     */
+    private function isOurNamespace(): bool
+    {
+        $namespace = explode('\\', __NAMESPACE__);
+
+        return str_starts_with(
+            $this->inputParamsResolver->getRoute()->getServiceClass(),
+            sprintf('%s\%s', $namespace[0], $namespace[1])
+        );
     }
 }
