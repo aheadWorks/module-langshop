@@ -39,7 +39,11 @@ class Swatch
             ['eaov' => $optionCollection->getTable('eav_attribute_option_swatch')],
             "eaov.option_id = main_table.option_id and eaov.store_id = $storeId",
             ['swatch_id', 'value']
-        );
+        )->joinLeft(
+            ['ceava' => $optionCollection->getTable('catalog_eav_attribute')],
+            "main_table.attribute_id = ceava.attribute_id",
+            []
+        )->where('ceava.additional_data NOT LIKE ?', '%"swatch_input_type":"visual"%');
 
         /** @var AttributeOption[] $swatches */
         $swatches = $optionCollection->getItems();
