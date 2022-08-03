@@ -13,6 +13,7 @@ class Read
      * The model fields to work with
      */
     private const KEY_OPTIONS = 'options';
+    private const KEY_STORE_TITLE = 'store_title';
 
     /**
      * @var OptionProvider
@@ -50,7 +51,7 @@ class Read
 
                 $product->setData(self::KEY_OPTIONS, array_replace(
                     $product->getData(self::KEY_OPTIONS) ?? [],
-                    [$optionId => $option->getTitle()]
+                    [$optionId => $option->getData(self::KEY_STORE_TITLE)]
                 ));
             }
         }
