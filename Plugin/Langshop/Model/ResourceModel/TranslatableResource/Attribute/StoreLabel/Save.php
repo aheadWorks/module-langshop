@@ -52,8 +52,9 @@ class Save
         Attribute $attribute
     ): AttributeResource {
         $storeLabel = $attribute->getData(self::KEY_STORE_LABEL);
+        $storeId = (int) $attribute->getData(self::KEY_STORE_ID);
+
         if ($storeLabel) {
-            $storeId = (int) $attribute->getData(self::KEY_STORE_ID);
             $storeLabelId = array_key_first(
                 $this->storeLabelProvider->get([$attribute->getId()], $storeId)
             );
@@ -66,6 +67,14 @@ class Save
                     'store_id' => $storeId,
                     'value' => $storeLabel
                 ]
+            );
+        } elseif ($storeLabel === false) {
+            $storeLabelId = array_key_first(
+                $this->storeLabelProvider->get([$attribute->getId()], $storeId)
+            );
+            $this->resourceConnection->getConnection()->delete(
+                $this->resourceConnection->getTableName('eav_attribute_label'),
+                'attribute_label_id = ' . $storeLabelId
             );
         }
 

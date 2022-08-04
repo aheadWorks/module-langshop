@@ -91,19 +91,35 @@ class Save
             $existingOptions = $this->optionProvider->get([$attribute->getId()], $storeId);
 
             $toInsert = [];
+            $toDelete= [];
+
             foreach ($options as $optionId => $value) {
-                $toInsert[] = [
-                    'value_id' => $existingOptions[$optionId]->getData('value_id'),
-                    'option_id' => $optionId,
-                    'store_id' => $storeId,
-                    'value' => $value
-                ];
+                if ($value) {
+                    $toInsert[] = [
+                        'value_id' => $existingOptions[$optionId]->getData('value_id'),
+                        'option_id' => $optionId,
+                        'store_id' => $storeId,
+                        'value' => $value
+                    ];
+                } else {
+                    $toDelete[] = $existingOptions[$optionId]->getData('value_id');
+                }
             }
 
-            $this->resourceConnection->getConnection()->insertOnDuplicate(
-                $this->resourceConnection->getTableName('eav_attribute_option_value'),
-                $toInsert
-            );
+            if ($toInsert) {
+                $this->resourceConnection->getConnection()->insertOnDuplicate(
+                    $this->resourceConnection->getTableName('eav_attribute_option_value'),
+                    $toInsert
+                );
+            }
+
+            if ($toDelete) {
+                $toDelete = implode(',', $toDelete);
+                $this->resourceConnection->getConnection()->delete(
+                    $this->resourceConnection->getTableName('eav_attribute_option_value'),
+                    "value_id IN ($toDelete)"
+                );
+            }
         }
 
         return $result;
