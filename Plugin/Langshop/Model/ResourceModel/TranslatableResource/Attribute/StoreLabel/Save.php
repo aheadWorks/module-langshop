@@ -68,7 +68,7 @@ class Save
                     'value' => $storeLabel
                 ]
             );
-        } else {
+        } elseif ($storeLabel === false) {
             $storeLabelId = array_key_first(
                 $this->storeLabelProvider->get([$attribute->getId()], $storeId)
             );
