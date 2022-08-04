@@ -54,7 +54,7 @@ class Translation extends Translate
             }
 
             $value = is_array($value) ? $value : (string) $value;
-            $key = str_replace('""', '"', $key);
+            $key = str_replace('""', '"', (string)$key);
             $value = str_replace('""', '"', $value);
 
             $this->_data[$translationType][$key] = $value;
