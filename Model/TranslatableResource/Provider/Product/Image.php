@@ -57,11 +57,14 @@ class Image
                 'mg.value_id = mgv.value_id AND main.store_id = mgv.store_id',
                 ['label']
             )->where(
-                'eava.attribute_code IN (?)', $this->attributeCodes
+                'eava.attribute_code IN (?)',
+                $this->attributeCodes
             )->where(
-                'mgv.store_id = ?', $storeId
+                'mgv.store_id = ?',
+                $storeId
             )->where(
-                'main.entity_id IN (?)', $productIds
+                'main.entity_id IN (?)',
+                $productIds
             );
 
         return $connection->fetchAssoc($select);
@@ -82,9 +85,11 @@ class Image
             ->from(
                 ['main' => $this->resourceConnection->getTableName('catalog_product_entity_media_gallery_value')]
             )->where(
-                'main.store_id = ?', $storeId
+                'main.store_id = ?',
+                $storeId
             )->where(
-                'main.entity_id IN (?)', $productIds
+                'main.entity_id IN (?)',
+                $productIds
             );
 
         return $connection->fetchAssoc($select);

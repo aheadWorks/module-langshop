@@ -8,6 +8,9 @@ use Magento\Catalog\Model\Product;
 
 class Read
 {
+    /**
+     * @var ProductImageProvider
+     */
     private ProductImageProvider $imageProvider;
 
     /**
