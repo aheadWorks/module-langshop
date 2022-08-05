@@ -216,7 +216,7 @@ class Collection extends DataCollection implements CollectionInterface
         $result = [];
         foreach ($csvData as $data) {
             $originalString = $data[CsvFile::ORIGINAL_INDEX];
-            if (count_chars($originalString) < 256) {
+            if (strlen($originalString) < 256) {
                 $result[] = $originalString;
             }
         }
