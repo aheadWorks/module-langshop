@@ -5,7 +5,6 @@ namespace Aheadworks\Langshop\Model\Service;
 use Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface;
 use Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterfaceFactory;
 use Aheadworks\Langshop\Api\NotificationManagementInterface;
-use Aheadworks\Langshop\Model\Status\StatusChecker;
 use Magento\AdminNotification\Model\Inbox;
 
 class Notification implements NotificationManagementInterface
@@ -16,27 +15,19 @@ class Notification implements NotificationManagementInterface
     private ConfirmationResultInterfaceFactory $resultFactory;
 
     /**
-     * @var StatusChecker
-     */
-    private StatusChecker $statusChecker;
-
-    /**
      * @var Inbox
      */
     private Inbox $notificationService;
 
     /**
      * @param ConfirmationResultInterfaceFactory $resultFactory
-     * @param StatusChecker $statusChecker
      * @param Inbox $notificationService
      */
     public function __construct(
         ConfirmationResultInterfaceFactory $resultFactory,
-        StatusChecker $statusChecker,
         Inbox $notificationService
     ) {
         $this->resultFactory = $resultFactory;
-        $this->statusChecker = $statusChecker;
         $this->notificationService = $notificationService;
     }
 
@@ -56,7 +47,7 @@ class Notification implements NotificationManagementInterface
         string $errorMessage = ''
     ): ConfirmationResultInterface {
         $isSuccess = false;
-        if ($status === 1 && $this->statusChecker->isTranslated($resourceType, $resourceId)) {
+        if ($status === 1) {
             $this->notificationService->addNotice(
                 __("Translation successfully completed")->render(),
                 __(
