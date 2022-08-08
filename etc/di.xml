@@ -497,6 +497,7 @@
                 <item name="type_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\TypeId</item>
                 <item name="options" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\Options</item>
                 <item name="options_values" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\OptionsValues</item>
+                <item name="image_labels" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product\Field\ImageLabels</item>
             </argument>
         </arguments>
     </virtualType>
@@ -626,6 +627,19 @@
             <argument name="type" xsi:type="string">array</argument>
             <argument name="isTranslatable" xsi:type="boolean">true</argument>
             <argument name="sortOrder" xsi:type="number">80</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Product\Field\ImageLabels"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">image_labels</argument>
+            <argument name="label" xsi:type="string">Image Labels</argument>
+            <argument name="type" xsi:type="string">array</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">90</argument>
             <argument name="visibleOn" xsi:type="array">
                 <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
             </argument>
