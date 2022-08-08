@@ -25,6 +25,15 @@ interface StatusManagementInterface
     public function save(StatusInterface $status): void;
 
     /**
+     * Mass save
+     *
+     * @param \Aheadworks\Langshop\Api\Data\StatusInterface[] $statuses
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function massSave(array $statuses): void;
+
+    /**
      * Deletes the status
      *
      * @param \Aheadworks\Langshop\Api\Data\StatusInterface $status
