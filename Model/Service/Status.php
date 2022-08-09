@@ -10,6 +10,7 @@ use Aheadworks\Langshop\Model\ResourceModel\StatusFactory as StatusResourceFacto
 use Aheadworks\Langshop\Model\Status as StatusModel;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class Status implements StatusManagementInterface
 {
@@ -64,6 +65,24 @@ class Status implements StatusManagementInterface
     {
         /** @var StatusModel $status */
         $this->statusResourceFactory->create()->save($status);
+    }
+
+    /**
+     * Mass save
+     *
+     * @param StatusModel[] $statuses
+     * @return void
+     * @throws LocalizedException
+     */
+    public function massSave(array $statuses): void
+    {
+        $data = [];
+
+        foreach ($statuses as $status) {
+            $data[] = $status->getData();
+        }
+
+        $this->statusResourceFactory->create()->massSave($data);
     }
 
     /**
