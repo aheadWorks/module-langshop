@@ -518,6 +518,9 @@
                 <item name="use_config_email_template" xsi:type="string">use_config_email_template</item>
                 <item name="allow_message" xsi:type="string">allow_message</item>
                 <item name="use_config_allow_message" xsi:type="string">use_config_allow_message</item>
+                <item name="image_label" xsi:type="string">image_label</item>
+                <item name="small_image_label" xsi:type="string">small_image_label</item>
+                <item name="thumbnail_label" xsi:type="string">thumbnail_label</item>
             </argument>
         </arguments>
     </virtualType>
