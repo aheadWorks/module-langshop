@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:DataObject/etc/fieldset.xsd">
+    <scope id="global">
+        <fieldset id="aw_ls_convert_scope_record">
+            <field name="locale_code">
+                <aspect name="to_locale" targetField="locale"/>
+            </field>
+            <field name="is_primary">
+                <aspect name="to_locale" targetField="primary"/>
+            </field>
+        </fieldset>
+    </scope>
+</config>

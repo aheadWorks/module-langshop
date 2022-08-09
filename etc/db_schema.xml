@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="aw_ls_status" resource="default" engine="innodb" comment="Langshop Translate Status">
+        <column xsi:type="int" name="status_id" unsigned="true" identity="true"/>
+        <column xsi:type="varchar" name="resource_type" nullable="false"/>
+        <column xsi:type="int" name="resource_id" unsigned="true" nullable="false"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" default="0"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="status_id"/>
+        </constraint>
+        <constraint xsi:type="foreign"
+                    referenceId="AW_LS_STATUS_STORE_ID_STORE_STORE_ID"
+                    table="aw_ls_status"
+                    column="store_id"
+                    referenceTable="store"
+                    referenceColumn="store_id"/>
+    </table>
+</schema>

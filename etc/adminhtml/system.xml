@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="aheadworks" translate="label" sortOrder="200">
+            <label>Aheadworks Extensions</label>
+        </tab>
+        <section id="aw_ls"
+                 translate="label"
+                 type="text"
+                 sortOrder="10"
+                 showInDefault="1"
+                 showInWebsite="1"
+                 showInStore="1">
+            <label>Langshop</label>
+            <tab>aheadworks</tab>
+            <resource>Aheadworks_Langshop::langshop</resource>
+            <group id="general"
+                   translate="label"
+                   type="text"
+                   sortOrder="10"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>General Settings</label>
+                <field id="scope_list_to_translate"
+                       translate="label comment"
+                       type="multiselect"
+                       sortOrder="10"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Store views to translate</label>
+                    <source_model>Aheadworks\Langshop\Model\Source\ListToTranslate</source_model>
+                    <comment>Some of store views are not available for select, as they have default locale</comment>
+                </field>
+                <field id="saas_domain"
+                       translate="label"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Application Domain</label>
+                </field>
+                <field id="saas_public_key"
+                       translate="label"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Application Public Key</label>
+                </field>
+            </group>
+            <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
+                <label>Integration details</label>
+                <field id="token" translate="label comment" type="text" sortOrder="30" showInDefault="1">
+                    <label>Magento Access Token</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\IntegrationDetail</frontend_model>
+                    <comment>The token is being used for access to your Magento stores</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
