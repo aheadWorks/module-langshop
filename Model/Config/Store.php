@@ -7,7 +7,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Store
 {
-    private const XML_PATH_WEB_BASE_URL = 'web/secure/base_url';
+    private const XML_PATH_WEB_BASE_UNSECURE_URL = 'web/unsecure/base_url';
+    private const XML_PATH_WEB_BASE_SECURE_URL = 'web/secure/base_url';
 
     /**
      * @var ScopeConfigInterface
@@ -30,8 +31,16 @@ class Store
      */
     public function getDefaultBaseUrl(): ?string
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_WEB_BASE_URL
+        $url = $this->scopeConfig->getValue(
+            self::XML_PATH_WEB_BASE_SECURE_URL
         );
+
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            $url = $this->scopeConfig->getValue(
+                self::XML_PATH_WEB_BASE_UNSECURE_URL
+            );
+        }
+
+        return $url;
     }
 }
