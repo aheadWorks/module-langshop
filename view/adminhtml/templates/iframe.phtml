@@ -4,11 +4,10 @@
  *
  * @var \Magento\Backend\Block\Template $block
  * @var \Aheadworks\Langshop\ViewModel\Page\Iframe $viewModel
- * @var \Magento\Framework\Escaper $escaper
  */
 $viewModel = $block->getViewModel();
 ?>
-<iframe src="<?= $escaper->escapeUrl($viewModel->getSourceUrl()) ?>"
+<iframe src="<?= $block->escapeUrl($viewModel->getSourceUrl()) ?>"
         width="100%"
         height="1000px"
         frameborder="0"
