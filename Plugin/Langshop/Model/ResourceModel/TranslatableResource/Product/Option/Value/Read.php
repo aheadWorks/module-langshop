@@ -6,13 +6,15 @@ namespace Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableRe
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\Collection as ProductCollection;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\Product\Option as OptionProvider;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Value as OptionValue;
 
 class Read
 {
     /**
      * The model fields to work with
      */
-    private const KEY_OPTIONS = 'options_values';
+    private const KEY_OPTIONS_VALUES = 'options_values';
+    private const KEY_STORE_TITLE = 'store_title';
 
     /**
      * @var OptionProvider
@@ -29,7 +31,7 @@ class Read
     }
 
     /**
-     * Retrieves options for the products
+     * Retrieves option values for the products
      *
      * @param ProductCollection $productCollection
      * @param Product[] $products
@@ -45,18 +47,21 @@ class Read
                 $productCollection->getStoreId()
             );
 
-            foreach ($options as $optionId => $option) {
+            foreach ($options as $option) {
                 $product = $products[$option->getProductId()];
-                $optionsValues = [];
-                $values = $option->getValues();
 
-                if (is_array($values)) {
-                    foreach ($values as $value) {
-                        $optionsValues[$value->getOptionTypeId()] = $value->getTitle();
+                if ($option->getValues()) {
+                    $optionValues = [];
+
+                    /** @var OptionValue $optionValue */
+                    foreach ($option->getValues() as $optionValue) {
+                        $optionValues[$optionValue->getOptionTypeId()] =
+                            $optionValue->getData(self::KEY_STORE_TITLE);
                     }
-                    $product->setData(self::KEY_OPTIONS, array_replace(
-                        $product->getData(self::KEY_OPTIONS) ?? [],
-                        $optionsValues
+
+                    $product->setData(self::KEY_OPTIONS_VALUES, array_replace(
+                        $product->getData(self::KEY_OPTIONS_VALUES) ?? [],
+                        $optionValues
                     ));
                 }
             }
