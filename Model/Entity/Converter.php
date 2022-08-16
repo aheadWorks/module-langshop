@@ -44,16 +44,14 @@ class Converter
     {
         $fieldsElements = $this->fieldConverter->convert($entity->getFields());
 
-        return $this->resourceFactory->create(['data' => [
-                ResourceInterface::RESOURCE => $entity->getResourceType(),
-                ResourceInterface::LABEL => $entity->getLabel(),
-                ResourceInterface::DESCRIPTION => $entity->getDescription(),
-                ResourceInterface::ICON => $entity->getIcon(),
-                ResourceInterface::VIEW_TYPE => $entity->getViewType(),
-                ResourceInterface::FIELDS => $fieldsElements[ResourceInterface::FIELDS],
-                ResourceInterface::SORTING => $fieldsElements[ResourceInterface::SORTING]
-            ]
-        ]);
+        return $this->resourceFactory->create()
+            ->setResource($entity->getResourceType())
+            ->setLabel($entity->getLabel())
+            ->setDescription($entity->getDescription())
+            ->setIcon($entity->getIcon())
+            ->setViewType($entity->getViewType())
+            ->setFields($fieldsElements[ResourceInterface::FIELDS])
+            ->setSorting($fieldsElements[ResourceInterface::SORTING]);
     }
 
     /**
