@@ -48,10 +48,12 @@ class ImageLabel
 
         $select = $connection->select()
             ->from(
-                ['value_to_entity' => $connection->getTableName(ProductGallery::GALLERY_VALUE_TO_ENTITY_TABLE)]
+                ['value_to_entity' => $this->resourceConnection->getTableName(
+                    ProductGallery::GALLERY_VALUE_TO_ENTITY_TABLE)
+                ]
             )
             ->joinLeft(
-                ['value' => $connection->getTableName(ProductGallery::GALLERY_VALUE_TABLE)],
+                ['value' => $this->resourceConnection->getTableName(ProductGallery::GALLERY_VALUE_TABLE)],
                 sprintf('value_to_entity.value_id = value.value_id AND value.store_id = %s', $storeId),
                 ['label', 'record_id']
             )
