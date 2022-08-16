@@ -49,8 +49,8 @@ class ImageLabel
         $select = $connection->select()
             ->from(
                 ['value_to_entity' => $this->resourceConnection->getTableName(
-                    ProductGallery::GALLERY_VALUE_TO_ENTITY_TABLE)
-                ]
+                    ProductGallery::GALLERY_VALUE_TO_ENTITY_TABLE
+                )]
             )
             ->joinLeft(
                 ['value' => $this->resourceConnection->getTableName(ProductGallery::GALLERY_VALUE_TABLE)],
