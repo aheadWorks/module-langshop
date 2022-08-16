@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Entity;
 
+use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterfaceFactory;
 use Aheadworks\Langshop\Model\Entity;
 use Aheadworks\Langshop\Model\Entity\Field\Converter as FieldConverter;
+use Aheadworks\Langshop\Model\Locale\LoadHandler as LocaleLoadHandler;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Magento\Framework\Exception\LocalizedException;
 
 class Converter
@@ -17,19 +20,35 @@ class Converter
     private FieldConverter $fieldConverter;
 
     /**
+     * @var LocaleLoadHandler
+     */
+    private LocaleLoadHandler $localeLoadHandler;
+
+    /**
+     * @var ScopeRecordRepository
+     */
+    private ScopeRecordRepository $scopeRecordRepository;
+
+    /**
      * @var ResourceInterfaceFactory
      */
     private ResourceInterfaceFactory $resourceFactory;
 
     /**
      * @param FieldConverter $fieldConverter
+     * @param LocaleLoadHandler $localeLoadHandler
+     * @param ScopeRecordRepository $scopeRecordRepository
      * @param ResourceInterfaceFactory $resourceFactory
      */
     public function __construct(
         FieldConverter $fieldConverter,
+        LocaleLoadHandler $localeLoadHandler,
+        ScopeRecordRepository $scopeRecordRepository,
         ResourceInterfaceFactory $resourceFactory
     ) {
         $this->fieldConverter = $fieldConverter;
+        $this->localeLoadHandler = $localeLoadHandler;
+        $this->scopeRecordRepository = $scopeRecordRepository;
         $this->resourceFactory = $resourceFactory;
     }
 
@@ -50,6 +69,7 @@ class Converter
             ->setDescription($entity->getDescription())
             ->setIcon($entity->getIcon())
             ->setViewType($entity->getViewType())
+            ->setDefaultLocale($this->getDefaultLocale($entity))
             ->setFields($fieldsElements[ResourceInterface::FIELDS])
             ->setSorting($fieldsElements[ResourceInterface::SORTING]);
     }
@@ -69,5 +89,25 @@ class Converter
         }
 
         return $resources;
+    }
+
+    /**
+     * Retrieves default locale from entity
+     *
+     * @param Entity $entity
+     * @return LocaleInterface|null
+     * @throws LocalizedException
+     */
+    private function getDefaultLocale(Entity $entity): ?LocaleInterface
+    {
+        if ($entity->getDefaultLocale()) {
+            $defaultLocale = $this->scopeRecordRepository->getPrimary(
+                $entity->getDefaultLocale()
+            );
+
+            return $this->localeLoadHandler->load($defaultLocale);
+        }
+
+        return null;
     }
 }
