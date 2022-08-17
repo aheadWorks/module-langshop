@@ -8,6 +8,8 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Status extends AbstractDb
 {
+    public const TABLE_NAME = 'aw_ls_status';
+
     /**
      * Resource initialization
      *
@@ -15,7 +17,7 @@ class Status extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('aw_ls_status', 'status_id');
+        $this->_init(self::TABLE_NAME, 'status_id');
     }
 
     /**
