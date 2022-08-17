@@ -28,7 +28,7 @@ class Index extends Action implements HttpGetActionInterface
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
         $resultPage
-            ->setActiveMenu('Aheadworks_Sarp::subscriptions')
+            ->setActiveMenu('Aheadworks_Langshop::langshop')
             ->getConfig()->getTitle()->prepend((string) __('Langshop'));
 
         return $resultPage;
