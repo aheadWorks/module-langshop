@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Entity;
 
+use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterfaceFactory;
 use Aheadworks\Langshop\Model\Entity;
 use Aheadworks\Langshop\Model\Entity\Field\Converter as FieldConverter;
+use Aheadworks\Langshop\Model\Locale\LoadHandler as LocaleLoadHandler;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Magento\Framework\Exception\LocalizedException;
 
 class Converter
@@ -17,19 +20,35 @@ class Converter
     private FieldConverter $fieldConverter;
 
     /**
+     * @var LocaleLoadHandler
+     */
+    private LocaleLoadHandler $localeLoadHandler;
+
+    /**
+     * @var ScopeRecordRepository
+     */
+    private ScopeRecordRepository $scopeRecordRepository;
+
+    /**
      * @var ResourceInterfaceFactory
      */
     private ResourceInterfaceFactory $resourceFactory;
 
     /**
      * @param FieldConverter $fieldConverter
+     * @param LocaleLoadHandler $localeLoadHandler
+     * @param ScopeRecordRepository $scopeRecordRepository
      * @param ResourceInterfaceFactory $resourceFactory
      */
     public function __construct(
         FieldConverter $fieldConverter,
+        LocaleLoadHandler $localeLoadHandler,
+        ScopeRecordRepository $scopeRecordRepository,
         ResourceInterfaceFactory $resourceFactory
     ) {
         $this->fieldConverter = $fieldConverter;
+        $this->localeLoadHandler = $localeLoadHandler;
+        $this->scopeRecordRepository = $scopeRecordRepository;
         $this->resourceFactory = $resourceFactory;
     }
 
@@ -44,16 +63,15 @@ class Converter
     {
         $fieldsElements = $this->fieldConverter->convert($entity->getFields());
 
-        return $this->resourceFactory->create(['data' => [
-                ResourceInterface::RESOURCE => $entity->getResourceType(),
-                ResourceInterface::LABEL => $entity->getLabel(),
-                ResourceInterface::DESCRIPTION => $entity->getDescription(),
-                ResourceInterface::ICON => $entity->getIcon(),
-                ResourceInterface::VIEW_TYPE => $entity->getViewType(),
-                ResourceInterface::FIELDS => $fieldsElements[ResourceInterface::FIELDS],
-                ResourceInterface::SORTING => $fieldsElements[ResourceInterface::SORTING]
-            ]
-        ]);
+        return $this->resourceFactory->create()
+            ->setResource($entity->getResourceType())
+            ->setLabel($entity->getLabel())
+            ->setDescription($entity->getDescription())
+            ->setIcon($entity->getIcon())
+            ->setViewType($entity->getViewType())
+            ->setDefaultLocale($this->getDefaultLocale($entity))
+            ->setFields($fieldsElements[ResourceInterface::FIELDS])
+            ->setSorting($fieldsElements[ResourceInterface::SORTING]);
     }
 
     /**
@@ -71,5 +89,25 @@ class Converter
         }
 
         return $resources;
+    }
+
+    /**
+     * Retrieves default locale from entity
+     *
+     * @param Entity $entity
+     * @return LocaleInterface|null
+     * @throws LocalizedException
+     */
+    private function getDefaultLocale(Entity $entity): ?LocaleInterface
+    {
+        if ($entity->getDefaultLocale()) {
+            $defaultLocale = $this->scopeRecordRepository->getPrimary(
+                $entity->getDefaultLocale()
+            );
+
+            return $this->localeLoadHandler->load($defaultLocale);
+        }
+
+        return null;
     }
 }

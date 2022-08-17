@@ -126,12 +126,13 @@ class Repository
     /**
      * Retrieves primary locale scope
      *
+     * @param string|null $replaceLocale
      * @return RecordInterface
      */
-    public function getPrimary(): RecordInterface
+    public function getPrimary(string $replaceLocale = null): RecordInterface
     {
         $localeCode = $this->localeCodeConverter->toLangshop(
-            $this->localeResolver->getDefaultLocale()
+            $replaceLocale ?? $this->localeResolver->getDefaultLocale()
         );
 
         return $this->localeScopeFactory->create()

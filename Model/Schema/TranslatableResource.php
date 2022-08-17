@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\Schema;
 
+use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Api\Data\Schema\ResourceInterface;
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface;
 use Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface;
@@ -95,6 +96,48 @@ class TranslatableResource extends DataObject implements ResourceInterface
     }
 
     /**
+     * Set view type
+     *
+     * @param string $viewType
+     * @return $this
+     */
+    public function setViewType(string $viewType): ResourceInterface
+    {
+        return $this->setData(self::VIEW_TYPE, $viewType);
+    }
+
+    /**
+     * Get view type
+     *
+     * @return string
+     */
+    public function getViewType(): string
+    {
+        return $this->getData(self::VIEW_TYPE);
+    }
+
+    /**
+     * Set default locale
+     *
+     * @param LocaleInterface|null $defaultLocale
+     * @return ResourceInterface
+     */
+    public function setDefaultLocale(?LocaleInterface $defaultLocale): ResourceInterface
+    {
+        return $this->setData(self::DEFAULT_LOCALE, $defaultLocale);
+    }
+
+    /**
+     * Get default locale
+     *
+     * @return LocaleInterface|null
+     */
+    public function getDefaultLocale(): ?LocaleInterface
+    {
+        return $this->getData(self::DEFAULT_LOCALE);
+    }
+
+    /**
      * Set fields
      *
      * @param FieldInterface[] $fields
@@ -134,26 +177,5 @@ class TranslatableResource extends DataObject implements ResourceInterface
     public function getSorting(): array
     {
         return $this->getData(self::SORTING);
-    }
-
-    /**
-     * Set view type
-     *
-     * @param string $viewType
-     * @return $this
-     */
-    public function setViewType(string $viewType): ResourceInterface
-    {
-        return $this->setData(self::VIEW_TYPE, $viewType);
-    }
-
-    /**
-     * Get view type
-     *
-     * @return string
-     */
-    public function getViewType(): string
-    {
-        return $this->getData(self::VIEW_TYPE);
     }
 }
