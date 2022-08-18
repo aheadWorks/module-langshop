@@ -1,6 +1,7 @@
 Translate,Translate
 "Processing %1 translation.","Processing %1 translation."
 Langshop,Langshop
+"Select locales that require translation in the <a href=""%url"">configuration</a>.","Select locales that require translation in the <a href=""%url"">configuration</a>."
 "Data processor must implement %1","Data processor must implement %1"
 "Sorting ""%1"" is not correct.","Sorting ""%1"" is not correct."
 "Field collector must implement %1","Field collector must implement %1"
