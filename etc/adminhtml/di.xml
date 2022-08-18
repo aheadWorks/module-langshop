@@ -37,4 +37,19 @@
     <type name="Magento\Framework\Data\Form\Element\Multiselect">
         <plugin name="aw_ls_disable_options" type="Aheadworks\Langshop\Plugin\Framework\Data\Form\Element\Multiselect" />
     </type>
+
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="aw_ls_admin_message" xsi:type="array">
+                    <item name="renderer" xsi:type="const">
+                        Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE
+                    </item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Aheadworks_Langshop::message.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
