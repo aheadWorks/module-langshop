@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="store_save_after">
+        <observer name="aw_ls_add_store_view_message" instance="Aheadworks\Langshop\Observer\AddStoreViewMessage"/>
+    </event>
+</config>
