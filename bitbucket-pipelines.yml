@@ -66,20 +66,20 @@ definitions:
         name: Validate marketplace package on Magento 2.3.7
         image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
         script:
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
     - step: &validatePackage-2.4.5
         name: Validate marketplace package on Magento 2.4.5
         image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
     - step: &eqpTest-2.3.7
         name: EQP tests on Magento 2.3.7
         image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
         script:
           - mkdir -p test-results/eqp
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager eqp ${PWD} > test-results/eqp/test-EQP-2.3.7.xml
         artifacts:
           - "test-results/**"
@@ -88,7 +88,7 @@ definitions:
         image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
           - mkdir -p test-results/eqp
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager eqp ${PWD} > test-results/eqp/test-EQP.xml
         artifacts:
           - "test-results/**"
@@ -103,7 +103,7 @@ definitions:
           - OLD=${PWD} && cd /var/www/html && composer config --unset repositories.0 && cd $OLD
           - OLD=${PWD} && cd /var/www/html && composer -n --no-update require php "~7.4.0||~8.1.0" && cd $OLD
           - composer -n --no-update require php "~7.4.0||~8.1.0"
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager static ${PWD} test-results/static-2.3.7-p3
         artifacts:
           - "test-results/**"
@@ -118,7 +118,7 @@ definitions:
           - echo 'lib/internal/GnuFreeFont/' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
           - echo 'lib/web/fonts/opensans/semibold/opensans-600.woff2' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
           - echo 'lib/web/fonts/opensans/regular/opensans-400.woff2' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager static ${PWD} test-results/static
         artifacts:
           - "test-results/**"
@@ -127,7 +127,7 @@ definitions:
         image: aheadworks/m2test-new:2.3.7-p3-with-dump-7.4
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.3.7.xml
         artifacts:
           - "test-results/**"
@@ -136,7 +136,7 @@ definitions:
         image: aheadworks/m2test-new:2.4.5-with-dump-8.1
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit.xml
         artifacts:
           - "test-results/**"
@@ -145,7 +145,7 @@ definitions:
         image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
@@ -155,7 +155,7 @@ definitions:
         image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
@@ -198,7 +198,7 @@ definitions:
         name: Ecommerce build
         image: aheadworks/deploy-tools:new-gen
         script:
-            - pip3 install aheadworks-deploy-manager
+            - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
             - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
             - python3 -m aheadworks_release_manager jira-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGN_TO}"
@@ -208,9 +208,9 @@ definitions:
         name: Building Web Api Documentation
         image: aheadworks/deploy-tools:latest
         services:
-          - m24-74
+          - m24-81
         script:
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
     - step: &deployPipelines
         name: Deploy pipelines
@@ -228,8 +228,8 @@ definitions:
           - key
           - env
   services:
-    m24-74:
-      image: aheadworks/m2test-new:2.4.5-with-dump-8.1
+    m24-81:
+      image: aheadworks/m2test-new:2.4.4-with-dump-8.1
 pipelines:
   tags:
     '*.*.*':
@@ -265,6 +265,7 @@ pipelines:
           - step: *installMagento-2.4.5
       - step: *deployToDevComposer
     feature/*:
+      - parallel:
         - step: *eqpTest-2.3.7
         - step: *eqpTest-2.4.5
         - step: *staticTest-2.3.7
@@ -272,6 +273,7 @@ pipelines:
         - step: *unitTestPHP74
         - step: *installMagento-2.4.5
     bugfix/*:
+      - parallel:
         - step: *eqpTest-2.3.7
         - step: *eqpTest-2.4.5
         - step: *staticTest-2.3.7
@@ -350,8 +352,9 @@ pipelines:
     static-test-with-select-severity:
       - variables:
           - name: SEVERITY
-      - step: *staticTest-2.3.7
-      - step: *staticTest-2.4.5
+      - parallel:
+        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.5
 
 
     # copy this file to all modules
