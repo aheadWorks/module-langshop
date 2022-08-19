@@ -200,6 +200,7 @@ definitions:
         script:
             - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
+            - python3 -m aheadworks_release_manager build-mm-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
             - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
             - python3 -m aheadworks_release_manager jira-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGN_TO}"
         artifacts:
@@ -238,8 +239,9 @@ pipelines:
     # For commits to master branch: run full set of tests
     master:
       - step: *build
-      - step: *validatePackage-2.3.7
-      - step: *validatePackage-2.4.5
+      - parallel:
+          - step: *validatePackage-2.3.7
+          - step: *validatePackage-2.4.5
       - parallel:
           - step: *eqpTest-2.3.7
           - step: *eqpTest-2.4.5
