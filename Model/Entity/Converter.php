@@ -102,7 +102,7 @@ class Converter
     {
         if ($entity->getDefaultLocale()) {
             $defaultLocale = $this->scopeRecordRepository->getPrimary(
-                $entity->getDefaultLocale()
+                $entity->getResourceType()
             );
 
             return $this->localeLoadHandler->load($defaultLocale);
