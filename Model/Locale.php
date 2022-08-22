@@ -9,6 +9,16 @@ use Magento\Framework\DataObject;
 class Locale extends DataObject implements LocaleInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const LOCALE = 'locale';
+    private const NAME = 'name';
+    private const PRIMARY = 'primary';
+    private const PUBLISHED = 'published';
+    private const URL = 'url';
+    private const PREVIEW_URL = 'preview_url';
+
+    /**
      * @inheritdoc
      */
     public function setLocale($locale)

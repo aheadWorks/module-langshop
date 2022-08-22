@@ -9,6 +9,12 @@ use Magento\Framework\DataObject;
 class Field extends DataObject implements FieldInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const KEY = 'key';
+    private const VALUE = 'value';
+
+    /**
      * @inheritDoc
      */
     public function getKey(): ?string

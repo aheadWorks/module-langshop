@@ -9,6 +9,14 @@ use Magento\Framework\DataObject;
 class TranslatableResourceGroup extends DataObject implements ResourceGroupInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const ID = 'id';
+    private const TITLE = 'title';
+    private const SORT_ORDER = 'sortOrder';
+    private const RESOURCES = 'resources';
+
+    /**
      * @inheritDoc
      */
     public function setId($id)

@@ -9,6 +9,14 @@ use Magento\Framework\DataObject;
 class Schema extends DataObject implements SchemaInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const VERSION = 'version';
+    private const TRANSLATABLE_RESOURCES = 'translatableResources';
+    private const POSSIBILITIES = 'possibilities';
+    private const TRANSLATABLE_RESOURCE_GROUPS = 'translatableResourceGroups';
+
+    /**
      * @inheritDoc
      */
     public function setVersion($version)

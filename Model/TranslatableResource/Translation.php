@@ -9,6 +9,13 @@ use Magento\Framework\DataObject;
 class Translation extends DataObject implements TranslationInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const LOCALE = 'locale';
+    private const KEY = 'key';
+    private const VALUE = 'value';
+
+    /**
      * @inheritDoc
      */
     public function setLocale($locale)

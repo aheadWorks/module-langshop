@@ -10,6 +10,12 @@ use Magento\Framework\DataObject;
 class ResourceList extends DataObject implements ResourceListInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const ITEMS = 'data';
+    private const PAGINATION = 'pagination';
+
+    /**
      * @inheritDoc
      */
     public function getItems(): ?array

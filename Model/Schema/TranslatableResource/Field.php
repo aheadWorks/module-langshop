@@ -10,6 +10,19 @@ use Magento\Framework\DataObject;
 class Field extends DataObject implements FieldInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const KEY = 'key';
+    private const LABEL = 'label';
+    private const TYPE = 'type';
+    private const IS_TRANSLATABLE = 'isTranslatable';
+    private const IS_TITLE = 'is_title';
+    private const FILTER = 'filter';
+    private const FILTER_OPTIONS = 'filter_options';
+    private const SORT_ORDER = 'sortOrder';
+    private const VISIBLE_ON = 'visible_on';
+
+    /**
      * Set key
      *
      * @param string $key

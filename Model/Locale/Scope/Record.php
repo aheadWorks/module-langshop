@@ -9,6 +9,14 @@ use Magento\Framework\DataObject;
 class Record extends DataObject implements RecordInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const SCOPE_ID = 'scope_id';
+    private const SCOPE_TYPE = 'scope_type';
+    private const LOCALE_CODE = 'locale_code';
+    private const IS_PRIMARY = 'is_primary';
+
+    /**
      * @inheritdoc
      */
     public function getScopeId()

@@ -9,6 +9,13 @@ use Magento\Framework\DataObject;
 class TranslatableResource extends DataObject implements TranslatableResourceInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const RESOURCE_ID = 'resourceId';
+    private const RESOURCE_TYPE = 'resourceType';
+    private const FIELDS = 'fields';
+
+    /**
      * @inheritDoc
      */
     public function getResourceId(): ?string

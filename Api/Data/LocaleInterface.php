@@ -3,13 +3,6 @@ namespace Aheadworks\Langshop\Api\Data;
 
 interface LocaleInterface
 {
-    public const LOCALE = 'locale';
-    public const NAME = 'name';
-    public const PRIMARY = 'primary';
-    public const PUBLISHED = 'published';
-    public const URL = 'url';
-    public const PREVIEW_URL = 'preview_url';
-
     /**
      * Get locale
      *

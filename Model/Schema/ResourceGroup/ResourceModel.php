@@ -9,6 +9,12 @@ use Magento\Framework\DataObject;
 class ResourceModel extends DataObject implements ResourceInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const RESOURCE = 'resource';
+    private const SORT_ORDER = 'sort_order';
+
+    /**
      * Set resource
      *
      * @param string $resource

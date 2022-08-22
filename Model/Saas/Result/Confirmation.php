@@ -9,6 +9,11 @@ use Magento\Framework\DataObject;
 class Confirmation extends DataObject implements ConfirmationResultInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const SUCCESS = 'success';
+
+    /**
      * @inheritDoc
      */
     public function setSuccess(bool $success): ConfirmationResultInterface

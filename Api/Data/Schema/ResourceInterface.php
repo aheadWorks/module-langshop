@@ -7,6 +7,9 @@ use Aheadworks\Langshop\Api\Data\LocaleInterface;
 
 interface ResourceInterface
 {
+    /**
+     * Constants for internal keys
+     */
     public const RESOURCE = 'resource';
     public const LABEL = 'label';
     public const DESCRIPTION = 'description';

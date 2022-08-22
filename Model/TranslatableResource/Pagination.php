@@ -9,6 +9,14 @@ use Magento\Framework\DataObject;
 class Pagination extends DataObject implements PaginationInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const PAGE = 'page';
+    private const PAGE_SIZE = 'pageSize';
+    private const TOTAL_PAGES = 'totalPages';
+    private const TOTAL_ITEMS = 'totalItems';
+
+    /**
      * @inheritDoc
      */
     public function setPage(int $page)
