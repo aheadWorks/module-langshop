@@ -6,13 +6,6 @@ namespace Aheadworks\Langshop\Api\Data;
 interface TranslatableResourceInterface
 {
     /**
-     * Constants for internal keys
-     */
-    public const RESOURCE_ID = 'resourceId';
-    public const RESOURCE_TYPE = 'resourceType';
-    public const FIELDS = 'fields';
-
-    /**
      * Get resource id
      *
      * @return string|null

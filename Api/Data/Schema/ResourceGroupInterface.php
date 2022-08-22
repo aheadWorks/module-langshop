@@ -3,11 +3,6 @@ namespace Aheadworks\Langshop\Api\Data\Schema;
 
 interface ResourceGroupInterface
 {
-    public const ID = 'id';
-    public const TITLE = 'title';
-    public const SORT_ORDER = 'sortOrder';
-    public const RESOURCES = 'resources';
-
     /**
      * Set id
      *

@@ -20,7 +20,10 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Set status id
+     *
+     * @param int $statusId
+     * @return $this
      */
     public function setStatusId(int $statusId): StatusInterface
     {
@@ -28,7 +31,9 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Get status id
+     *
+     * @return int
      */
     public function getStatusId(): int
     {
@@ -36,7 +41,10 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Set resource type
+     *
+     * @param string $resourceType
+     * @return $this
      */
     public function setResourceType(string $resourceType): StatusInterface
     {
@@ -44,7 +52,9 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Get resource type
+     *
+     * @return string
      */
     public function getResourceType(): string
     {
@@ -52,7 +62,10 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Set resource id
+     *
+     * @param int $resourceId
+     * @return $this
      */
     public function setResourceId(int $resourceId): StatusInterface
     {
@@ -60,7 +73,9 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Get resource id
+     *
+     * @return int
      */
     public function getResourceId(): int
     {
@@ -68,7 +83,10 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Set store id
+     *
+     * @param int $storeId
+     * @return $this
      */
     public function setStoreId(int $storeId): StatusInterface
     {
@@ -76,7 +94,9 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Get store id
+     *
+     * @return int
      */
     public function getStoreId(): int
     {
@@ -84,7 +104,10 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Set status
+     *
+     * @param int $status
+     * @return $this
      */
     public function setStatus(int $status): StatusInterface
     {
@@ -92,7 +115,9 @@ class Status extends AbstractModel implements StatusInterface
     }
 
     /**
-     * @inheritDoc
+     * Get status
+     *
+     * @return int
      */
     public function getStatus(): int
     {

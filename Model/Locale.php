@@ -9,7 +9,20 @@ use Magento\Framework\DataObject;
 class Locale extends DataObject implements LocaleInterface
 {
     /**
-     * @inheritdoc
+     * Constants for internal keys
+     */
+    private const LOCALE = 'locale';
+    private const NAME = 'name';
+    private const PRIMARY = 'primary';
+    private const PUBLISHED = 'published';
+    private const URL = 'url';
+    private const PREVIEW_URL = 'preview_url';
+
+    /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return $this
      */
     public function setLocale($locale)
     {
@@ -17,7 +30,9 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Get locale
+     *
+     * @return string
      */
     public function getLocale()
     {
@@ -25,7 +40,10 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Set name
+     *
+     * @param string $name
+     * @return $this
      */
     public function setName($name)
     {
@@ -33,7 +51,9 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Get name
+     *
+     * @return string
      */
     public function getName()
     {
@@ -41,7 +61,10 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Set primary
+     *
+     * @param bool $primary
+     * @return $this
      */
     public function setPrimary($primary)
     {
@@ -49,7 +72,9 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Get primary
+     *
+     * @return bool
      */
     public function getPrimary()
     {
@@ -57,7 +82,10 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Set published
+     *
+     * @param bool $published
+     * @return $this
      */
     public function setPublished($published)
     {
@@ -65,7 +93,9 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Get published
+     *
+     * @return bool
      */
     public function getPublished()
     {
@@ -73,7 +103,10 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Set url
+     *
+     * @param string $url
+     * @return $this
      */
     public function setUrl($url)
     {
@@ -81,7 +114,9 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Get url
+     *
+     * @return string
      */
     public function getUrl()
     {
@@ -89,7 +124,10 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Set url
+     *
+     * @param string $previewUrl
+     * @return $this
      */
     public function setPreviewUrl($previewUrl)
     {
@@ -97,7 +135,9 @@ class Locale extends DataObject implements LocaleInterface
     }
 
     /**
-     * @inheritdoc
+     * Get preview url
+     *
+     * @return string
      */
     public function getPreviewUrl()
     {

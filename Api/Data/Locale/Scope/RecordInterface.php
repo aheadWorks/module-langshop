@@ -7,16 +7,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 interface RecordInterface extends ExtensibleDataInterface
 {
-    /**#@+
-     * Constants defined for keys of the data array.
-     * Identical to the name of the getter in snake case
-     */
-    public const SCOPE_ID = 'scope_id';
-    public const SCOPE_TYPE = 'scope_type';
-    public const LOCALE_CODE = 'locale_code';
-    public const IS_PRIMARY = 'is_primary';
-    /**#@-*/
-
     /**
      * Get scope id
      *
