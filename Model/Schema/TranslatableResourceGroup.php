@@ -17,7 +17,10 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     private const RESOURCES = 'resources';
 
     /**
-     * @inheritDoc
+     * Set id
+     *
+     * @param int $id
+     * @return $this
      */
     public function setId($id)
     {
@@ -25,7 +28,9 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     }
 
     /**
-     * @inheritDoc
+     * Get id
+     *
+     * @return int
      */
     public function getId()
     {
@@ -33,7 +38,10 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     }
 
     /**
-     * @inheritDoc
+     * Set title
+     *
+     * @param string $title
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -41,7 +49,9 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     }
 
     /**
-     * @inheritDoc
+     * Get title
+     *
+     * @return string
      */
     public function getTitle()
     {
@@ -49,7 +59,10 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     }
 
     /**
-     * @inheritDoc
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return $this
      */
     public function setSortOrder($sortOrder)
     {
@@ -57,7 +70,9 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     }
 
     /**
-     * @inheritDoc
+     * Get sort order
+     *
+     * @return int
      */
     public function getSortOrder()
     {
@@ -65,7 +80,10 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     }
 
     /**
-     * @inheritDoc
+     * Set resources
+     *
+     * @param \Aheadworks\Langshop\Api\Data\Schema\ResourceGroup\ResourceInterface[] $resources
+     * @return $this
      */
     public function setResources($resources)
     {
@@ -73,7 +91,9 @@ class TranslatableResourceGroup extends DataObject implements ResourceGroupInter
     }
 
     /**
-     * @inheritDoc
+     * Get resources
+     *
+     * @return \Aheadworks\Langshop\Api\Data\Schema\ResourceGroup\ResourceInterface[]
      */
     public function getResources()
     {

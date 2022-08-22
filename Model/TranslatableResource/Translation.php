@@ -16,7 +16,10 @@ class Translation extends DataObject implements TranslationInterface
     private const VALUE = 'value';
 
     /**
-     * @inheritDoc
+     * Set locale
+     *
+     * @param string $locale
+     * @return $this
      */
     public function setLocale($locale)
     {
@@ -24,7 +27,9 @@ class Translation extends DataObject implements TranslationInterface
     }
 
     /**
-     * @inheritDoc
+     * Get locale
+     *
+     * @return string
      */
     public function getLocale()
     {
@@ -32,7 +37,10 @@ class Translation extends DataObject implements TranslationInterface
     }
 
     /**
-     * @inheritDoc
+     * Set key
+     *
+     * @param string $key
+     * @return $this
      */
     public function setKey($key)
     {
@@ -40,7 +48,9 @@ class Translation extends DataObject implements TranslationInterface
     }
 
     /**
-     * @inheritDoc
+     * Get key
+     *
+     * @return string
      */
     public function getKey()
     {
@@ -48,7 +58,10 @@ class Translation extends DataObject implements TranslationInterface
     }
 
     /**
-     * @inheritDoc
+     * Set value
+     *
+     * @param mixed $value
+     * @return $this
      */
     public function setValue($value)
     {
@@ -56,7 +69,9 @@ class Translation extends DataObject implements TranslationInterface
     }
 
     /**
-     * @inheritDoc
+     * Get value
+     *
+     * @return mixed
      */
     public function getValue()
     {

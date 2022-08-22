@@ -17,7 +17,9 @@ class Record extends DataObject implements RecordInterface
     private const IS_PRIMARY = 'is_primary';
 
     /**
-     * @inheritdoc
+     * Get scope id
+     *
+     * @return int
      */
     public function getScopeId()
     {
@@ -25,7 +27,10 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Set scope id
+     *
+     * @param int $scopeId
+     * @return $this
      */
     public function setScopeId($scopeId)
     {
@@ -33,7 +38,9 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Get scope type
+     *
+     * @return string
      */
     public function getScopeType()
     {
@@ -41,7 +48,10 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Set scope type
+     *
+     * @param string $scopeType
+     * @return $this
      */
     public function setScopeType($scopeType)
     {
@@ -49,7 +59,9 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Get locale code
+     *
+     * @return string
      */
     public function getLocaleCode()
     {
@@ -57,7 +69,10 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Set locale code
+     *
+     * @param string $localeCode
+     * @return $this
      */
     public function setLocaleCode($localeCode)
     {
@@ -65,7 +80,9 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Get is primary locale flag
+     *
+     * @return bool
      */
     public function getIsPrimary()
     {
@@ -73,7 +90,10 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Set is primary locale flag
+     *
+     * @param bool $isPrimary
+     * @return $this
      */
     public function setIsPrimary($isPrimary)
     {
@@ -81,7 +101,9 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Retrieve existing extension attributes object or create a new one
+     *
+     * @return \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -89,7 +111,10 @@ class Record extends DataObject implements RecordInterface
     }
 
     /**
-     * @inheritdoc
+     * Set an extension attributes object
+     *
+     * @param \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes
+     * @return $this
      */
     public function setExtensionAttributes(
         \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes

@@ -17,7 +17,10 @@ class Schema extends DataObject implements SchemaInterface
     private const TRANSLATABLE_RESOURCE_GROUPS = 'translatableResourceGroups';
 
     /**
-     * @inheritDoc
+     * Set version
+     *
+     * @param string $version
+     * @return $this
      */
     public function setVersion($version)
     {
@@ -25,7 +28,9 @@ class Schema extends DataObject implements SchemaInterface
     }
 
     /**
-     * @inheritDoc
+     * Get version
+     *
+     * @return string
      */
     public function getVersion()
     {
@@ -33,7 +38,10 @@ class Schema extends DataObject implements SchemaInterface
     }
 
     /**
-     * @inheritDoc
+     * Set translatable resources
+     *
+     * @param \Aheadworks\Langshop\Api\Data\Schema\ResourceInterface[] $resources
+     * @return $this
      */
     public function setTranslatableResources($resources)
     {
@@ -41,7 +49,9 @@ class Schema extends DataObject implements SchemaInterface
     }
 
     /**
-     * @inheritDoc
+     * Get translatable resources
+     *
+     * @return \Aheadworks\Langshop\Api\Data\Schema\ResourceInterface[]
      */
     public function getTranslatableResources()
     {
@@ -49,7 +59,10 @@ class Schema extends DataObject implements SchemaInterface
     }
 
     /**
-     * @inheritDoc
+     * Set possibilities
+     *
+     * @param string[] $possibilities
+     * @return $this
      */
     public function setPossibilities($possibilities)
     {
@@ -57,7 +70,9 @@ class Schema extends DataObject implements SchemaInterface
     }
 
     /**
-     * @inheritDoc
+     * Get possibilities
+     *
+     * @return string[]
      */
     public function getPossibilities()
     {
@@ -65,7 +80,10 @@ class Schema extends DataObject implements SchemaInterface
     }
 
     /**
-     * @inheritDoc
+     * Set translatable resource groups
+     *
+     * @param \Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface[] $resourceGroups
+     * @return $this
      */
     public function setTranslatableResourceGroups($resourceGroups)
     {
@@ -73,7 +91,9 @@ class Schema extends DataObject implements SchemaInterface
     }
 
     /**
-     * @inheritDoc
+     * Get translatable resource groups
+     *
+     * @return \Aheadworks\Langshop\Api\Data\Schema\ResourceGroupInterface[]
      */
     public function getTranslatableResourceGroups()
     {

@@ -15,7 +15,9 @@ class Field extends DataObject implements FieldInterface
     private const VALUE = 'value';
 
     /**
-     * @inheritDoc
+     * Get key
+     *
+     * @return string|null
      */
     public function getKey(): ?string
     {
@@ -23,7 +25,10 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * @inheritDoc
+     * Set key
+     *
+     * @param string $key
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface
      */
     public function setKey(string $key): FieldInterface
     {
@@ -31,7 +36,9 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * @inheritDoc
+     * Get value
+     *
+     * @return mixed
      */
     public function getValue()
     {
@@ -39,7 +46,10 @@ class Field extends DataObject implements FieldInterface
     }
 
     /**
-     * @inheritDoc
+     * Set value
+     *
+     * @param mixed $value
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface
      */
     public function setValue($value): FieldInterface
     {
