@@ -7,8 +7,10 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterfaceFactory;
 use Aheadworks\Langshop\Model\Config\ListToTranslate as ListToTranslateConfig;
 use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
+use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
 use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeType;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreRepository;
@@ -46,6 +48,11 @@ class Repository
     private LocaleConfig $localeConfig;
 
     /**
+     * @var EntityPool
+     */
+    private EntityPool $entityPool;
+
+    /**
      * @var array|null
      */
     private ?array $localeScopes;
@@ -57,6 +64,7 @@ class Repository
      * @param LocaleCodeConverter $localeCodeConverter
      * @param StoreRepository $storeRepository
      * @param LocaleConfig $localeConfig
+     * @param EntityPool $entityPool
      */
     public function __construct(
         LocaleResolverInterface $localeResolver,
@@ -64,7 +72,8 @@ class Repository
         ListToTranslateConfig $listToTranslateConfig,
         LocaleCodeConverter $localeCodeConverter,
         StoreRepository $storeRepository,
-        LocaleConfig $localeConfig
+        LocaleConfig $localeConfig,
+        EntityPool $entityPool
     ) {
         $this->localeResolver = $localeResolver;
         $this->localeScopeFactory = $localeScopeFactory;
@@ -72,6 +81,7 @@ class Repository
         $this->localeCodeConverter = $localeCodeConverter;
         $this->storeRepository = $storeRepository;
         $this->localeConfig = $localeConfig;
+        $this->entityPool = $entityPool;
     }
 
     /**
@@ -107,18 +117,12 @@ class Repository
      * Retrieves locale scopes by locale codes
      *
      * @param string[] $locales
-     * @param bool $includePrimary
      * @return RecordInterface[]
      */
-    public function getByLocale(array $locales, bool $includePrimary = false): array
+    public function getByLocale(array $locales): array
     {
-        $localeScopes = $this->getList();
-        if ($includePrimary) {
-            array_unshift($localeScopes, $this->getPrimary());
-        }
-
         return array_filter(
-            $localeScopes,
+            $this->getList(),
             fn (RecordInterface $localeScope) => in_array($localeScope->getLocaleCode(), $locales)
         );
     }
@@ -126,14 +130,18 @@ class Repository
     /**
      * Retrieves primary locale scope
      *
-     * @param string|null $replaceLocale
+     * @param string|null $resourceType
      * @return RecordInterface
+     * @throws NoSuchEntityException
      */
-    public function getPrimary(string $replaceLocale = null): RecordInterface
+    public function getPrimary(string $resourceType = null): RecordInterface
     {
-        $localeCode = $this->localeCodeConverter->toLangshop(
-            $replaceLocale ?? $this->localeResolver->getDefaultLocale()
-        );
+        $defaultLocale = $this->localeResolver->getDefaultLocale();
+        if ($resourceType) {
+            $defaultLocale = $this->entityPool->getByType($resourceType)->getDefaultLocale() ?: $defaultLocale;
+        }
+
+        $localeCode = $this->localeCodeConverter->toLangshop($defaultLocale);
 
         return $this->localeScopeFactory->create()
             ->setScopeId(Store::DEFAULT_STORE_ID)

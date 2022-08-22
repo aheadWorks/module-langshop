@@ -41,14 +41,15 @@ class Locale implements ProcessorInterface
      */
     public function process(array $data): array
     {
+        $resourceType = $data['resourceType'];
         $locales = &$data['locale'];
 
         foreach ($locales as $locale) {
-            $this->localeValidation->validate($locale, true);
+            $this->localeValidation->validate($locale, true, $resourceType);
         }
 
-        $locales = $this->localeScopeRepository->getByLocale($locales, true) ?:
-            [$this->localeScopeRepository->getPrimary()];
+        $locales = $this->localeScopeRepository->getByLocale($locales) ?:
+            [$this->localeScopeRepository->getPrimary($resourceType)];
 
         return $data;
     }

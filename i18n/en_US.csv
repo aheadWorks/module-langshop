@@ -14,7 +14,6 @@ Langshop,Langshop
 Default,Default
 Website,Website
 "Store View","Store View"
-"We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales.","We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales."
 "Resource with type = ""%1"" does not exist.","Resource with type = ""%1"" does not exist."
 "Resource with identifier = ""%1"" does not exist.","Resource with identifier = ""%1"" does not exist."
 "Attribute with code = ""%1"" does not exist.","Attribute with code = ""%1"" does not exist."

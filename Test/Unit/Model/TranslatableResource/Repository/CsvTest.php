@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Test\Unit\Model\TranslatableResource\Repository;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection as CsvCollection;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\CollectionFactory;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\ProcessorInterface;
@@ -16,7 +16,6 @@ use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as Tra
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Translation\Model\ResourceModel\StringUtils;
 use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -64,11 +63,6 @@ class CsvTest extends TestCase
      */
     private $localeCodeConverterMock;
 
-    /**
-     * @var ScopeRecordRepository|MockObject
-     */
-    private $scopeRecordRepositoryMock;
-
     private const RESOURCE_TYPE = 'csv';
 
     /**
@@ -83,7 +77,6 @@ class CsvTest extends TestCase
         $this->translationValidationMock = $this->createMock(TranslationValidation::class);
         $this->eventManagerMock = $this->createMock(EventManagerInterface::class);
         $this->localeCodeConverterMock = $this->createMock(LocaleCodeConverter::class);
-        $this->scopeRecordRepositoryMock = $this->createMock(ScopeRecordRepository::class);
 
         $this->csvRepository = new CsvRepository(
             $this->attributeProviderMock,
@@ -92,21 +85,16 @@ class CsvTest extends TestCase
             $this->resourceModelFactoryMock,
             $this->translationValidationMock,
             $this->eventManagerMock,
-            $this->localeCodeConverterMock,
-            $this->scopeRecordRepositoryMock
+            $this->localeCodeConverterMock
         );
     }
 
     /**
      * Test 'getList' method
      *
-     * @param string $defaultLocaleCode
-     *
-     * @return void
-     * @dataProvider getDataProvider
      * @throws LocalizedException
      */
-    public function testGetList(string $defaultLocaleCode): void
+    public function testGetList(): void
     {
         $collection = $this->createMock(CsvCollection::class);
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
@@ -121,20 +109,16 @@ class CsvTest extends TestCase
             ->method('process')
             ->with($searchCriteria, $collection);
 
-        $collection = $this->addLocalizedAttributes($collection, $localeScopes, $defaultLocaleCode);
+        $collection = $this->addLocalizedAttributes($collection, $localeScopes);
         $this->assertSame($collection, $this->csvRepository->getList($searchCriteria, $localeScopes));
     }
 
     /**
      * Test 'get' method
      *
-     * @param string $defaultLocaleCode
-     *
-     * @return void
-     * @dataProvider getDataProvider
      * @throws LocalizedException
      */
-    public function testGet(string $defaultLocaleCode): void
+    public function testGet(): void
     {
         $collection = $this->createMock(CsvCollection::class);
         $model = $this->createMock(Model::class);
@@ -150,7 +134,7 @@ class CsvTest extends TestCase
             ->method('addEntityIdFilter')
             ->with($entityId);
 
-        $collection = $this->addLocalizedAttributes($collection, $localeScopes, $defaultLocaleCode);
+        $collection = $this->addLocalizedAttributes($collection, $localeScopes);
         $collection
             ->expects($this->any())
             ->method('getFirstItem')
@@ -242,19 +226,6 @@ class CsvTest extends TestCase
      *
      * @return array
      */
-    public function getDataProvider(): array
-    {
-        return [
-            ['en-US'],
-            ['en-GB'],
-        ];
-    }
-
-    /**
-     * Data provider for save method
-     *
-     * @return array
-     */
     public function saveDataProvider(): array
     {
         return [
@@ -268,42 +239,21 @@ class CsvTest extends TestCase
      *
      * @param MockObject $collection
      * @param MockObject[] $localeScopes
-     * @param string $defaultLocaleCode
      * @return MockObject
      */
     private function addLocalizedAttributes(
         MockObject $collection,
-        array $localeScopes,
-        string $defaultLocaleCode
+        array $localeScopes
     ): MockObject {
         $localizedCollection = $collection;
         $translatableAttributeCodes = ['code'];
 
-        $defaultLocaleScope = $this->createMock(RecordInterface::class);
         $item = $this->createMock(Model::class);
         $localizedItems = [$this->createMock(Model::class)];
         $value = [];
         $code = 'code';
         $localizedValue = [];
         $collectionSize = 1;
-
-        $this->scopeRecordRepositoryMock
-            ->expects($this->any())
-            ->method('getPrimary')
-            ->willReturn($defaultLocaleScope);
-        $defaultLocaleScope
-            ->expects($this->any())
-            ->method('getLocaleCode')
-            ->willReturn($defaultLocaleCode);
-        if ($defaultLocaleCode !== 'en-US') {
-            $exception = new WebapiException(
-                __('We are sorry. Currently, we only support the default locale to be en_US.'
-                    . ' We are working to support other default locales.'),
-                501,
-                501
-            );
-            $this->expectExceptionObject($exception);
-        }
 
         $this->attributeProviderMock
             ->expects($this->any())

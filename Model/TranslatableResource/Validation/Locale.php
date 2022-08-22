@@ -27,14 +27,27 @@ class Locale
      *
      * @param string $value
      * @param bool $includePrimary
+     * @param string|null $resourceType
      * @throws NoSuchEntityException
      */
-    public function validate(string $value, bool $includePrimary = false): void
-    {
-        if (!$this->localeScopeRepository->getByLocale([$value], $includePrimary)) {
-            throw new NoSuchEntityException(
-                __('Locale with code = "%1" does not exist.', $value)
-            );
+    public function validate(
+        string $value,
+        bool $includePrimary = false,
+        string $resourceType = null
+    ): void {
+        if ($this->localeScopeRepository->getByLocale([$value])) {
+            return;
         }
+
+        if ($includePrimary) {
+            $primaryLocale = $this->localeScopeRepository->getPrimary($resourceType);
+            if ($primaryLocale->getLocaleCode() === $value) {
+                return;
+            }
+        }
+
+        throw new NoSuchEntityException(
+            __('Locale with code = "%1" does not exist.', $value)
+        );
     }
 }
