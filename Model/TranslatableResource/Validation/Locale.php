@@ -35,19 +35,10 @@ class Locale
         bool $includePrimary = false,
         string $resourceType = null
     ): void {
-        if ($this->localeScopeRepository->getByLocale([$value])) {
-            return;
+        if (!$this->localeScopeRepository->getByLocale([$value], $includePrimary, $resourceType)) {
+            throw new NoSuchEntityException(
+                __('Locale with code = "%1" does not exist.', $value)
+            );
         }
-
-        if ($includePrimary) {
-            $primaryLocale = $this->localeScopeRepository->getPrimary($resourceType);
-            if ($primaryLocale->getLocaleCode() === $value) {
-                return;
-            }
-        }
-
-        throw new NoSuchEntityException(
-            __('Locale with code = "%1" does not exist.', $value)
-        );
     }
 }

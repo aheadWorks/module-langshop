@@ -48,7 +48,7 @@ class Locale implements ProcessorInterface
             $this->localeValidation->validate($locale, true, $resourceType);
         }
 
-        $locales = $this->localeScopeRepository->getByLocale($locales) ?:
+        $locales = $this->localeScopeRepository->getByLocale($locales, true, $resourceType) ?:
             [$this->localeScopeRepository->getPrimary($resourceType)];
 
         return $data;

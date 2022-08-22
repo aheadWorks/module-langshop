@@ -117,12 +117,23 @@ class Repository
      * Retrieves locale scopes by locale codes
      *
      * @param string[] $locales
+     * @param bool $includePrimary
+     * @param string|null $resourceType
      * @return RecordInterface[]
+     * @throws NoSuchEntityException
      */
-    public function getByLocale(array $locales): array
-    {
+    public function getByLocale(
+        array $locales,
+        bool $includePrimary = false,
+        string $resourceType = null
+    ): array {
+        $localeScopes = $this->getList();
+        if ($includePrimary) {
+            array_unshift($localeScopes, $this->getPrimary($resourceType));
+        }
+
         return array_filter(
-            $this->getList(),
+            $localeScopes,
             fn (RecordInterface $localeScope) => in_array($localeScope->getLocaleCode(), $locales)
         );
     }
