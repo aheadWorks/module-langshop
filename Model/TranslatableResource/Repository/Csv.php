@@ -182,7 +182,7 @@ class Csv implements RepositoryInterface
         $localizedCollection->setIsNeedToAddLinesAttribute(true);
 
         foreach ($localeScopes as $localeScope) {
-            $localizedCollection->setStoreId((int)$localeScope->getScopeId())->clear();
+            $localizedCollection->setStoreId($localeScope->getScopeId())->clear();
             /** @var Model[] $localizedItems */
             $localizedItems = $localizedCollection->getItems();
 

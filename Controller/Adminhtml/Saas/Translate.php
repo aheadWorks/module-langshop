@@ -94,7 +94,7 @@ class Translate extends Action implements HttpPostActionInterface
                 ->setResourceId($resourceId)
                 ->setResourceType($resourceType)
                 ->setStatus(StatusInterface::STATUS_PROCESSING)
-                ->setStoreId((int)$scopeRecord->getScopeId());
+                ->setStoreId($scopeRecord->getScopeId());
             $this->statusManager->save($status);
         }
 

@@ -21,7 +21,7 @@ class Record extends DataObject implements RecordInterface
      *
      * @return int
      */
-    public function getScopeId()
+    public function getScopeId(): int
     {
         return $this->getData(self::SCOPE_ID);
     }
@@ -32,7 +32,7 @@ class Record extends DataObject implements RecordInterface
      * @param int $scopeId
      * @return $this
      */
-    public function setScopeId($scopeId)
+    public function setScopeId(int $scopeId): RecordInterface
     {
         return $this->setData(self::SCOPE_ID, $scopeId);
     }
@@ -42,7 +42,7 @@ class Record extends DataObject implements RecordInterface
      *
      * @return string
      */
-    public function getScopeType()
+    public function getScopeType(): string
     {
         return $this->getData(self::SCOPE_TYPE);
     }
@@ -53,7 +53,7 @@ class Record extends DataObject implements RecordInterface
      * @param string $scopeType
      * @return $this
      */
-    public function setScopeType($scopeType)
+    public function setScopeType(string $scopeType): RecordInterface
     {
         return $this->setData(self::SCOPE_TYPE, $scopeType);
     }
@@ -63,7 +63,7 @@ class Record extends DataObject implements RecordInterface
      *
      * @return string
      */
-    public function getLocaleCode()
+    public function getLocaleCode(): string
     {
         return $this->getData(self::LOCALE_CODE);
     }
@@ -74,7 +74,7 @@ class Record extends DataObject implements RecordInterface
      * @param string $localeCode
      * @return $this
      */
-    public function setLocaleCode($localeCode)
+    public function setLocaleCode(string $localeCode): RecordInterface
     {
         return $this->setData(self::LOCALE_CODE, $localeCode);
     }
@@ -84,7 +84,7 @@ class Record extends DataObject implements RecordInterface
      *
      * @return bool
      */
-    public function getIsPrimary()
+    public function getIsPrimary(): bool
     {
         return $this->getData(self::IS_PRIMARY);
     }
@@ -95,30 +95,8 @@ class Record extends DataObject implements RecordInterface
      * @param bool $isPrimary
      * @return $this
      */
-    public function setIsPrimary($isPrimary)
+    public function setIsPrimary(bool $isPrimary): RecordInterface
     {
         return $this->setData(self::IS_PRIMARY, $isPrimary);
-    }
-
-    /**
-     * Retrieve existing extension attributes object or create a new one
-     *
-     * @return \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
-    }
-
-    /**
-     * Set an extension attributes object
-     *
-     * @param \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes
-    ) {
-        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
 }

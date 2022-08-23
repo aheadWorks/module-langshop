@@ -7,6 +7,7 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeReco
 use Aheadworks\Langshop\Api\Data\LocaleInterface;
 use Aheadworks\Langshop\Api\Data\LocaleInterfaceFactory;
 use Aheadworks\Langshop\Model\Locale;
+use Aheadworks\Langshop\Model\Locale\Scope\Record;
 use Magento\Framework\DataObject\Copy;
 
 class Converter
@@ -44,6 +45,7 @@ class Converter
         /** @var Locale $locale */
         $locale = $this->localeFactory->create();
 
+        /** @var Record $scopeRecord */
         $this->copyService->copyFieldsetToTarget(
             'aw_ls_convert_scope_record',
             'to_locale',
