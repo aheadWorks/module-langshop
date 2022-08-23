@@ -99,6 +99,8 @@ class Csv implements RepositoryInterface
     {
         /** @var CsvCollection $collection */
         $collection = $this->collectionFactory->create();
+        $collection->setResourceType(self::RESOURCE_TYPE);
+
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         return $this->addLocalizedAttributes($collection, $localeScopes);
@@ -116,6 +118,7 @@ class Csv implements RepositoryInterface
     {
         /** @var CsvCollection $collection */
         $collection = $this->collectionFactory->create();
+        $collection->setResourceType(self::RESOURCE_TYPE);
         $collection->addEntityIdFilter($entityId);
 
         return $this->addLocalizedAttributes($collection, $localeScopes)->getFirstItem();
