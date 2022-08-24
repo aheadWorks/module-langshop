@@ -102,7 +102,7 @@ class Repository
                     );
 
                     $this->localeScopes[] = $this->localeScopeFactory->create()
-                        ->setScopeId($scope->getId())
+                        ->setScopeId((int) $scope->getId())
                         ->setScopeType(LocaleScopeType::STORE)
                         ->setLocaleCode($localeCode)
                         ->setIsPrimary(false);

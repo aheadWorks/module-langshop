@@ -217,7 +217,7 @@ class Repository implements RepositoryInterface
         }
 
         foreach ($localeScopes as $localeScope) {
-            $localizedCollection->setStoreId((int) $localeScope->getScopeId())->clear();
+            $localizedCollection->setStoreId($localeScope->getScopeId())->clear();
 
             /** @var AbstractModel $localizedItem */
             foreach ($localizedCollection->getItems() as $localizedItem) {

@@ -6,6 +6,7 @@ Langshop,Langshop
 "Sorting ""%1"" is not correct.","Sorting ""%1"" is not correct."
 "Field collector must implement %1","Field collector must implement %1"
 "No such entity with type = %1","No such entity with type = %1"
+"Store with identifier = ""%1"" is not available for translate.","Store with identifier = ""%1"" is not available for translate."
 "Schema processor must implement %1","Schema processor must implement %1"
 "This method is not implemented yet.","This method is not implemented yet."
 "Translation successfully completed","Translation successfully completed"
