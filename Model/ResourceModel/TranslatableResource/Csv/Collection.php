@@ -161,7 +161,11 @@ class Collection extends DataCollection implements CollectionInterface
                 if ($this->needToAddLines) {
                     try {
                         $data = $this->csvReader->getCsvData($packageName, $this->getLocaleCode());
-                        $lines = $this->getTranslationLines($this->getOriginalLines($data), $translationData, $localeCode);
+                        $lines = $this->getTranslationLines(
+                            $this->getOriginalLines($data),
+                            $translationData,
+                            $localeCode
+                        );
                         $model->setLines($lines);
                     } catch (Exception $e) {
                         $this->logger->error($e->getMessage());
