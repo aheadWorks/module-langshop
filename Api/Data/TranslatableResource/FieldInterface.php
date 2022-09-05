@@ -6,12 +6,6 @@ namespace Aheadworks\Langshop\Api\Data\TranslatableResource;
 interface FieldInterface
 {
     /**
-     * Constants for internal keys
-     */
-    public const KEY = 'key';
-    public const VALUE = 'value';
-
-    /**
      * Get key
      *
      * @return string|null

@@ -10,7 +10,15 @@ use Magento\Framework\DataObject;
 class ResourceList extends DataObject implements ResourceListInterface
 {
     /**
-     * @inheritDoc
+     * Constants for internal keys
+     */
+    private const ITEMS = 'data';
+    private const PAGINATION = 'pagination';
+
+    /**
+     * Get items
+     *
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface[]|null
      */
     public function getItems(): ?array
     {
@@ -18,7 +26,10 @@ class ResourceList extends DataObject implements ResourceListInterface
     }
 
     /**
-     * @inheritDoc
+     * Set items
+     *
+     * @param \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface[] $items
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface
      */
     public function setItems(array $items): ResourceListInterface
     {
@@ -26,7 +37,9 @@ class ResourceList extends DataObject implements ResourceListInterface
     }
 
     /**
-     * @inheritDoc
+     * Get pagination
+     *
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface|null
      */
     public function getPagination(): ?PaginationInterface
     {
@@ -34,7 +47,10 @@ class ResourceList extends DataObject implements ResourceListInterface
     }
 
     /**
-     * @inheritDoc
+     * Set pagination
+     *
+     * @param \Aheadworks\Langshop\Api\Data\TranslatableResource\PaginationInterface $pagination
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface
      */
     public function setPagination(PaginationInterface $pagination): ResourceListInterface
     {

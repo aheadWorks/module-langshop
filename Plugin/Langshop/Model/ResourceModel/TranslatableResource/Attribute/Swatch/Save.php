@@ -94,15 +94,17 @@ class Save
             $toDelete = [];
 
             foreach ($swatches as $optionId => $value) {
+                $swatchId = $existingSwatches[$optionId]->getData('swatch_id');
+
                 if ($value) {
                     $toInsert[] = [
-                        'swatch_id' => $existingSwatches[$optionId]->getData('swatch_id'),
+                        'swatch_id' => $swatchId,
                         'option_id' => $optionId,
                         'store_id' => $storeId,
                         'value' => $value
                     ];
-                } else {
-                    $toDelete[] = $existingSwatches[$optionId]->getData('swatch_id');
+                } elseif ($swatchId) {
+                    $toDelete[] = $swatchId;
                 }
             }
 

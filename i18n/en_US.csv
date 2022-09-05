@@ -1,22 +1,27 @@
 Translate,Translate
+"Processing %1 translation.","Processing %1 translation."
 Langshop,Langshop
+"Select locales that require translation in the <a href=""%url"">configuration</a>.","Select locales that require translation in the <a href=""%url"">configuration</a>."
 "Data processor must implement %1","Data processor must implement %1"
 "Sorting ""%1"" is not correct.","Sorting ""%1"" is not correct."
 "Field collector must implement %1","Field collector must implement %1"
 "No such entity with type = %1","No such entity with type = %1"
+"Store with identifier = ""%1"" is not available for translate.","Store with identifier = ""%1"" is not available for translate."
 "Schema processor must implement %1","Schema processor must implement %1"
 "This method is not implemented yet.","This method is not implemented yet."
+"Translation successfully completed","Translation successfully completed"
+"Translation of %1 with identifier = '%2' successfully completed.","Translation of %1 with identifier = '%2' successfully completed."
+"Translation failed","Translation failed"
 Default,Default
 Website,Website
 "Store View","Store View"
 "Resource with type = ""%1"" does not exist.","Resource with type = ""%1"" does not exist."
 "Resource with identifier = ""%1"" does not exist.","Resource with identifier = ""%1"" does not exist."
 "Attribute with code = ""%1"" does not exist.","Attribute with code = ""%1"" does not exist."
-"Locale with code = ""%1"" does not exist.","Locale with code = ""%1"" does not exist."
 "Option with identifier = ""%1"" does not exist.","Option with identifier = ""%1"" does not exist."
+"Locale with code = ""%1"" does not exist.","Locale with code = ""%1"" does not exist."
 "Attribute with code = ""%1"" is not available for translate.","Attribute with code = ""%1"" is not available for translate."
-"A technical problem with the server created an error.","A technical problem with the server created an error."
-"Translations are ready. Enjoy!","Translations are ready. Enjoy!"
+"Specify the store view in <a href=""%url"">Langshop configuration</a> to translate it.","Specify the store view in <a href=""%url"">Langshop configuration</a> to translate it."
 Locales,Locales
 Schema,Schema
 Resources,Resources
@@ -29,8 +34,3 @@ Resources,Resources
 "Integration details","Integration details"
 "Magento Access Token","Magento Access Token"
 "The token is being used for access to your Magento stores","The token is being used for access to your Magento stores"
-"We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales.","We are sorry. Currently, we only support the default locale to be en_US. We are working to support other default locales."
-"Translation successfully completed","Translation successfully completed"
-"Translation of %1 with identifier = '%2' successfully completed.","Translation of %1 with identifier = '%2' successfully completed."
-"Processing %1 translation.","Processing %1 translation."
-"Translation failed","Translation failed"

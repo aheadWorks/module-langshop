@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Model\Entity;
 
 use Aheadworks\Langshop\Model\Entity;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Pool
 {
@@ -37,12 +37,12 @@ class Pool
      *
      * @param string $type
      * @return Entity
-     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getByType(string $type): Entity
     {
         if (!isset($this->entityList[$type])) {
-            throw new LocalizedException(__('No such entity with type = %1', $type));
+            throw new NoSuchEntityException(__('No such entity with type = %1', $type));
         }
 
         return $this->entityList[$type];

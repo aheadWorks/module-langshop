@@ -8,6 +8,9 @@ use Magento\Framework\DataObject;
 
 class FieldOption extends DataObject implements FieldOptionInterface
 {
+    /**
+     * Constants for internal keys
+     */
     private const VALUE = 'value';
     private const LABEL = 'label';
 

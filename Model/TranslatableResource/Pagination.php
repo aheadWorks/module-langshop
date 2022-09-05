@@ -9,7 +9,18 @@ use Magento\Framework\DataObject;
 class Pagination extends DataObject implements PaginationInterface
 {
     /**
-     * @inheritDoc
+     * Constants for internal keys
+     */
+    private const PAGE = 'page';
+    private const PAGE_SIZE = 'pageSize';
+    private const TOTAL_PAGES = 'totalPages';
+    private const TOTAL_ITEMS = 'totalItems';
+
+    /**
+     * Set page
+     *
+     * @param int $page
+     * @return $this
      */
     public function setPage(int $page)
     {
@@ -17,7 +28,9 @@ class Pagination extends DataObject implements PaginationInterface
     }
 
     /**
-     * @inheritDoc
+     * Get page
+     *
+     * @return int|null
      */
     public function getPage(): ?int
     {
@@ -25,7 +38,10 @@ class Pagination extends DataObject implements PaginationInterface
     }
 
     /**
-     * @inheritDoc
+     * Set page size
+     *
+     * @param int $pageSize
+     * @return $this
      */
     public function setPageSize(int $pageSize)
     {
@@ -33,7 +49,9 @@ class Pagination extends DataObject implements PaginationInterface
     }
 
     /**
-     * @inheritDoc
+     * Get page size
+     *
+     * @return int|null
      */
     public function getPageSize(): ?int
     {
@@ -41,7 +59,10 @@ class Pagination extends DataObject implements PaginationInterface
     }
 
     /**
-     * @inheritDoc
+     * Set total pages
+     *
+     * @param int $totalPages
+     * @return $this
      */
     public function setTotalPages(int $totalPages)
     {
@@ -49,7 +70,9 @@ class Pagination extends DataObject implements PaginationInterface
     }
 
     /**
-     * @inheritDoc
+     * Get total pages
+     *
+     * @return int|null
      */
     public function getTotalPages(): ?int
     {
@@ -57,7 +80,10 @@ class Pagination extends DataObject implements PaginationInterface
     }
 
     /**
-     * @inheritDoc
+     * Set total items
+     *
+     * @param int $totalItems
+     * @return $this
      */
     public function setTotalItems(int $totalItems)
     {
@@ -65,7 +91,9 @@ class Pagination extends DataObject implements PaginationInterface
     }
 
     /**
-     * @inheritDoc
+     * Get total items
+     *
+     * @return int|null
      */
     public function getTotalItems(): ?int
     {

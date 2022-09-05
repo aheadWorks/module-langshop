@@ -5,10 +5,6 @@ namespace Aheadworks\Langshop\Api\Data\TranslatableResource;
 
 interface TranslationInterface
 {
-    public const LOCALE = 'locale';
-    public const KEY = 'key';
-    public const VALUE = 'value';
-
     /**
      * Set locale
      *

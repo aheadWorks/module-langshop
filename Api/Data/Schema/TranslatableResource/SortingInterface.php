@@ -5,11 +5,6 @@ namespace Aheadworks\Langshop\Api\Data\Schema\TranslatableResource;
 
 interface SortingInterface
 {
-    public const KEY = 'key';
-    public const LABEL = 'label';
-    public const FIELD = 'field';
-    public const DIRECTION = 'direction';
-
     /**
      * Set key
      *

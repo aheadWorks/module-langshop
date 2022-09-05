@@ -31,9 +31,9 @@ class ListToTranslate
      */
     public function getValue(): array
     {
-        return explode(
+        return array_filter(explode(
             self::SEPARATOR,
             $this->scopeConfig->getValue(self::XML_PATH_CONFIG) ?? ''
-        );
+        ));
     }
 }

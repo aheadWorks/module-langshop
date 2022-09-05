@@ -334,6 +334,7 @@
             <argument name="description" xsi:type="string">Store Localizations</argument>
             <argument name="icon" xsi:type="string">StoreMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
+            <argument name="defaultLocale" xsi:type="string">en_US</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Csv</argument>
         </arguments>
     </virtualType>

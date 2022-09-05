@@ -66,29 +66,29 @@ definitions:
         name: Validate marketplace package on Magento 2.3.7
         image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
         script:
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
-    - step: &validatePackage-2.4.4
-        name: Validate marketplace package on Magento 2.4.4
-        image: aheadworks/m2test-new:2.4.4-without-dump-8.1
+    - step: &validatePackage-2.4.5
+        name: Validate marketplace package on Magento 2.4.5
+        image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
     - step: &eqpTest-2.3.7
         name: EQP tests on Magento 2.3.7
         image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
         script:
           - mkdir -p test-results/eqp
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager eqp ${PWD} > test-results/eqp/test-EQP-2.3.7.xml
         artifacts:
           - "test-results/**"
-    - step: &eqpTest-2.4.4
-        name: EQP tests on Magento 2.4.4
-        image: aheadworks/m2test-new:2.4.4-without-dump-8.1
+    - step: &eqpTest-2.4.5
+        name: EQP tests on Magento 2.4.5
+        image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
           - mkdir -p test-results/eqp
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager eqp ${PWD} > test-results/eqp/test-EQP.xml
         artifacts:
           - "test-results/**"
@@ -103,51 +103,40 @@ definitions:
           - OLD=${PWD} && cd /var/www/html && composer config --unset repositories.0 && cd $OLD
           - OLD=${PWD} && cd /var/www/html && composer -n --no-update require php "~7.4.0||~8.1.0" && cd $OLD
           - composer -n --no-update require php "~7.4.0||~8.1.0"
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager static ${PWD} test-results/static-2.3.7-p3
         artifacts:
           - "test-results/**"
-    - step: &staticTest-2.4.4
-        name: Static tests on Magento 2.4.4
-        image: aheadworks/m2test-new:2.4.4-with-dump-8.1
+    - step: &staticTest-2.4.5
+        name: Static tests on Magento 2.4.5
+        image: aheadworks/m2test-new:2.4.5-with-dump-8.1
         script:
           - mkdir -p test-results/static
           - *prepare_git
-          # 2.4.4-specific. Fix false positive code duplication test for fonts
+          # 2.4.5-specific. Fix false positive code duplication test for fonts
           - echo 'lib/internal/LinLibertineFont/' > /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
           - echo 'lib/internal/GnuFreeFont/' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
           - echo 'lib/web/fonts/opensans/semibold/opensans-600.woff2' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
           - echo 'lib/web/fonts/opensans/regular/opensans-400.woff2' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager static ${PWD} test-results/static
         artifacts:
           - "test-results/**"
-    - step: &PHPStan-2.4.4
-        name: PHPStan running on Magento 2.4.4
-        image: aheadworks/m2test-new:2.4.4-without-dump-8.1
-        script:
-          - export MODULE_DIR=app/code/Aheadworks/Langshop
-          - cd /var/www/html
-          - mkdir -p $MODULE_DIR
-          - cp -r $BITBUCKET_CLONE_DIR/* $MODULE_DIR
-          - bin/magento module:enable --all
-          - bin/magento setup:di:compile
-          - vendor/bin/phpstan analyze -c $MODULE_DIR/phpstan.neon $MODULE_DIR
     - step: &unitTestPHP74
         name: Unit tests PHP 7.4
         image: aheadworks/m2test-new:2.3.7-p3-with-dump-7.4
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.3.7.xml
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP81
         name: Unit tests PHP 8.1
-        image: aheadworks/m2test-new:2.4.4-with-dump-8.1
+        image: aheadworks/m2test-new:2.4.5-with-dump-8.1
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit.xml
         artifacts:
           - "test-results/**"
@@ -156,17 +145,17 @@ definitions:
         image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
           - "test-results/test-unit.xml"
-    - step: &installMagento-2.4.4
-        name: Install Magento 2.4.4 test
-        image: aheadworks/m2test-new:2.4.4-without-dump-8.1
+    - step: &installMagento-2.4.5
+        name: Install Magento 2.4.5 test
+        image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
           - mkdir -p test-results
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
@@ -209,8 +198,9 @@ definitions:
         name: Ecommerce build
         image: aheadworks/deploy-tools:new-gen
         script:
-            - pip3 install aheadworks-deploy-manager
+            - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
+            - python3 -m aheadworks_release_manager build-mm-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
             - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
             - python3 -m aheadworks_release_manager jira-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGN_TO}"
         artifacts:
@@ -219,9 +209,9 @@ definitions:
         name: Building Web Api Documentation
         image: aheadworks/deploy-tools:latest
         services:
-          - m24-74
+          - m24-81
         script:
-          - pip3 install aheadworks-deploy-manager
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
     - step: &deployPipelines
         name: Deploy pipelines
@@ -239,7 +229,7 @@ definitions:
           - key
           - env
   services:
-    m24-74:
+    m24-81:
       image: aheadworks/m2test-new:2.4.4-with-dump-8.1
 pipelines:
   tags:
@@ -249,18 +239,18 @@ pipelines:
     # For commits to master branch: run full set of tests
     master:
       - step: *build
-      - step: *validatePackage-2.3.7
-      - step: *validatePackage-2.4.4
+      - parallel:
+          - step: *validatePackage-2.3.7
+          - step: *validatePackage-2.4.5
       - parallel:
           - step: *eqpTest-2.3.7
-          - step: *eqpTest-2.4.4
+          - step: *eqpTest-2.4.5
           - step: *staticTest-2.3.7
-          - step: *staticTest-2.4.4
-          - step: *PHPStan-2.4.4
+          - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
+          - step: *installMagento-2.4.5
       - step: *ecommerce_build
       - step: *swaggerWebApiDocBuild
       - step: *deployToDevComposer
@@ -270,52 +260,48 @@ pipelines:
     develop:
       - parallel:
           - step: *eqpTest-2.3.7
-          - step: *eqpTest-2.4.4
+          - step: *eqpTest-2.4.5
           - step: *staticTest-2.3.7
-          - step: *staticTest-2.4.4
-          - step: *PHPStan-2.4.4
+          - step: *staticTest-2.4.5
           - step: *unitTestPHP74
-          - step: *installMagento-2.4.4
+          - step: *installMagento-2.4.5
       - step: *deployToDevComposer
     feature/*:
       - parallel:
-          - step: *eqpTest-2.3.7
-          - step: *eqpTest-2.4.4
-          - step: *staticTest-2.3.7
-          - step: *staticTest-2.4.4
-          - step: *PHPStan-2.4.4
-          - step: *unitTestPHP74
-          - step: *installMagento-2.4.4
+        - step: *eqpTest-2.3.7
+        - step: *eqpTest-2.4.5
+        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.5
+        - step: *unitTestPHP74
+        - step: *installMagento-2.4.5
     bugfix/*:
       - parallel:
-          - step: *eqpTest-2.3.7
-          - step: *eqpTest-2.4.4
-          - step: *staticTest-2.3.7
-          - step: *staticTest-2.4.4
-          - step: *PHPStan-2.4.4
-          - step: *unitTestPHP74
-          - step: *installMagento-2.4.4
+        - step: *eqpTest-2.3.7
+        - step: *eqpTest-2.4.5
+        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.5
+        - step: *unitTestPHP74
+        - step: *installMagento-2.4.5
     release/*:
       - step: *build
       - step: *validatePackage-2.3.7
-      - step: *validatePackage-2.4.4
+      - step: *validatePackage-2.4.5
       - parallel:
           - step: *eqpTest-2.3.7
-          - step: *eqpTest-2.4.4
+          - step: *eqpTest-2.4.5
           - step: *staticTest-2.3.7
-          - step: *staticTest-2.4.4
-          - step: *PHPStan-2.4.4
+          - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
+          - step: *installMagento-2.4.5
 
   custom:
     # Upload to AW composer manually
     deploy-to-aw-composer:
       - step: *build
       - step: *validatePackage-2.3.7
-      - step: *validatePackage-2.4.4
+      - step: *validatePackage-2.4.5
       - step: *deployToAwComposer
 
     deploy-to-dev-composer:
@@ -325,32 +311,30 @@ pipelines:
     build-marketplace-package:
       - step: *build
       - step: *validatePackage-2.3.7
-      - step: *validatePackage-2.4.4
+      - step: *validatePackage-2.4.5
 
     # Run tests manually
     run-all-tests:
       - parallel:
           - step: *eqpTest-2.3.7
-          - step: *eqpTest-2.4.4
+          - step: *eqpTest-2.4.5
           - step: *staticTest-2.3.7
-          - step: *staticTest-2.4.4
-          - step: *PHPStan-2.4.4
+          - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
+          - step: *installMagento-2.4.5
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
           - step: *eqpTest-2.3.7
-          - step: *eqpTest-2.4.4
+          - step: *eqpTest-2.4.5
           - step: *staticTest-2.3.7
-          - step: *staticTest-2.4.4
-          - step: *PHPStan-2.4.4
+          - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
           - step: *installMagento-2.3.7
-          - step: *installMagento-2.4.4
+          - step: *installMagento-2.4.5
 
     # set composer permissions
     set_permissions:
@@ -370,8 +354,9 @@ pipelines:
     static-test-with-select-severity:
       - variables:
           - name: SEVERITY
-      - step: *staticTest-2.3.7
-      - step: *staticTest-2.4.4
+      - parallel:
+        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.5
 
 
     # copy this file to all modules

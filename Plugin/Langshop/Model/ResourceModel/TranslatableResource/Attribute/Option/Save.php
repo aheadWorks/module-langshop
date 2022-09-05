@@ -91,18 +91,20 @@ class Save
             $existingOptions = $this->optionProvider->get([$attribute->getId()], $storeId);
 
             $toInsert = [];
-            $toDelete= [];
+            $toDelete = [];
 
             foreach ($options as $optionId => $value) {
+                $valueId = $existingOptions[$optionId]->getData('value_id');
+
                 if ($value) {
                     $toInsert[] = [
-                        'value_id' => $existingOptions[$optionId]->getData('value_id'),
+                        'value_id' => $valueId,
                         'option_id' => $optionId,
                         'store_id' => $storeId,
                         'value' => $value
                     ];
-                } else {
-                    $toDelete[] = $existingOptions[$optionId]->getData('value_id');
+                } elseif ($valueId) {
+                    $toDelete[] = $valueId;
                 }
             }
 

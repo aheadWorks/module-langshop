@@ -1,15 +1,23 @@
 <?php
+declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Api\Data\Schema;
+
+use Aheadworks\Langshop\Api\Data\LocaleInterface;
 
 interface ResourceInterface
 {
+    /**
+     * Constants for internal keys
+     */
     public const RESOURCE = 'resource';
     public const LABEL = 'label';
     public const DESCRIPTION = 'description';
     public const ICON = 'icon';
+    public const VIEW_TYPE = 'viewType';
+    public const DEFAULT_LOCALE = 'defaultLocale';
     public const FIELDS = 'fields';
     public const SORTING = 'sorting';
-    public const VIEW_TYPE = 'viewType';
 
     /**
      * Set resource
@@ -72,6 +80,36 @@ interface ResourceInterface
     public function getIcon(): string;
 
     /**
+     * Set view type
+     *
+     * @param string $viewType
+     * @return $this
+     */
+    public function setViewType(string $viewType): ResourceInterface;
+
+    /**
+     * Get view type
+     *
+     * @return string
+     */
+    public function getViewType(): string;
+
+    /**
+     * Set default locale
+     *
+     * @param \Aheadworks\Langshop\Api\Data\LocaleInterface|null $defaultLocale
+     * @return $this
+     */
+    public function setDefaultLocale(?LocaleInterface $defaultLocale): ResourceInterface;
+
+    /**
+     * Get default locale
+     *
+     * @return \Aheadworks\Langshop\Api\Data\LocaleInterface|null
+     */
+    public function getDefaultLocale(): ?LocaleInterface;
+
+    /**
      * Set fields
      *
      * @param \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\FieldInterface[] $fields
@@ -100,19 +138,4 @@ interface ResourceInterface
      * @return \Aheadworks\Langshop\Api\Data\Schema\TranslatableResource\SortingInterface[]
      */
     public function getSorting(): array;
-
-    /**
-     * Set view type
-     *
-     * @param string $viewType
-     * @return $this
-     */
-    public function setViewType(string $viewType): ResourceInterface;
-
-    /**
-     * Get view type
-     *
-     * @return string
-     */
-    public function getViewType(): string;
 }

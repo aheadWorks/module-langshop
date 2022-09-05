@@ -54,11 +54,11 @@ class Save
         $storeLabel = $attribute->getData(self::KEY_STORE_LABEL);
         $storeId = (int) $attribute->getData(self::KEY_STORE_ID);
 
-        if ($storeLabel) {
-            $storeLabelId = array_key_first(
-                $this->storeLabelProvider->get([$attribute->getId()], $storeId)
-            );
+        $storeLabelId = array_key_first(
+            $this->storeLabelProvider->get([$attribute->getId()], $storeId)
+        );
 
+        if ($storeLabel) {
             $this->resourceConnection->getConnection()->insertOnDuplicate(
                 $this->resourceConnection->getTableName('eav_attribute_label'),
                 [
@@ -68,10 +68,7 @@ class Save
                     'value' => $storeLabel
                 ]
             );
-        } elseif ($storeLabel === false) {
-            $storeLabelId = array_key_first(
-                $this->storeLabelProvider->get([$attribute->getId()], $storeId)
-            );
+        } elseif ($storeLabel === false && $storeLabelId) {
             $this->resourceConnection->getConnection()->delete(
                 $this->resourceConnection->getTableName('eav_attribute_label'),
                 'attribute_label_id = ' . $storeLabelId

@@ -5,16 +5,6 @@ namespace Aheadworks\Langshop\Api\Data\Schema\TranslatableResource;
 
 interface FieldInterface
 {
-    public const KEY = 'key';
-    public const LABEL = 'label';
-    public const TYPE = 'type';
-    public const IS_TRANSLATABLE = 'isTranslatable';
-    public const IS_TITLE = 'is_title';
-    public const FILTER = 'filter';
-    public const FILTER_OPTIONS = 'filter_options';
-    public const SORT_ORDER = 'sortOrder';
-    public const VISIBLE_ON = 'visible_on';
-
     /**
      * Set key
      *
