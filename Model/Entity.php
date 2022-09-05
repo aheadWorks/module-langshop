@@ -40,6 +40,11 @@ class Entity
     private string $viewType;
 
     /**
+     * @var string
+     */
+    private string $defaultLocale;
+
+    /**
      * @var Field[]
      */
     private array $fields;
@@ -51,6 +56,7 @@ class Entity
      * @param string $description
      * @param string $icon
      * @param string $viewType
+     * @param string $defaultLocale
      */
     public function __construct(
         FieldCollector $fieldCollector,
@@ -58,7 +64,8 @@ class Entity
         string $label = '',
         string $description = '',
         string $icon = '',
-        string $viewType = ''
+        string $viewType = '',
+        string $defaultLocale = ''
     ) {
         $this->fieldCollector = $fieldCollector;
         $this->resourceType = $resourceType;
@@ -66,6 +73,7 @@ class Entity
         $this->description = $description;
         $this->icon = $icon;
         $this->viewType = $viewType;
+        $this->defaultLocale = $defaultLocale;
     }
 
     /**
@@ -116,6 +124,16 @@ class Entity
     public function getViewType(): string
     {
         return $this->viewType;
+    }
+
+    /**
+     * Get default locale
+     *
+     * @return string
+     */
+    public function getDefaultLocale(): string
+    {
+        return $this->defaultLocale;
     }
 
     /**

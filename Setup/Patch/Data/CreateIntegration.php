@@ -6,9 +6,9 @@ namespace Aheadworks\Langshop\Setup\Patch\Data;
 use Aheadworks\Langshop\Model\Service\Integration as IntegrationService;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 
-//todo realize revertable interface
-class CreateIntegration implements DataPatchInterface
+class CreateIntegration implements DataPatchInterface, PatchRevertableInterface
 {
     /**
      * @var IntegrationService
@@ -36,6 +36,17 @@ class CreateIntegration implements DataPatchInterface
         $this->integrationService->generateToken();
 
         return $this;
+    }
+
+    /**
+     * Remove access token
+     *
+     * @return void
+     * @throws IntegrationException
+     */
+    public function revert()
+    {
+        $this->integrationService->deleteIntegration();
     }
 
     /**

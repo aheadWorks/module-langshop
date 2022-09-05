@@ -1,11 +1,13 @@
 <?php
 declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv;
 
-use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
 use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
+use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionTrait;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\SortingApplier;
@@ -15,19 +17,24 @@ use Aheadworks\Langshop\Model\TranslationFactory;
 use Exception;
 use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 class Collection extends DataCollection implements CollectionInterface
 {
     use CollectionTrait;
 
-    public const BASE_LOCALE = 'en_US';
+    /**
+     * @var LocaleScopeRepository
+     */
+    private LocaleScopeRepository $localeScopeRepository;
 
     /**
-     * @var LocaleConfig
+     * @var LocaleCodeConverter
      */
-    private LocaleConfig $localeConfig;
+    private LocaleCodeConverter $localeCodeConverter;
 
     /**
      * @var CsvReader
@@ -81,7 +88,8 @@ class Collection extends DataCollection implements CollectionInterface
 
     /**
      * @param EntityFactoryInterface $entityFactory
-     * @param LocaleConfig $localeConfig
+     * @param LocaleScopeRepository $localeScopeRepository
+     * @param LocaleCodeConverter $localeCodeConverter
      * @param CsvReader $csvReader
      * @param ModuleListInterface $moduleList
      * @param TranslationFactory $translationFactory
@@ -91,7 +99,8 @@ class Collection extends DataCollection implements CollectionInterface
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
-        LocaleConfig $localeConfig,
+        LocaleScopeRepository $localeScopeRepository,
+        LocaleCodeConverter $localeCodeConverter,
         CsvReader $csvReader,
         ModuleListInterface $moduleList,
         TranslationFactory $translationFactory,
@@ -100,7 +109,9 @@ class Collection extends DataCollection implements CollectionInterface
         Resolver $filterResolver
     ) {
         parent::__construct($entityFactory);
-        $this->localeConfig = $localeConfig;
+
+        $this->localeScopeRepository = $localeScopeRepository;
+        $this->localeCodeConverter = $localeCodeConverter;
         $this->csvReader = $csvReader;
         $this->moduleList = $moduleList;
         $this->translationFactory = $translationFactory;
@@ -136,8 +147,8 @@ class Collection extends DataCollection implements CollectionInterface
     public function loadData($printQuery = false, $logQuery = false)
     {
         $translation = $this->translationFactory->create();
-        $locale = $this->localeConfig->getValue($this->getStoreId());
-        $translationData = $translation->setLocale($locale)->loadData(null, true)->getData();
+        $localeCode = $this->getLocaleCode($this->getStoreId());
+        $translationData = $translation->setLocale($localeCode)->loadData(null, true)->getData();
 
         foreach ($this->moduleList->getNames() as $packageName) {
             $model = $this->_entityFactory->create($this->_itemObjectClass);
@@ -149,8 +160,12 @@ class Collection extends DataCollection implements CollectionInterface
             if ($this->filterResolver->resolve($this->_filters, $model)) {
                 if ($this->needToAddLines) {
                     try {
-                        $data = $this->csvReader->getCsvData($packageName, self::BASE_LOCALE);
-                        $lines = $this->getTranslationLines($this->getOriginalLines($data), $translationData, $locale);
+                        $data = $this->csvReader->getCsvData($packageName, $this->getLocaleCode());
+                        $lines = $this->getTranslationLines(
+                            $this->getOriginalLines($data),
+                            $translationData,
+                            $localeCode
+                        );
                         $model->setLines($lines);
                     } catch (Exception $e) {
                         $this->logger->error($e->getMessage());
@@ -188,12 +203,13 @@ class Collection extends DataCollection implements CollectionInterface
      * @param array $translationData
      * @param string $localeCode
      * @return string[]
+     * @throws NoSuchEntityException
      */
     private function getTranslationLines(array $lines, array $translationData, string $localeCode): array
     {
         $result = [];
         foreach ($lines as $line) {
-            $result[$line] = $localeCode === self::BASE_LOCALE ? $line : '';
+            $result[$line] = $localeCode === $this->getLocaleCode() ? $line : '';
 
             foreach ($translationData as $translationValue) {
                 if (isset($translationValue[$line])) {
@@ -216,7 +232,7 @@ class Collection extends DataCollection implements CollectionInterface
         $result = [];
         foreach ($csvData as $data) {
             $originalString = $data[CsvFile::ORIGINAL_INDEX];
-            if (strlen($originalString) < 256) {
+            if ($originalString && strlen($originalString) < 256) {
                 $result[] = $originalString;
             }
         }
@@ -285,5 +301,32 @@ class Collection extends DataCollection implements CollectionInterface
         $offset = $this->getPageSize() * ($this->getCurPage() - 1);
         $this->_items = array_slice($this->_items, $offset, $this->getPageSize());
         return $this;
+    }
+
+    /**
+     * Retrieves locale scope by store id
+     *
+     * @param int $storeId
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    private function getLocaleCode(int $storeId = Store::DEFAULT_STORE_ID): string
+    {
+        $localeScopes = array_merge(
+            $this->localeScopeRepository->getList(),
+            [$this->localeScopeRepository->getPrimary($this->getResourceType())],
+        );
+
+        foreach ($localeScopes as $localeScope) {
+            if ($localeScope->getScopeId() === $storeId) {
+                return $this->localeCodeConverter->toMagento(
+                    $localeScope->getLocaleCode()
+                );
+            }
+        }
+
+        throw new NoSuchEntityException(
+            __('Store with identifier = "%1" is not available for translate.', $storeId)
+        );
     }
 }

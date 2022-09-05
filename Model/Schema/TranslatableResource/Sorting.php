@@ -9,6 +9,14 @@ use Magento\Framework\DataObject;
 class Sorting extends DataObject implements SortingInterface
 {
     /**
+     * Constants for internal keys
+     */
+    private const KEY = 'key';
+    private const LABEL = 'label';
+    private const FIELD = 'field';
+    private const DIRECTION = 'direction';
+
+    /**
      * Set key
      *
      * @param string $key

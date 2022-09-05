@@ -1,11 +1,14 @@
 <?php
 declare(strict_types=1);
+
 namespace Aheadworks\Langshop\Test\Unit\Model\ResourceModel\TranslatableResource\Csv;
 
-use Aheadworks\Langshop\Model\Config\Locale as LocaleConfig;
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
+use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\SortingApplier;
 use Aheadworks\Langshop\Model\Source\CsvFile;
@@ -31,9 +34,14 @@ class CollectionTest extends TestCase
     private $entityFactory;
 
     /**
-     * @var LocaleConfig|MockObject
+     * @var LocaleScopeRepository|MockObject
      */
-    private $localeConfigMock;
+    private $localeScopeRepositoryMock;
+
+    /**
+     * @var LocaleCodeConverter|MockObject
+     */
+    private $localeCodeConverterMock;
 
     /**
      * @var CsvReader|MockObject
@@ -51,9 +59,9 @@ class CollectionTest extends TestCase
     private $filterResolverMock;
 
     /**
-     * @var MockObject
+     * @var TranslationFactory|MockObject
      */
-    private MockObject $translationFactoryMock;
+    private $translationFactoryMock;
 
     /**
      * @var SortingApplier|MockObject
@@ -61,7 +69,7 @@ class CollectionTest extends TestCase
     private $sortingApplierMock;
 
     /**
-     * @var MockObject|LoggerInterface
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
@@ -71,7 +79,8 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->entityFactory = $this->createMock(EntityFactoryInterface::class);
-        $this->localeConfigMock = $this->createMock(LocaleConfig::class);
+        $this->localeScopeRepositoryMock = $this->createMock(LocaleScopeRepository::class);
+        $this->localeCodeConverterMock = $this->createMock(LocaleCodeConverter::class);
         $this->csvReaderMock = $this->createMock(CsvReader::class);
         $this->moduleListMock = $this->createMock(ModuleListInterface::class);
         $this->filterResolverMock = $this->createMock(Resolver::class);
@@ -81,7 +90,8 @@ class CollectionTest extends TestCase
 
         $this->collection = new Collection(
             $this->entityFactory,
-            $this->localeConfigMock,
+            $this->localeScopeRepositoryMock,
+            $this->localeCodeConverterMock,
             $this->csvReaderMock,
             $this->moduleListMock,
             $this->translationFactoryMock,
@@ -100,7 +110,9 @@ class CollectionTest extends TestCase
     public function testLoadData(): void
     {
         $translation = $this->createMock(Translation::class);
+        $localeScope = $this->createMock(RecordInterface::class);
         $model = $this->createMock(Model::class);
+
         $filters = [];
         $locale = 'en_US';
         $data = [];
@@ -110,16 +122,6 @@ class CollectionTest extends TestCase
         $translationData = ['original'=> 'translation'];
         $storeId = 0;
 
-        $this->translationFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($translation);
-
-        $this->localeConfigMock
-            ->expects($this->any())
-            ->method('getValue')
-            ->with($storeId)
-            ->willReturn($locale);
         $translation
             ->expects($this->any())
             ->method('setLocale')
@@ -134,6 +136,35 @@ class CollectionTest extends TestCase
             ->expects($this->any())
             ->method('getData')
             ->willReturn($data);
+
+        $this->translationFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($translation);
+
+        $localeScope
+            ->expects($this->any())
+            ->method('getScopeId')
+            ->willReturn($storeId);
+        $localeScope
+            ->expects($this->any())
+            ->method('getLocaleCode')
+            ->willReturn($locale);
+
+        $this->localeScopeRepositoryMock
+            ->expects($this->any())
+            ->method('getList')
+            ->willReturn([$localeScope]);
+        $this->localeScopeRepositoryMock
+            ->expects($this->any())
+            ->method('getPrimary')
+            ->willReturn($localeScope);
+
+        $this->localeCodeConverterMock
+            ->expects($this->any())
+            ->method('toMagento')
+            ->willReturn($locale);
+
         $this->moduleListMock
             ->expects($this->any())
             ->method('getNames')
@@ -170,10 +201,10 @@ class CollectionTest extends TestCase
             $this->csvReaderMock
                 ->expects($this->any())
                 ->method('getCsvData')
-                ->with($packageName, Collection::BASE_LOCALE)
+                ->with($packageName, $locale)
                 ->willReturn($csvData);
             $originalLines = $this->getOriginalLines($csvData);
-            $lines = $this->getTranslationLines($originalLines, $translationData, Collection::BASE_LOCALE);
+            $lines = $this->getTranslationLines($originalLines, $translationData, $locale);
             $model
                 ->expects($this->any())
                 ->method('setLines')
@@ -198,7 +229,7 @@ class CollectionTest extends TestCase
     {
         $result = [];
         foreach ($lines as $line) {
-            $result[$line] = $localeCode === Collection::BASE_LOCALE ? $line : '';
+            $result[$line] = $localeCode === 'en_US' ? $line : '';
 
             foreach ($translationData as $translationValue) {
                 if (isset($translationValue[$line])) {

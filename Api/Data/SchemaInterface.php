@@ -3,11 +3,6 @@ namespace Aheadworks\Langshop\Api\Data;
 
 interface SchemaInterface
 {
-    public const VERSION = 'version';
-    public const TRANSLATABLE_RESOURCES = 'translatableResources';
-    public const POSSIBILITIES = 'possibilities';
-    public const TRANSLATABLE_RESOURCE_GROUPS = 'translatableResourceGroups';
-
     /**
      * Set version
      *

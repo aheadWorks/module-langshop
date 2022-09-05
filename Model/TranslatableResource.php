@@ -9,7 +9,16 @@ use Magento\Framework\DataObject;
 class TranslatableResource extends DataObject implements TranslatableResourceInterface
 {
     /**
-     * @inheritDoc
+     * Constants for internal keys
+     */
+    private const RESOURCE_ID = 'resourceId';
+    private const RESOURCE_TYPE = 'resourceType';
+    private const FIELDS = 'fields';
+
+    /**
+     * Get resource id
+     *
+     * @return string|null
      */
     public function getResourceId(): ?string
     {
@@ -17,7 +26,10 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     }
 
     /**
-     * @inheritDoc
+     * Set resource id
+     *
+     * @param string $resourceId
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      */
     public function setResourceId(string $resourceId): TranslatableResourceInterface
     {
@@ -25,7 +37,9 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     }
 
     /**
-     * @inheritDoc
+     * Get resource type
+     *
+     * @return string|null
      */
     public function getResourceType(): ?string
     {
@@ -33,7 +47,10 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     }
 
     /**
-     * @inheritDoc
+     * Set resource type
+     *
+     * @param string $resourceType
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      */
     public function setResourceType(string $resourceType): TranslatableResourceInterface
     {
@@ -41,7 +58,9 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     }
 
     /**
-     * @inheritDoc
+     * Get fields
+     *
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface[]|null
      */
     public function getFields(): ?array
     {
@@ -49,7 +68,10 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     }
 
     /**
-     * @inheritDoc
+     * Set fields
+     *
+     * @param \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface[] $fields
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      */
     public function setFields(array $fields): TranslatableResourceInterface
     {

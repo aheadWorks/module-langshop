@@ -9,7 +9,15 @@ use Magento\Framework\DataObject;
 class Confirmation extends DataObject implements ConfirmationResultInterface
 {
     /**
-     * @inheritDoc
+     * Constants for internal keys
+     */
+    private const SUCCESS = 'success';
+
+    /**
+     * Set result of confirm action
+     *
+     * @param bool $success
+     * @return \Aheadworks\Langshop\Api\Data\Saas\ConfirmationResultInterface
      */
     public function setSuccess(bool $success): ConfirmationResultInterface
     {
@@ -17,7 +25,9 @@ class Confirmation extends DataObject implements ConfirmationResultInterface
     }
 
     /**
-     * @inheritDoc
+     * Get result of confirm action
+     *
+     * @return bool
      */
     public function isSuccess(): bool
     {

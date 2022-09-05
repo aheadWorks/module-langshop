@@ -9,83 +9,94 @@ use Magento\Framework\DataObject;
 class Record extends DataObject implements RecordInterface
 {
     /**
-     * @inheritdoc
+     * Constants for internal keys
      */
-    public function getScopeId()
+    private const SCOPE_ID = 'scope_id';
+    private const SCOPE_TYPE = 'scope_type';
+    private const LOCALE_CODE = 'locale_code';
+    private const IS_PRIMARY = 'is_primary';
+
+    /**
+     * Get scope id
+     *
+     * @return int
+     */
+    public function getScopeId(): int
     {
         return $this->getData(self::SCOPE_ID);
     }
 
     /**
-     * @inheritdoc
+     * Set scope id
+     *
+     * @param int $scopeId
+     * @return $this
      */
-    public function setScopeId($scopeId)
+    public function setScopeId(int $scopeId): RecordInterface
     {
         return $this->setData(self::SCOPE_ID, $scopeId);
     }
 
     /**
-     * @inheritdoc
+     * Get scope type
+     *
+     * @return string
      */
-    public function getScopeType()
+    public function getScopeType(): string
     {
         return $this->getData(self::SCOPE_TYPE);
     }
 
     /**
-     * @inheritdoc
+     * Set scope type
+     *
+     * @param string $scopeType
+     * @return $this
      */
-    public function setScopeType($scopeType)
+    public function setScopeType(string $scopeType): RecordInterface
     {
         return $this->setData(self::SCOPE_TYPE, $scopeType);
     }
 
     /**
-     * @inheritdoc
+     * Get locale code
+     *
+     * @return string
      */
-    public function getLocaleCode()
+    public function getLocaleCode(): string
     {
         return $this->getData(self::LOCALE_CODE);
     }
 
     /**
-     * @inheritdoc
+     * Set locale code
+     *
+     * @param string $localeCode
+     * @return $this
      */
-    public function setLocaleCode($localeCode)
+    public function setLocaleCode(string $localeCode): RecordInterface
     {
         return $this->setData(self::LOCALE_CODE, $localeCode);
     }
 
     /**
-     * @inheritdoc
+     * Get is primary locale flag
+     *
+     * @return bool
      */
-    public function getIsPrimary()
+    public function getIsPrimary(): bool
     {
         return $this->getData(self::IS_PRIMARY);
     }
 
     /**
-     * @inheritdoc
+     * Set is primary locale flag
+     *
+     * @param bool $isPrimary
+     * @return $this
      */
-    public function setIsPrimary($isPrimary)
+    public function setIsPrimary(bool $isPrimary): RecordInterface
     {
         return $this->setData(self::IS_PRIMARY, $isPrimary);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(
-        \Aheadworks\Langshop\Api\Data\Locale\Scope\RecordExtensionInterface $extensionAttributes
-    ) {
-        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
 }

@@ -93,4 +93,19 @@ class Integration
     {
         return $this->getIntegration()->getData('token');
     }
+
+    /**
+     * Delete Langshop integration
+     *
+     * @return void
+     * @throws IntegrationException
+     */
+    public function deleteIntegration(): void
+    {
+        $integration = $this->getIntegration();
+        $integrationData = $this->integrationService->delete($integration->getId());
+        if (isset($integrationData[IntegrationModel::CONSUMER_ID])) {
+            $this->oauthService->deleteConsumer($integrationData[IntegrationModel::CONSUMER_ID]);
+        }
+    }
 }

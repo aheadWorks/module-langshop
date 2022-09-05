@@ -6,12 +6,6 @@ namespace Aheadworks\Langshop\Api\Data\TranslatableResource;
 interface ResourceListInterface
 {
     /**
-     * Constants for internal keys
-     */
-    public const ITEMS = 'data';
-    public const PAGINATION = 'pagination';
-
-    /**
      * Get items
      *
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface[]|null

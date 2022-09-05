@@ -5,8 +5,6 @@ namespace Aheadworks\Langshop\Api\Data\Saas;
 
 interface ConfirmationResultInterface
 {
-    public const SUCCESS = 'success';
-
     /**
      * Set result of confirm action
      *
