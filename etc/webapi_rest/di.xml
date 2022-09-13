@@ -4,4 +4,10 @@
     <type name="\Magento\Framework\Webapi\ErrorProcessor">
         <plugin name="aw_ls_process_exceptions" type="Aheadworks\Langshop\Plugin\Framework\Webapi\ErrorProcessor"/>
     </type>
+
+    <type name="Magento\Webapi\Model\Authorization\TokenUserContext">
+        <arguments>
+            <argument name="request" xsi:type="object">Aheadworks\Langshop\Model\Authorization\Request</argument>
+        </arguments>
+    </type>
 </config>
