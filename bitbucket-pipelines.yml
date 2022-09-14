@@ -62,9 +62,9 @@ definitions:
         artifacts:
           - "*.zip"
   test_steps:
-    - step: &validatePackage-2.3.7
-        name: Validate marketplace package on Magento 2.3.7
-        image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
+    - step: &validatePackage-2.4.0-p1
+        name: Validate marketplace package on Magento 2.4.0-p1
+        image: aheadworks/m2test-new:2.4.0-p1-without-dump-7.4
         script:
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
@@ -74,13 +74,13 @@ definitions:
         script:
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
-    - step: &eqpTest-2.3.7
-        name: EQP tests on Magento 2.3.7
-        image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
+    - step: &eqpTest-2.4.0-p1
+        name: EQP tests on Magento 2.4.0-p1
+        image: aheadworks/m2test-new:2.4.0-p1-without-dump-7.4
         script:
           - mkdir -p test-results/eqp
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager eqp ${PWD} > test-results/eqp/test-EQP-2.3.7.xml
+          - python3 -m aheadworks_test_manager eqp ${PWD} > test-results/eqp/test-EQP-2.4.0-p1.xml
         artifacts:
           - "test-results/**"
     - step: &eqpTest-2.4.5
@@ -92,19 +92,14 @@ definitions:
           - python3 -m aheadworks_test_manager eqp ${PWD} > test-results/eqp/test-EQP.xml
         artifacts:
           - "test-results/**"
-    - step: &staticTest-2.3.7
-        name: Static tests on Magento 2.3.7
-        image: aheadworks/m2test-new:2.3.7-p3-with-dump-7.4
+    - step: &staticTest-2.4.0-p1
+        name: Static tests on Magento 2.4.0-p1
+        image: aheadworks/m2test-new:2.4.0-p1-with-dump-7.4
         script:
-          - mkdir -p test-results/static-2.3.7-p3
+          - mkdir -p test-results/static-2.4.0-p1
           - *prepare_git
-          # Fixup missing php version requirement in magento 2.3.7
-          - OLD=${PWD} && cd /var/www/html && composer config --unset repositories.magento && cd $OLD
-          - OLD=${PWD} && cd /var/www/html && composer config --unset repositories.0 && cd $OLD
-          - OLD=${PWD} && cd /var/www/html && composer -n --no-update require php "~7.4.0||~8.1.0" && cd $OLD
-          - composer -n --no-update require php "~7.4.0||~8.1.0"
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager static ${PWD} test-results/static-2.3.7-p3
+          - python3 -m aheadworks_test_manager static ${PWD} test-results/static-2.4.0-p1
         artifacts:
           - "test-results/**"
     - step: &staticTest-2.4.5
@@ -124,11 +119,11 @@ definitions:
           - "test-results/**"
     - step: &unitTestPHP74
         name: Unit tests PHP 7.4
-        image: aheadworks/m2test-new:2.3.7-p3-with-dump-7.4
+        image: aheadworks/m2test-new:2.4.0-p1-with-dump-7.4
         script:
           - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.3.7.xml
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.0-p1.xml
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP81
@@ -140,9 +135,9 @@ definitions:
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit.xml
         artifacts:
           - "test-results/**"
-    - step: &installMagento-2.3.7
-        name: Install Magento 2.3.7 test
-        image: aheadworks/m2test-new:2.3.7-p3-without-dump-7.4
+    - step: &installMagento-2.4.0-p1
+        name: Install Magento 2.4.0-p1 test
+        image: aheadworks/m2test-new:2.4.0-p1-without-dump-7.4
         script:
           - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
@@ -240,16 +235,16 @@ pipelines:
     master:
       - step: *build
       - parallel:
-          - step: *validatePackage-2.3.7
+          - step: *validatePackage-2.4.0-p1
           - step: *validatePackage-2.4.5
       - parallel:
-          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.0-p1
           - step: *eqpTest-2.4.5
-          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.0-p1
           - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
-          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.0-p1
           - step: *installMagento-2.4.5
       - step: *ecommerce_build
       - step: *swaggerWebApiDocBuild
@@ -259,48 +254,48 @@ pipelines:
     # For every commit to develop branch: run tests
     develop:
       - parallel:
-          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.0-p1
           - step: *eqpTest-2.4.5
-          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.0-p1
           - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *installMagento-2.4.5
       - step: *deployToDevComposer
     feature/*:
       - parallel:
-        - step: *eqpTest-2.3.7
+        - step: *eqpTest-2.4.0-p1
         - step: *eqpTest-2.4.5
-        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.0-p1
         - step: *staticTest-2.4.5
         - step: *unitTestPHP74
         - step: *installMagento-2.4.5
     bugfix/*:
       - parallel:
-        - step: *eqpTest-2.3.7
+        - step: *eqpTest-2.4.0-p1
         - step: *eqpTest-2.4.5
-        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.0-p1
         - step: *staticTest-2.4.5
         - step: *unitTestPHP74
         - step: *installMagento-2.4.5
     release/*:
       - step: *build
-      - step: *validatePackage-2.3.7
+      - step: *validatePackage-2.4.0-p1
       - step: *validatePackage-2.4.5
       - parallel:
-          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.0-p1
           - step: *eqpTest-2.4.5
-          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.0-p1
           - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
-          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.0-p1
           - step: *installMagento-2.4.5
 
   custom:
     # Upload to AW composer manually
     deploy-to-aw-composer:
       - step: *build
-      - step: *validatePackage-2.3.7
+      - step: *validatePackage-2.4.0-p1
       - step: *validatePackage-2.4.5
       - step: *deployToAwComposer
 
@@ -310,30 +305,30 @@ pipelines:
     # Build pack manually
     build-marketplace-package:
       - step: *build
-      - step: *validatePackage-2.3.7
+      - step: *validatePackage-2.4.0-p1
       - step: *validatePackage-2.4.5
 
     # Run tests manually
     run-all-tests:
       - parallel:
-          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.0-p1
           - step: *eqpTest-2.4.5
-          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.0-p1
           - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
-          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.0-p1
           - step: *installMagento-2.4.5
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
-          - step: *eqpTest-2.3.7
+          - step: *eqpTest-2.4.0-p1
           - step: *eqpTest-2.4.5
-          - step: *staticTest-2.3.7
+          - step: *staticTest-2.4.0-p1
           - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *unitTestPHP81
-          - step: *installMagento-2.3.7
+          - step: *installMagento-2.4.0-p1
           - step: *installMagento-2.4.5
 
     # set composer permissions
@@ -355,7 +350,7 @@ pipelines:
       - variables:
           - name: SEVERITY
       - parallel:
-        - step: *staticTest-2.3.7
+        - step: *staticTest-2.4.0-p1
         - step: *staticTest-2.4.5
 
 
