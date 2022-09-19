@@ -1,7 +1,12 @@
-define([], function () {
+define([
+    'jquery'
+], function ($) {
     'use strict';
 
     let iframeBridge = {
+        options: {
+            redirectUrl: ''
+        },
 
         /**
          * @property {HTMLElement} iframe
@@ -19,6 +24,24 @@ define([], function () {
             if (data.url) {
                 window.location.href = data.url;
             }
+        },
+
+        /**
+         * @param {string} data.path
+         */
+        redirectToByPath: function (data) {
+            $.ajax({
+                url: this.options.redirectUrl,
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    path: data.path
+                }
+            }).success(function (response) {
+                if (response.url) {
+                    window.location.href = response.url;
+                }
+            });
         },
 
         /**
@@ -70,5 +93,6 @@ define([], function () {
      */
     return function (settings, iframe) {
         iframeBridge.iframe = iframe;
+        iframeBridge.options = settings;
     };
 });

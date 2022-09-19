@@ -12,5 +12,7 @@ $viewModel = $block->getViewModel();
         height="1000px"
         frameborder="0"
         sandbox="allow-same-origin allow-scripts"
-        data-mage-init='{"Aheadworks_Langshop/js/iframe-bridge": {}}'
+        data-mage-init='{"Aheadworks_Langshop/js/iframe-bridge": {
+            "redirectUrl": "<?= $block->escapeUrl($viewModel->getRedirectUrl()) ?>"
+        }}'
 ></iframe>
