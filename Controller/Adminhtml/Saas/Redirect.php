@@ -11,6 +11,8 @@ use Magento\Framework\Controller\ResultInterface;
 class Redirect extends Action implements HttpGetActionInterface
 {
     /**
+     * Get url
+     *
      * @return ResultInterface|Json
      */
     public function execute()

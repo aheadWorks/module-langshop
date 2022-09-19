@@ -39,7 +39,7 @@ define([
                 }
             }).success(function (response) {
                 if (response.url) {
-                    window.location.href = response.url;
+                    window.parent.location.href = response.url;
                 }
             });
         },
