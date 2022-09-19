@@ -183,3 +183,149 @@ definitions:
         script:
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
+    - step: &get_key
+        name: get_key
+        image: aheadworks/m2test-new:test-7.4
+        script:
+          - echo ${DEVOPS_SSH_KEY} > key
+          - printenv > env
+        artifacts:
+          - key
+          - env
+  services:
+    m24-81:
+      image: aheadworks/m2test-new:2.4.4-with-dump-8.1
+pipelines:
+  tags:
+    '*.*.*':
+      - step: *rebuildPrivateComposer
+  branches:
+    # For commits to master branch: run full set of tests
+    master:
+      - step: *build
+      - parallel:
+          - step: *validatePackage-2.4.0-p1
+          - step: *validatePackage-2.4.5
+          - step: *eqpTest-2.4.0-p1
+          - step: *eqpTest-2.4.5
+          - step: *staticTest-2.4.0-p1
+          - step: *staticTest-2.4.5
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.4.0-p1
+          - step: *installMagento-2.4.5
+      - step: *rebuildPrivateComposer
+      - step: *build_packages
+      - step: *swaggerWebApiDocBuild
+      - step: *releaseToPublicComposer
+
+    # For every commit to develop branch: run tests
+    develop:
+      - parallel:
+          - step: *eqpTest-2.4.0-p1
+          - step: *eqpTest-2.4.5
+          - step: *staticTest-2.4.0-p1
+          - step: *staticTest-2.4.5
+          - step: *unitTestPHP74
+          - step: *installMagento-2.4.5
+      - step: *rebuildPrivateComposer
+    feature/*:
+      - parallel:
+        - step: *eqpTest-2.4.0-p1
+        - step: *eqpTest-2.4.5
+        - step: *staticTest-2.4.0-p1
+        - step: *staticTest-2.4.5
+        - step: *unitTestPHP74
+        - step: *installMagento-2.4.5
+    bugfix/*:
+      - parallel:
+        - step: *eqpTest-2.4.0-p1
+        - step: *eqpTest-2.4.5
+        - step: *staticTest-2.4.0-p1
+        - step: *staticTest-2.4.5
+        - step: *unitTestPHP74
+        - step: *installMagento-2.4.5
+    release/*:
+      - step: *build
+      - parallel:
+          - step: *validatePackage-2.4.0-p1
+          - step: *validatePackage-2.4.5
+          - step: *eqpTest-2.4.0-p1
+          - step: *eqpTest-2.4.5
+          - step: *staticTest-2.4.0-p1
+          - step: *staticTest-2.4.5
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.4.0-p1
+          - step: *installMagento-2.4.5
+
+  custom:
+    # Manual upload to the Public composer repository
+    release-to-public-composer:
+      - step: *build
+      - parallel:
+          - step: *validatePackage-2.4.0-p1
+          - step: *validatePackage-2.4.5
+      - step: *releaseToPublicComposer
+
+    # Manual resync of tags and branches for Internal composer repo
+    rebuild-private-composer:
+      - step: *rebuildPrivateComposer
+
+    # Build pack manually
+    build-marketplace-package:
+      - step: *build
+      - parallel:
+          - step: *validatePackage-2.4.0-p1
+          - step: *validatePackage-2.4.5
+
+    # Run tests manually
+    run-all-tests:
+      - parallel:
+          - step: *eqpTest-2.4.0-p1
+          - step: *eqpTest-2.4.5
+          - step: *staticTest-2.4.0-p1
+          - step: *staticTest-2.4.5
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.4.0-p1
+          - step: *installMagento-2.4.5
+
+    # Run prerelease tests manually
+    run-prerelease-tests:
+      - parallel:
+          - step: *eqpTest-2.4.0-p1
+          - step: *eqpTest-2.4.5
+          - step: *staticTest-2.4.0-p1
+          - step: *staticTest-2.4.5
+          - step: *unitTestPHP74
+          - step: *unitTestPHP81
+          - step: *installMagento-2.4.0-p1
+          - step: *installMagento-2.4.5
+
+    # set composer permissions
+    set_permissions:
+      - step: *setPermissions
+
+    get_key:
+      - step: *get_key
+
+    #prepare build
+    build_packages:
+      - step: *build_packages
+
+    # Manually rebuild Web Api Documentation and publish it at S3
+    swagger-web-api-doc-build:
+      - step: *swaggerWebApiDocBuild
+
+    static-test-with-select-severity:
+      - variables:
+          - name: SEVERITY
+      - parallel:
+        - step: *staticTest-2.4.0-p1
+        - step: *staticTest-2.4.5
+
+
+    # copy this file to all modules
+
+
