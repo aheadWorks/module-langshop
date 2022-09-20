@@ -5,9 +5,9 @@ namespace Aheadworks\Langshop\Model\Saas;
 
 use Aheadworks\Langshop\Model\Config\Saas as SaasConfig;
 use Aheadworks\Langshop\Model\Saas\Request\Install as InstallRequest;
-use Magento\Backend\Model\Url;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\UrlInterface;
 
 class UrlBuilder
 {
@@ -32,23 +32,23 @@ class UrlBuilder
     private SerializerInterface $serializer;
 
     /**
-     * @var Url
+     * @var UrlInterface
      */
-    private Url $url;
+    private UrlInterface $url;
 
     /**
      * @param SaasConfig $saasConfig
      * @param CurlSender $curlSender
      * @param InstallRequest $installRequest
      * @param SerializerInterface $serializer
-     * @param Url $url
+     * @param UrlInterface $url
      */
     public function __construct(
         SaasConfig $saasConfig,
         CurlSender $curlSender,
         InstallRequest $installRequest,
         SerializerInterface $serializer,
-        Url $url
+        UrlInterface $url
     ) {
         $this->saasConfig = $saasConfig;
         $this->curlSender = $curlSender;

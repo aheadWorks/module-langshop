@@ -18,10 +18,12 @@ class Redirect extends Action implements HttpGetActionInterface
     public function execute()
     {
         /** @var Json $result */
-         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-         $path = $this->getRequest()->getParam('path');
-         $result->setData(['url' => $this->getUrl($path)]);
+        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $path = $this->getRequest()->getParam('path');
+        $result->setData([
+            'url' => $path ? $this->getUrl($path) : null
+        ]);
 
-         return $result;
+        return $result;
     }
 }
