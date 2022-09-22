@@ -44,4 +44,14 @@ class Iframe implements ArgumentInterface
             ? $this->urlBuilder->getApplicationUrl()
             : $this->urlBuilder->getWizardUrl();
     }
+
+    /**
+     * Get redirect url
+     *
+     * @return string
+     */
+    public function getRedirectUrl(): string
+    {
+        return $this->urlBuilder->getRedirectUrl();
+    }
 }
