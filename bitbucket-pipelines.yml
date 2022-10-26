@@ -24,38 +24,11 @@ definitions:
       TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
       curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100 >> repositories
       curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100\&page=2 >> repositories2
-    get_repositories: &getRepositories2 |-
-      TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
-      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/awm2ext?q=updated_on%3C2022-07-07T04%3A43%3A07%2B03%3A33\&pagelen=100\&sort=updated_on >> repositories
-      echo '{"values":[]}' > repositories2
-    toggle_satis_rebuild: &toggleSatisRebuild |-
-      TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
-      [[ -z "$TOKEN" ]] && { echo "Can't obtain OAuth access token, check credentials" ; exit 1; }
-      curl -s  -X POST -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json" \
-      https://api.bitbucket.org/2.0/repositories/${COMPOSER_DEV_REPO}/pipelines/ \
-      -d '
-      {
-        "target": {
-            "type": "pipeline_ref_target",
-            "ref_type": "branch",
-            "ref_name": "master",
-            "selector": {
-              "type": "custom",
-              "pattern": "rebuild-selected-packages"
-            }
-          },
-          "variables": [
-            {
-              "key": "PACKAGE_URL",
-              "value": "'${BITBUCKET_GIT_SSH_ORIGIN}'"
-            }
-          ]
-      }' || ex
 
   build_steps:
     - step: &build
         image: atlassian/default-image:2
-        name: Build
+        name: Clean and pack sources
         script:
           - *cleanSource
           - *packZip
@@ -75,7 +48,7 @@ definitions:
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
     - step: &eqpTest-2.4.0-p1
-        name: EQP tests on Magento 2.4.0-p1
+        name: Run EQP tests on Magento 2.4.0-p1
         image: aheadworks/m2test-new:2.4.0-p1-without-dump-7.4
         script:
           - mkdir -p test-results/eqp
@@ -84,7 +57,7 @@ definitions:
         artifacts:
           - "test-results/**"
     - step: &eqpTest-2.4.5
-        name: EQP tests on Magento 2.4.5
+        name: Run EQP tests on Magento 2.4.5
         image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
           - mkdir -p test-results/eqp
@@ -93,7 +66,7 @@ definitions:
         artifacts:
           - "test-results/**"
     - step: &staticTest-2.4.0-p1
-        name: Static tests on Magento 2.4.0-p1
+        name: Run static tests on Magento 2.4.0-p1
         image: aheadworks/m2test-new:2.4.0-p1-with-dump-7.4
         script:
           - mkdir -p test-results/static-2.4.0-p1
@@ -103,12 +76,12 @@ definitions:
         artifacts:
           - "test-results/**"
     - step: &staticTest-2.4.5
-        name: Static tests on Magento 2.4.5
+        name: Run static tests on Magento 2.4.5
         image: aheadworks/m2test-new:2.4.5-with-dump-8.1
         script:
           - mkdir -p test-results/static
           - *prepare_git
-          # 2.4.5-specific. Fix false positive code duplication test for fonts
+          # 2.4.4/2.4.5-specific. Fix false positive code duplication test for fonts
           - echo 'lib/internal/LinLibertineFont/' > /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
           - echo 'lib/internal/GnuFreeFont/' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
           - echo 'lib/web/fonts/opensans/semibold/opensans-600.woff2' >> /var/www/html/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist/false_positive.txt
@@ -118,7 +91,7 @@ definitions:
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP74
-        name: Unit tests PHP 7.4
+        name: Run unit tests PHP 7.4
         image: aheadworks/m2test-new:2.4.0-p1-with-dump-7.4
         script:
           - mkdir -p test-results
@@ -127,7 +100,7 @@ definitions:
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP81
-        name: Unit tests PHP 8.1
+        name: Run unit tests PHP 8.1
         image: aheadworks/m2test-new:2.4.5-with-dump-8.1
         script:
           - mkdir -p test-results
@@ -136,7 +109,7 @@ definitions:
         artifacts:
           - "test-results/**"
     - step: &installMagento-2.4.0-p1
-        name: Install Magento 2.4.0-p1 test
+        name: Run install Magento 2.4.0-p1 test
         image: aheadworks/m2test-new:2.4.0-p1-without-dump-7.4
         script:
           - mkdir -p test-results
@@ -146,7 +119,7 @@ definitions:
           - "logs1/**"
           - "test-results/test-unit.xml"
     - step: &installMagento-2.4.5
-        name: Install Magento 2.4.5 test
+        name: Run install Magento 2.4.5 test
         image: aheadworks/m2test-new:2.4.5-without-dump-8.1
         script:
           - mkdir -p test-results
@@ -170,13 +143,15 @@ definitions:
         script:
           - apk add py3-requests
           - python3 /permissions.py
-    - step: &deployToDevComposer
-        name: Toggle satis refresh
+    - step: &rebuildPrivateComposer
+        name: Sync tags and branches to the Internal composer
+        image: aheadworks/deploy-tools:new-gen
         script:
           - *cleanTestResults
-          - *toggleSatisRebuild
-    - step: &deployToAwComposer
-        name: Deploy to composer repository
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_bitbucket_manager internal_composer_refresh
+    - step: &releaseToPublicComposer
+        name: Add the new package to the Public composer repository
         image: aheadworks/deploy
         username: ${DOCKERHUB_LOGIN}
         password: ${DOCKERHUB_PASSWORD}
@@ -189,8 +164,8 @@ definitions:
           - ssh -t ${AW_COMPOSER_SSH_URL} "mkdir -p ${AW_COMPOSER_PACKAGES_ROOT}/${NAME}"
           - scp ${BITBUCKET_REPO_SLUG}.zip ${AW_COMPOSER_SSH_URL}:${AW_COMPOSER_PACKAGES_ROOT}/${NAME}/${BITBUCKET_REPO_SLUG}-${VERSION}.zip
           - REPO_URL=${AW_COMPOSER_API_URL} REPO_LOGIN=${AW_COMPOSER_API_LOGIN} REPO_TOKEN=${AW_COMPOSER_API_PASSWORD} deploy comp -p send-package --filename=${BITBUCKET_REPO_SLUG}-${VERSION}.zip ${BITBUCKET_REPO_SLUG}.zip
-    - step: &ecommerce_build
-        name: Ecommerce build
+    - step: &build_packages
+        name: Build store and marketplace packages and send them to Jira
         image: aheadworks/deploy-tools:new-gen
         script:
             - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
@@ -201,19 +176,13 @@ definitions:
         artifacts:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
-        name: Building Web Api Documentation
+        name: Build Web Api Documentation and publish it at S3
         image: aheadworks/deploy-tools:latest
         services:
           - m24-81
         script:
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
-    - step: &deployPipelines
-        name: Deploy pipelines
-        image: aheadworks/m2test-new:test-7.4
-        script:
-          - *getRepositories
-          - python3 /deploypipeline.py
     - step: &get_key
         name: get_key
         image: aheadworks/m2test-new:test-7.4
@@ -229,7 +198,7 @@ definitions:
 pipelines:
   tags:
     '*.*.*':
-      - step: *deployToDevComposer
+      - step: *rebuildPrivateComposer
   branches:
     # For commits to master branch: run full set of tests
     master:
@@ -237,7 +206,6 @@ pipelines:
       - parallel:
           - step: *validatePackage-2.4.0-p1
           - step: *validatePackage-2.4.5
-      - parallel:
           - step: *eqpTest-2.4.0-p1
           - step: *eqpTest-2.4.5
           - step: *staticTest-2.4.0-p1
@@ -246,10 +214,10 @@ pipelines:
           - step: *unitTestPHP81
           - step: *installMagento-2.4.0-p1
           - step: *installMagento-2.4.5
-      - step: *ecommerce_build
+      - step: *rebuildPrivateComposer
+      - step: *build_packages
       - step: *swaggerWebApiDocBuild
-      - step: *deployToDevComposer
-      - step: *deployToAwComposer
+      - step: *releaseToPublicComposer
 
     # For every commit to develop branch: run tests
     develop:
@@ -260,7 +228,7 @@ pipelines:
           - step: *staticTest-2.4.5
           - step: *unitTestPHP74
           - step: *installMagento-2.4.5
-      - step: *deployToDevComposer
+      - step: *rebuildPrivateComposer
     feature/*:
       - parallel:
         - step: *eqpTest-2.4.0-p1
@@ -279,9 +247,9 @@ pipelines:
         - step: *installMagento-2.4.5
     release/*:
       - step: *build
-      - step: *validatePackage-2.4.0-p1
-      - step: *validatePackage-2.4.5
       - parallel:
+          - step: *validatePackage-2.4.0-p1
+          - step: *validatePackage-2.4.5
           - step: *eqpTest-2.4.0-p1
           - step: *eqpTest-2.4.5
           - step: *staticTest-2.4.0-p1
@@ -292,21 +260,24 @@ pipelines:
           - step: *installMagento-2.4.5
 
   custom:
-    # Upload to AW composer manually
-    deploy-to-aw-composer:
+    # Manual upload to the Public composer repository
+    release-to-public-composer:
       - step: *build
-      - step: *validatePackage-2.4.0-p1
-      - step: *validatePackage-2.4.5
-      - step: *deployToAwComposer
+      - parallel:
+          - step: *validatePackage-2.4.0-p1
+          - step: *validatePackage-2.4.5
+      - step: *releaseToPublicComposer
 
-    deploy-to-dev-composer:
-      - step: *deployToDevComposer
+    # Manual resync of tags and branches for Internal composer repo
+    rebuild-private-composer:
+      - step: *rebuildPrivateComposer
 
     # Build pack manually
     build-marketplace-package:
       - step: *build
-      - step: *validatePackage-2.4.0-p1
-      - step: *validatePackage-2.4.5
+      - parallel:
+          - step: *validatePackage-2.4.0-p1
+          - step: *validatePackage-2.4.5
 
     # Run tests manually
     run-all-tests:
@@ -319,6 +290,7 @@ pipelines:
           - step: *unitTestPHP81
           - step: *installMagento-2.4.0-p1
           - step: *installMagento-2.4.5
+
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
@@ -339,10 +311,10 @@ pipelines:
       - step: *get_key
 
     #prepare build
-    ecommerce_build:
-      - step: *ecommerce_build
+    build_packages:
+      - step: *build_packages
 
-    #prepare build
+    # Manually rebuild Web Api Documentation and publish it at S3
     swagger-web-api-doc-build:
       - step: *swaggerWebApiDocBuild
 
@@ -355,7 +327,5 @@ pipelines:
 
 
     # copy this file to all modules
-    deploy-pipeline:
-      - step: *deployPipelines
 
 
