@@ -16,7 +16,7 @@
         "magento/module-webapi": "^100.4"
     },
     "type": "magento2-module",
-    "version": "0.9.3",
+    "version": "0.9.4",
     "license": [
         "proprietary"
     ],
