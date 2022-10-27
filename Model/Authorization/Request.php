@@ -18,7 +18,7 @@ class Request extends WebapiRequest
     {
         $headerValue = parent::getHeader($header, $default);
 
-        if ($header === 'Authorization') {
+        if ($header === 'Authorization' && $headerValue) {
             $headerValue = stristr($headerValue, 'bearer') ?: '';
         }
 
