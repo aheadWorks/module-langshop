@@ -14,7 +14,7 @@ definitions:
       (umask  077 ; echo ${AW_COMPOSER_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa)
     prepare_m2key: &prepareBB_SSH |-
       mkdir -p ~/.ssh
-      (umask  077 ; echo ${DEVOPS_SSH_KEY} | base64 -di > ~/.ssh/id_rsa)
+      (umask  077 ; echo ${DEVOPS_NEW_SSH} | base64 -di > ~/.ssh/id_rsa)
       eval $(ssh-agent)
       ssh-add ~/.ssh/id_rsa
       ssh -T git@bitbucket.org
@@ -161,11 +161,15 @@ definitions:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
         name: Build Web Api Documentation and publish it at S3
-        image: aheadworks/deploy-tools:latest
+        image: aheadworks/deploy-tools:new-gen
         services:
           - m24-81
         script:
           - *prepareBB_SSH
+          - mkdir -p /var/www/html/pub
+          - cd /tmp
+          - git clone git@bitbucket.org:awimpl/magento-swagger-web-api-generator.git
+          - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
     - step: &get_key
