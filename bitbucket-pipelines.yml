@@ -161,7 +161,7 @@ definitions:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
         name: Build Web Api Documentation and publish it at S3
-        image: aheadworks/deploy-tools:new-gen
+        image: aheadworks/deploy-tools:latest
         services:
           - m24-81
         script:
