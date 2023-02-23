@@ -7,17 +7,24 @@ definitions:
     pack_zip: &packZip |-
       echo "Will create ${BITBUCKET_REPO_SLUG}.zip"
       zip -r ${BITBUCKET_REPO_SLUG}.zip .
-    # should we use 2 ssh steps?
     prepare_ssh: &prepareSSH |-
       mkdir -p ~/.ssh
       echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
       (umask  077 ; echo ${AW_COMPOSER_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa)
-    prepare_m2key: &prepareBB_SSH |-
-      mkdir -p ~/.ssh
-      (umask  077 ; echo ${DEVOPS_NEW_SSH} | base64 -di > ~/.ssh/id_rsa)
-      eval $(ssh-agent)
-      ssh-add ~/.ssh/id_rsa
-      ssh -T git@bitbucket.org
+      # prepare git must be removed
+    prepare_git: &prepare_git |-
+      echo 'skip'
+      apk add --update openssh
+      apk add --update coreutils
+      apk add git
+      echo ${DEVOPS_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa
+      chmod 700 ~/.ssh
+      chmod 600 ~/.ssh/id_rsa
+    get_repositories: &getRepositories |-
+      TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
+      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100 >> repositories
+      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100\&page=2 >> repositories2
+
   build_steps:
     - step: &build
         image: atlassian/default-image:2
@@ -32,21 +39,18 @@ definitions:
         name: Validate marketplace package on Magento 2.4.4-p2
         image: aheadworks/m2test-new:2.4.4-p2-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
     - step: &validatePackage-2.4.5-p1
         name: Validate marketplace package on Magento 2.4.5-p1
         image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
     - step: &codesnifferTest-2.4.5-p1
         name: Run codesniffer tests
         image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.5-p1.xml
@@ -56,7 +60,6 @@ definitions:
         name: Run unit tests PHP 8.1 on Magento 2.4.4-p2
         image: aheadworks/m2test-new:2.4.4-p2-with-dump-8.1
         script:
-          - *prepareBB_SSH
           - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.4-p2.xml
@@ -66,7 +69,6 @@ definitions:
         name: Run unit tests PHP 8.1 on Magento 2.4.5-p1
         image: aheadworks/m2test-new:2.4.5-p1-with-dump-8.1
         script:
-          - *prepareBB_SSH
           - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.5-p1.xml
@@ -76,7 +78,6 @@ definitions:
         name: Run phpstan tests PHP 8.1 on Magento 2.4.4-p2
         image: aheadworks/m2test-new:2.4.4-p2-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.4-p2.xml
@@ -86,7 +87,6 @@ definitions:
         name: Run phpstan tests PHP 8.1 on Magento 2.4.5-p1
         image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.5-p1.xml
@@ -96,7 +96,6 @@ definitions:
         name: Run mess detector tests PHP 8.1
         image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager mess-detector ${PWD}
         artifacts:
@@ -105,7 +104,6 @@ definitions:
         name: Run install Magento 2.4.4-p2 test
         image: aheadworks/m2test-new:2.4.4-p2-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
@@ -116,7 +114,6 @@ definitions:
         name: Run install Magento 2.4.5-p1 test
         image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
         script:
-          - *prepareBB_SSH
           - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
@@ -129,7 +126,6 @@ definitions:
         name: Sync tags and branches to the Internal composer
         image: aheadworks/deploy-tools:new-gen
         script:
-          - *prepareBB_SSH
           - *cleanTestResults
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_bitbucket_manager internal_composer_refresh
@@ -151,7 +147,6 @@ definitions:
         name: Build store and marketplace packages and send them to Jira
         image: aheadworks/deploy-tools:new-gen
         script:
-            - *prepareBB_SSH
             - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
             - python3 -m aheadworks_release_manager build-mm-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
@@ -165,14 +160,10 @@ definitions:
         services:
           - m24-81
         script:
-          - *prepareBB_SSH
-          - mkdir -p /var/www/html/pub
-          - cd /tmp
-          - git clone git@bitbucket.org:awimpl/magento-swagger-web-api-generator.git
-          - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
     - step: &get_key
+        # is it useful?
         name: get_key
         image: aheadworks/m2test-new:test-7.4
         script:
@@ -304,4 +295,3 @@ pipelines:
 
     mess-detector-test:
       - step: *messDetectorTestPHP81
-      
