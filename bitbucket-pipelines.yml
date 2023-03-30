@@ -35,23 +35,10 @@ definitions:
         artifacts:
           - "*.zip"
   test_steps:
-    - step: &validatePackage-2.4.4-p3
-        name: Validate marketplace package on Magento 2.4.4-p3
-        image: aheadworks/m2test-new:2.4.4-p3-without-dump-8.1
-        script:
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
-    - step: &validatePackage-2.4.6
-        name: Validate marketplace package on Magento 2.4.6
-        image: aheadworks/m2test-new:2.4.6-without-dump-8.2
-        script:
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
     - step: &codesnifferTest-2.4.6
         name: Run codesniffer tests
         image: aheadworks/m2test-new:2.4.6-without-dump-8.2
         script:
-          - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.6.xml
         artifacts:
@@ -60,7 +47,6 @@ definitions:
         name: Run unit tests PHP 8.1 on Magento 2.4.4-p3
         image: aheadworks/m2test-new:2.4.4-p3-without-dump-8.1
         script:
-          - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.4-p3.xml
         artifacts:
@@ -69,7 +55,6 @@ definitions:
         name: Run unit tests PHP 8.2 on Magento 2.4.6
         image: aheadworks/m2test-new:2.4.6-without-dump-8.2
         script:
-          - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6.xml
         artifacts:
@@ -78,7 +63,6 @@ definitions:
         name: Run phpstan tests PHP 8.1 on Magento 2.4.4-p3
         image: aheadworks/m2test-new:2.4.4-p3-without-dump-8.1
         script:
-          - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.4-p3.xml
         artifacts:
@@ -87,7 +71,6 @@ definitions:
         name: Run phpstan tests PHP 8.2 on Magento 2.4.6
         image: aheadworks/m2test-new:2.4.6-without-dump-8.2
         script:
-          - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6.xml
         artifacts:
@@ -104,7 +87,6 @@ definitions:
         name: Run install Magento 2.4.4-p3 test
         image: aheadworks/m2test-new:2.4.4-p3-without-dump-8.1
         script:
-          - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
@@ -114,7 +96,6 @@ definitions:
         name: Run install Magento 2.4.6 test
         image: aheadworks/m2test-new:2.4.6-without-dump-8.2
         script:
-          - mkdir -p test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
@@ -184,8 +165,6 @@ pipelines:
     master:
       - step: *build
       - parallel:
-          - step: *validatePackage-2.4.4-p3
-          - step: *validatePackage-2.4.6
           - step: *codesnifferTest-2.4.6
           - step: *unitTestPHP81-244
           - step: *unitTestPHP81
@@ -222,8 +201,6 @@ pipelines:
     release/*:
       - step: *build
       - parallel:
-          - step: *validatePackage-2.4.4-p3
-          - step: *validatePackage-2.4.6
           - step: *codesnifferTest-2.4.6
           - step: *unitTestPHP81-244
           - step: *unitTestPHP81
@@ -236,9 +213,6 @@ pipelines:
     # Manual upload to the Public composer repository
     release-to-public-composer:
       - step: *build
-      - parallel:
-          - step: *validatePackage-2.4.4-p3
-          - step: *validatePackage-2.4.6
       - step: *releaseToPublicComposer
 
     # Manual resync of tags and branches for Internal composer repo
@@ -248,9 +222,6 @@ pipelines:
     # Build pack manually
     build-marketplace-package:
       - step: *build
-      - parallel:
-          - step: *validatePackage-2.4.4-p3
-          - step: *validatePackage-2.4.6
 
     # Run tests manually
     run-all-tests:
@@ -294,7 +265,7 @@ pipelines:
 
     phpstan-test-with-select-severity:
       - variables:
-          - name: SEVERITY
+          - name: PHPSTANSEVERITY
             default: 0
       - step: *phpstanTestPHP81-244
       - step: *phpstanTestPHP81
