@@ -137,14 +137,11 @@ definitions:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
         name: Build Web Api Documentation and publish it at S3
-        image: aheadworks/deploy-tools:latest
-        services:
-          - m24-81
+        image: aheadworks/deploy-tools:swagger
         script:
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
+          - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost
     - step: &get_key
-        # is it useful?
         name: get_key
         image: aheadworks/m2test-new:test-7.4
         script:
@@ -153,9 +150,6 @@ definitions:
         artifacts:
           - key
           - env
-  services:
-    m24-81:
-      image: aheadworks/m2test-new:2.4.4-p3-with-dump-8.1
 pipelines:
   tags:
     '*.*.*':
