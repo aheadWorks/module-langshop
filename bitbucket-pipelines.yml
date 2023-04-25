@@ -14,7 +14,7 @@ definitions:
       # change prepare_git way to get access of our modules from ssh keys to keys like in magento repo
     prepare_git: &prepare_git |-
       mkdir -p ~/.ssh
-      echo ${DEVOPS_ALEX_KEY} | base64 -di > ~/.ssh/id_rsa
+      echo ${AWM2EXT_KEY} | base64 -di > ~/.ssh/id_rsa
       chmod 700 ~/.ssh
       chmod 600 ~/.ssh/id_rsa
 
