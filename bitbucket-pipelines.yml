@@ -11,19 +11,12 @@ definitions:
       mkdir -p ~/.ssh
       echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
       (umask  077 ; echo ${AW_COMPOSER_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa)
-      # prepare git must be removed
+      # change prepare_git way to get access of our modules from ssh keys to keys like in magento repo
     prepare_git: &prepare_git |-
-      echo 'skip'
-      apk add --update openssh
-      apk add --update coreutils
-      apk add git
-      echo ${DEVOPS_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa
+      mkdir -p ~/.ssh
+      echo ${DEVOPS_ALEX_KEY} | base64 -di > ~/.ssh/id_rsa
       chmod 700 ~/.ssh
       chmod 600 ~/.ssh/id_rsa
-    get_repositories: &getRepositories |-
-      TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
-      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100 >> repositories
-      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100\&page=2 >> repositories2
 
   build_steps:
     - step: &build
@@ -37,7 +30,7 @@ definitions:
   test_steps:
     - step: &codesnifferTest-2.4.6
         name: Run codesniffer tests
-        image: aheadworks/m2test-new:2.4.6-without-dump-8.2
+        image: aheadworks/m2test-new:2.4.6-without-db-8.2
         script:
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.6.xml
@@ -45,48 +38,54 @@ definitions:
           - "test-results/**"
     - step: &unitTestPHP81-244
         name: Run unit tests PHP 8.1 on Magento 2.4.4-p3
-        image: aheadworks/m2test-new:2.4.4-p3-without-dump-8.1
+        image: aheadworks/m2test-new:2.4.4-p3-with-db-8.1
         script:
+          - *prepare_git
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.4-p3.xml
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP81
         name: Run unit tests PHP 8.2 on Magento 2.4.6
-        image: aheadworks/m2test-new:2.4.6-without-dump-8.2
+        image: aheadworks/m2test-new:2.4.6-with-db-8.2
         script:
+          - *prepare_git
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6.xml
         artifacts:
           - "test-results/**"
     - step: &phpstanTestPHP81-244
         name: Run phpstan tests PHP 8.1 on Magento 2.4.4-p3
-        image: aheadworks/m2test-new:2.4.4-p3-without-dump-8.1
+        image: aheadworks/m2test-new:2.4.4-p3-with-db-8.1
         script:
+          - *prepare_git
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.4-p3.xml
         artifacts:
-          - "test-results/**" 
+          - "test-results/**"
     - step: &phpstanTestPHP81
         name: Run phpstan tests PHP 8.2 on Magento 2.4.6
-        image: aheadworks/m2test-new:2.4.6-without-dump-8.2
+        image: aheadworks/m2test-new:2.4.6-with-db-8.2
         script:
+          - *prepare_git
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6.xml
         artifacts:
           - "test-results/**"
     - step: &messDetectorTestPHP81
         name: Run mess detector tests PHP 8.2
-        image: aheadworks/m2test-new:2.4.6-without-dump-8.2
+        image: aheadworks/m2test-new:2.4.6-with-db-8.2
         script:
+          - *prepare_git
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager mess-detector ${PWD}
         artifacts:
           - "test-results/**"
     - step: &installMagento-2.4.4-p3
         name: Run install Magento 2.4.4-p3 test
-        image: aheadworks/m2test-new:2.4.4-p3-without-dump-8.1
+        image: aheadworks/m2test-new:2.4.4-p3-without-db-8.1
         script:
+          - *prepare_git
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
@@ -94,8 +93,9 @@ definitions:
           - "test-results/test-unit.xml"
     - step: &installMagento-2.4.6
         name: Run install Magento 2.4.6 test
-        image: aheadworks/m2test-new:2.4.6-without-dump-8.2
+        image: aheadworks/m2test-new:2.4.6-without-db-8.2
         script:
+          - *prepare_git
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
