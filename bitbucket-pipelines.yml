@@ -142,9 +142,8 @@ definitions:
         image: aheadworks/deploy-tools:swagger
         script:
           - *prepare_git
-          - cd /tmp && git clone https://x-token-auth:ATCTT3xFfGN0vjcTUDLVSJNsLQLqPGPwc9hveK-Hog2GIACQgTgROD6XfbQQcH-zlG87N388r5s1TC4K8MlFOagNbnR6NRsN4WRxP9yhxZhiUik30pUhtTZYYiPRctTy8RAG1eZMbyppdXlxqNVPXooidPnipjcXPYTOfBcNfv1XE_AH5z5_4PM=B6E2A0B8@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
+          - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
           - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
-          - cd /opt/atlassian/pipelines/agent/build
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost
     - step: &get_key
