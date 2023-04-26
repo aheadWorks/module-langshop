@@ -17,6 +17,7 @@ definitions:
       echo ${AWM2EXT_KEY} | base64 -di > ~/.ssh/id_rsa
       chmod 700 ~/.ssh
       chmod 600 ~/.ssh/id_rsa
+      ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
 
   build_steps:
     - step: &build
@@ -128,6 +129,7 @@ definitions:
         name: Build store and marketplace packages and send them to Jira
         image: aheadworks/deploy-tools:new-gen
         script:
+            - *prepare_git
             - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
             - python3 -m aheadworks_release_manager build-mm-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
@@ -139,6 +141,10 @@ definitions:
         name: Build Web Api Documentation and publish it at S3
         image: aheadworks/deploy-tools:swagger
         script:
+          - *prepare_git
+          - cd /tmp && git clone https://x-token-auth:ATCTT3xFfGN0vjcTUDLVSJNsLQLqPGPwc9hveK-Hog2GIACQgTgROD6XfbQQcH-zlG87N388r5s1TC4K8MlFOagNbnR6NRsN4WRxP9yhxZhiUik30pUhtTZYYiPRctTy8RAG1eZMbyppdXlxqNVPXooidPnipjcXPYTOfBcNfv1XE_AH5z5_4PM=B6E2A0B8@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
+          - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
+          - cd /opt/atlassian/pipelines/agent/build
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost
     - step: &get_key
@@ -185,13 +191,11 @@ pipelines:
     feature/*:
       - parallel:
         - step: *codesnifferTest-2.4.6
-        - step: *unitTestPHP81-244
-        - step: *installMagento-2.4.6
+        - step: *unitTestPHP81
     bugfix/*:
       - parallel:
         - step: *codesnifferTest-2.4.6
-        - step: *unitTestPHP81-244
-        - step: *installMagento-2.4.6
+        - step: *unitTestPHP81
     release/*:
       - step: *build
       - parallel:
@@ -200,8 +204,6 @@ pipelines:
           - step: *unitTestPHP81
           - step: *phpstanTestPHP81-244
           - step: *phpstanTestPHP81
-          - step: *installMagento-2.4.4-p3
-          - step: *installMagento-2.4.6
 
   custom:
     # Manual upload to the Public composer repository
@@ -261,8 +263,9 @@ pipelines:
       - variables:
           - name: PHPSTANSEVERITY
             default: 0
-      - step: *phpstanTestPHP81-244
-      - step: *phpstanTestPHP81
+      - parallel:
+          - step: *phpstanTestPHP81-244
+          - step: *phpstanTestPHP81
 
     mess-detector-test:
       - step: *messDetectorTestPHP81
