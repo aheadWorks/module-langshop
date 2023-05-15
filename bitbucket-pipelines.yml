@@ -8,15 +8,11 @@ definitions:
       echo "Will create ${BITBUCKET_REPO_SLUG}.zip"
       zip -r ${BITBUCKET_REPO_SLUG}.zip .
     prepare_ssh: &prepareSSH |-
+      # change way to get access of our modules to composer from ssh keys to composer keys
       mkdir -p ~/.ssh
-      echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
-      (umask  077 ; echo ${AW_COMPOSER_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa)
-      # change prepare_git way to get access of our modules from ssh keys to keys like in magento repo
-    prepare_git: &prepare_git |-
-      mkdir -p ~/.ssh
-      echo ${AWM2EXT_KEY} | base64 -di > ~/.ssh/id_rsa
+      (umask  077; echo ${AWM2EXT_SSH_KEY} | base64 -di > ~/.ssh/id_rsa)
       chmod 700 ~/.ssh
-      chmod 600 ~/.ssh/id_rsa
+      echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
       ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
 
   build_steps:
@@ -41,7 +37,7 @@ definitions:
         name: Run unit tests PHP 8.1 on Magento 2.4.4-p3
         image: aheadworks/m2test-new:2.4.4-p3-with-db-8.1
         script:
-          - *prepare_git
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.4-p3.xml
         artifacts:
@@ -50,7 +46,7 @@ definitions:
         name: Run unit tests PHP 8.2 on Magento 2.4.6
         image: aheadworks/m2test-new:2.4.6-with-db-8.2
         script:
-          - *prepare_git
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6.xml
         artifacts:
@@ -59,7 +55,7 @@ definitions:
         name: Run phpstan tests PHP 8.1 on Magento 2.4.4-p3
         image: aheadworks/m2test-new:2.4.4-p3-with-db-8.1
         script:
-          - *prepare_git
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.4-p3.xml
         artifacts:
@@ -68,7 +64,7 @@ definitions:
         name: Run phpstan tests PHP 8.2 on Magento 2.4.6
         image: aheadworks/m2test-new:2.4.6-with-db-8.2
         script:
-          - *prepare_git
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6.xml
         artifacts:
@@ -77,7 +73,7 @@ definitions:
         name: Run mess detector tests PHP 8.2
         image: aheadworks/m2test-new:2.4.6-with-db-8.2
         script:
-          - *prepare_git
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager mess-detector ${PWD}
         artifacts:
@@ -86,7 +82,7 @@ definitions:
         name: Run install Magento 2.4.4-p3 test
         image: aheadworks/m2test-new:2.4.4-p3-without-db-8.1
         script:
-          - *prepare_git
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
@@ -96,7 +92,7 @@ definitions:
         name: Run install Magento 2.4.6 test
         image: aheadworks/m2test-new:2.4.6-without-db-8.2
         script:
-          - *prepare_git
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
@@ -129,7 +125,7 @@ definitions:
         name: Build store and marketplace packages and send them to Jira
         image: aheadworks/deploy-tools:new-gen
         script:
-            - *prepare_git
+            - *prepareSSH
             - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
             - python3 -m aheadworks_release_manager build-mm-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
@@ -141,7 +137,7 @@ definitions:
         name: Build Web Api Documentation and publish it at S3
         image: aheadworks/deploy-tools:swagger
         script:
-          - *prepare_git
+          - *prepareSSH
           - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
           - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
