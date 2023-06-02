@@ -187,10 +187,14 @@ pipelines:
       - parallel:
         - step: *codesnifferTest-2.4.6
         - step: *unitTestPHP81
+        - step: *phpstanTestPHP81-244
+        - step: *phpstanTestPHP81
     bugfix/*:
       - parallel:
         - step: *codesnifferTest-2.4.6
         - step: *unitTestPHP81
+        - step: *phpstanTestPHP81-244
+        - step: *phpstanTestPHP81
     release/*:
       - step: *build
       - parallel:
