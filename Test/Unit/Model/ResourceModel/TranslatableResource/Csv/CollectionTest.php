@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Aheadworks\Langshop\Test\Unit\Model\ResourceModel\TranslatableResource\Csv;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
-use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
@@ -12,7 +11,6 @@ use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepos
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\Item\Hydrator as CsvCollectionItemHydrator;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\SortingApplier;
-use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
 use Aheadworks\Langshop\Model\Translation;
 use Aheadworks\Langshop\Model\TranslationFactory;
@@ -20,7 +18,6 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class CollectionTest extends TestCase
 {

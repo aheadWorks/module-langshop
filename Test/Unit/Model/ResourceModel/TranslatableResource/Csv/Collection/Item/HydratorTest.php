@@ -13,6 +13,11 @@ use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\
 class HydratorTest extends TestCase
 {
     /**
+     * @var Hydrator
+     */
+    private $hydrator;
+
+    /**
      * @var CsvReader|MockObject
      */
     private $csvReaderMock;
