@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv;
 
-use Aheadworks\Langshop\Model\Csv\File\Reader as CsvReader;
 use Aheadworks\Langshop\Model\Csv\Model;
 use Aheadworks\Langshop\Model\Csv\ModelFactory;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
@@ -11,7 +10,6 @@ use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepos
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInterface;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionTrait;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\SortingApplier;
-use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
 use Aheadworks\Langshop\Model\TranslationFactory;
 use Exception;
@@ -20,7 +18,8 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Store\Model\Store;
-use Psr\Log\LoggerInterface;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\Item\Hydrator
+    as CsvCollectionItemHydrator;
 
 class Collection extends DataCollection implements CollectionInterface
 {
@@ -35,11 +34,6 @@ class Collection extends DataCollection implements CollectionInterface
      * @var LocaleCodeConverter
      */
     private LocaleCodeConverter $localeCodeConverter;
-
-    /**
-     * @var CsvReader
-     */
-    private CsvReader $csvReader;
 
     /**
      * @var ModuleListInterface
@@ -62,9 +56,9 @@ class Collection extends DataCollection implements CollectionInterface
     private SortingApplier $sortingApplier;
 
     /**
-     * @var LoggerInterface
+     * @var CsvCollectionItemHydrator
      */
-    private LoggerInterface $logger;
+    private CsvCollectionItemHydrator $csvCollectionItemHydrator;
 
     /**
      * @var int
@@ -85,34 +79,31 @@ class Collection extends DataCollection implements CollectionInterface
      * @param EntityFactoryInterface $entityFactory
      * @param LocaleScopeRepository $localeScopeRepository
      * @param LocaleCodeConverter $localeCodeConverter
-     * @param CsvReader $csvReader
      * @param ModuleListInterface $moduleList
      * @param TranslationFactory $translationFactory
      * @param SortingApplier $sortingApplier
-     * @param LoggerInterface $logger
      * @param Resolver $filterResolver
+     * @param CsvCollectionItemHydrator $csvCollectionItemHydrator
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         LocaleScopeRepository $localeScopeRepository,
         LocaleCodeConverter $localeCodeConverter,
-        CsvReader $csvReader,
         ModuleListInterface $moduleList,
         TranslationFactory $translationFactory,
         SortingApplier $sortingApplier,
-        LoggerInterface $logger,
-        Resolver $filterResolver
+        Resolver $filterResolver,
+        CsvCollectionItemHydrator $csvCollectionItemHydrator
     ) {
         parent::__construct($entityFactory);
 
         $this->localeScopeRepository = $localeScopeRepository;
         $this->localeCodeConverter = $localeCodeConverter;
-        $this->csvReader = $csvReader;
         $this->moduleList = $moduleList;
         $this->translationFactory = $translationFactory;
         $this->sortingApplier = $sortingApplier;
-        $this->logger = $logger;
         $this->filterResolver = $filterResolver;
+        $this->csvCollectionItemHydrator = $csvCollectionItemHydrator;
     }
 
     /**
@@ -147,29 +138,15 @@ class Collection extends DataCollection implements CollectionInterface
 
         foreach ($this->moduleList->getNames() as $packageName) {
             /** @var Model $model */
-            $model = $this->_entityFactory->create($this->_itemObjectClass);
-            $names = explode('_', $packageName);
-            $model
-                ->setId($packageName)
-                ->setVendorName($names[0])
-                ->setModuleName($names[1]);
-            try {
-                $data = $this->csvReader->getCsvData($packageName, $this->getLocaleCode());
-                $lines = $this->getTranslationLines(
-                    $this->getOriginalLines($data),
-                    $translationData,
-                    $localeCode
-                );
-                $model->setLines($lines);
-            } catch (Exception $e) {
-                $this->logger->error(
-                    __("Impossible to fetch CSV file data for the package %1, error: %2",
-                        $packageName,
-                        $e->getMessage()
-                    )
-                );
-                $model->setLines([]);
-            }
+            $model = $this->getNewEmptyItem();
+
+            $model = $this->csvCollectionItemHydrator->fillWithData(
+                $model,
+                $packageName,
+                $this->getLocaleCode(),
+                $localeCode,
+                $translationData
+            );
 
             if ($this->isNeedToAddItemToResult($model)) {
                 $this->addItem($model);
@@ -182,50 +159,6 @@ class Collection extends DataCollection implements CollectionInterface
         $this->applyPagination();
 
         return $this;
-    }
-
-    /**
-     * Get translation lines
-     *
-     * @param string[] $lines
-     * @param array $translationData
-     * @param string $localeCode
-     * @return string[]
-     * @throws NoSuchEntityException
-     */
-    private function getTranslationLines(array $lines, array $translationData, string $localeCode): array
-    {
-        $result = [];
-        foreach ($lines as $line) {
-            $result[$line] = $localeCode === $this->getLocaleCode() ? $line : '';
-
-            foreach ($translationData as $translationValue) {
-                if (isset($translationValue[$line])) {
-                    $result[$line] = $translationValue[$line];
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get original lines
-     *
-     * @param array $csvData
-     * @return array
-     */
-    private function getOriginalLines(array $csvData): array
-    {
-        $result = [];
-        foreach ($csvData as $data) {
-            $originalString = $data[CsvFile::ORIGINAL_INDEX];
-            if ($originalString && strlen($originalString) < 256) {
-                $result[] = $originalString;
-            }
-        }
-
-        return $result;
     }
 
     /**

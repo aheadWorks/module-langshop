@@ -10,6 +10,7 @@ use Aheadworks\Langshop\Model\Csv\ModelFactory;
 use Aheadworks\Langshop\Model\Locale\LocaleCodeConverter;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection;
+use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\Item\Hydrator as CsvCollectionItemHydrator;
 use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Csv\Collection\SortingApplier;
 use Aheadworks\Langshop\Model\Source\CsvFile;
 use Aheadworks\Langshop\Model\TranslatableResource\Csv\Filter\Resolver;
@@ -44,11 +45,6 @@ class CollectionTest extends TestCase
     private $localeCodeConverterMock;
 
     /**
-     * @var CsvReader|MockObject
-     */
-    private $csvReaderMock;
-
-    /**
      * @var ModuleListInterface|MockObject
      */
     private $moduleListMock;
@@ -69,9 +65,9 @@ class CollectionTest extends TestCase
     private $sortingApplierMock;
 
     /**
-     * @var LoggerInterface|MockObject
+     * @var CsvCollectionItemHydrator|MockObject
      */
-    private $loggerMock;
+    private $csvCollectionItemHydratorMock;
 
     /**
      * @return void
@@ -81,23 +77,21 @@ class CollectionTest extends TestCase
         $this->entityFactory = $this->createMock(EntityFactoryInterface::class);
         $this->localeScopeRepositoryMock = $this->createMock(LocaleScopeRepository::class);
         $this->localeCodeConverterMock = $this->createMock(LocaleCodeConverter::class);
-        $this->csvReaderMock = $this->createMock(CsvReader::class);
         $this->moduleListMock = $this->createMock(ModuleListInterface::class);
         $this->filterResolverMock = $this->createMock(Resolver::class);
         $this->translationFactoryMock = $this->createMock(TranslationFactory::class);
         $this->sortingApplierMock = $this->createMock(SortingApplier::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->csvCollectionItemHydratorMock = $this->createMock(CsvCollectionItemHydrator::class);
 
         $this->collection = new Collection(
             $this->entityFactory,
             $this->localeScopeRepositoryMock,
             $this->localeCodeConverterMock,
-            $this->csvReaderMock,
             $this->moduleListMock,
             $this->translationFactoryMock,
             $this->sortingApplierMock,
-            $this->loggerMock,
-            $this->filterResolverMock
+            $this->filterResolverMock,
+            $this->csvCollectionItemHydratorMock
         );
     }
 
@@ -118,8 +112,6 @@ class CollectionTest extends TestCase
         $data = [];
         $moduleNames = ['Aheadworks_Lanshop'];
         $isFilterResolved = true;
-        $csvData = [[CsvFile::ORIGINAL_INDEX => 'original', CsvFile::TRANSLATION_INDEX => 'translation']];
-        $translationData = ['original'=> 'translation'];
         $storeId = 0;
 
         $translation
@@ -175,84 +167,20 @@ class CollectionTest extends TestCase
                 ->method('create')
                 ->with(Model::class)
                 ->willReturn($model);
-            $names = explode('_', $packageName);
-            $model
+
+            $this->csvCollectionItemHydratorMock
                 ->expects($this->any())
-                ->method('setId')
-                ->with($packageName)
-                ->willReturnSelf();
-            $model
-                ->expects($this->any())
-                ->method('setVendorName')
-                ->with($names[0])
-                ->willReturnSelf();
-            $model
-                ->expects($this->any())
-                ->method('setModuleName')
-                ->with($names[1])
-                ->willReturnSelf();
+                ->method('fillWithData')
+                ->willReturn($model);
 
             $this->filterResolverMock
                 ->expects($this->any())
                 ->method('resolve')
                 ->with($filters, $model)
                 ->willReturn($isFilterResolved);
-
-            $this->csvReaderMock
-                ->expects($this->any())
-                ->method('getCsvData')
-                ->with($packageName, $locale)
-                ->willReturn($csvData);
-            $originalLines = $this->getOriginalLines($csvData);
-            $lines = $this->getTranslationLines($originalLines, $translationData, $locale);
-            $model
-                ->expects($this->any())
-                ->method('setLines')
-                ->with($lines)
-                ->willReturnSelf();
         }
 
         $this->collection
             ->loadData();
-    }
-
-    /**
-     * Get translation lines
-     *
-     * @param string[] $lines
-     * @param array $translationData
-     * @param string $localeCode
-     * @return string[]
-     */
-    private function getTranslationLines(array $lines, array $translationData, string $localeCode): array
-    {
-        $result = [];
-        foreach ($lines as $line) {
-            $result[$line] = $localeCode === 'en_US' ? $line : '';
-
-            foreach ($translationData as $translationValue) {
-                if (isset($translationValue[$line])) {
-                    $result[$line] = $translationValue[$line];
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get original lines
-     *
-     * @param array $csvData
-     * @return array
-     */
-    private function getOriginalLines(array $csvData): array
-    {
-        $result = [];
-        foreach ($csvData as $data) {
-            $result[] = $data[CsvFile::ORIGINAL_INDEX];
-        }
-
-        return $result;
     }
 }
