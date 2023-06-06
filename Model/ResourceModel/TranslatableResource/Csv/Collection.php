@@ -166,9 +166,7 @@ class Collection extends DataCollection implements CollectionInterface
                 $model->setLines([]);
             }
 
-            if ($this->filterResolver->resolve($this->_filters, $model)
-                && count($model->getLines()) > 0
-            ) {
+            if ($this->isNeedToAddItemToResult($model)) {
                 $this->addItem($model);
             }
         }
@@ -313,5 +311,17 @@ class Collection extends DataCollection implements CollectionInterface
         throw new NoSuchEntityException(
             __('Store with identifier = "%1" is not available for translate.', $storeId)
         );
+    }
+
+    /**
+     * Check if the given item matches applied filters and contains translatable data
+     *
+     * @param Model $item
+     * @return bool
+     */
+    private function isNeedToAddItemToResult(Model $item): bool
+    {
+        return $this->filterResolver->resolve($this->_filters, $item)
+            && (count($item->getLines()) > 0);
     }
 }
