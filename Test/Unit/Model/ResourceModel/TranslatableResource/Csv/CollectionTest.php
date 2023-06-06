@@ -213,7 +213,6 @@ class CollectionTest extends TestCase
         }
 
         $this->collection
-            ->setIsNeedToAddLinesAttribute(true)
             ->loadData();
     }
 

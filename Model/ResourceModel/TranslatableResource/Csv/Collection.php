@@ -82,11 +82,6 @@ class Collection extends DataCollection implements CollectionInterface
     protected $_itemObjectClass = Model::class;
 
     /**
-     * @var bool
-     */
-    private bool $needToAddLines = false;
-
-    /**
      * @param EntityFactoryInterface $entityFactory
      * @param LocaleScopeRepository $localeScopeRepository
      * @param LocaleCodeConverter $localeCodeConverter
@@ -158,19 +153,17 @@ class Collection extends DataCollection implements CollectionInterface
                 ->setVendorName($names[0])
                 ->setModuleName($names[1]);
             if ($this->filterResolver->resolve($this->_filters, $model)) {
-                if ($this->needToAddLines) {
-                    try {
-                        $data = $this->csvReader->getCsvData($packageName, $this->getLocaleCode());
-                        $lines = $this->getTranslationLines(
-                            $this->getOriginalLines($data),
-                            $translationData,
-                            $localeCode
-                        );
-                        $model->setLines($lines);
-                    } catch (Exception $e) {
-                        $this->logger->error($e->getMessage());
-                        $model->setLines([]);
-                    }
+                try {
+                    $data = $this->csvReader->getCsvData($packageName, $this->getLocaleCode());
+                    $lines = $this->getTranslationLines(
+                        $this->getOriginalLines($data),
+                        $translationData,
+                        $localeCode
+                    );
+                    $model->setLines($lines);
+                } catch (Exception $e) {
+                    $this->logger->error($e->getMessage());
+                    $model->setLines([]);
                 }
                 $this->addItem($model);
             }
@@ -181,18 +174,6 @@ class Collection extends DataCollection implements CollectionInterface
         $this->_setIsLoaded();
         $this->applyPagination();
 
-        return $this;
-    }
-
-    /**
-     * Set is need to add lines to result collection
-     *
-     * @param bool $isNeed
-     * @return $this
-     */
-    public function setIsNeedToAddLinesAttribute(bool $isNeed): Collection
-    {
-        $this->needToAddLines = $isNeed;
         return $this;
     }
 
