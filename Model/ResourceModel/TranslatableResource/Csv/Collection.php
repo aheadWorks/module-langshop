@@ -162,7 +162,12 @@ class Collection extends DataCollection implements CollectionInterface
                 );
                 $model->setLines($lines);
             } catch (Exception $e) {
-                $this->logger->error($e->getMessage());
+                $this->logger->error(
+                    __("Impossible to fetch CSV file data for the package %1, error: %2",
+                        $packageName,
+                        $e->getMessage()
+                    )
+                );
                 $model->setLines([]);
             }
 
