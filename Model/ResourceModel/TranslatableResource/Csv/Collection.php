@@ -146,25 +146,29 @@ class Collection extends DataCollection implements CollectionInterface
         $translationData = $translation->setLocale($localeCode)->loadData(null, true)->getData();
 
         foreach ($this->moduleList->getNames() as $packageName) {
+            /** @var Model $model */
             $model = $this->_entityFactory->create($this->_itemObjectClass);
             $names = explode('_', $packageName);
             $model
                 ->setId($packageName)
                 ->setVendorName($names[0])
                 ->setModuleName($names[1]);
-            if ($this->filterResolver->resolve($this->_filters, $model)) {
-                try {
-                    $data = $this->csvReader->getCsvData($packageName, $this->getLocaleCode());
-                    $lines = $this->getTranslationLines(
-                        $this->getOriginalLines($data),
-                        $translationData,
-                        $localeCode
-                    );
-                    $model->setLines($lines);
-                } catch (Exception $e) {
-                    $this->logger->error($e->getMessage());
-                    $model->setLines([]);
-                }
+            try {
+                $data = $this->csvReader->getCsvData($packageName, $this->getLocaleCode());
+                $lines = $this->getTranslationLines(
+                    $this->getOriginalLines($data),
+                    $translationData,
+                    $localeCode
+                );
+                $model->setLines($lines);
+            } catch (Exception $e) {
+                $this->logger->error($e->getMessage());
+                $model->setLines([]);
+            }
+
+            if ($this->filterResolver->resolve($this->_filters, $model)
+                && count($model->getLines()) > 0
+            ) {
                 $this->addItem($model);
             }
         }
