@@ -12,25 +12,13 @@ use Exception;
 class Hydrator
 {
     /**
-     * @var CsvReader
-     */
-    private CsvReader $csvReader;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
      * @param CsvReader $csvReader
      * @param LoggerInterface $logger
      */
     public function __construct(
-        CsvReader $csvReader,
-        LoggerInterface $logger
+        private CsvReader $csvReader,
+        private LoggerInterface $logger
     ) {
-        $this->csvReader = $csvReader;
-        $this->logger = $logger;
     }
 
     /**

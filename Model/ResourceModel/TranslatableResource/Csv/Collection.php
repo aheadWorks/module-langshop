@@ -26,41 +26,6 @@ class Collection extends DataCollection implements CollectionInterface
     use CollectionTrait;
 
     /**
-     * @var LocaleScopeRepository
-     */
-    private LocaleScopeRepository $localeScopeRepository;
-
-    /**
-     * @var LocaleCodeConverter
-     */
-    private LocaleCodeConverter $localeCodeConverter;
-
-    /**
-     * @var ModuleListInterface
-     */
-    private ModuleListInterface $moduleList;
-
-    /**
-     * @var Resolver
-     */
-    private Resolver $filterResolver;
-
-    /**
-     * @var TranslationFactory
-     */
-    private TranslationFactory $translationFactory;
-
-    /**
-     * @var SortingApplier
-     */
-    private SortingApplier $sortingApplier;
-
-    /**
-     * @var CsvCollectionItemHydrator
-     */
-    private CsvCollectionItemHydrator $csvCollectionItemHydrator;
-
-    /**
      * @var int
      */
     protected $_pageSize = 20;
@@ -87,23 +52,15 @@ class Collection extends DataCollection implements CollectionInterface
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
-        LocaleScopeRepository $localeScopeRepository,
-        LocaleCodeConverter $localeCodeConverter,
-        ModuleListInterface $moduleList,
-        TranslationFactory $translationFactory,
-        SortingApplier $sortingApplier,
-        Resolver $filterResolver,
-        CsvCollectionItemHydrator $csvCollectionItemHydrator
+        private LocaleScopeRepository $localeScopeRepository,
+        private LocaleCodeConverter $localeCodeConverter,
+        private ModuleListInterface $moduleList,
+        private TranslationFactory $translationFactory,
+        private SortingApplier $sortingApplier,
+        private Resolver $filterResolver,
+        private CsvCollectionItemHydrator $csvCollectionItemHydrator
     ) {
         parent::__construct($entityFactory);
-
-        $this->localeScopeRepository = $localeScopeRepository;
-        $this->localeCodeConverter = $localeCodeConverter;
-        $this->moduleList = $moduleList;
-        $this->translationFactory = $translationFactory;
-        $this->sortingApplier = $sortingApplier;
-        $this->filterResolver = $filterResolver;
-        $this->csvCollectionItemHydrator = $csvCollectionItemHydrator;
     }
 
     /**
