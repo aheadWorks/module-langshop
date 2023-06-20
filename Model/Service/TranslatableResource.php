@@ -6,7 +6,7 @@ namespace Aheadworks\Langshop\Model\Service;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Api\TranslatableResourceManagementInterface;
-use Aheadworks\Langshop\Model\Data\ProcessorInterface;
+use Aheadworks\Langshop\Model\Data\Processor\Pool as DataProcessorPool;
 use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool as RepositoryPool;
 use Magento\Framework\Api\Filter;
@@ -15,41 +15,17 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 class TranslatableResource implements TranslatableResourceManagementInterface
 {
     /**
-     * @var Converter
-     */
-    private Converter $converter;
-
-    /**
-     * @var RepositoryPool
-     */
-    private RepositoryPool $repositoryPool;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-
-    /**
-     * @var ProcessorInterface
-     */
-    private ProcessorInterface $dataProcessor;
-
-    /**
      * @param Converter $converter
      * @param RepositoryPool $repositoryPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param ProcessorInterface $dataProcessor
+     * @param DataProcessorPool $dataProcessorPool
      */
     public function __construct(
-        Converter $converter,
-        RepositoryPool $repositoryPool,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        ProcessorInterface $dataProcessor
+        private Converter $converter,
+        private RepositoryPool $repositoryPool,
+        private SearchCriteriaBuilder $searchCriteriaBuilder,
+        private DataProcessorPool $dataProcessorPool
     ) {
-        $this->converter = $converter;
-        $this->repositoryPool = $repositoryPool;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -65,7 +41,8 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     ): ResourceListInterface {
         $repository = $this->repositoryPool->get($resourceType);
 
-        $params = $this->dataProcessor->process([
+        $dataProcessor = $this->dataProcessorPool->get($resourceType);
+        $params = $dataProcessor->process([
             'resourceType' => $resourceType,
             'locale' => $locale,
             'page' => $page,

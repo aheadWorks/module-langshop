@@ -55,6 +55,62 @@
     <!-- START Data Processor Pool -->
     <preference for="Aheadworks\Langshop\Model\Data\ProcessorInterface"
                 type="Aheadworks\Langshop\Model\Data\Processor\Composite" />
+
+    <type name="Aheadworks\Langshop\Model\Data\Processor\Pool">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="product" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Product</item>
+                <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Category</item>
+                <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Attribute</item>
+                <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Csv</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Product"
+                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
+                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Category"
+                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
+                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Attribute"
+                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
+                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Csv"
+                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
+                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <!-- END Data Processor Pool -->
 
     <!-- START Scope Record Configuration -->
@@ -213,23 +269,6 @@
             </argument>
         </arguments>
     </type>
-
-    <type name="Aheadworks\Langshop\Model\Service\TranslatableResource">
-        <arguments>
-            <argument name="dataProcessor" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Composite</argument>
-        </arguments>
-    </type>
-    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Composite"
-                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
-        <arguments>
-            <argument name="processorList" xsi:type="array">
-                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
-                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
-                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
-                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
-            </argument>
-        </arguments>
-    </virtualType>
 
     <type name="Aheadworks\Langshop\Model\Service\Schema">
         <arguments>
