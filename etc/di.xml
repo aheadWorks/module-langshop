@@ -203,7 +203,7 @@
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Product\CollectionFactory</argument>
             <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\ProductFactory</argument>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">product</argument>
         </arguments>
     </virtualType>
