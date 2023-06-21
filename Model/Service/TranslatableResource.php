@@ -73,7 +73,8 @@ class TranslatableResource implements TranslatableResourceManagementInterface
     {
         $repository = $this->repositoryPool->get($resourceType);
 
-        $params = $this->dataProcessor->process([
+        $dataProcessor = $this->dataProcessorPool->get($resourceType);
+        $params = $dataProcessor->process([
             'resourceType' => $resourceType,
             'locale' => $locale
         ]);
