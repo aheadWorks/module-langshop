@@ -88,6 +88,8 @@
                 <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
                 <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
                 <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
+                <!-- N.B. The next processor must always be the last one in the list -->
+                <item name="localeFilter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Category\LocaleFilter</item>
             </argument>
         </arguments>
     </virtualType>
@@ -209,15 +211,36 @@
             <argument name="resourceType" xsi:type="string">product</argument>
         </arguments>
     </virtualType>
+
+    <!-- START Category repository -->
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionProcessor\FilterProcessor"
+                 type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="path" xsi:type="object">\Aheadworks\Langshop\Model\TranslatableResource\Repository\CollectionProcessor\FilterProcessor\CustomFilter\Category\Path</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionProcessor"
+                 type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Category"
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category\CollectionFactory</argument>
             <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CategoryFactory</argument>
-            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+            <argument name="collectionProcessor" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category\CollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">category</argument>
         </arguments>
     </virtualType>
+    <!-- END Category repository -->
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute"
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
         <arguments>

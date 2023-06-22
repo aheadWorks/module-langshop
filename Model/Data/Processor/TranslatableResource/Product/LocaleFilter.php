@@ -27,7 +27,9 @@ class LocaleFilter implements ProcessorInterface
     }
 
     /**
-     * Prepares filters for search criteria
+     * Prepares filter for search criteria to limit the list of products
+     * based on the list of locales specified and corresponding websites,
+     * where those locales are used
      *
      * @param array $data
      * @return array
