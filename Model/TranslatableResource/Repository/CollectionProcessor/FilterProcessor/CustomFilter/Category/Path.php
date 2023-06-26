@@ -11,7 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 class Path implements CustomFilterInterface
 {
     /**
-     * Apply category path filter to th category collection
+     * Apply category path filter to the category collection
      *
      * @param Filter $filter
      * @param AbstractDb $collection
