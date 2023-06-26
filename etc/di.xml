@@ -341,7 +341,7 @@
                 <item name="date" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Date</item>
                 <item name="select" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Select</item>
                 <item name="multiselect" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Multiselect</item>
-                <item name="website_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Product\WebsiteId</item>
+                <item name="product_website_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Filter\Product\WebsiteId</item>
             </argument>
         </arguments>
     </type>

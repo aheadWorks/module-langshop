@@ -14,7 +14,7 @@ use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceM
 class LocaleFilter implements ProcessorInterface
 {
     private const FILTER_FIELD_NAME = 'website_id';
-    private const FILTER_TYPE = 'website_id';
+    private const FILTER_TYPE = 'product_website_id';
 
     /**
      * @param FilterBuilder $filterBuilder
