@@ -7,6 +7,7 @@ use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeReco
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\Entity\Field\Filter\Builder as FilterBuilder;
 use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceModel;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Checker as LocaleScopeRecordChecker;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
@@ -21,11 +22,13 @@ class LocaleFilter implements ProcessorInterface
      * @param FilterBuilder $filterBuilder
      * @param StoreManagerInterface $storeManager
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param LocaleScopeRecordChecker $localeScopeRecordChecker
      */
     public function __construct(
         private FilterBuilder $filterBuilder,
         private StoreManagerInterface $storeManager,
-        private CategoryRepositoryInterface $categoryRepository
+        private CategoryRepositoryInterface $categoryRepository,
+        private LocaleScopeRecordChecker $localeScopeRecordChecker
     ) {
     }
 
@@ -43,7 +46,7 @@ class LocaleFilter implements ProcessorInterface
         /** @var LocaleScopeRecordInterface[] $localeScopeRecordList */
         $localeScopeRecordList = $data['locale'] ?? [];
 
-        if ($this->isNeedToApplyLocaleFilter($localeScopeRecordList)) {
+        if ($this->localeScopeRecordChecker->doesListOfRecordsRequireLocaleFilter($localeScopeRecordList)) {
             $storeGroupIdList = $this->getStoreGroupIdList($localeScopeRecordList);
             $rootCategoryIdList = $this->getRootCategoryIdList($storeGroupIdList);
             $rootCategoryPathList = $this->getCategoryPathList($rootCategoryIdList);
@@ -61,35 +64,6 @@ class LocaleFilter implements ProcessorInterface
     }
 
     /**
-     * Check if the given locale scope record requires applying additional filter
-     * for the category collection
-     *
-     * @param LocaleScopeRecordInterface $localeScopeRecord
-     * @return bool
-     */
-    private function isNeedToApplyFilterForLocale(LocaleScopeRecordInterface $localeScopeRecord): bool
-    {
-        return !($localeScopeRecord->getIsPrimary());
-    }
-
-    /**
-     * Check if the given list of locales contains at least 1 locale to apply
-     * filter for the category collection
-     *
-     * @param LocaleScopeRecordInterface[] $localeScopeRecordList
-     * @return bool
-     */
-    private function isNeedToApplyLocaleFilter(array $localeScopeRecordList): bool
-    {
-        foreach ($localeScopeRecordList as $localeScopeRecord) {
-            if ($this->isNeedToApplyFilterForLocale($localeScopeRecord)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Retrieve the list of store group id, where the given list of locales is used
      *
      * @param LocaleScopeRecordInterface[] $localeScopeRecordList
@@ -100,7 +74,7 @@ class LocaleFilter implements ProcessorInterface
     {
         $storeGroupIdList = [];
         foreach ($localeScopeRecordList as $localeScopeRecord) {
-            if ($this->isNeedToApplyFilterForLocale($localeScopeRecord)) {
+            if ($this->localeScopeRecordChecker->doesRecordRequireLocaleFilter($localeScopeRecord)) {
                 // To simplify the logic, assume, that all records have scope type either
                 // DEFAULT or STORE. The DEFAULT should be already filtered out with isNeedToApplyFilterForLocale()
                 if ($localeScopeRecord->getScopeType() === LocaleScopeTypeSourceModel::STORE) {

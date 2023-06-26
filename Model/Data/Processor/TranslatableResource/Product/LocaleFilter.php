@@ -7,6 +7,7 @@ use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Exception\LocalizedException;
 use Aheadworks\Langshop\Model\Entity\Field\Filter\Builder as FilterBuilder;
+use Aheadworks\Langshop\Model\Locale\Scope\Record\Checker as LocaleScopeRecordChecker;
 use Magento\Store\Model\StoreManagerInterface;
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceModel;
@@ -19,10 +20,12 @@ class LocaleFilter implements ProcessorInterface
     /**
      * @param FilterBuilder $filterBuilder
      * @param StoreManagerInterface $storeManager
+     * @param LocaleScopeRecordChecker $localeScopeRecordChecker
      */
     public function __construct(
         private FilterBuilder $filterBuilder,
-        private StoreManagerInterface $storeManager
+        private StoreManagerInterface $storeManager,
+        private LocaleScopeRecordChecker $localeScopeRecordChecker
     ) {
     }
 
@@ -40,7 +43,7 @@ class LocaleFilter implements ProcessorInterface
         /** @var LocaleScopeRecordInterface[] $localeScopeRecordList */
         $localeScopeRecordList = $data['locale'] ?? [];
 
-        if ($this->isNeedToApplyLocaleFilter($localeScopeRecordList)) {
+        if ($this->localeScopeRecordChecker->doesListOfRecordsRequireLocaleFilter($localeScopeRecordList)) {
             $websiteIdList = $this->getWebsiteIdList($localeScopeRecordList);
 
             $websiteIdFilter = $this->filterBuilder->create(
@@ -56,35 +59,6 @@ class LocaleFilter implements ProcessorInterface
     }
 
     /**
-     * Check if the given locale scope record requires applying additional filter
-     * for the product collection
-     *
-     * @param LocaleScopeRecordInterface $localeScopeRecord
-     * @return bool
-     */
-    private function isNeedToApplyFilterForLocale(LocaleScopeRecordInterface $localeScopeRecord): bool
-    {
-        return !($localeScopeRecord->getIsPrimary());
-    }
-
-    /**
-     * Check if the given list of locales contains at least 1 locale to apply
-     * filter for the product collection
-     *
-     * @param LocaleScopeRecordInterface[] $localeScopeRecordList
-     * @return bool
-     */
-    private function isNeedToApplyLocaleFilter(array $localeScopeRecordList): bool
-    {
-        foreach ($localeScopeRecordList as $localeScopeRecord) {
-            if ($this->isNeedToApplyFilterForLocale($localeScopeRecord)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Retrieve the list of website id, where the given list of locales is used
      *
      * @param LocaleScopeRecordInterface[] $localeScopeRecordList
@@ -95,7 +69,7 @@ class LocaleFilter implements ProcessorInterface
     {
         $websiteIdList = [];
         foreach ($localeScopeRecordList as $localeScopeRecord) {
-            if ($this->isNeedToApplyFilterForLocale($localeScopeRecord)) {
+            if ($this->localeScopeRecordChecker->doesRecordRequireLocaleFilter($localeScopeRecord)) {
                 if ($localeScopeRecord->getScopeType() === LocaleScopeTypeSourceModel::STORE) {
                     $websiteIdList[] = $this->storeManager->getStore($localeScopeRecord->getScopeId())->getWebsiteId();
                 }
