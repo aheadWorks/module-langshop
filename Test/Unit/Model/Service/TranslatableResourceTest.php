@@ -7,6 +7,7 @@ use Aheadworks\Langshop\Api\Data\TranslatableResource\ResourceListInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Api\Data\TranslatableResourceInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
+use Aheadworks\Langshop\Model\Data\Processor\Pool as DataProcessorPool;
 use Aheadworks\Langshop\Model\Service\TranslatableResource as TranslatableResourceService;
 use Aheadworks\Langshop\Model\TranslatableResource\Converter;
 use Aheadworks\Langshop\Model\TranslatableResource\Repository\Pool as RepositoryPool;
@@ -43,9 +44,9 @@ class TranslatableResourceTest extends TestCase
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var ProcessorInterface|MockObject
+     * @var DataProcessorPool|MockObject
      */
-    private $dataProcessorMock;
+    private $dataProcessorPoolMock;
 
     /**
      * @return void
@@ -55,13 +56,13 @@ class TranslatableResourceTest extends TestCase
         $this->converterMock = $this->createMock(Converter::class);
         $this->repositoryPoolMock = $this->createMock(RepositoryPool::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->dataProcessorMock = $this->createMock(ProcessorInterface::class);
+        $this->dataProcessorPoolMock = $this->createMock(DataProcessorPool::class);
 
         $this->translatableResourceService = new TranslatableResourceService(
             $this->converterMock,
             $this->repositoryPoolMock,
             $this->searchCriteriaBuilderMock,
-            $this->dataProcessorMock
+            $this->dataProcessorPoolMock
         );
     }
 
@@ -92,6 +93,7 @@ class TranslatableResourceTest extends TestCase
         $collectionMock = $this->createMock(Collection::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $result = $resourceListMock = $this->createMock(ResourceListInterface::class);
+        $dataProcessorMock = $this->createMock(ProcessorInterface::class);
 
         $processedParams['filter'] = [$this->createMock(Filter::class)];
         $processedParams['sortBy'] = [];
@@ -101,11 +103,16 @@ class TranslatableResourceTest extends TestCase
             ->method('get')
             ->with($resourceType)
             ->willReturn($repositoryMock);
-        $this->dataProcessorMock
+        $dataProcessorMock
             ->expects($this->once())
             ->method('process')
             ->with($params)
             ->willReturn($processedParams);
+        $this->dataProcessorPoolMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resourceType)
+            ->willReturn($dataProcessorMock);
         $this->searchCriteriaBuilderMock
             ->expects($this->once())
             ->method('setCurrentPage')
@@ -165,6 +172,8 @@ class TranslatableResourceTest extends TestCase
         $repository = $this->createMock(RepositoryInterface::class);
         $result = $resource = $this->createMock(TranslatableResourceInterface::class);
         $item = $this->createMock(DataObject::class);
+        $dataProcessorMock = $this->createMock(ProcessorInterface::class);
+
         $params = [
             'resourceType' => $resourceType,
             'locale' => $locale
@@ -175,11 +184,16 @@ class TranslatableResourceTest extends TestCase
             ->method('get')
             ->with($resourceType)
             ->willReturn($repository);
-        $this->dataProcessorMock
+        $dataProcessorMock
             ->expects($this->once())
             ->method('process')
             ->with($params)
             ->willReturn($params);
+        $this->dataProcessorPoolMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resourceType)
+            ->willReturn($dataProcessorMock);
         $repository
             ->expects($this->once())
             ->method('get')
@@ -206,6 +220,7 @@ class TranslatableResourceTest extends TestCase
         $result = $resource = $this->createMock(TranslatableResourceInterface::class);
         $item = $this->createMock(DataObject::class);
         $translation = [$this->createMock(TranslationInterface::class)];
+        $dataProcessorMock = $this->createMock(ProcessorInterface::class);
         $resourceType = 'resourceType';
         $resourceId = 'resourceId';
 
@@ -231,11 +246,16 @@ class TranslatableResourceTest extends TestCase
             ->with($resourceType)
             ->willReturn($repository);
 
-        $this->dataProcessorMock
+        $dataProcessorMock
             ->expects($this->once())
             ->method('process')
             ->with($params)
             ->willReturn($params);
+        $this->dataProcessorPoolMock
+            ->expects($this->once())
+            ->method('get')
+            ->with($resourceType)
+            ->willReturn($dataProcessorMock);
 
         $repository
             ->expects($this->once())
