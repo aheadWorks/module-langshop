@@ -76,7 +76,7 @@
                 <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
                 <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
                 <!-- N.B. The next processor must always be the last one in the list -->
-                <item name="localeFilter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Product\LocaleFilter</item>
+                <item name="localeFilter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter\Locale\Product</item>
             </argument>
         </arguments>
     </virtualType>
@@ -89,7 +89,7 @@
                 <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
                 <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
                 <!-- N.B. The next processor must always be the last one in the list -->
-                <item name="localeFilter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Category\LocaleFilter</item>
+                <item name="localeFilter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter\Locale\Category</item>
             </argument>
         </arguments>
     </virtualType>

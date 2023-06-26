@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Product;
+namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter\Locale;
 
+use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
-use Magento\Framework\Api\Filter;
-use Magento\Framework\Exception\LocalizedException;
 use Aheadworks\Langshop\Model\Entity\Field\Filter\Builder as FilterBuilder;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Checker as LocaleScopeRecordChecker;
-use Magento\Store\Model\StoreManagerInterface;
-use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceModel;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\StoreManagerInterface;
 
-class LocaleFilter implements ProcessorInterface
+class Product implements ProcessorInterface
 {
     private const FILTER_FIELD_NAME = 'website_id';
     private const FILTER_TYPE = 'product_website_id';

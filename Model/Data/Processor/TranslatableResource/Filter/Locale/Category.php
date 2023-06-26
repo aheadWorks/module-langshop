@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Category;
+namespace Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter\Locale;
 
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface as LocaleScopeRecordInterface;
 use Aheadworks\Langshop\Model\Data\ProcessorInterface;
 use Aheadworks\Langshop\Model\Entity\Field\Filter\Builder as FilterBuilder;
-use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceModel;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Checker as LocaleScopeRecordChecker;
+use Aheadworks\Langshop\Model\Source\Locale\Scope\Type as LocaleScopeTypeSourceModel;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 
-class LocaleFilter implements ProcessorInterface
+class Category implements ProcessorInterface
 {
     private const FILTER_FIELD_NAME = 'path';
     private const FILTER_TYPE = 'select';
