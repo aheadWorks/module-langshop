@@ -23,12 +23,14 @@ class Category implements ProcessorInterface
      * @param StoreManagerInterface $storeManager
      * @param CategoryRepositoryInterface $categoryRepository
      * @param LocaleScopeRecordChecker $localeScopeRecordChecker
+     * @param FilterListModifier $filterListModifier
      */
     public function __construct(
         private FilterBuilder $filterBuilder,
         private StoreManagerInterface $storeManager,
         private CategoryRepositoryInterface $categoryRepository,
-        private LocaleScopeRecordChecker $localeScopeRecordChecker
+        private LocaleScopeRecordChecker $localeScopeRecordChecker,
+        private FilterListModifier $filterListModifier
     ) {
     }
 
@@ -57,7 +59,7 @@ class Category implements ProcessorInterface
                 self::FILTER_TYPE
             );
 
-            $data['filter'] = $this->addPathFilterToList($data['filter'], $pathFilter);
+            $data['filter'] = $this->filterListModifier->addOrReplaceFilter($data['filter'], $pathFilter);
         }
 
         return $data;
@@ -124,32 +126,5 @@ class Category implements ProcessorInterface
         }
 
         return $categoryPathList;
-    }
-
-    /**
-     * Add path filter to the list of already prepared filters
-     * In case, if path filter has been added earlier, replace the old filter
-     * with the new one
-     *
-     * @param Filter[] $filterList
-     * @param Filter $pathFilter
-     * @return array
-     */
-    private function addPathFilterToList(array $filterList, Filter $pathFilter): array
-    {
-        $indexOfExistingWebsiteIdFilter = null;
-        foreach ($filterList as $index => $filter) {
-            if ($filter->getField() === self::FILTER_FIELD_NAME) {
-                $indexOfExistingWebsiteIdFilter = $index;
-                break;
-            }
-        }
-
-        if ($indexOfExistingWebsiteIdFilter !== null) {
-            unset($filterList[$indexOfExistingWebsiteIdFilter]);
-        }
-
-        $filterList[] = $pathFilter;
-        return $filterList;
     }
 }

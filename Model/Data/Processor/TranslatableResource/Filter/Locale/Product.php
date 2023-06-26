@@ -21,11 +21,13 @@ class Product implements ProcessorInterface
      * @param FilterBuilder $filterBuilder
      * @param StoreManagerInterface $storeManager
      * @param LocaleScopeRecordChecker $localeScopeRecordChecker
+     * @param FilterListModifier $filterListModifier
      */
     public function __construct(
         private FilterBuilder $filterBuilder,
         private StoreManagerInterface $storeManager,
-        private LocaleScopeRecordChecker $localeScopeRecordChecker
+        private LocaleScopeRecordChecker $localeScopeRecordChecker,
+        private FilterListModifier $filterListModifier
     ) {
     }
 
@@ -52,7 +54,7 @@ class Product implements ProcessorInterface
                 self::FILTER_TYPE
             );
 
-            $data['filter'] = $this->addWebsiteIdFilterToList($data['filter'], $websiteIdFilter);
+            $data['filter'] = $this->filterListModifier->addOrReplaceFilter($data['filter'], $websiteIdFilter);
         }
 
         return $data;
@@ -80,32 +82,5 @@ class Product implements ProcessorInterface
         }
 
         return array_unique($websiteIdList);
-    }
-
-    /**
-     * Add website id filter to the list of already prepared filters
-     * In case, if website id filter has been added earlier, replace the old filter
-     * with the new one
-     *
-     * @param Filter[] $filterList
-     * @param Filter $websiteIdFilter
-     * @return array
-     */
-    private function addWebsiteIdFilterToList(array $filterList, Filter $websiteIdFilter): array
-    {
-        $indexOfExistingWebsiteIdFilter = null;
-        foreach ($filterList as $index => $filter) {
-            if ($filter->getField() === self::FILTER_FIELD_NAME) {
-                $indexOfExistingWebsiteIdFilter = $index;
-                break;
-            }
-        }
-
-        if ($indexOfExistingWebsiteIdFilter !== null) {
-            unset($filterList[$indexOfExistingWebsiteIdFilter]);
-        }
-
-        $filterList[] = $websiteIdFilter;
-        return $filterList;
     }
 }
