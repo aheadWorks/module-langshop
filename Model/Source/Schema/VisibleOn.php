@@ -7,4 +7,5 @@ class VisibleOn
 {
     public const GRID = 'grid';
     public const FORM = 'form';
+    public const TRANSLATION_GRID = 'translationGrid';
 }
