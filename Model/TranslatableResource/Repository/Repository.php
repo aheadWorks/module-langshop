@@ -246,8 +246,10 @@ class Repository implements RepositoryInterface
     private function addAlwaysOriginalAttribue(Collection $collection)
     {
         $alwaysOriginalFields = $this->attributeProvider->getAlwaysOriginalFields($this->resourceType);
+        $untranslatableAttributeCodes = $this->attributeProvider->getCodesOfUntranslatableFields($this->resourceType);
 
         if ($collection instanceof CatalogCollection) {
+            $collection->addAttributeToSelect($untranslatableAttributeCodes);
             $collection->addAttributeToSelect($this->attributeProvider->getCodesOfAlwaysOriginalFields($this->resourceType));
         }
 
