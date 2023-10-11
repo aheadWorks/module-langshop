@@ -179,7 +179,6 @@ class Csv implements RepositoryInterface
     {
         $localizedCollection = clone $collection;
         $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields(self::RESOURCE_TYPE);
-        $localizedCollection->setIsNeedToAddLinesAttribute(true);
 
         foreach ($localeScopes as $localeScope) {
             $localizedCollection->setStoreId($localeScope->getScopeId())->clear();

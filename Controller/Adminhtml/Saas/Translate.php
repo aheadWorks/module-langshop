@@ -7,6 +7,7 @@ use Aheadworks\Langshop\Api\Data\StatusInterface;
 use Aheadworks\Langshop\Api\Data\StatusInterfaceFactory;
 use Aheadworks\Langshop\Api\StatusManagementInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as ScopeRecordRepository;
+use Aheadworks\Langshop\Model\Saas\CurlResponseHandler;
 use Aheadworks\Langshop\Model\Saas\CurlSender;
 use Aheadworks\Langshop\Model\Saas\Request\Translate as TranslateRequest;
 use Magento\Backend\App\Action;
@@ -45,6 +46,11 @@ class Translate extends Action implements HttpPostActionInterface
     private ScopeRecordRepository $scopeRecordRepository;
 
     /**
+     * @var CurlResponseHandler
+     */
+    private CurlResponseHandler $curlResponseHandler;
+
+    /**
      * @param Context $context
      * @param CurlSender $curlSender
      * @param TranslateRequest $translateRequest
@@ -58,7 +64,8 @@ class Translate extends Action implements HttpPostActionInterface
         TranslateRequest $translateRequest,
         StatusManagementInterface $statusManager,
         StatusInterfaceFactory $statusFactory,
-        ScopeRecordRepository $scopeRecordRepository
+        ScopeRecordRepository $scopeRecordRepository,
+        CurlResponseHandler $curlResponseHandler
     ) {
         parent::__construct($context);
 
@@ -67,6 +74,7 @@ class Translate extends Action implements HttpPostActionInterface
         $this->statusManager = $statusManager;
         $this->statusFactory = $statusFactory;
         $this->scopeRecordRepository = $scopeRecordRepository;
+        $this->curlResponseHandler = $curlResponseHandler;
     }
 
     /**
@@ -80,13 +88,22 @@ class Translate extends Action implements HttpPostActionInterface
         $resourceType = (string) $this->getRequest()->getParam('resource_type');
         $resourceId = (int) $this->getRequest()->getParam('resource_id');
 
-        $this->curlSender->post(
+        $response = $this->curlSender->post(
             $this->translateRequest->getUrl(),
             $this->translateRequest->getParams(
                 $resourceType,
                 $resourceId
             )
         );
+
+        /** @var ResultJson $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+
+        if ($response->getStatus() > 400) {
+            return $resultJson->setData(
+                $this->curlResponseHandler->prepareResponse($response)
+            );
+        }
 
         foreach ($this->scopeRecordRepository->getList() as $scopeRecord) {
             /** @var StatusInterface $status */
@@ -97,9 +114,6 @@ class Translate extends Action implements HttpPostActionInterface
                 ->setStoreId($scopeRecord->getScopeId());
             $this->statusManager->save($status);
         }
-
-        /** @var ResultJson $resultJson */
-        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         return $resultJson->setData([]);
     }

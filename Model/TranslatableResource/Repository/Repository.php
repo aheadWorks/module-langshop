@@ -109,6 +109,8 @@ class Repository implements RepositoryInterface
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
+        $collection = $this->addAlwaysOriginalAttribue($collection);
+
         return $this->addLocalizedAttributes($collection, $localeScopes);
     }
 
@@ -229,6 +231,31 @@ class Repository implements RepositoryInterface
                     $value[$localeScope->getLocaleCode()] = $localizedItem->getData($attributeCode);
                     $item->setData($attributeCode, $value);
                 }
+            }
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Adds always original attribute values to the collection
+     *
+     * @param Collection $collection
+     * @return Collection
+     */
+    private function addAlwaysOriginalAttribue(Collection $collection)
+    {
+        $alwaysOriginalFields = $this->attributeProvider->getAlwaysOriginalFields($this->resourceType);
+        $untranslatableAttributeCodes = $this->attributeProvider->getCodesOfUntranslatableFields($this->resourceType);
+
+        if ($collection instanceof CatalogCollection) {
+            $collection->addAttributeToSelect($untranslatableAttributeCodes);
+            $collection->addAttributeToSelect($this->attributeProvider->getCodesOfAlwaysOriginalFields($this->resourceType));
+        }
+
+        foreach ($collection->getItems() as $item) {
+            foreach ($alwaysOriginalFields as $field) {
+                $item->setData($field->getCode(), $item->getData($field->getOriginalCode()));
             }
         }
 
