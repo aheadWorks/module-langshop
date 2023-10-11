@@ -88,6 +88,7 @@ class Translate implements ButtonProviderInterface
                                 (string)$this->getResourceId()
                             ),
                             'successMessage' => __('Processing %1 translation.', $this->resourceType),
+                            'failedMessage' => __('Something went wong.'),
                             'translateUrl' => $this->urlBuilder->getUrl(self::TRANSLATE_URL),
                             'ajaxParams' => [
                                 'resource_type' => $this->resourceType,

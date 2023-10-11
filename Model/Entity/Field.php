@@ -18,6 +18,7 @@ use Magento\Framework\DataObject;
  * @method $this setFilterOptions(OptionSourceInterface $filterOptions)
  * @method $this setSortOrder(int $sortOrder)
  * @method $this setVisibleOn(string[] $visibleOn)
+ * @method $this setOriginalCode(string $originalCode)
  *
  * @method string getCode()
  * @method string getLabel()
@@ -30,6 +31,7 @@ use Magento\Framework\DataObject;
  * @method OptionSourceInterface|null getFilterOptions()
  * @method int getSortOrder()
  * @method string[] getVisibleOn()
+ * @method string getOriginalCode()
  */
 class Field extends DataObject
 {
@@ -59,7 +61,8 @@ class Field extends DataObject
         OptionSourceInterface $filterOptions = null,
         int $sortOrder = 0,
         array $visibleOn = [],
-        array $data = []
+        array $data = [],
+        string $originalCode = ''
     ) {
         $this
             ->setCode($code)
@@ -71,7 +74,8 @@ class Field extends DataObject
             ->setIsTitle($isTitle)
             ->setFilterType($filterType)
             ->setSortOrder($sortOrder)
-            ->setVisibleOn($visibleOn);
+            ->setVisibleOn($visibleOn)
+            ->setOriginalCode($originalCode);
 
         if ($filterOptions) {
             $this->setFilterOptions($filterOptions);
