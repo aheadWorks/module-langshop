@@ -34,3 +34,4 @@ Resources,Resources
 "Integration details","Integration details"
 "Magento Access Token","Magento Access Token"
 "The token is being used for access to your Magento stores","The token is being used for access to your Magento stores"
+"Impossible to fetch CSV file data for the package %1, error: %2","Impossible to fetch CSV file data for the package %1, error: %2"

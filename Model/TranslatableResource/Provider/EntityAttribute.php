@@ -101,6 +101,24 @@ class EntityAttribute
     }
 
     /**
+     * Get always original translatable fields
+     *
+     * @param string $entityType
+     * @return Field[]
+     * @throws LocalizedException
+     */
+    public function getAlwaysOriginalFields(string $entityType): array
+    {
+        if (!isset($this->attributes[$entityType])) {
+            $this->getList($entityType);
+        }
+
+        return array_filter($this->attributes[$entityType][SourceField::UNTRANSLATABLE], function ($attribute) {
+            return $attribute->getOriginalCode();
+        });
+    }
+
+    /**
      * Get codes of translatable fields
      *
      * @param string $entityType
@@ -112,6 +130,23 @@ class EntityAttribute
         $codes = [];
         foreach ($this->getTranslatableFields($entityType) as $field) {
             $codes[] = $field->getCode();
+        }
+
+        return $codes;
+    }
+
+    /**
+     * Get codes of always original fields
+     *
+     * @param string $entityType
+     * @return string[]
+     * @throws LocalizedException
+     */
+    public function getCodesOfAlwaysOriginalFields(string $entityType): array
+    {
+        $codes = [];
+        foreach ($this->getAlwaysOriginalFields($entityType) as $field) {
+            $codes[] = $field->getOriginalCode();
         }
 
         return $codes;

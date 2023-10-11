@@ -260,9 +260,6 @@ class CsvTest extends TestCase
             ->method('getCodesOfTranslatableFields')
             ->with('csv')
             ->willReturn($translatableAttributeCodes);
-        $localizedCollection
-            ->expects($this->any())
-            ->method('setIsNeedToAddLinesAttribute');
 
         foreach ($localeScopes as $localeScope) {
             $scopeId = 0;

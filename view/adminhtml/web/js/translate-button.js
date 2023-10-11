@@ -11,6 +11,7 @@ define([
             isDisabled: false,
             translateUrl: '',
             successMessage: '',
+            failedMessage: '',
             ajaxParams: {}
         },
 
@@ -27,8 +28,16 @@ define([
                 /**
                  * @param {boolean} data.success
                  */
-                function () {
-                    this.showMessage();
+                function (data) {
+                    if (data?.code && data?.code > 400) {
+                        var message =  data.message ?? this.options.failedMessage;
+
+                        this.element.attr('disabled', false);
+
+                        this.showMessage(message, true);
+                    } else {
+                        this.showMessage();
+                    }
                 }.bind(this)
             );
         },
@@ -44,9 +53,12 @@ define([
             });
         },
 
-        showMessage: function () {
+        showMessage: function (message = '', isError = false) {
+            var notificationMessage = message || this.options.successMessage;
+
             $('body').notification('clear').notification('add', {
-                message: this.options.successMessage,
+                message: $.mage.__(notificationMessage),
+                error: isError,
 
                 /**
                  * @param {string} message
