@@ -8,22 +8,12 @@ definitions:
       echo "Will create ${BITBUCKET_REPO_SLUG}.zip"
       zip -r ${BITBUCKET_REPO_SLUG}.zip .
     prepare_ssh: &prepareSSH |-
+      # change way to get access of our modules to composer from ssh keys to composer keys
       mkdir -p ~/.ssh
-      echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
-      (umask  077 ; echo ${AW_COMPOSER_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa)
-      # prepare git must be removed
-    prepare_git: &prepare_git |-
-      echo 'skip'
-      apk add --update openssh
-      apk add --update coreutils
-      apk add git
-      echo ${DEVOPS_SSH_KEY} | base64 --decode > ~/.ssh/id_rsa
+      (umask  077; echo ${AWM2EXT_SSH_KEY} | base64 -di > ~/.ssh/id_rsa)
       chmod 700 ~/.ssh
-      chmod 600 ~/.ssh/id_rsa
-    get_repositories: &getRepositories |-
-      TOKEN=$(curl -s -X POST -u "${BITBUCKET_KEY}:${BITBUCKET_SECRET}"  https://bitbucket.org/site/oauth2/access_token  -d grant_type=client_credentials | sed  -E 's/.*"access_token":? "?([^,"]*)"?.*/\1/')
-      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100 >> repositories
-      curl -H "Authorization: Bearer ${TOKEN}" https://api.bitbucket.org/2.0/repositories/$BITBUCKET_WORKSPACE?pagelen=100\&page=2 >> repositories2
+      echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
+      ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
 
   build_steps:
     - step: &build
@@ -35,86 +25,74 @@ definitions:
         artifacts:
           - "*.zip"
   test_steps:
-    - step: &validatePackage-2.4.4-p2
-        name: Validate marketplace package on Magento 2.4.4-p2
-        image: aheadworks/m2test-new:2.4.4-p2-without-dump-8.1
-        script:
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
-    - step: &validatePackage-2.4.5-p1
-        name: Validate marketplace package on Magento 2.4.5-p1
-        image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
-        script:
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager validate-m2-package ${BITBUCKET_REPO_SLUG}.zip
-    - step: &codesnifferTest-2.4.5-p1
+    - step: &codesnifferTest-2.4.6-p2
         name: Run codesniffer tests
-        image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
+        image: aheadworks/m2test-new:2.4.6-p2-without-db-8.2
         script:
-          - mkdir test-results
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.5-p1.xml
+          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.6-p2.xml
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP81-244
-        name: Run unit tests PHP 8.1 on Magento 2.4.4-p2
-        image: aheadworks/m2test-new:2.4.4-p2-with-dump-8.1
+        name: Run unit tests PHP 8.1 on Magento 2.4.4-p5
+        image: aheadworks/m2test-new:2.4.4-p5-with-db-8.1
         script:
-          - mkdir test-results
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.4-p2.xml
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.4-p5.xml
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP81
-        name: Run unit tests PHP 8.1 on Magento 2.4.5-p1
-        image: aheadworks/m2test-new:2.4.5-p1-with-dump-8.1
+        name: Run unit tests PHP 8.2 on Magento 2.4.6-p2
+        image: aheadworks/m2test-new:2.4.6-p2-with-db-8.2
         script:
-          - mkdir test-results
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.5-p1.xml
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6-p2.xml
         artifacts:
           - "test-results/**"
     - step: &phpstanTestPHP81-244
-        name: Run phpstan tests PHP 8.1 on Magento 2.4.4-p2
-        image: aheadworks/m2test-new:2.4.4-p2-without-dump-8.1
+        name: Run phpstan tests PHP 8.1 on Magento 2.4.4-p5
+        image: aheadworks/m2test-new:2.4.4-p5-with-db-8.1
         script:
-          - mkdir test-results
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.4-p2.xml
+          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.4-p5.xml
         artifacts:
-          - "test-results/**" 
+          - "test-results/**"
     - step: &phpstanTestPHP81
-        name: Run phpstan tests PHP 8.1 on Magento 2.4.5-p1
-        image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
+        name: Run phpstan tests PHP 8.2 on Magento 2.4.6-p2
+        image: aheadworks/m2test-new:2.4.6-p2-with-db-8.2
         script:
-          - mkdir test-results
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.5-p1.xml
+          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6-p2.xml
         artifacts:
           - "test-results/**"
     - step: &messDetectorTestPHP81
-        name: Run mess detector tests PHP 8.1
-        image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
+        name: Run mess detector tests PHP 8.2
+        image: aheadworks/m2test-new:2.4.6-p2-with-db-8.2
         script:
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager mess-detector ${PWD}
         artifacts:
           - "test-results/**"
-    - step: &installMagento-2.4.4-p2
-        name: Run install Magento 2.4.4-p2 test
-        image: aheadworks/m2test-new:2.4.4-p2-without-dump-8.1
+    - step: &installMagento-2.4.4-p5
+        name: Run install Magento 2.4.4-p5 test
+        image: aheadworks/m2test-new:2.4.4-p5-without-db-8.1
         script:
-          - mkdir test-results
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
           - "test-results/test-unit.xml"
-    - step: &installMagento-2.4.5-p1
-        name: Run install Magento 2.4.5-p1 test
-        image: aheadworks/m2test-new:2.4.5-p1-without-dump-8.1
+    - step: &installMagento-2.4.6-p2
+        name: Run install Magento 2.4.6-p2 test
+        image: aheadworks/m2test-new:2.4.6-p2-without-db-8.2
         script:
-          - mkdir test-results
+          - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
@@ -147,23 +125,24 @@ definitions:
         name: Build store and marketplace packages and send them to Jira
         image: aheadworks/deploy-tools:new-gen
         script:
+            - *prepareSSH
             - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
-            - python3 -m aheadworks_release_manager build-mm-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
+            - python3 -m aheadworks_release_manager build-mm-pack
             - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
             - python3 -m aheadworks_release_manager jira-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGN_TO}"
         artifacts:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
         name: Build Web Api Documentation and publish it at S3
-        image: aheadworks/deploy-tools:latest
-        services:
-          - m24-81
+        image: aheadworks/deploy-tools:swagger
         script:
+          - *prepareSSH
+          - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
+          - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost --ssh_port=22
+          - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost
     - step: &get_key
-        # is it useful?
         name: get_key
         image: aheadworks/m2test-new:test-7.4
         script:
@@ -172,9 +151,6 @@ definitions:
         artifacts:
           - key
           - env
-  services:
-    m24-81:
-      image: aheadworks/m2test-new:2.4.4-p2-with-dump-8.1
 pipelines:
   tags:
     '*.*.*':
@@ -184,13 +160,13 @@ pipelines:
     master:
       - step: *build
       - parallel:
-          - step: *validatePackage-2.4.4-p2
-          - step: *validatePackage-2.4.5-p1
-          - step: *codesnifferTest-2.4.5-p1
+          - step: *codesnifferTest-2.4.6-p2
           - step: *unitTestPHP81-244
           - step: *unitTestPHP81
-          - step: *installMagento-2.4.4-p2
-          - step: *installMagento-2.4.5-p1
+          - step: *phpstanTestPHP81-244
+          - step: *phpstanTestPHP81
+          - step: *installMagento-2.4.4-p5
+          - step: *installMagento-2.4.6-p2
       - step: *rebuildPrivateComposer
       - step: *build_packages
       - step: *swaggerWebApiDocBuild
@@ -199,40 +175,39 @@ pipelines:
     # For every commit to develop branch: run tests
     develop:
       - parallel:
-          - step: *codesnifferTest-2.4.5-p1
+          - step: *codesnifferTest-2.4.6-p2
           - step: *unitTestPHP81-244
           - step: *unitTestPHP81
-          - step: *installMagento-2.4.4-p2
-          - step: *installMagento-2.4.5-p1
+          - step: *phpstanTestPHP81-244
+          - step: *phpstanTestPHP81
+          - step: *installMagento-2.4.4-p5
+          - step: *installMagento-2.4.6-p2
       - step: *rebuildPrivateComposer
     feature/*:
       - parallel:
-        - step: *codesnifferTest-2.4.5-p1
-        - step: *unitTestPHP81-244
-        - step: *installMagento-2.4.5-p1
+        - step: *codesnifferTest-2.4.6-p2
+        - step: *unitTestPHP81
+        - step: *phpstanTestPHP81-244
+        - step: *phpstanTestPHP81
     bugfix/*:
       - parallel:
-        - step: *codesnifferTest-2.4.5-p1
-        - step: *unitTestPHP81-244
-        - step: *installMagento-2.4.5-p1
+        - step: *codesnifferTest-2.4.6-p2
+        - step: *unitTestPHP81
+        - step: *phpstanTestPHP81-244
+        - step: *phpstanTestPHP81
     release/*:
       - step: *build
       - parallel:
-          - step: *validatePackage-2.4.4-p2
-          - step: *validatePackage-2.4.5-p1
-          - step: *codesnifferTest-2.4.5-p1
+          - step: *codesnifferTest-2.4.6-p2
           - step: *unitTestPHP81-244
           - step: *unitTestPHP81
-          - step: *installMagento-2.4.4-p2
-          - step: *installMagento-2.4.5-p1
+          - step: *phpstanTestPHP81-244
+          - step: *phpstanTestPHP81
 
   custom:
     # Manual upload to the Public composer repository
     release-to-public-composer:
       - step: *build
-      - parallel:
-          - step: *validatePackage-2.4.4-p2
-          - step: *validatePackage-2.4.5-p1
       - step: *releaseToPublicComposer
 
     # Manual resync of tags and branches for Internal composer repo
@@ -242,30 +217,27 @@ pipelines:
     # Build pack manually
     build-marketplace-package:
       - step: *build
-      - parallel:
-          - step: *validatePackage-2.4.4-p2
-          - step: *validatePackage-2.4.5-p1
 
     # Run tests manually
     run-all-tests:
       - parallel:
-          - step: *codesnifferTest-2.4.5-p1
+          - step: *codesnifferTest-2.4.6-p2
           - step: *unitTestPHP81-244
           - step: *unitTestPHP81
           - step: *phpstanTestPHP81-244
           - step: *phpstanTestPHP81
           - step: *messDetectorTestPHP81
-          - step: *installMagento-2.4.4-p2
-          - step: *installMagento-2.4.5-p1
+          - step: *installMagento-2.4.4-p5
+          - step: *installMagento-2.4.6-p2
 
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
-          - step: *codesnifferTest-2.4.5-p1
+          - step: *codesnifferTest-2.4.6-p2
           - step: *unitTestPHP81-244
           - step: *unitTestPHP81
-          - step: *installMagento-2.4.4-p2
-          - step: *installMagento-2.4.5-p1
+          - step: *installMagento-2.4.4-p5
+          - step: *installMagento-2.4.6-p2
 
     get_key:
       - step: *get_key
@@ -284,14 +256,15 @@ pipelines:
       - variables:
           - name: SEVERITY
             default: 9
-      - step: *codesnifferTest-2.4.5-p1
+      - step: *codesnifferTest-2.4.6-p2
 
     phpstan-test-with-select-severity:
       - variables:
-          - name: SEVERITY
+          - name: PHPSTANSEVERITY
             default: 0
-      - step: *phpstanTestPHP81-244
-      - step: *phpstanTestPHP81
+      - parallel:
+          - step: *phpstanTestPHP81-244
+          - step: *phpstanTestPHP81
 
     mess-detector-test:
       - step: *messDetectorTestPHP81
