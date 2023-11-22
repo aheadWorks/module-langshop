@@ -156,6 +156,7 @@
         <plugin name="aw_ls_image_label_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Image\Label\Save"/>
         <plugin name="aw_ls_option_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Save"/>
         <plugin name="aw_ls_option_values_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\Option\Value\Save"/>
+        <plugin name="aw_ls_url_key_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Product\UrlKey\Save"/>
     </type>
     <type name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category">
         <plugin name="aw_ls_category_save" type="Aheadworks\Langshop\Plugin\Langshop\Model\ResourceModel\TranslatableResource\Category\Save"/>
