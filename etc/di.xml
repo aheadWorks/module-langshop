@@ -1067,4 +1067,8 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Aheadworks\Langshop\Model\TranslatableResource\Converter">
+        <plugin name="aw_ls_add_assigned_locales_to_product" type="Aheadworks\Langshop\Plugin\Langshop\Model\Model\TranslatableResource\ConverterPlugin" />
+    </type>
 </config>
