@@ -13,6 +13,7 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
      */
     private const RESOURCE_ID = 'resourceId';
     private const RESOURCE_TYPE = 'resourceType';
+    private const RESOURCE_ASSIGNED_LOCALES = 'resourceAssignedLocales';
     private const FIELDS = 'fields';
 
     /**
@@ -55,6 +56,27 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     public function setResourceType(string $resourceType): TranslatableResourceInterface
     {
         return $this->setData(self::RESOURCE_TYPE, $resourceType);
+    }
+
+    /**
+     * Retrieve locales assigned to resources
+     *
+     * @return array|null
+     */
+    public function getResourceAssignedLocales(): ?array
+    {
+        return $this->getData(self::RESOURCE_ASSIGNED_LOCALES);
+    }
+
+    /**
+     * Set locales assigned to resources
+     *
+     * @param array $locales
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
+     */
+    public function setResourceAssignedLocales(array $locales): TranslatableResourceInterface
+    {
+        return $this->setData(self::RESOURCE_ASSIGNED_LOCALES, $locales);
     }
 
     /**
