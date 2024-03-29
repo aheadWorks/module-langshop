@@ -25,6 +25,44 @@ definitions:
         artifacts:
           - "*.zip"
   test_steps:
+    - step: &codesnifferTest-2.4.7-beta3
+        name: Run codesniffer tests
+        image: aheadworks/m2test-new:2.4.7-beta3-without-db-8.2
+        script:
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.7-beta3.xml
+        artifacts:
+          - "test-results/**"
+    - step: &unitTestPHP82-247
+        name: Run unit tests PHP 8.2 on Magento 2.4.7-beta3
+        image: aheadworks/m2test-new:2.4.7-beta3-with-db-8.2
+        script:
+          - *prepareSSH
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.7-beta3.xml
+        artifacts:
+          - "test-results/**"
+    - step: &phpstanTestPHP82-247
+        name: Run phpstan tests PHP 8.2 on Magento 2.4.7-beta3
+        image: aheadworks/m2test-new:2.4.7-beta3-with-db-8.2
+        script:
+          - *prepareSSH
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.7-beta3.xml
+        artifacts:
+          - "test-results/**"
+    - step: &installMagento-2.4.7-beta3
+        name: Run install Magento 2.4.7-beta3 test
+        image: aheadworks/m2test-new:2.4.7-beta3-without-db-8.2
+        script:
+          - *prepareSSH
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.7-beta3.xml
+        artifacts:
+          - "logs1/**"
+          - "test-results/**"
+
+          
     - step: &codesnifferTest-2.4.6-p4
         name: Run codesniffer tests
         image: aheadworks/m2test-new:2.4.6-p4-without-db-8.2
@@ -182,6 +220,12 @@ pipelines:
           - step: *phpstanTestPHP81
           - step: *installMagento-2.4.4-p7
           - step: *installMagento-2.4.6-p4
+#prerelease 2.4.7          
+          - step: *codesnifferTest-2.4.7-beta3
+          - step: *unitTestPHP82-247
+          - step: *phpstanTestPHP82-247
+          - step: *installMagento-2.4.7-beta3
+          
       - step: *rebuildPrivateComposer
     feature/*:
       - parallel:
