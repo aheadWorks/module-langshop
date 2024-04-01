@@ -27,36 +27,36 @@ definitions:
   test_steps:
     - step: &codesnifferTest-2.4.7-beta3
         name: Run codesniffer tests
-        image: aheadworks/m2test-new:2.4.7-beta3-without-db-8.2
+        image: aheadworks/m2test-new:2.4.7-beta3-without-db-8.3
         script:
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - pip3 install --break-system-packages  aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.7-beta3.xml
         artifacts:
           - "test-results/**"
     - step: &unitTestPHP82-247
-        name: Run unit tests PHP 8.2 on Magento 2.4.7-beta3
-        image: aheadworks/m2test-new:2.4.7-beta3-with-db-8.2
+        name: Run unit tests PHP 8.3 on Magento 2.4.7-beta3
+        image: aheadworks/m2test-new:2.4.7-beta3-with-db-8.3
         script:
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - pip3 install --break-system-packages aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.7-beta3.xml
         artifacts:
           - "test-results/**"
     - step: &phpstanTestPHP82-247
-        name: Run phpstan tests PHP 8.2 on Magento 2.4.7-beta3
-        image: aheadworks/m2test-new:2.4.7-beta3-with-db-8.2
+        name: Run phpstan tests PHP 8.3 on Magento 2.4.7-beta3
+        image: aheadworks/m2test-new:2.4.7-beta3-with-db-8.3
         script:
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - pip3 install --break-system-packages aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.7-beta3.xml
         artifacts:
           - "test-results/**"
     - step: &installMagento-2.4.7-beta3
         name: Run install Magento 2.4.7-beta3 test
-        image: aheadworks/m2test-new:2.4.7-beta3-without-db-8.2
+        image: aheadworks/m2test-new:2.4.7-beta3-without-db-8.3
         script:
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - pip3 install --break-system-packages aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.7-beta3.xml
         artifacts:
           - "logs1/**"
