@@ -159,7 +159,7 @@ definitions:
           - scp ${BITBUCKET_REPO_SLUG}.zip ${AW_COMPOSER_SSH_URL}:${AW_COMPOSER_PACKAGES_ROOT}/${NAME}/${BITBUCKET_REPO_SLUG}-${VERSION}.zip
           - REPO_URL=${AW_COMPOSER_API_URL} REPO_LOGIN=${AW_COMPOSER_API_LOGIN} REPO_TOKEN=${AW_COMPOSER_API_PASSWORD} deploy comp -p send-package --filename=${BITBUCKET_REPO_SLUG}-${VERSION}.zip ${BITBUCKET_REPO_SLUG}.zip
     - step: &build_packages
-        name: Build store and marketplace packages and send them to Jira
+        name: Build store and marketplace packages and send them to Teamwork
         image: aheadworks/deploy-tools:new-gen
         script:
             - *prepareSSH
@@ -167,7 +167,7 @@ definitions:
             - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
             - python3 -m aheadworks_release_manager build-mm-pack
             - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
-            - if [[ "$TEAMWORK_ENABLED" == "true" ]]; then export JIRA_TOKEN="$TEAMWORK_TOKEN"; python3 -m aheadworks_release_manager teamwork-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGNEE_TEAMWORK}"; else python3 -m aheadworks_release_manager jira-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGN_TO}"; fi;
+            - python3 -m aheadworks_release_manager teamwork-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGNEE_TEAMWORK}"
         artifacts:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
