@@ -2,7 +2,7 @@
     "name": "aheadworks/module-langshop",
     "description": "Langshop module by Aheadworks",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": ">=8.1",
         "magento/framework": "^103.0.4",
         "magento/module-admin-notification": "^100.4.3",
         "magento/module-backend": "^102.0.4",
@@ -17,7 +17,7 @@
         "magento/module-webapi": "^100.4.3"
     },
     "type": "magento2-module",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "license": [
         "proprietary"
     ],
