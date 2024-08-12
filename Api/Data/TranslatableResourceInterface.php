@@ -36,6 +36,21 @@ interface TranslatableResourceInterface
     public function setResourceType(string $resourceType): TranslatableResourceInterface;
 
     /**
+     * Retrieve locales assigned to resources
+     *
+     * @return array|null
+     */
+    public function getResourceAssignedLocales(): ?array;
+
+    /**
+     * Set locales assigned to resources
+     *
+     * @param array $locales
+     * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
+     */
+    public function setResourceAssignedLocales(array $locales): TranslatableResourceInterface;
+
+    /**
      * Get fields
      *
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResource\FieldInterface[]|null
