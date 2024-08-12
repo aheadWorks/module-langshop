@@ -206,7 +206,7 @@ pipelines:
           - step: *installMagento-2.4.6
       - step: *rebuildPrivateComposer
       - step: *build_packages
-      - step: *swaggerWebApiDocBuild
+#      - step: *swaggerWebApiDocBuild
       - step: *releaseToPublicComposer
 
     # For every commit to develop branch: run tests
