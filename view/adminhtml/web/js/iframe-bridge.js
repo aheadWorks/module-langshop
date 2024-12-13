@@ -78,7 +78,10 @@ define([
     };
 
     window.addEventListener('message', function (e) {
-        let messageObject = JSON.parse(e.data);
+        let messageObject = typeof (e.data) === 'string'
+            ? JSON.parse(e.data)
+            : e.data;
+
         let eventName = messageObject.event || '';
         let eventData = messageObject.data || {};
 

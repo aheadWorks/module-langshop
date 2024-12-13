@@ -62,4 +62,14 @@ class State
     {
         return $this->getMode() === self::APP_BUILDER;
     }
+
+    /**
+     * Check if mode is lang shop app
+     *
+     * @return bool
+     */
+    public function isLangShopAppMode(): bool
+    {
+        return $this->getMode() === self::LANG_SHOP_APP;
+    }
 }
