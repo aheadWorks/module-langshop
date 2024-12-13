@@ -42,6 +42,7 @@
                        showInWebsite="0"
                        showInStore="0">
                     <label>Application Domain</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\HideDependOnModeField</frontend_model>
                 </field>
                 <field id="saas_public_key"
                        translate="label"
@@ -51,9 +52,11 @@
                        showInWebsite="0"
                        showInStore="0">
                     <label>Application Public Key</label>
+                    <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\HideDependOnModeField</frontend_model>
                 </field>
             </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">
+                <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\HideDependOnModeFieldset</frontend_model>
                 <label>Integration details</label>
                 <field id="token" translate="label comment" type="text" sortOrder="30" showInDefault="1">
                     <label>Magento Access Token</label>
