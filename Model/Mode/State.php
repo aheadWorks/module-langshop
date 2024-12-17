@@ -9,7 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 class State
 {
     public const APP_BUILDER = 'app_builder';
-    public const LANG_SHOP_APP = 'lang_shop_app';
+    public const LANGSHOP_APP = 'langshop_app';
 
     /**
      * @param Flag $flag
@@ -25,7 +25,7 @@ class State
      */
     public function setMode(string $mode): void
     {
-        if (!in_array($mode, [self::APP_BUILDER, self::LANG_SHOP_APP])) {
+        if (!in_array($mode, [self::APP_BUILDER, self::LANGSHOP_APP])) {
             throw new LocalizedException(__('Invalid mode'));
         }
         $this->flag
@@ -45,9 +45,9 @@ class State
             $flagValue = $this->flag
                 ->loadSelf()
                 ->getFlagData();
-            $mode = $flagValue ?: self::LANG_SHOP_APP;
+            $mode = $flagValue ?: self::LANGSHOP_APP;
         } catch (LocalizedException) {
-            $mode = self::LANG_SHOP_APP;
+            $mode = self::LANGSHOP_APP;
         }
 
         return $mode;
@@ -64,12 +64,12 @@ class State
     }
 
     /**
-     * Check if mode is lang shop app
+     * Check if mode is Langshop app
      *
      * @return bool
      */
     public function isLangShopAppMode(): bool
     {
-        return $this->getMode() === self::LANG_SHOP_APP;
+        return $this->getMode() === self::LANGSHOP_APP;
     }
 }

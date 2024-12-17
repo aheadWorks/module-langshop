@@ -35,12 +35,12 @@ class SetMode extends Command
     {
         $description = sprintf(
             'Rendering application mode - possible values ("%s", "%s")',
-            ModeState::LANG_SHOP_APP,
+            ModeState::LANGSHOP_APP,
             ModeState::APP_BUILDER
         );
         $this->addArgument(self::MODE, InputArgument::REQUIRED, $description);
         $this
-            ->setName('aw-lang-shop:set-mode')
+            ->setName('aw-langshop:set-mode')
             ->setDescription('Set application rendering mode');
 
         parent::configure();
@@ -58,11 +58,11 @@ class SetMode extends Command
         $mode = $input->getArgument(self::MODE);
         try {
             $this->modeState->setMode($mode);
-            if ($mode === ModeState::LANG_SHOP_APP) {
-                $output->writeln('Enabled Mode: Built-In LangShop Application');
+            if ($mode === ModeState::LANGSHOP_APP) {
+                $output->writeln('Enabled mode: Built-in Langshop application');
             }
             if ($mode === ModeState::APP_BUILDER) {
-                $output->writeln('Enabled mode: LangShop Application via App Builder ');
+                $output->writeln('Enabled mode: Langshop application via App Builder ');
             }
         } catch (\Exception $exception) {
             $output->writeln($exception->getMessage());

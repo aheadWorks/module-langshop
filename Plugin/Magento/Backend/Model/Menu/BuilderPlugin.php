@@ -25,7 +25,7 @@ class BuilderPlugin
     public function afterGetResult(Builder $subject, Menu $menu): Menu
     {
         if ($this->modeState->isAppBuilderMode()) {
-            $menu->remove('Aheadworks_Langshop::langshop_app');
+            $menu->remove('Aheadworks_Langshop::langshop');
         }
 
         return $menu;

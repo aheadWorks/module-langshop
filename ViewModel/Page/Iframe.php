@@ -47,7 +47,7 @@ class Iframe implements ArgumentInterface
     }
 
     /**
-     * Check if mode is lang shop app
+     * Check if mode is Langshop app
      *
      * @return bool
      */
