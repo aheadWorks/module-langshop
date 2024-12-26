@@ -108,6 +108,6 @@ class UrlBuilder
      */
     public function getAppBuilderAppPage(): string
     {
-        return $this->url->getUrl('adminuisdk/menu/page/extensionId/aw-langshop');
+        return $this->url->getUrl('adminhtml/dashboard');
     }
 }
