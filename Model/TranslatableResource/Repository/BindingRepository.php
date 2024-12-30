@@ -21,6 +21,7 @@ use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\ResourceModel\Entity\Binding as BindingResource;
+use \Aheadworks\Langshop\Model\Entity\Binding\Manager as BindingManager;
 
 class BindingRepository implements RepositoryInterface
 {
@@ -164,7 +165,7 @@ class BindingRepository implements RepositoryInterface
                 if ($item->getId()) {
                     $item
                         ->addData($values)
-                        ->setData('aw_ls_binding', 'skip');
+                        ->setData(BindingManager::BINDING_MODE, BindingManager::BINDING_SKIP);
                     $resourceModel->save($item);
                 } else {
                     $bindingData = [
@@ -173,10 +174,10 @@ class BindingRepository implements RepositoryInterface
                     ];
                     $originalItem
                         ->setData($this->fieldToDuplicateByScope, $originalItem->getData($this->fieldToDuplicateByScope) . ' (' . $locale . ')')
-                        ->setData('aw_ls_binding', 'create')
-                        ->setData('aw_ls_binding_data', $bindingData)
-                        ->setId(null)
+                        ->setData(BindingManager::BINDING_MODE, BindingManager::BINDING_CREATE)
+                        ->setData(BindingManager::BINDING_DATA, $bindingData)
                         ->addData($values)
+                        ->setId(null)
                         ->setStoreId([$localeScope->getScopeId()]);
                     $resourceModel->save($originalItem);
                 }
