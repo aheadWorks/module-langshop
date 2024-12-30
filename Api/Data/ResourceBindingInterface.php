@@ -41,6 +41,7 @@ interface ResourceBindingInterface
     /**
      * Set original resource ID
      *
+     * @param int $resourceId
      * @return $this
      */
     public function setOriginalResourceId(int $resourceId): self;
@@ -55,6 +56,7 @@ interface ResourceBindingInterface
     /**
      * Set original resource ID
      *
+     * @param int $resourceId
      * @return $this
      */
     public function setTranslatedResourceId(int $resourceId): self;
@@ -69,6 +71,7 @@ interface ResourceBindingInterface
     /**
      * Set store ID
      *
+     * @param int $storeId
      * @return $this
      */
     public function setStoreId(int $storeId): self;
