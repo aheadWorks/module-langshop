@@ -21,7 +21,7 @@ use Aheadworks\Langshop\Api\Data\TranslatableResource\TranslationInterface;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\ResourceModel\Entity\Binding as BindingResource;
-use \Aheadworks\Langshop\Model\Entity\Binding\Manager as BindingManager;
+use Aheadworks\Langshop\Model\Entity\Binding\Manager as BindingManager;
 
 class BindingRepository implements RepositoryInterface
 {
