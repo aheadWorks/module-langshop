@@ -163,10 +163,21 @@ class BindingRepository implements RepositoryInterface
 
                 $item = $localizedCollection->getFirstItem();
                 if ($item->getId()) {
-                    $item
-                        ->addData($values)
-                        ->setData(BindingManager::BINDING_MODE, BindingManager::BINDING_SKIP);
-                    $resourceModel->save($item);
+                    $isToRemove = true;
+                    foreach ($values as $value) {
+                        if ($value) {
+                            $isToRemove = false;
+                            break;
+                        }
+                    }
+                    if ($isToRemove) {
+                        $resourceModel->delete($item);
+                    } else {
+                        $item
+                            ->addData($values)
+                            ->setData(BindingManager::BINDING_MODE, BindingManager::BINDING_SKIP);
+                        $resourceModel->save($item);
+                    }
                 } else {
                     $bindingData = [
                         ResourceBindingInterface::ORIGINAL_RESOURCE_ID => $originalItem->getId(),
