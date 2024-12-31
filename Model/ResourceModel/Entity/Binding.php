@@ -22,6 +22,26 @@ class Binding extends AbstractDb
     }
 
     /**
+     * Get ticket ID by external link
+     *
+     * @param string $resourceType
+     * @param int $translatedResourceId
+     * @return int|null
+     * @throws LocalizedException
+     */
+    public function getOriginalResourceId(string $resourceType, int $translatedResourceId): ?int
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getMainTable(), ResourceBindingInterface::ORIGINAL_RESOURCE_ID)
+            ->where('resource_type = ?', $resourceType)
+            ->where('translated_resource_id = ?', $translatedResourceId);
+
+        $result = $connection->fetchOne($select);
+        return $result ? (int)$result : null;
+    }
+
+    /**
      * Mass save
      *
      * @param array $data

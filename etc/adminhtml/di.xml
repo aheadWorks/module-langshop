@@ -15,6 +15,14 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Aheadworks\Langshop\Block\Adminhtml\Button\CmsBlock\Translate"
+                 type="Aheadworks\Langshop\Block\Adminhtml\Button\BindingResource\Translate">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">cms_block</argument>
+            <argument name="resourceIdParam" xsi:type="string">block_id</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="AttributeTranslateButton" type="Aheadworks\Langshop\Block\Adminhtml\Button\Translate">
         <arguments>
             <argument name="resourceType" xsi:type="string">attribute</argument>
