@@ -15,6 +15,14 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Aheadworks\Langshop\Block\Adminhtml\Button\CmsBlock\Translate"
+                 type="Aheadworks\Langshop\Block\Adminhtml\Button\BindingResource\Translate">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">cms_block</argument>
+            <argument name="resourceIdParam" xsi:type="string">block_id</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="AttributeTranslateButton" type="Aheadworks\Langshop\Block\Adminhtml\Button\Translate">
         <arguments>
             <argument name="resourceType" xsi:type="string">attribute</argument>
@@ -39,6 +47,9 @@
     </type>
     <type name="Magento\Backend\Model\Menu\Builder">
         <plugin name="aw_ls_menu_builder" type="Aheadworks\Langshop\Plugin\Magento\Backend\Model\Menu\BuilderPlugin" />
+    </type>
+    <type name="Magento\Cms\Model\ResourceModel\Block\Grid\Collection">
+        <plugin name="aw_ls_block_grid" type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Block\Grid\CollectionPlugin" />
     </type>
 
     <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">

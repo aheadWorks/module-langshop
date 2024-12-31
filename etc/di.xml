@@ -69,6 +69,7 @@
             <argument name="processorList" xsi:type="array">
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Category</item>
+                <item name="cms_block" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\CmsBlock</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Attribute</item>
                 <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Csv</item>
             </argument>
@@ -98,6 +99,17 @@
                 <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
                 <!-- N.B. The next processor must always be the last one in the list -->
                 <item name="localeFilter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter\Locale\Category</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\CmsBlock"
+                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
+                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
             </argument>
         </arguments>
     </virtualType>
@@ -138,6 +150,7 @@
             <argument name="repositories" xsi:type="array">
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
+                <item name="cms_block" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\CmsBlock</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
                 <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Csv</item>
             </argument>
@@ -184,6 +197,12 @@
                  type="Magento\Framework\Data\Collection\AbstractDbFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Category\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CmsBlock\CollectionFactory"
+                 type="Magento\Framework\Data\Collection\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Collection</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\CollectionFactory"
@@ -250,6 +269,26 @@
         </arguments>
     </virtualType>
     <!-- END Category repository -->
+
+    <!-- START CMS Block repository -->
+    <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CmsBlockFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Cms\Model\ResourceModel\Block</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\CmsBlock"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\BindingRepository">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CmsBlock\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CmsBlockFactory</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor</argument>
+            <argument name="resourceType" xsi:type="string">cms_block</argument>
+            <argument name="fieldToDuplicateByScope" xsi:type="string">title</argument>
+        </arguments>
+    </virtualType>
+    <!-- END CMS Block repository -->
+
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute"
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
         <arguments>
@@ -360,6 +399,7 @@
             <argument name="entityList" xsi:type="array">
                 <item name="product" xsi:type="object">Aheadworks\Langshop\Model\Entity\Product</item>
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category</item>
+                <item name="cms_block" xsi:type="object">Aheadworks\Langshop\Model\Entity\CmsBlock</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute</item>
                 <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\Entity\Csv</item>
             </argument>
@@ -398,6 +438,17 @@
             <argument name="icon" xsi:type="string">CategoriesMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Category</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\CmsBlock"
+                 type="Aheadworks\Langshop\Model\Entity">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">cms_block</argument>
+            <argument name="label" xsi:type="string">Blocks</argument>
+            <argument name="description" xsi:type="string">Blocks</argument>
+            <argument name="icon" xsi:type="string">ChecklistAlternateMajor</argument>
+            <argument name="viewType" xsi:type="string">grid</argument>
+            <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\CmsBlock</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Csv"
@@ -829,6 +880,95 @@
     </virtualType>
     <!-- END Schema Category Fields -->
 
+    <!-- START Schema CMS Block Fields -->
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\CmsBlock"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector">
+        <arguments>
+            <argument name="collectorList" xsi:type="array">
+                <item name="static" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\CmsBlock</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\CmsBlock"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="block_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\CmsBlock\Field\BlockId</item>
+                <item name="title" xsi:type="object">Aheadworks\Langshop\Model\Entity\CmsBlock\Field\Title</item>
+                <item name="identifier" xsi:type="object">Aheadworks\Langshop\Model\Entity\CmsBlock\Field\Identifier</item>
+                <item name="content" xsi:type="object">Aheadworks\Langshop\Model\Entity\CmsBlock\Field\Content</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\CmsBlock\Field\BlockId"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">block_id</argument>
+            <argument name="label" xsi:type="string">ID</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">10</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\CmsBlock\Field\Title"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">title</argument>
+            <argument name="originalCode" xsi:type="string">title</argument>
+            <argument name="label" xsi:type="string">Title</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="isTitle" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">15</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\CmsBlock\Field\Identifier"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">identifier</argument>
+            <argument name="label" xsi:type="string">Identifier</argument>
+            <argument name="isTranslatable" xsi:type="boolean">false</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">20</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\CmsBlock\Field\OriginalContent"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">original_content</argument>
+            <argument name="originalCode" xsi:type="string">content</argument>
+            <argument name="label" xsi:type="string">Original Content</argument>
+            <argument name="sortOrder" xsi:type="number">25</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="translationGrid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::TRANSLATION_GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\CmsBlock\Field\Content"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">content</argument>
+            <argument name="label" xsi:type="string">Content</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">30</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Schema CMS Block Fields -->
+
     <!-- START Schema Csv Fields -->
     <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\Csv"
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector">
@@ -1078,5 +1218,8 @@
 
     <type name="Aheadworks\Langshop\Model\TranslatableResource\Converter">
         <plugin name="aw_ls_add_assigned_locales_to_product" type="Aheadworks\Langshop\Plugin\Langshop\Model\Model\TranslatableResource\ConverterPlugin" />
+    </type>
+    <type name="Magento\Cms\Model\ResourceModel\Block">
+        <plugin name="aw_ls_block_resource_model_plugin" type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\BlockPlugin" />
     </type>
 </config>
