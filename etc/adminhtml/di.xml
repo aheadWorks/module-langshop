@@ -48,6 +48,9 @@
     <type name="Magento\Backend\Model\Menu\Builder">
         <plugin name="aw_ls_menu_builder" type="Aheadworks\Langshop\Plugin\Magento\Backend\Model\Menu\BuilderPlugin" />
     </type>
+    <type name="Magento\Cms\Model\ResourceModel\Block\Grid\Collection">
+        <plugin name="aw_ls_block_grid" type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Block\Grid\CollectionPlugin" />
+    </type>
 
     <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
         <arguments>
