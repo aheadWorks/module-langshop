@@ -74,7 +74,7 @@ class Manager
      */
     public function bindEntity(string $type, int $originalId, int $translatedId, int $storeId): void
     {
-        if (!$this->bindingResource->checkIsAlreadyBound(ResourceBindingInterface::CMS_BLOCK_RESOURCE_TYPE, $translatedId)) {
+        if (!$this->bindingResource->checkIsAlreadyBound($type, $translatedId)) {
             $dataToInsert = [
                 ResourceBindingInterface::RESOURCE_TYPE => $type,
                 ResourceBindingInterface::ORIGINAL_RESOURCE_ID => $originalId,

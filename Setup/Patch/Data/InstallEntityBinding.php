@@ -7,14 +7,17 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 use Aheadworks\Langshop\Model\Entity\Binding\InitialSetup\CmsBlock;
+use Aheadworks\Langshop\Model\Entity\Binding\InitialSetup\CmsPage;
 
 class InstallEntityBinding implements DataPatchInterface, PatchRevertableInterface
 {
     /**
      * @param CmsBlock $cmsBlock
+     * @param CmsPage $cmsPage
      */
     public function __construct(
-        private readonly CmsBlock $cmsBlock
+        private readonly CmsBlock $cmsBlock,
+        private readonly CmsPage $cmsPage
     ) {
     }
 
@@ -27,6 +30,7 @@ class InstallEntityBinding implements DataPatchInterface, PatchRevertableInterfa
     public function apply(): self
     {
         $this->cmsBlock->installInitialData();
+        $this->cmsPage->installInitialData();
 
         return $this;
     }
