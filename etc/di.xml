@@ -538,7 +538,7 @@
             <argument name="resourceType" xsi:type="string">cms_page</argument>
             <argument name="label" xsi:type="string">Pages</argument>
             <argument name="description" xsi:type="string">Pages</argument>
-            <argument name="icon" xsi:type="string">ChecklistAlternateMajor</argument>
+            <argument name="icon" xsi:type="string">PageMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\CmsPage</argument>
         </arguments>
@@ -549,7 +549,7 @@
             <argument name="resourceType" xsi:type="string">agreement</argument>
             <argument name="label" xsi:type="string">Terms and Conditions</argument>
             <argument name="description" xsi:type="string">Terms and Conditions</argument>
-            <argument name="icon" xsi:type="string">ChecklistAlternateMajor</argument>
+            <argument name="icon" xsi:type="string">ChecklistMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Agreement</argument>
         </arguments>
