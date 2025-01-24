@@ -65,10 +65,11 @@ class BindingRepository implements RepositoryInterface
         $collection = $this->collectionFactory->create();
         $localizedCollection = $this->collectionFactory->create();
 
+        $fieldName = $collection->getResource()->getIdFieldName();
         $collection->getSelect()
             ->joinInner(
                 ['binding_tbl' => $this->bindingResource->getTable(BindingResource::MAIN_TABLE_NAME)],
-                $this->getBindingTableJoinCondition(ResourceBindingInterface::ORIGINAL_RESOURCE_ID, Store::DEFAULT_STORE_ID),
+                $this->getBindingTableJoinCondition($fieldName, ResourceBindingInterface::ORIGINAL_RESOURCE_ID, Store::DEFAULT_STORE_ID),
                 []
             );
         $this->collectionProcessor->process($searchCriteria, $collection);
@@ -117,7 +118,7 @@ class BindingRepository implements RepositoryInterface
             $collection->getSelect()
                 ->joinInner(
                     ['binding_tbl' => $this->bindingResource->getTable(BindingResource::MAIN_TABLE_NAME)],
-                    $this->getBindingTableJoinCondition(ResourceBindingInterface::ORIGINAL_RESOURCE_ID, Store::DEFAULT_STORE_ID),
+                    $this->getBindingTableJoinCondition($fieldName, ResourceBindingInterface::ORIGINAL_RESOURCE_ID, Store::DEFAULT_STORE_ID),
                     []
                 );
 
@@ -143,6 +144,7 @@ class BindingRepository implements RepositoryInterface
         $translationByLocales = [];
         $collection = $this->prepareCollectionById($entityId, false);
         $originalItem = $collection->getFirstItem();
+        $fieldName = $collection->getResource()->getIdFieldName();
 
         foreach ($translations as $translation) {
             $this->translationValidation->validate($translation, $this->resourceType);
@@ -157,7 +159,7 @@ class BindingRepository implements RepositoryInterface
                 $localizedCollection->getSelect()
                     ->joinInner(
                         ['binding_tbl' => $this->bindingResource->getTable(BindingResource::MAIN_TABLE_NAME)],
-                        $this->getBindingTableJoinCondition(ResourceBindingInterface::TRANSLATED_RESOURCE_ID, $localeScope->getScopeId()),
+                        $this->getBindingTableJoinCondition($fieldName, ResourceBindingInterface::TRANSLATED_RESOURCE_ID, $localeScope->getScopeId()),
                         [ResourceBindingInterface::TRANSLATED_RESOURCE_ID]
                     )->where(ResourceBindingInterface::ORIGINAL_RESOURCE_ID . ' = ?', $entityId);
 
@@ -209,10 +211,11 @@ class BindingRepository implements RepositoryInterface
      * @param int $storeId
      * @return string
      */
-    private function getBindingTableJoinCondition(string $fieldToJoin, int $storeId): string
+    private function getBindingTableJoinCondition(string $entityField, string $fieldToJoin, int $storeId): string
     {
         return sprintf(
-            'main_table.block_id = binding_tbl.%s AND resource_type = "%s" AND binding_tbl.store_id = %s',
+            'main_table.%s = binding_tbl.%s AND resource_type = "%s" AND binding_tbl.store_id = %s',
+            $entityField,
             $fieldToJoin,
             $this->resourceType,
             $storeId
@@ -250,13 +253,14 @@ class BindingRepository implements RepositoryInterface
      */
     private function addLocalizedAttributes(Collection $collection, Collection $originalLocalizedCollection, array $localeScopes): Collection
     {
+        $fieldName = $collection->getResource()->getIdFieldName();
         $translatableAttributeCodes = $this->attributeProvider->getCodesOfTranslatableFields($this->resourceType);
         foreach ($localeScopes as $localeScope) {
             $localizedCollection = clone $originalLocalizedCollection;
             $localizedCollection->getSelect()
                 ->joinInner(
                     ['binding_tbl' => $this->bindingResource->getTable(BindingResource::MAIN_TABLE_NAME)],
-                    $this->getBindingTableJoinCondition(ResourceBindingInterface::TRANSLATED_RESOURCE_ID, $localeScope->getScopeId()),
+                    $this->getBindingTableJoinCondition($fieldName,ResourceBindingInterface::TRANSLATED_RESOURCE_ID, $localeScope->getScopeId()),
                     [ResourceBindingInterface::ORIGINAL_RESOURCE_ID]
                 );
 

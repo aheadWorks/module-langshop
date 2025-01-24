@@ -15,6 +15,7 @@ interface ResourceBindingInterface
     public const STORE_ID = 'store_id';
 
     public const CMS_BLOCK_RESOURCE_TYPE = 'cms_block';
+    public const CMS_PAGE_RESOURCE_TYPE = 'cms_page';
 
     /**
      * Get resource type
