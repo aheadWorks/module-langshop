@@ -325,7 +325,7 @@
             <argument name="fieldToDuplicateByScope" xsi:type="string">title</argument>
         </arguments>
     </virtualType>
-    <!-- END CMS Block repository -->
+    <!-- END CMS Page repository -->
 
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute"
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
