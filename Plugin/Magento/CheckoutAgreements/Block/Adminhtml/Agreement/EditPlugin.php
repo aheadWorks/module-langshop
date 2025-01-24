@@ -18,7 +18,7 @@ class EditPlugin
     }
 
     /**
-     * Add Adobe Stock Search button to the toolbar
+     * Add translation button
      *
      * @param Container $subject
      * @param LayoutInterface $layout
