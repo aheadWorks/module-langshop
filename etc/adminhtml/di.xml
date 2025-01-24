@@ -59,13 +59,6 @@
     <type name="Magento\Cms\Model\ResourceModel\Block\Grid\Collection">
         <plugin name="aw_ls_block_grid" type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Block\Grid\CollectionPlugin" />
     </type>
-    <virtualType name="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Page\Grid\CollectionPlugin"
-                 type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Block\Grid\CollectionPlugin">
-        <arguments>
-            <argument name="entityFieldName" xsi:type="string">page_id</argument>
-            <argument name="resourceType" xsi:type="const">Aheadworks\Langshop\Api\Data\ResourceBindingInterface::CMS_PAGE_RESOURCE_TYPE</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Cms\Model\ResourceModel\Page\Grid\Collection">
         <plugin name="aw_ls_page_grid" type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Page\Grid\CollectionPlugin" />
     </type>

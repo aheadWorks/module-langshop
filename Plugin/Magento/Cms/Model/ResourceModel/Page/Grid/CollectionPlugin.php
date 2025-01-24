@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Block\Grid;
+namespace Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Page\Grid;
 
 use Magento\Cms\Model\ResourceModel\AbstractCollection;
 use Aheadworks\Langshop\Api\Data\ResourceBindingInterface;
@@ -34,7 +34,7 @@ class CollectionPlugin
         $condition,
     ): AbstractCollection {
         if ($field == 'aw_ls_translation') {
-            $this->translationFilter->apply($subject, ResourceBindingInterface::CMS_BLOCK_RESOURCE_TYPE, 'block_id');
+            $this->translationFilter->apply($subject, ResourceBindingInterface::CMS_PAGE_RESOURCE_TYPE, 'page_id');
             return $subject;
         }
 
