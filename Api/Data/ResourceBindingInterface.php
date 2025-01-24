@@ -16,6 +16,7 @@ interface ResourceBindingInterface
 
     public const CMS_BLOCK_RESOURCE_TYPE = 'cms_block';
     public const CMS_PAGE_RESOURCE_TYPE = 'cms_page';
+    public const AGREEMENT_RESOURCE_TYPE = 'agreement';
 
     /**
      * Get resource type

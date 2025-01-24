@@ -36,6 +36,7 @@ class BindingRepository implements RepositoryInterface
      * @param EntityAttributeProvider $attributeProvider
      * @param string $resourceType
      * @param string $fieldToDuplicateByScope
+     * @param string $fieldToSaveScope
      */
     public function __construct(
         private readonly CollectionFactory $collectionFactory,
@@ -47,7 +48,8 @@ class BindingRepository implements RepositoryInterface
         private readonly LocaleScopeRepository $localeScopeRepository,
         private readonly EntityAttributeProvider $attributeProvider,
         private readonly string $resourceType,
-        private readonly string $fieldToDuplicateByScope
+        private readonly string $fieldToDuplicateByScope,
+        private readonly string $fieldToSaveScope
     ) {
     }
 
@@ -191,7 +193,8 @@ class BindingRepository implements RepositoryInterface
                         ->setData(BindingManager::BINDING_DATA, $bindingData)
                         ->addData($values)
                         ->setId(null)
-                        ->setStoreId([$localeScope->getScopeId()]);
+                        ->setData($this->fieldToSaveScope, [$localeScope->getScopeId()]);
+
                     $resourceModel->save($originalItem);
                 }
 
