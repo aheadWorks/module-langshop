@@ -8,16 +8,19 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 use Aheadworks\Langshop\Model\Entity\Binding\InitialSetup\CmsBlock;
 use Aheadworks\Langshop\Model\Entity\Binding\InitialSetup\CmsPage;
+use Aheadworks\Langshop\Model\Entity\Binding\InitialSetup\Agreement;
 
 class InstallEntityBinding implements DataPatchInterface, PatchRevertableInterface
 {
     /**
      * @param CmsBlock $cmsBlock
      * @param CmsPage $cmsPage
+     * @param Agreement $agreement
      */
     public function __construct(
         private readonly CmsBlock $cmsBlock,
-        private readonly CmsPage $cmsPage
+        private readonly CmsPage $cmsPage,
+        private readonly Agreement $agreement
     ) {
     }
 
@@ -31,6 +34,7 @@ class InstallEntityBinding implements DataPatchInterface, PatchRevertableInterfa
     {
         $this->cmsBlock->installInitialData();
         $this->cmsPage->installInitialData();
+        $this->agreement->installInitialData();
 
         return $this;
     }

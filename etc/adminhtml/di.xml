@@ -31,6 +31,19 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Aheadworks\Langshop\Block\Adminhtml\Button\Agreement\Translate"
+                 type="Aheadworks\Langshop\Block\Adminhtml\Button\BindingResource\Translate">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">agreement</argument>
+            <argument name="resourceIdParam" xsi:type="string">id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Aheadworks\Langshop\Plugin\Magento\CheckoutAgreements\Block\Adminhtml\Agreement\EditPlugin">
+        <arguments>
+            <argument name="translateButton" xsi:type="object">Aheadworks\Langshop\Block\Adminhtml\Button\Agreement\Translate</argument>
+        </arguments>
+    </type>
+
     <virtualType name="AttributeTranslateButton" type="Aheadworks\Langshop\Block\Adminhtml\Button\Translate">
         <arguments>
             <argument name="resourceType" xsi:type="string">attribute</argument>
@@ -61,6 +74,10 @@
     </type>
     <type name="Magento\Cms\Model\ResourceModel\Page\Grid\Collection">
         <plugin name="aw_ls_page_grid" type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\Page\Grid\CollectionPlugin" />
+    </type>
+
+    <type name="Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit">
+        <plugin name="aw_ls_agreement_form" type="Aheadworks\Langshop\Plugin\Magento\CheckoutAgreements\Block\Adminhtml\Agreement\EditPlugin" />
     </type>
 
     <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">

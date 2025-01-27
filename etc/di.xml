@@ -71,6 +71,7 @@
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Category</item>
                 <item name="cms_block" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\CmsBlock</item>
                 <item name="cms_page" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\CmsPage</item>
+                <item name="agreement" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Agreement</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Attribute</item>
                 <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Csv</item>
             </argument>
@@ -125,6 +126,17 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Agreement"
+                 type="Aheadworks\Langshop\Model\Data\Processor\Composite">
+        <arguments>
+            <argument name="processorList" xsi:type="array">
+                <item name="default" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\DefaultValue</item>
+                <item name="locale" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Locale</item>
+                <item name="sorting" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Sorting</item>
+                <item name="filter" xsi:type="object">Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Filter</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Data\Processor\TranslatableResource\Attribute"
                  type="Aheadworks\Langshop\Model\Data\Processor\Composite">
         <arguments>
@@ -164,6 +176,7 @@
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Category</item>
                 <item name="cms_block" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\CmsBlock</item>
                 <item name="cms_page" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\CmsPage</item>
+                <item name="agreement" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Agreement</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute</item>
                 <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\TranslatableResource\Repository\Csv</item>
             </argument>
@@ -222,6 +235,12 @@
                  type="Magento\Framework\Data\Collection\AbstractDbFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Agreement\CollectionFactory"
+                 type="Magento\Framework\Data\Collection\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Attribute\CollectionFactory"
@@ -304,6 +323,7 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">cms_block</argument>
             <argument name="fieldToDuplicateByScope" xsi:type="string">title</argument>
+            <argument name="fieldToSaveScope" xsi:type="string">store_id</argument>
         </arguments>
     </virtualType>
     <!-- END CMS Block repository -->
@@ -323,9 +343,30 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor</argument>
             <argument name="resourceType" xsi:type="string">cms_page</argument>
             <argument name="fieldToDuplicateByScope" xsi:type="string">title</argument>
+            <argument name="fieldToSaveScope" xsi:type="string">store_id</argument>
         </arguments>
     </virtualType>
     <!-- END CMS Page repository -->
+
+    <!-- START Checkout Agreement repository -->
+    <virtualType name="Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\AgreementFactory"
+                 type="Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\CheckoutAgreements\Model\ResourceModel\Agreement</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Agreement"
+                 type="Aheadworks\Langshop\Model\TranslatableResource\Repository\BindingRepository">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\Agreement\CollectionFactory</argument>
+            <argument name="resourceModelFactory" xsi:type="object">Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\AgreementFactory</argument>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor</argument>
+            <argument name="resourceType" xsi:type="string">agreement</argument>
+            <argument name="fieldToDuplicateByScope" xsi:type="string">name</argument>
+            <argument name="fieldToSaveScope" xsi:type="string">stores</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Checkout Agreement repository -->
 
     <virtualType name="Aheadworks\Langshop\Model\TranslatableResource\Repository\Attribute"
                  type="Aheadworks\Langshop\Model\TranslatableResource\Repository\Repository">
@@ -439,6 +480,7 @@
                 <item name="category" xsi:type="object">Aheadworks\Langshop\Model\Entity\Category</item>
                 <item name="cms_block" xsi:type="object">Aheadworks\Langshop\Model\Entity\CmsBlock</item>
                 <item name="cms_page" xsi:type="object">Aheadworks\Langshop\Model\Entity\CmsPage</item>
+                <item name="agreement" xsi:type="object">Aheadworks\Langshop\Model\Entity\Agreement</item>
                 <item name="attribute" xsi:type="object">Aheadworks\Langshop\Model\Entity\Attribute</item>
                 <item name="csv" xsi:type="object">Aheadworks\Langshop\Model\Entity\Csv</item>
             </argument>
@@ -496,9 +538,20 @@
             <argument name="resourceType" xsi:type="string">cms_page</argument>
             <argument name="label" xsi:type="string">Pages</argument>
             <argument name="description" xsi:type="string">Pages</argument>
-            <argument name="icon" xsi:type="string">ChecklistAlternateMajor</argument>
+            <argument name="icon" xsi:type="string">PageMajor</argument>
             <argument name="viewType" xsi:type="string">grid</argument>
             <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\CmsPage</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Agreement"
+                 type="Aheadworks\Langshop\Model\Entity">
+        <arguments>
+            <argument name="resourceType" xsi:type="string">agreement</argument>
+            <argument name="label" xsi:type="string">Terms and Conditions</argument>
+            <argument name="description" xsi:type="string">Terms and Conditions</argument>
+            <argument name="icon" xsi:type="string">ChecklistMajor</argument>
+            <argument name="viewType" xsi:type="string">grid</argument>
+            <argument name="fieldCollector" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\Agreement</argument>
         </arguments>
     </virtualType>
     <virtualType name="Aheadworks\Langshop\Model\Entity\Csv"
@@ -1136,6 +1189,80 @@
     </virtualType>
     <!-- END Schema CMS Page Fields -->
 
+    <!-- START Schema Checkout Agreements Fields -->
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\Agreement"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector">
+        <arguments>
+            <argument name="collectorList" xsi:type="array">
+                <item name="static" xsi:type="object">Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\Agreement</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute\Agreement"
+                 type="Aheadworks\Langshop\Model\Entity\Field\Collector\StaticAttribute">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="agreement_id" xsi:type="object">Aheadworks\Langshop\Model\Entity\Agreement\Field\AgreementId</item>
+                <item name="name" xsi:type="object">Aheadworks\Langshop\Model\Entity\Agreement\Field\Name</item>
+                <item name="checkbox_text" xsi:type="object">Aheadworks\Langshop\Model\Entity\Agreement\Field\CheckboxText</item>
+                <item name="content" xsi:type="object">Aheadworks\Langshop\Model\Entity\Agreement\Field\Content</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Agreement\Field\AgreementId"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">agreement_id</argument>
+            <argument name="label" xsi:type="string">ID</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">10</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Agreement\Field\Name"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">name</argument>
+            <argument name="label" xsi:type="string">Condition Name</argument>
+            <argument name="isFilterable" xsi:type="boolean">true</argument>
+            <argument name="isSortable" xsi:type="boolean">true</argument>
+            <argument name="isTitle" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">20</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="grid" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::GRID</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Agreement\Field\CheckboxText"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">checkbox_text</argument>
+            <argument name="label" xsi:type="string">Checkbox Text</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">30</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Aheadworks\Langshop\Model\Entity\Agreement\Field\Content"
+                 type="Aheadworks\Langshop\Model\Entity\Field">
+        <arguments>
+            <argument name="code" xsi:type="string">content</argument>
+            <argument name="label" xsi:type="string">Content</argument>
+            <argument name="isTranslatable" xsi:type="boolean">true</argument>
+            <argument name="sortOrder" xsi:type="number">40</argument>
+            <argument name="visibleOn" xsi:type="array">
+                <item name="form" xsi:type="const">Aheadworks\Langshop\Model\Source\Schema\VisibleOn::FORM</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Schema Checkout Agreements Fields -->
+
     <!-- START Schema Csv Fields -->
     <virtualType name="Aheadworks\Langshop\Model\Entity\Field\Collector\Csv"
                  type="Aheadworks\Langshop\Model\Entity\Field\Collector">
@@ -1391,5 +1518,8 @@
     </type>
     <type name="Magento\Cms\Model\ResourceModel\Page">
         <plugin name="aw_ls_page_resource_model_plugin" type="Aheadworks\Langshop\Plugin\Magento\Cms\Model\ResourceModel\PagePlugin" />
+    </type>
+    <type name="Magento\CheckoutAgreements\Model\ResourceModel\Agreement">
+        <plugin name="aw_ls_agreement_resource_model_plugin" type="Aheadworks\Langshop\Plugin\Magento\CheckoutAgreements\Model\ResourceModel\AgreementPlugin" />
     </type>
 </config>
