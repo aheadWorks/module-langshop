@@ -24,6 +24,10 @@ $viewModel = $block->getData('view_model');
                     },
                     'Aheadworks_Langshop/js/iframe-bridge'
                 );
+                iframe.setAttribute('scrolling', 'no');
+                iframe.setAttribute('height', '780');
+                iframe.removeAttribute('style');
+                iframe.style.border = 'none';
             });
         });
     </script>
