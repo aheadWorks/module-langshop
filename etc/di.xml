@@ -52,6 +52,14 @@
     <preference for="Aheadworks\Langshop\Api\TranslatableResourceManagementInterface"
                 type="Aheadworks\Langshop\Model\Service\TranslatableResource" />
 
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="awLangShopSetMode" xsi:type="object">Aheadworks\Langshop\Console\Command\SetMode</item>
+            </argument>
+        </arguments>
+    </type>
+
     <!-- START Data Processor Pool -->
     <preference for="Aheadworks\Langshop\Model\Data\ProcessorInterface"
                 type="Aheadworks\Langshop\Model\Data\Processor\Composite" />
