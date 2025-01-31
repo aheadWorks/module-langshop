@@ -12,6 +12,7 @@ define([
          * @property {HTMLElement} iframe
          */
         iframe: null,
+        height: 600,
 
         reload: function (data) {
             window.location.reload();
@@ -69,16 +70,18 @@ define([
          * @param {number} data.height
          */
         updateIframeSize: function (data) {
-            if (this.iframe) {
-                if (data.height) {
-                    this.iframe.style.height = data.height + 'px';
-                }
+            if (this.iframe && data.height) {
+                let height = data.height > this.height ? data.height : this.height;
+                this.iframe.height = height.toString();
             }
         }
     };
 
     window.addEventListener('message', function (e) {
-        let messageObject = JSON.parse(e.data);
+        let messageObject = typeof (e.data) === 'string'
+            ? JSON.parse(e.data)
+            : e.data;
+
         let eventName = messageObject.event || '';
         let eventData = messageObject.data || {};
 

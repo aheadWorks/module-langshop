@@ -100,4 +100,14 @@ class UrlBuilder
     {
         return $this->url->getUrl('langshop/saas/redirect');
     }
+
+    /**
+     * Get app builder app page
+     *
+     * @return string
+     */
+    public function getAppBuilderAppPage(): string
+    {
+        return $this->url->getUrl('adminhtml/dashboard');
+    }
 }

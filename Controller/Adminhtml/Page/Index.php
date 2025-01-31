@@ -9,6 +9,8 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Aheadworks\Langshop\Model\Mode\State;
+use Aheadworks\Langshop\Model\Saas\UrlBuilder;
 
 class Index extends Action implements HttpGetActionInterface
 {
@@ -29,10 +31,14 @@ class Index extends Action implements HttpGetActionInterface
     /**
      * @param Context $context
      * @param ListToTranslateConfig $listToTranslateConfig
+     * @param State $state
+     * @param UrlBuilder $urlBuilder
      */
     public function __construct(
         Context $context,
-        ListToTranslateConfig $listToTranslateConfig
+        ListToTranslateConfig $listToTranslateConfig,
+        private readonly State $state,
+        private readonly UrlBuilder $urlBuilder
     ) {
         parent::__construct($context);
         $this->listToTranslateConfig = $listToTranslateConfig;
@@ -44,6 +50,12 @@ class Index extends Action implements HttpGetActionInterface
     public function execute()
     {
         $this->addConfigNotice();
+
+        if ($this->state->isAppBuilderMode()) {
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath($this->urlBuilder->getAppBuilderAppPage());
+            return $resultRedirect;
+        }
 
         /** @var ResultPage $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

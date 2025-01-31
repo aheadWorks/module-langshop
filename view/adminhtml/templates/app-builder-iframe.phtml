@@ -1,0 +1,34 @@
+<?php
+use Magento\Framework\Escaper;
+use Magento\Backend\Block\Template;
+use Aheadworks\Langshop\ViewModel\Page\Iframe;
+
+/**
+ * @var Template $block
+ * @var Escaper $escaper
+ * @var Iframe $viewModel
+ */
+$viewModel = $block->getData('view_model');
+?>
+<?php if ($viewModel->isAppBuilderMode()) : ?>
+    <script>
+        require([
+            'mage/apply/main',
+            'Magento_Ui/js/lib/view/utils/async',
+        ], function(main, $) {
+            $.async('#uix-page-content iframe', function (iframe) {
+                main.applyFor(
+                    iframe,
+                    {
+                        redirectUrl: '<?= $escaper->escapeUrl($viewModel->getRedirectUrl()) ?>'
+                    },
+                    'Aheadworks_Langshop/js/iframe-bridge'
+                );
+                iframe.setAttribute('scrolling', 'no');
+                iframe.setAttribute('height', '780');
+                iframe.removeAttribute('style');
+                iframe.style.border = 'none';
+            });
+        });
+    </script>
+<?php endif; ?>
