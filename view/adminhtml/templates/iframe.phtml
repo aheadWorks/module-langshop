@@ -9,9 +9,10 @@ $viewModel = $block->getViewModel();
 ?>
 <iframe src="<?= $block->escapeUrl($viewModel->getSourceUrl()) ?>"
         width="100%"
-        height="1000px"
+        height="780"
         frameborder="0"
         sandbox="allow-same-origin allow-scripts"
+        scrolling="no"
         data-mage-init='{"Aheadworks_Langshop/js/iframe-bridge": {
             "redirectUrl": "<?= $block->escapeUrl($viewModel->getRedirectUrl()) ?>"
         }}'
