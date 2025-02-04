@@ -1525,4 +1525,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="aw_ls_product_resource_model_plugin" type="Aheadworks\Langshop\Plugin\Magento\Catalog\Model\ResourceModel\ProductPlugin" />
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="aw_ls_category_resource_model_plugin" type="Aheadworks\Langshop\Plugin\Magento\Catalog\Model\ResourceModel\CategoryPlugin" />
+    </type>
 </config>

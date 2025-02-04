@@ -62,19 +62,19 @@ class Processor
         $originalData = array_intersect_key($resource->getOrigData(), array_flip($translatableFields));
 
         if (($originalData === $modifiedData)
-            || $this->statusChecker->isProcessing($resourceType, $resource->getEntityId())
+            || $this->statusChecker->isProcessing($resourceType, $resource->getId())
         ) {
             return;
         }
 
-        $response = $this->translateAction->makeRequest($resourceType, (int)$resource->getEntityId());
+        $response = $this->translateAction->makeRequest($resourceType, (int)$resource->getId());
         if ($response->getStatus() > 400) {
             $response = $this->curlResponseHandler->prepareResponse($response);
             if (isset($response['message'])) {
                 $this->logger->warning($response['message']);
             }
         } else {
-            $this->translateAction->setProcessingStatus($resourceType, (int)$resource->getEntityId());
+            $this->translateAction->setProcessingStatus($resourceType, (int)$resource->getId());
         }
     }
 
