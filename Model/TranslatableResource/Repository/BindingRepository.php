@@ -14,6 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Store\Model\Store;
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Aheadworks\Langshop\Api\Data\Locale\Scope\RecordInterface;
 use Aheadworks\Langshop\Api\Data\ResourceBindingInterface;
@@ -167,6 +168,11 @@ class BindingRepository implements RepositoryInterface
 
                 $item = $localizedCollection->getFirstItem();
                 if ($item->getId()) {
+                    if ($item instanceof AgreementInterface) {
+                        // to trigger after load method to attach stores data
+                        $resourceModel->load($item, $item->getId());
+                    }
+
                     $isToRemove = true;
                     foreach ($values as $value) {
                         if ($value) {
@@ -210,6 +216,7 @@ class BindingRepository implements RepositoryInterface
     /**
      * Get binding table join condition
      *
+     * @param string $entityField
      * @param string $fieldToJoin
      * @param int $storeId
      * @return string

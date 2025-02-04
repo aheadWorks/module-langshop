@@ -55,7 +55,7 @@ class Processor
 
         $translatableFields = $this->getTranslatedFields($resourceType);
         $modifiedData = array_intersect_key($resource->getData(), array_flip($translatableFields));
-        $originalData = array_intersect_key($resource->getOrigData(), array_flip($translatableFields));
+        $originalData = array_intersect_key($resource->getOrigData() ?? [], array_flip($translatableFields));
 
         if (($originalData === $modifiedData)
             || $this->statusChecker->isProcessing($resourceType, $resource->getId())
