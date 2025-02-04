@@ -7,7 +7,6 @@ use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Webapi\Exception;
 use Aheadworks\Langshop\Model\Config\AutoUpdateTranslation;
 use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
@@ -48,10 +47,9 @@ class Processor
      * @return void
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function forceTranslateEavEntity(
+    public function forceTranslate(
         AbstractModel $resource,
         string $resourceType,
     ): void {
