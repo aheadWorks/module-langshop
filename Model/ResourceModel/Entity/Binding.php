@@ -96,4 +96,24 @@ class Binding extends AbstractDb
             ]
         );
     }
+
+    /**
+     * Get resource store ID
+     *
+     * @param string $resourceType
+     * @param int $translatedResourceId
+     * @return int|null
+     * @throws LocalizedException
+     */
+    public function getResourceStoreId(string $resourceType, int $translatedResourceId): ?int
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getMainTable(), ResourceBindingInterface::STORE_ID)
+            ->where('resource_type = ?', $resourceType)
+            ->where('translated_resource_id = ?', $translatedResourceId);
+
+        $result = $connection->fetchOne($select);
+        return $result !== null ? (int)$result : null;
+    }
 }

@@ -8,14 +8,17 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Cms\Model\ResourceModel\Page as PageResourceModel;
 use Aheadworks\Langshop\Api\Data\ResourceBindingInterface;
 use Aheadworks\Langshop\Model\Entity\Binding\Manager as BindingManager;
+use Aheadworks\Langshop\Model\Entity\AutoTranslation\Processor;
 
 class PagePlugin
 {
     /**
      * @param BindingManager $bindingManager
+     * @param Processor $processor
      */
     public function __construct(
-        private readonly BindingManager $bindingManager
+        private readonly BindingManager $bindingManager,
+        private readonly Processor $processor
     ) {
     }
 
@@ -35,6 +38,7 @@ class PagePlugin
         AbstractModel $pageResult,
     ): PageResourceModel {
         $this->bindingManager->processEntityBinding($pageResult, ResourceBindingInterface::CMS_PAGE_RESOURCE_TYPE);
+        $this->processor->forceTranslate($pageResult, ResourceBindingInterface::CMS_PAGE_RESOURCE_TYPE);
         return $result;
     }
 
