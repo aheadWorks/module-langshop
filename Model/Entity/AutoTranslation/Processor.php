@@ -49,7 +49,7 @@ class Processor
         AbstractModel $resource,
         string $resourceType,
     ): void {
-        if (!$this->checker->canProceed($resource, $resourceType)) {
+        if (!$this->checker->canAutoTranslate($resource, $resourceType)) {
             return;
         }
 

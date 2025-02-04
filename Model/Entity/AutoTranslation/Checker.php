@@ -27,7 +27,7 @@ class Checker
     }
 
     /**
-     * Can proceed
+     * Can auto translate
      *
      * @param AbstractModel $resource
      * @param string $resourceType
@@ -35,7 +35,7 @@ class Checker
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    public function canProceed(AbstractModel $resource, string $resourceType): bool
+    public function canAutoTranslate(AbstractModel $resource, string $resourceType): bool
     {
         if (!$this->autoUpdateTranslation->isEnabled()) {
             return false;

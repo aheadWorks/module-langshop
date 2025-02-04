@@ -10,17 +10,11 @@ class AutoUpdateTranslation
     private const XML_PATH_CONFIG = 'aw_ls/general/is_auto_update_translation_enabled';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private ScopeConfigInterface $scopeConfig;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
