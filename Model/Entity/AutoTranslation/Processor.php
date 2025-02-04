@@ -7,8 +7,6 @@ use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
-use Aheadworks\Langshop\Model\Config\AutoUpdateTranslation;
-use Aheadworks\Langshop\Model\Locale\Scope\Record\Repository as LocaleScopeRepository;
 use Aheadworks\Langshop\Model\Entity\Pool as EntityPool;
 use Aheadworks\Langshop\Model\Entity\Converter as EntityConverter;
 use Aheadworks\Langshop\Model\Status\StatusChecker;
@@ -19,23 +17,21 @@ class Processor
 {
     /**
      * @param Logger $logger
-     * @param AutoUpdateTranslation $autoUpdateTranslation
-     * @param LocaleScopeRepository $localeScopeRepository
      * @param EntityPool $entityPool
      * @param EntityConverter $entityConverter
      * @param StatusChecker $statusChecker
      * @param TranslateAction $translateAction
      * @param CurlResponseHandler $curlResponseHandler
+     * @param Checker $checker
      */
     public function __construct(
         private readonly Logger $logger,
-        private readonly AutoUpdateTranslation $autoUpdateTranslation,
-        private readonly LocaleScopeRepository $localeScopeRepository,
         private readonly EntityPool $entityPool,
         private readonly EntityConverter $entityConverter,
         private readonly StatusChecker $statusChecker,
         private readonly TranslateAction $translateAction,
-        private readonly CurlResponseHandler $curlResponseHandler
+        private readonly CurlResponseHandler $curlResponseHandler,
+        private readonly Checker $checker
     ) {
     }
 
@@ -53,7 +49,7 @@ class Processor
         AbstractModel $resource,
         string $resourceType,
     ): void {
-        if (!$this->canProceed($resource, $resourceType)) {
+        if (!$this->checker->canProceed($resource, $resourceType)) {
             return;
         }
 
@@ -76,28 +72,6 @@ class Processor
         } else {
             $this->translateAction->setProcessingStatus($resourceType, (int)$resource->getId());
         }
-    }
-
-    /**
-     * Can proceed
-     *
-     * @param AbstractModel $resource
-     * @param string $resourceType
-     * @return bool
-     * @throws NoSuchEntityException
-     */
-    private function canProceed(AbstractModel $resource, string $resourceType): bool
-    {
-        if (!$this->autoUpdateTranslation->isEnabled()) {
-            return false;
-        }
-
-        $defaultLocale = $this->localeScopeRepository->getPrimary($resourceType);
-        if ($resource->getData('store_id') != $defaultLocale->getScopeId()) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

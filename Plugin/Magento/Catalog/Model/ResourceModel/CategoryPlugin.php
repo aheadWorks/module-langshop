@@ -25,7 +25,7 @@ class CategoryPlugin
      *
      * @param CategoryResourceModel $subject
      * @param CategoryResourceModel $result
-     * @param AbstractModel $productResult
+     * @param AbstractModel $categoryResult
      * @return CategoryResourceModel
      * @throws Exception
      * @throws LocalizedException
@@ -35,9 +35,9 @@ class CategoryPlugin
     public function afterSave(
         CategoryResourceModel $subject,
         CategoryResourceModel $result,
-        AbstractModel $productResult,
+        AbstractModel $categoryResult,
     ): CategoryResourceModel {
-        $this->processor->forceTranslate($productResult, 'category');
+        $this->processor->forceTranslate($categoryResult, 'category');
 
         return $result;
     }
