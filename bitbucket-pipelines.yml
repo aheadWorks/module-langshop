@@ -25,99 +25,131 @@ definitions:
         artifacts:
           - "*.zip"
   test_steps:
-    - step: &codesnifferTest-2.4.7-p1
-        name: Run codesniffer tests
-        image: aheadworks/m2test-new:2.4.7-p1-without-db-8.3
+# Magento 2.4.8 tests
+    - step: &codesnifferTestPHP84-2.4.8
+        name: codesniffer tests PHP 8.4 on Magento 2.4.8
+        image: aheadworks/m2test-new:2.4.8-without-db-8.4
         script:
-          - pip3 install --break-system-packages  aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.7-p1.xml
+          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.8.xml
         artifacts:
           - "test-results/**"
-    - step: &unitTestPHP82-247
-        name: Run unit tests PHP 8.3 on Magento 2.4.7-p1
-        image: aheadworks/m2test-new:2.4.7-p1-with-db-8.3
+
+    - step: &unitTestPHP84-2.4.8
+        name: unit tests PHP 8.4 on Magento 2.4.8
+        image: aheadworks/m2test-new:2.4.8-with-db-8.4
         script:
           - *prepareSSH
           - pip3 install --break-system-packages aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.7-p1.xml
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.8.xml
         artifacts:
           - "test-results/**"
-    - step: &phpstanTestPHP82-247
-        name: Run phpstan tests PHP 8.3 on Magento 2.4.7-p1
-        image: aheadworks/m2test-new:2.4.7-p1-with-db-8.3
+
+    - step: &phpstanTestPHP84-2.4.8
+        name: phpstan tests PHP 8.4 on Magento 2.4.8
+        image: aheadworks/m2test-new:2.4.8-with-db-8.4
         script:
           - *prepareSSH
           - pip3 install --break-system-packages aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.7-p1.xml
+          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.8.xml
         artifacts:
           - "test-results/**"
-    - step: &installMagento-2.4.7-p1
-        name: Run install Magento 2.4.7-p1 test
-        image: aheadworks/m2test-new:2.4.7-p1-without-db-8.3
+
+    - step: &installMagentoPHP84-2.4.8
+        name: install Magento 2.4.8 test
+        image: aheadworks/m2test-new:2.4.8-without-db-8.4
         script:
           - *prepareSSH
           - pip3 install --break-system-packages aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.7-p1.xml
+          - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.8.xml
         artifacts:
           - "logs1/**"
           - "test-results/**"
 
-    - step: &codesnifferTest-2.4.6
-        name: Run codesniffer tests
-        image: aheadworks/m2test-new:2.4.6-p6-without-db-8.2
+# Magento 2.4.7 tests
+    - step: &codesnifferTestPHP83-2.4.7
+        name: codesniffer tests on Magento 2.4.7
+        image: aheadworks/m2test-new:2.4.7-p5-without-db-8.3
         script:
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.6-p6.xml
+          - pip3 install --break-system-packages  aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.7.xml
         artifacts:
           - "test-results/**"
-    - step: &unitTestPHP81-244
-        name: Run unit tests PHP 8.1 on Magento 2.4.4-p9
-        image: aheadworks/m2test-new:2.4.4-p9-with-db-8.1
-        script:
-          - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.4-p9.xml
-        artifacts:
-          - "test-results/**"
-    - step: &unitTestPHP82
-        name: Run unit tests PHP 8.2 on Magento 2.4.6-p6
-        image: aheadworks/m2test-new:2.4.6-p6-with-db-8.2
+
+    - step: &unitTestPHP83-2.4.7
+        name: unit tests PHP 8.3 on Magento 2.4.7
+        image: aheadworks/m2test-new:2.4.7-p5-with-db-8.3
         script:
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6-p6.xml
+          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.7.xml
         artifacts:
           - "test-results/**"
-    - step: &phpstanTestPHP81-244
-        name: Run phpstan tests PHP 8.1 on Magento 2.4.4-p9
-        image: aheadworks/m2test-new:2.4.4-p9-with-db-8.1
+
+    - step: &phpstanTestPHP83-2.4.7
+        name: phpstan tests PHP 8.3 on Magento 2.4.7
+        image: aheadworks/m2test-new:2.4.7-p5-with-db-8.3
         script:
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.4-p9.xml
+          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.7.xml
         artifacts:
           - "test-results/**"
-    - step: &phpstanTestPHP82
-        name: Run phpstan tests PHP 8.2 on Magento 2.4.6-p6
-        image: aheadworks/m2test-new:2.4.6-p6-with-db-8.2
+
+    - step: &installMagentoPHP83-2.4.7
+        name: install Magento 2.4.7 test
+        image: aheadworks/m2test-new:2.4.7-p5-without-db-8.3
         script:
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6-p6.xml
+          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.7.xml
         artifacts:
+          - "logs1/**"
           - "test-results/**"
-    - step: &messDetectorTestPHP82
-        name: Run mess detector tests PHP 8.2
-        image: aheadworks/m2test-new:2.4.6-p6-with-db-8.2
+
+# Magento 2.4.6 tests
+    - step: &messDetectorTestPHP82-2.4.6
+        name: mess detector tests PHP 8.2
+        image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
         script:
           - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
           - python3 -m aheadworks_test_manager mess-detector ${PWD}
         artifacts:
           - "test-results/**"
-    - step: &installMagento-2.4.4
-        name: Run install Magento 2.4.4-p9 test
-        image: aheadworks/m2test-new:2.4.4-p9-without-db-8.1
+
+    - step: &codesnifferTestPHP82-2.4.6
+        name: codesniffer tests on Magento 2.4.6
+        image: aheadworks/m2test-new:2.4.6-p10-without-db-8.2
+        script:
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.6.xml
+        artifacts:
+          - "test-results/**"
+
+    - step: &unitTestPHP82-2.4.6
+        name: unit tests PHP 8.2 on Magento 2.4.6
+        image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
+        script:
+          - *prepareSSH
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6.xml
+        artifacts:
+          - "test-results/**"
+
+    - step: &phpstanTestPHP82-2.4.6
+        name: phpstan tests PHP 8.2 on Magento 2.4.6
+        image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
+        script:
+          - *prepareSSH
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6.xml
+        artifacts:
+          - "test-results/**"
+
+    - step: &installMagentoPHP82-2.4.6
+        name: install Magento 2.4.6 test
+        image: aheadworks/m2test-new:2.4.6-p10-without-db-8.2
         script:
           - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
@@ -125,9 +157,31 @@ definitions:
         artifacts:
           - "logs1/**"
           - "test-results/test-unit.xml"
-    - step: &installMagento-2.4.6
-        name: Run install Magento 2.4.6-p6 test
-        image: aheadworks/m2test-new:2.4.6-p6-without-db-8.2
+
+# Magento 2.4.5 tests
+    - step: &unitTestPHP81-2.4.5
+        name: unit tests PHP 8.1 on Magento 2.4.5
+        image: aheadworks/m2test-new:2.4.5-p12-with-db-8.1
+        script:
+          - *prepareSSH
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.5.xml
+        artifacts:
+          - "test-results/**"
+
+    - step: &phpstanTestPHP81-2.4.5
+        name: phpstan tests PHP 8.1 on Magento 2.4.5
+        image: aheadworks/m2test-new:2.4.5-p12-with-db-8.1
+        script:
+          - *prepareSSH
+          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.5.xml
+        artifacts:
+          - "test-results/**"
+
+    - step: &installMagentoPHP81-2.4.5
+        name: install Magento 2.4.5 test
+        image: aheadworks/m2test-new:2.4.5-p12-without-db-8.1
         script:
           - *prepareSSH
           - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
@@ -197,54 +251,62 @@ pipelines:
     master:
       - step: *build
       - parallel:
-          - step: *codesnifferTest-2.4.6
-          - step: *unitTestPHP81-244
-          - step: *unitTestPHP82
-          - step: *phpstanTestPHP81-244
-          - step: *phpstanTestPHP82
-          - step: *installMagento-2.4.4
-          - step: *installMagento-2.4.6
+          - step: *codesnifferTestPHP82-2.4.6
+          - step: *unitTestPHP82-2.4.6
+          - step: *installMagentoPHP82-2.4.6
+          - step: *phpstanTestPHP82-2.4.6
+          - step: *unitTestPHP81-2.4.5
+          - step: *phpstanTestPHP81-2.4.5
+          - step: *installMagentoPHP81-2.4.5
       - step: *rebuildPrivateComposer
       - step: *build_packages
-#      - step: *swaggerWebApiDocBuild
+      - step: *swaggerWebApiDocBuild
       - step: *releaseToPublicComposer
 
     # For every commit to develop branch: run tests
     develop:
       - parallel:
-          - step: *codesnifferTest-2.4.6
-          - step: *unitTestPHP81-244
-          - step: *unitTestPHP82
-          - step: *phpstanTestPHP81-244
-          - step: *phpstanTestPHP82
-          - step: *installMagento-2.4.4
-          - step: *installMagento-2.4.6
-          - step: *codesnifferTest-2.4.7-p1
-          - step: *unitTestPHP82-247
-          - step: *phpstanTestPHP82-247
-          - step: *installMagento-2.4.7-p1
+          - step: *codesnifferTestPHP84-2.4.8
+          - step: *unitTestPHP84-2.4.8
+          - step: *phpstanTestPHP84-2.4.8
+          - step: *installMagentoPHP84-2.4.8
+          - step: *codesnifferTestPHP83-2.4.7
+          - step: *unitTestPHP83-2.4.7
+          - step: *phpstanTestPHP83-2.4.7
+          - step: *installMagentoPHP83-2.4.7
+          - step: *codesnifferTestPHP82-2.4.6
+          - step: *unitTestPHP82-2.4.6
+          - step: *installMagentoPHP82-2.4.6
+          - step: *phpstanTestPHP82-2.4.6
+          - step: *unitTestPHP81-2.4.5
+          - step: *phpstanTestPHP81-2.4.5
+          - step: *installMagentoPHP81-2.4.5
           
       - step: *rebuildPrivateComposer
     feature/*:
       - parallel:
-        - step: *codesnifferTest-2.4.6
-        - step: *unitTestPHP82
-        - step: *phpstanTestPHP81-244
-        - step: *phpstanTestPHP82
+        - step: *codesnifferTestPHP82-2.4.6
+        - step: *unitTestPHP82-2.4.6
+        - step: *phpstanTestPHP82-2.4.6
+        - step: *phpstanTestPHP81-2.4.5
+
     bugfix/*:
       - parallel:
-        - step: *codesnifferTest-2.4.6
-        - step: *unitTestPHP82
-        - step: *phpstanTestPHP81-244
-        - step: *phpstanTestPHP82
+        - step: *unitTestPHP83-2.4.7
+        - step: *codesnifferTestPHP82-2.4.6
+        - step: *unitTestPHP82-2.4.6
+        - step: *phpstanTestPHP82-2.4.6
+        - step: *phpstanTestPHP81-2.4.5
+
     release/*:
       - step: *build
       - parallel:
-          - step: *codesnifferTest-2.4.6
-          - step: *unitTestPHP81-244
-          - step: *unitTestPHP82
-          - step: *phpstanTestPHP81-244
-          - step: *phpstanTestPHP82
+          - step: *unitTestPHP83-2.4.7
+          - step: *codesnifferTestPHP82-2.4.6
+          - step: *unitTestPHP82-2.4.6
+          - step: *phpstanTestPHP82-2.4.6
+          - step: *unitTestPHP81-2.4.5
+          - step: *phpstanTestPHP81-2.4.5
 
   custom:
     # Manual upload to the Public composer repository
@@ -263,23 +325,23 @@ pipelines:
     # Run tests manually
     run-all-tests:
       - parallel:
-          - step: *codesnifferTest-2.4.6
-          - step: *unitTestPHP81-244
-          - step: *unitTestPHP82
-          - step: *phpstanTestPHP81-244
-          - step: *phpstanTestPHP82
-          - step: *messDetectorTestPHP82
-          - step: *installMagento-2.4.4
-          - step: *installMagento-2.4.6
+          - step: *codesnifferTestPHP82-2.4.6
+          - step: *unitTestPHP82-2.4.6
+          - step: *phpstanTestPHP82-2.4.6
+          - step: *messDetectorTestPHP82-2.4.6
+          - step: *installMagentoPHP82-2.4.6
+          - step: *phpstanTestPHP81-2.4.5
+          - step: *unitTestPHP81-2.4.5
+          - step: *installMagentoPHP81-2.4.5
 
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
-          - step: *codesnifferTest-2.4.6
-          - step: *unitTestPHP81-244
-          - step: *unitTestPHP82
-          - step: *installMagento-2.4.4
-          - step: *installMagento-2.4.6
+          - step: *codesnifferTestPHP82-2.4.6
+          - step: *unitTestPHP82-2.4.6
+          - step: *installMagentoPHP82-2.4.6
+          - step: *unitTestPHP81-2.4.5
+          - step: *installMagentoPHP81-2.4.5
 
     get_key:
       - step: *get_key
@@ -298,15 +360,15 @@ pipelines:
       - variables:
           - name: SEVERITY
             default: 9
-      - step: *codesnifferTest-2.4.6
+      - step: *codesnifferTestPHP82-2.4.6
 
     phpstan-test-with-select-severity:
       - variables:
           - name: PHPSTANSEVERITY
             default: 0
       - parallel:
-          - step: *phpstanTestPHP81-244
-          - step: *phpstanTestPHP82
+          - step: *phpstanTestPHP81-2.4.5
+          - step: *phpstanTestPHP82-2.4.6
 
     mess-detector-test:
-      - step: *messDetectorTestPHP82
+      - step: *messDetectorTestPHP82-2.4.6
