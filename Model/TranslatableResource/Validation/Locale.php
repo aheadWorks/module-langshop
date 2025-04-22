@@ -33,7 +33,7 @@ class Locale
     public function validate(
         string $value,
         bool $includePrimary = false,
-        string $resourceType = null
+        ?string $resourceType = null
     ): void {
         if (!$this->localeScopeRepository->getByLocale([$value], $includePrimary, $resourceType)) {
             throw new NoSuchEntityException(
