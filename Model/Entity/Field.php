@@ -48,6 +48,7 @@ class Field extends DataObject
      * @param int $sortOrder
      * @param array $visibleOn
      * @param array $data
+     * @param string $originalCode
      */
     public function __construct(
         string $code = '',
@@ -58,7 +59,7 @@ class Field extends DataObject
         bool $isSortable = false,
         bool $isTitle = false,
         string $filterType = 'text',
-        OptionSourceInterface $filterOptions = null,
+        ?OptionSourceInterface $filterOptions = null,
         int $sortOrder = 0,
         array $visibleOn = [],
         array $data = [],
