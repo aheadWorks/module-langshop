@@ -125,7 +125,7 @@ class Repository
     public function getByLocale(
         array $locales,
         bool $includePrimary = false,
-        string $resourceType = null
+        ?string $resourceType = null
     ): array {
         $localeScopes = $this->getList();
         if ($includePrimary) {
@@ -145,7 +145,7 @@ class Repository
      * @return RecordInterface
      * @throws NoSuchEntityException
      */
-    public function getPrimary(string $resourceType = null): RecordInterface
+    public function getPrimary(?string $resourceType = null): RecordInterface
     {
         $defaultLocale = $this->localeResolver->getDefaultLocale();
         if ($resourceType) {
