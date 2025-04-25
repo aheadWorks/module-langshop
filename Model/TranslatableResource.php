@@ -61,7 +61,7 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     /**
      * Retrieve locales assigned to resources
      *
-     * @return array|null
+     * @return string[]|null
      */
     public function getResourceAssignedLocales(): ?array
     {
@@ -71,7 +71,7 @@ class TranslatableResource extends DataObject implements TranslatableResourceInt
     /**
      * Set locales assigned to resources
      *
-     * @param array $locales
+     * @param string[] $locales
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      */
     public function setResourceAssignedLocales(array $locales): TranslatableResourceInterface

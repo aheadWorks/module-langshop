@@ -38,14 +38,14 @@ interface TranslatableResourceInterface
     /**
      * Retrieve locales assigned to resources
      *
-     * @return array|null
+     * @return string[]|null
      */
     public function getResourceAssignedLocales(): ?array;
 
     /**
      * Set locales assigned to resources
      *
-     * @param array $locales
+     * @param string[] $locales
      * @return \Aheadworks\Langshop\Api\Data\TranslatableResourceInterface
      */
     public function setResourceAssignedLocales(array $locales): TranslatableResourceInterface;
