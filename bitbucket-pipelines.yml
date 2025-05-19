@@ -7,6 +7,13 @@ definitions:
     pack_zip: &packZip |-
       echo "Will create ${BITBUCKET_REPO_SLUG}.zip"
       zip -r ${BITBUCKET_REPO_SLUG}.zip .
+    prepare_env: &prepareEnv |-
+      # Do we build a hyva module?
+      case "$BITBUCKET_REPO_SLUG" in
+        *hyva) export IS_HYVA=1 ;;
+        *)     export IS_HYVA=0 ;;
+      esac
+      echo "Hyva flag: $IS_HYVA"
     prepare_ssh: &prepareSSH |-
       # change way to get access of our modules to composer from ssh keys to composer keys
       mkdir -p ~/.ssh
@@ -14,6 +21,40 @@ definitions:
       chmod 700 ~/.ssh
       echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
       ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
+
+      # Hyva access
+      if [ "$IS_HYVA" -eq 1 ]; then
+        echo -e "${HYVA_KEY}" > ~/.ssh/id_rsa_hyva
+        chmod 600  ~/.ssh/id_rsa_hyva
+        echo -e "Host hyva-repo\nHostName gitlab.hyva.io\nUser git\nIdentityFile ~/.ssh/id_rsa_hyva\nIdentitiesOnly yes" >> ~/.ssh/config
+        cat ~/.ssh/config
+        ssh-keyscan -H gitlab.hyva.io >> ~/.ssh/known_hosts
+      fi
+    install_lib: &installLib |-
+      pip3 install --break-system-packages aheadworks-deploy-manager
+      # Installing additional Hyva modules
+      echo "Hyva flag: $IS_HYVA"
+      if [ "$IS_HYVA" -eq 1 ]; then
+        oldpath=`pwd`
+        cd /var/www/html
+        apk add --update --no-cache nodejs npm openssh-client
+        composer config repositories.hyva-themes/magento2-theme-module git hyva-repo:hyva-themes/magento2-theme-module.git
+        composer config repositories.hyva-themes/magento2-reset-theme git hyva-repo:hyva-themes/magento2-reset-theme.git
+        composer config repositories.hyva-themes/magento2-email-module git hyva-repo:hyva-themes/magento2-email-module.git
+        composer config repositories.hyva-themes/magento2-default-theme git hyva-repo:hyva-themes/magento2-default-theme.git
+        composer config repositories.hyva-themes/magento2-mollie-theme-bundle git hyva-repo:hyva-themes/hyva-compat/magento2-mollie-theme-bundle.git
+        composer config repositories.hyva-themes/magento2-compat-module-fallback git hyva-repo:hyva-themes/magento2-compat-module-fallback.git
+        composer config repositories.hyva-themes/magento2-theme-fallback git hyva-repo:hyva-themes/magento2-theme-fallback.git
+        composer config repositories.hyva-themes/hyva-checkout git hyva-repo:hyva-checkout/checkout.git
+
+        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-mollie-theme-bundle
+        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-theme-module:^1.3.11
+        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-default-theme
+        COMPOSER_MEMORY_LIMIT=-1 composer require hyva-themes/magento2-compat-module-fallback
+        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-hyva-checkout:^1.3.2
+        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-theme-fallback
+        cd $oldpath
+      fi
 
   build_steps:
     - step: &build
@@ -24,13 +65,16 @@ definitions:
           - *packZip
         artifacts:
           - "*.zip"
+
   test_steps:
 # Magento 2.4.8 tests
     - step: &codesnifferTestPHP84-2.4.8
         name: codesniffer tests PHP 8.4 on Magento 2.4.8
         image: aheadworks/m2test-new:2.4.8-without-db-8.4
         script:
-          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - *prepareEnv
+          - *prepareSSH
+          - *installLib
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.8.xml
         artifacts:
           - "test-results/**"
@@ -39,9 +83,10 @@ definitions:
         name: unit tests PHP 8.4 on Magento 2.4.8
         image: aheadworks/m2test-new:2.4.8-with-db-8.4
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip3 install --break-system-packages aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.8.xml
+          - *installLib
+          - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.8.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
         artifacts:
           - "test-results/**"
 
@@ -49,8 +94,9 @@ definitions:
         name: phpstan tests PHP 8.4 on Magento 2.4.8
         image: aheadworks/m2test-new:2.4.8-with-db-8.4
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.8.xml
         artifacts:
           - "test-results/**"
@@ -59,8 +105,9 @@ definitions:
         name: install Magento 2.4.8 test
         image: aheadworks/m2test-new:2.4.8-without-db-8.4
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.8.xml
         artifacts:
           - "logs1/**"
@@ -71,7 +118,9 @@ definitions:
         name: codesniffer tests on Magento 2.4.7
         image: aheadworks/m2test-new:2.4.7-p5-without-db-8.3
         script:
-          - pip3 install --break-system-packages  aheadworks-deploy-manager
+          - *prepareEnv
+          - *prepareSSH
+          - *installLib
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.7.xml
         artifacts:
           - "test-results/**"
@@ -80,9 +129,10 @@ definitions:
         name: unit tests PHP 8.3 on Magento 2.4.7
         image: aheadworks/m2test-new:2.4.7-p5-with-db-8.3
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip3 install --break-system-packages aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.7.xml
+          - *installLib
+          - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.7.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
         artifacts:
           - "test-results/**"
 
@@ -90,8 +140,9 @@ definitions:
         name: phpstan tests PHP 8.3 on Magento 2.4.7
         image: aheadworks/m2test-new:2.4.7-p5-with-db-8.3
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.7.xml
         artifacts:
           - "test-results/**"
@@ -100,8 +151,9 @@ definitions:
         name: install Magento 2.4.7 test
         image: aheadworks/m2test-new:2.4.7-p5-without-db-8.3
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip3 install --break-system-packages aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.7.xml
         artifacts:
           - "logs1/**"
@@ -112,8 +164,9 @@ definitions:
         name: mess detector tests PHP 8.2
         image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager mess-detector ${PWD}
         artifacts:
           - "test-results/**"
@@ -122,7 +175,9 @@ definitions:
         name: codesniffer tests on Magento 2.4.6
         image: aheadworks/m2test-new:2.4.6-p10-without-db-8.2
         script:
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *prepareEnv
+          - *prepareSSH
+          - *installLib
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.6.xml
         artifacts:
           - "test-results/**"
@@ -131,9 +186,10 @@ definitions:
         name: unit tests PHP 8.2 on Magento 2.4.6
         image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6.xml
+          - *installLib
+          - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
         artifacts:
           - "test-results/**"
 
@@ -141,8 +197,9 @@ definitions:
         name: phpstan tests PHP 8.2 on Magento 2.4.6
         image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6.xml
         artifacts:
           - "test-results/**"
@@ -151,8 +208,9 @@ definitions:
         name: install Magento 2.4.6 test
         image: aheadworks/m2test-new:2.4.6-p10-without-db-8.2
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
@@ -163,9 +221,10 @@ definitions:
         name: unit tests PHP 8.1 on Magento 2.4.5
         image: aheadworks/m2test-new:2.4.5-p12-with-db-8.1
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-          - python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.5.xml
+          - *installLib
+          - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.5.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
         artifacts:
           - "test-results/**"
 
@@ -173,8 +232,9 @@ definitions:
         name: phpstan tests PHP 8.1 on Magento 2.4.5
         image: aheadworks/m2test-new:2.4.5-p12-with-db-8.1
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.5.xml
         artifacts:
           - "test-results/**"
@@ -183,8 +243,9 @@ definitions:
         name: install Magento 2.4.5 test
         image: aheadworks/m2test-new:2.4.5-p12-without-db-8.1
         script:
+          - *prepareEnv
           - *prepareSSH
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
         artifacts:
           - "logs1/**"
@@ -195,8 +256,10 @@ definitions:
         name: Sync tags and branches to the Internal composer
         image: aheadworks/deploy-tools:new-gen
         script:
+          - *prepareEnv
+          - *prepareSSH
           - *cleanTestResults
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_bitbucket_manager internal_composer_refresh
     - step: &releaseToPublicComposer
         name: Add the new package to the Public composer repository
@@ -204,6 +267,8 @@ definitions:
         username: ${DOCKERHUB_LOGIN}
         password: ${DOCKERHUB_PASSWORD}
         script:
+          - *prepareEnv
+          - *prepareSSH
           - *cleanTestResults
           - *prepareSSH
           - VERSION=$(cat composer.json | jq -r '.version') && NAME=$(cat composer.json | jq -r '.name')
@@ -216,32 +281,26 @@ definitions:
         name: Build store and marketplace packages and send them to Teamwork
         image: aheadworks/deploy-tools:new-gen
         script:
-            - *prepareSSH
-            - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
-            - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
-            - python3 -m aheadworks_release_manager build-mm-pack
-            - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
-            - python3 -m aheadworks_release_manager teamwork-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGNEE_TEAMWORK}"
+          - *prepareEnv
+          - *prepareSSH
+          - *installLib
+          - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
+          - python3 -m aheadworks_release_manager build-mm-pack
+          - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
+          - python3 -m aheadworks_release_manager teamwork-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGNEE_TEAMWORK}"
         artifacts:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
         name: Build Web Api Documentation and publish it at S3
         image: aheadworks/deploy-tools:swagger
         script:
+          - *prepareEnv
           - *prepareSSH
           - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
           - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
-          - pip install --upgrade pip && pip3 install aheadworks-deploy-manager
+          - *installLib
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost
-    - step: &get_key
-        name: get_key
-        image: aheadworks/m2test-new:test-7.4
-        script:
-          - echo ${DEVOPS_SSH_KEY} > key
-          - printenv > env
-        artifacts:
-          - key
-          - env
+
 pipelines:
   tags:
     '*.*.*':
@@ -342,9 +401,6 @@ pipelines:
           - step: *installMagentoPHP82-2.4.6
           - step: *unitTestPHP81-2.4.5
           - step: *installMagentoPHP81-2.4.5
-
-    get_key:
-      - step: *get_key
 
     #prepare build
     build_packages:
