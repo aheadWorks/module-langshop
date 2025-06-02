@@ -113,6 +113,19 @@ definitions:
           - "logs1/**"
           - "test-results/**"
 
+    - step: &UCT-PHP83-2.4.8
+        name: Upgrade Compatibility Tool 2.4.8 test
+        image: aheadworks/deploy-tools:new-gen
+        script:
+          - export BUILD_DIR=$PWD
+          - cd /root
+          - composer create-project magento/upgrade-compatibility-tool uct --repository https://repo.magento.com
+          - chmod +x uct/bin/uct
+          - uct/bin/uct upgrade:check --current-version=2.4.7-p3 --coming-version=2.4.8 --json-output-path=${BUILD_DIR}/test-results/uct-2.4.8.json --html-output-path=${BUILD_DIR}/test-results/uct-2.4.8.html --min-issue-level=${UCT_ISSUE_LEVEL:-'critical'} -- ${BUILD_DIR}
+        artifacts:
+          - "logs1/**"
+          - "test-results/**"
+
 # Magento 2.4.7 tests
     - step: &codesnifferTestPHP83-2.4.7
         name: codesniffer tests on Magento 2.4.7
@@ -325,6 +338,7 @@ pipelines:
     # For every commit to develop branch: run tests
     develop:
       - parallel:
+          - step: *UCT-PHP83-2.4.8
           - step: *codesnifferTestPHP84-2.4.8
           - step: *unitTestPHP84-2.4.8
           - step: *phpstanTestPHP84-2.4.8
@@ -360,6 +374,7 @@ pipelines:
     release/*:
       - step: *build
       - parallel:
+          - step: *UCT-PHP83-2.4.8
           - step: *unitTestPHP83-2.4.7
           - step: *codesnifferTestPHP82-2.4.6
           - step: *unitTestPHP82-2.4.6
@@ -392,6 +407,7 @@ pipelines:
           - step: *phpstanTestPHP81-2.4.5
           - step: *unitTestPHP81-2.4.5
           - step: *installMagentoPHP81-2.4.5
+          - step: *UCT-PHP83-2.4.8
 
     # Run prerelease tests manually
     run-prerelease-tests:
