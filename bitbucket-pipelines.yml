@@ -55,6 +55,27 @@ definitions:
         COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-theme-fallback
         cd $oldpath
       fi
+    uct_validate: &uctValidate |-
+      apk add --no-cache jq
+      UCT_CRITICAL=`cat ${BUILD_DIR}/test-results/uct-2.4.8.json| jq -- '.stats.critical'`
+      UCT_ERRORS=`cat   ${BUILD_DIR}/test-results/uct-2.4.8.json| jq -- '.stats.errors'`
+      UCT_WARNINGS=`cat ${BUILD_DIR}/test-results/uct-2.4.8.json| jq -- '.stats.warnings'`
+      case ${UCT_ISSUE_LEVEL:-'critical'} in
+        "critical")
+          if [ "$UCT_CRITICAL" -gt 0 ]; then echo "$UCT_CRITICAL Critical issue(s) found"; exit 1; fi
+          ;;
+        "error")
+          if [ "$UCT_CRITICAL" -gt 0 ] || [ "$UCT_ERRORS" -gt 0 ]; then echo "$UCT_CRITICAL Critical issue(s) and $UCT_ERRORS Error issue(s) found "; exit 1; fi
+          ;;
+
+        "warning")
+          if [ "$UCT_CRITICAL" -gt 0 ] || [ "$UCT_ERRORS" -gt 0 ] || [ "$UCT_WARNINGS" -gt 0 ]; then echo "$UCT_CRITICAL Critical issue(s) and $UCT_ERRORS Error and $UCT_WARNINGS warnings. issue(s) found "; exit 1; fi
+          ;;
+
+        *)
+          echo "Unknown UCT_ISSUE_LEVEL: '$UCT_ISSUE_LEVEL' - only 'critical', 'error' and 'warning' are allowed"
+          ;;
+      esac
 
   build_steps:
     - step: &build
@@ -122,6 +143,7 @@ definitions:
           - composer create-project magento/upgrade-compatibility-tool uct --repository https://repo.magento.com
           - chmod +x uct/bin/uct
           - uct/bin/uct upgrade:check --current-version=2.4.7-p3 --coming-version=2.4.8 --json-output-path=${BUILD_DIR}/test-results/uct-2.4.8.json --html-output-path=${BUILD_DIR}/test-results/uct-2.4.8.html --min-issue-level=${UCT_ISSUE_LEVEL:-'critical'} -- ${BUILD_DIR}
+          - *uctValidate
         artifacts:
           - "logs1/**"
           - "test-results/**"
