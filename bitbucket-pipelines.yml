@@ -334,6 +334,10 @@ definitions:
           - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
           - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
           - *installLib
+          - mkdir -p ~/.aws/
+          - echo '[default]' >  ~/.aws/credentials
+          - echo "aws_access_key_id = $SWAGGER_AWS_ACCESS_KEY_ID" >>  ~/.aws/credentials
+          - echo "aws_secret_access_key = $SWAGGER_AWS_SECRET_ACCESS_KEY" >>  ~/.aws/credentials
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost
 
 pipelines:
