@@ -8,12 +8,20 @@ definitions:
       echo "Will create ${BITBUCKET_REPO_SLUG}.zip"
       zip -r ${BITBUCKET_REPO_SLUG}.zip .
     prepare_env: &prepareEnv |-
+      which jq || apk add --update --no-cache jq
+
       # Do we build a hyva module?
       case "$BITBUCKET_REPO_SLUG" in
         *hyva) export IS_HYVA=1 ;;
         *)     export IS_HYVA=0 ;;
       esac
-      echo "Hyva flag: $IS_HYVA"
+
+      # May be we still have hyva module in suggests of composer.json?
+      cat composer.json | jq  '.suggests' | grep -qE "aheadworks/.*-hyva"  && SUGGESTS_HYVA=1 || SUGGESTS_HYVA=0
+
+      echo "Hyva: $IS_HYVA"
+      echo "Suggests Hyva: $SUGGESTS_HYVA"
+
     prepare_ssh: &prepareSSH |-
       # change way to get access of our modules to composer from ssh keys to composer keys
       mkdir -p ~/.ssh
@@ -317,6 +325,8 @@ definitions:
         image: aheadworks/deploy-tools:new-gen
         script:
           - *prepareEnv
+          # If the module suggests aheadworks/hyva override the flag to preinstall Hyva dependencies required for the build step
+          - export IS_HYVA=$SUGGESTS_HYVA
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
@@ -330,6 +340,8 @@ definitions:
         image: aheadworks/deploy-tools:swagger
         script:
           - *prepareEnv
+          # If the module suggests aheadworks/hyva override the flag to preinstall Hyva dependencies required for the build step
+          - export IS_HYVA=$SUGGESTS_HYVA
           - *prepareSSH
           - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
           - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
