@@ -1,0 +1,8 @@
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <settings>
+        <buttons>
+            <button name="translate" class="Aheadworks\Langshop\Block\Adminhtml\Button\CmsPage\Translate"/>
+        </buttons>
+    </settings>
+</form>
