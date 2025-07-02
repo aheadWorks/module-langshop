@@ -11,5 +11,18 @@
             "PRIMARY": true,
             "AW_LS_STATUS_STORE_ID_STORE_STORE_ID": true
         }
+    },
+    "aw_ls_resource_binding": {
+        "column": {
+            "id": true,
+            "resource_type": true,
+            "original_resource_id": true,
+            "translated_resource_id": true,
+            "store_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AW_LS_RESOURCE_BINDING_STORE_ID_STORE_STORE_ID": true
+        }
     }
 }

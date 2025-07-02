@@ -3,5 +3,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="aw_ls_save_translatable_resource">
         <observer name="aw_ls_update_translate_status" instance="Aheadworks\Langshop\Observer\UpdateTranslateStatus"/>
+        <observer name="aw_ls_invalidate_page_cache" instance="Magento\PageCache\Observer\InvalidateCache" />
     </event>
 </config>

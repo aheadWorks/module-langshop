@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters">
+            <filterSelect name="aw_ls_translation"
+                          provider="${ $.parentName }">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Aheadworks\Langshop\Model\Source\Entity\Binding\Translation"/>
+                    <label translate="true">Translation</label>
+                    <dataScope>aw_ls_translation</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+</listing>

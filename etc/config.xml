@@ -5,6 +5,7 @@
         <aw_ls>
             <general>
                 <saas_domain>https://app.langshop.io/</saas_domain>
+                <is_auto_update_translation_enabled>0</is_auto_update_translation_enabled>
             </general>
         </aw_ls>
     </default>

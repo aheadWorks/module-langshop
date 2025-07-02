@@ -47,12 +47,23 @@
                 <field id="saas_public_key"
                        translate="label"
                        type="text"
-                       sortOrder="20"
+                       sortOrder="30"
                        showInDefault="1"
                        showInWebsite="0"
                        showInStore="0">
                     <label>Application Public Key</label>
                     <frontend_model>Aheadworks\Langshop\Block\Adminhtml\Form\Field\HideDependOnModeField</frontend_model>
+                </field>
+                <field id="is_auto_update_translation_enabled"
+                       translate="label comment"
+                       type="select"
+                       sortOrder="40"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0">
+                    <label>Auto-Update Translation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Start translation automatically if the original content was changed</comment>
                 </field>
             </group>
             <group id="integration_details" translate="label" type="text" sortOrder="90" showInDefault="1">

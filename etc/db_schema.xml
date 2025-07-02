@@ -17,4 +17,20 @@
                     referenceTable="store"
                     referenceColumn="store_id"/>
     </table>
+    <table name="aw_ls_resource_binding" resource="default" engine="innodb" comment="Langshop Resource Binding">
+        <column xsi:type="int" name="id" unsigned="true" identity="true"/>
+        <column xsi:type="varchar" name="resource_type" nullable="false"/>
+        <column xsi:type="int" name="original_resource_id" unsigned="true" nullable="false"/>
+        <column xsi:type="int" name="translated_resource_id" unsigned="true" nullable="false"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign"
+                    referenceId="AW_LS_RESOURCE_BINDING_STORE_ID_STORE_STORE_ID"
+                    table="aw_ls_resource_binding"
+                    column="store_id"
+                    referenceTable="store"
+                    referenceColumn="store_id"/>
+    </table>
 </schema>
