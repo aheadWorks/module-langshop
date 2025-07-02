@@ -326,7 +326,10 @@ definitions:
         script:
           - *prepareEnv
           # If the module suggests aheadworks/hyva override the flag to preinstall Hyva dependencies required for the build step
-          - export IS_HYVA=$SUGGESTS_HYVA
+          - >
+            if [ "$IS_HYVA" -eq 0 ]; then
+              IS_HYVA=$SUGGESTS_HYVA;
+            fi
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
@@ -341,7 +344,10 @@ definitions:
         script:
           - *prepareEnv
           # If the module suggests aheadworks/hyva override the flag to preinstall Hyva dependencies required for the build step
-          - export IS_HYVA=$SUGGESTS_HYVA
+          - >
+            if [ "$IS_HYVA" -eq 0 ]; then
+              IS_HYVA=$SUGGESTS_HYVA;
+            fi
           - *prepareSSH
           - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
           - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
