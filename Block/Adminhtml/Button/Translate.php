@@ -3,48 +3,18 @@ declare(strict_types=1);
 
 namespace Aheadworks\Langshop\Block\Adminhtml\Button;
 
-use Aheadworks\Langshop\Model\Saas\ModuleChecker;
-use Aheadworks\Langshop\Model\Status\StatusChecker;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Aheadworks\Langshop\Model\Saas\ModuleChecker;
+use Aheadworks\Langshop\Model\Status\StatusChecker;
 
 class Translate implements ButtonProviderInterface
 {
     /**
      * Url for ajax requests
      */
-    private const TRANSLATE_URL = 'langshop/saas/translate';
-
-    /**
-     * @var UrlInterface
-     */
-    private UrlInterface $urlBuilder;
-
-    /**
-     * @var ModuleChecker
-     */
-    private ModuleChecker $moduleChecker;
-
-    /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-
-    /**
-     * @var string
-     */
-    private string $resourceType;
-
-    /**
-     * @var string
-     */
-    private string $resourceIdParam;
-
-    /**
-     * @var StatusChecker
-     */
-    private StatusChecker $statusChecker;
+    protected const TRANSLATE_URL = 'langshop/saas/translate';
 
     /**
      * @param UrlInterface $urlBuilder
@@ -55,19 +25,13 @@ class Translate implements ButtonProviderInterface
      * @param string $resourceIdParam
      */
     public function __construct(
-        UrlInterface $urlBuilder,
-        ModuleChecker $moduleChecker,
-        RequestInterface $request,
-        StatusChecker $statusChecker,
-        string $resourceType,
-        string $resourceIdParam = 'id'
+        protected readonly UrlInterface $urlBuilder,
+        protected readonly ModuleChecker $moduleChecker,
+        protected readonly RequestInterface $request,
+        protected readonly StatusChecker $statusChecker,
+        protected readonly string $resourceType,
+        protected readonly string $resourceIdParam = 'id'
     ) {
-        $this->urlBuilder = $urlBuilder;
-        $this->moduleChecker = $moduleChecker;
-        $this->request = $request;
-        $this->statusChecker = $statusChecker;
-        $this->resourceType = $resourceType;
-        $this->resourceIdParam = $resourceIdParam;
     }
 
     /**
@@ -75,9 +39,10 @@ class Translate implements ButtonProviderInterface
      *
      * @return array
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
-        if ($this->moduleChecker->isConfigured() && $this->getResourceId()) {
+        $resourceId = $this->getResourceId();
+        if ($this->moduleChecker->isConfigured() && $resourceId) {
             return [
                 'label' => __('Translate'),
                 'data_attribute' => [
@@ -85,14 +50,14 @@ class Translate implements ButtonProviderInterface
                         'Aheadworks_Langshop/js/translate-button' => [
                             'isDisabled' => $this->statusChecker->isProcessing(
                                 $this->resourceType,
-                                (string)$this->getResourceId()
+                                (string)$resourceId
                             ),
                             'successMessage' => __('Processing %1 translation.', $this->resourceType),
                             'failedMessage' => __('Something went wong.'),
                             'translateUrl' => $this->urlBuilder->getUrl(self::TRANSLATE_URL),
                             'ajaxParams' => [
                                 'resource_type' => $this->resourceType,
-                                'resource_id' => $this->getResourceId()
+                                'resource_id' => $resourceId
                             ]
                         ]
                     ]
@@ -107,10 +72,11 @@ class Translate implements ButtonProviderInterface
     /**
      * Retrieves identifier for the current resource
      *
-     * @return int
+     * @return int|null
      */
-    private function getResourceId(): int
+    protected function getResourceId(): ?int
     {
-        return (int) $this->request->getParam($this->resourceIdParam);
+        $resourceId = $this->request->getParam($this->resourceIdParam);
+        return $resourceId ? (int)$resourceId : null;
     }
 }
