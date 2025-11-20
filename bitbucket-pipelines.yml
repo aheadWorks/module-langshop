@@ -147,6 +147,7 @@ definitions:
         image: aheadworks/deploy-tools:new-gen
         script:
           - export BUILD_DIR=$PWD
+          - export COMPOSER_AUTH=$COMPOSER_AUTH_EE
           - cd /root
           - composer create-project magento/upgrade-compatibility-tool uct --repository https://repo.magento.com
           - chmod +x uct/bin/uct
