@@ -24,11 +24,13 @@ definitions:
       # change way to get access of our modules to composer from ssh keys to composer keys
       mkdir -p ~/.ssh
       echo "adding a key"
-      (umask  077; echo "${AWM2EXT_SSH_KEY}" | base64 -di > ~/.ssh/id_rsa)
+      (umask 077; echo "${AWM2EXT_SSH_KEY}" | base64 -d > ~/.ssh/id_rsa || echo "${AWM2EXT_SSH_KEY}" | base64 -di > ~/.ssh/id_rsa)
       chmod 700 ~/.ssh
+      chmod 600 ~/.ssh/id_rsa
       echo "adding hosts"
       echo "${AW_COMPOSER_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
       ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
+      echo -e "Host bitbucket.org\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/id_rsa\n\tIdentitiesOnly yes" >> ~/.ssh/config
 
       # Hyva access
       if [ "$IS_HYVA" -eq 1 ]; then
