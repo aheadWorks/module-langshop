@@ -148,7 +148,7 @@ class Csv implements RepositoryInterface
             foreach ($values as $original => $translation) {
                 if ($translation) {
                     $resourceModel->saveTranslate(
-                        $original,
+                        (string)$original,
                         $translation,
                         $locale,
                         0
