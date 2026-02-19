@@ -1,3 +1,4 @@
+# Generated on 2026-02-04
 definitions:
   scripts:
     clean_source: &cleanSource |-
@@ -11,10 +12,7 @@ definitions:
       which jq || apk add --update --no-cache jq
 
       # Do we build a hyva module?
-      case "$BITBUCKET_REPO_SLUG" in
-        *hyva) export IS_HYVA=1 ;;
-        *)     export IS_HYVA=0 ;;
-      esac
+      cat composer.json | jq  '.require' | grep -qE "hyva-themes/"  && IS_HYVA=1 || IS_HYVA=0
 
       # May be we still have hyva module in suggests of composer.json?
       cat composer.json | jq  '.suggests' | grep -qE "aheadworks/.*-hyva"  && SUGGESTS_HYVA=1 || SUGGESTS_HYVA=0
@@ -25,10 +23,14 @@ definitions:
     prepare_ssh: &prepareSSH |-
       # change way to get access of our modules to composer from ssh keys to composer keys
       mkdir -p ~/.ssh
-      (umask  077; echo ${AWM2EXT_SSH_KEY} | base64 -di > ~/.ssh/id_rsa)
+      echo "adding a key"
+      (umask 077; echo "${AWM2EXT_SSH_KEY}" | base64 -d > ~/.ssh/id_rsa || echo "${AWM2EXT_SSH_KEY}" | base64 -di > ~/.ssh/id_rsa)
       chmod 700 ~/.ssh
-      echo ${AW_COMPOSER_KNOWN_HOSTS} >> ~/.ssh/known_hosts
+      chmod 600 ~/.ssh/id_rsa
+      echo "adding hosts"
+      echo "${AW_COMPOSER_KNOWN_HOSTS}" >> ~/.ssh/known_hosts
       ssh-keyscan -t rsa bitbucket.org >> ~/.ssh/known_hosts
+      echo -e "Host bitbucket.org\n\tStrictHostKeyChecking no\n\tIdentityFile ~/.ssh/id_rsa\n\tIdentitiesOnly yes" >> ~/.ssh/config
 
       # Hyva access
       if [ "$IS_HYVA" -eq 1 ]; then
@@ -55,12 +57,14 @@ definitions:
         composer config repositories.hyva-themes/magento2-theme-fallback git hyva-repo:hyva-themes/magento2-theme-fallback.git
         composer config repositories.hyva-themes/hyva-checkout git hyva-repo:hyva-checkout/checkout.git
 
-        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-mollie-theme-bundle
-        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-theme-module:^1.3.11
-        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-default-theme
-        COMPOSER_MEMORY_LIMIT=-1 composer require hyva-themes/magento2-compat-module-fallback
-        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-hyva-checkout:^1.3.2
-        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source hyva-themes/magento2-theme-fallback
+        COMPOSER_MEMORY_LIMIT=-1 composer require --prefer-source \
+            hyva-themes/magento2-mollie-theme-bundle \
+            hyva-themes/magento2-theme-module:^1.3.11 \
+            hyva-themes/magento2-default-theme \
+            hyva-themes/magento2-compat-module-fallback \
+            hyva-themes/magento2-hyva-checkout:^1.3.2 \
+            hyva-themes/magento2-theme-fallback
+
         cd $oldpath
       fi
     uct_validate: &uctValidate |-
@@ -96,6 +100,17 @@ definitions:
           - "*.zip"
 
   test_steps:
+# Preload Hyva modules from gitlab into the composer cache to avoid penalties
+    - step: &preloadHyva
+        name: Preload Hyva modules from gitlab into the composer cache
+        image: aheadworks/m2test-new:2.4.8-without-db-8.4
+        script:
+          - *prepareEnv
+          - *prepareSSH
+          - *installLib
+        caches:
+          - composer
+
 # Magento 2.4.8 tests
     - step: &codesnifferTestPHP84-2.4.8
         name: codesniffer tests PHP 8.4 on Magento 2.4.8
@@ -105,6 +120,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.8.xml
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -116,6 +133,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.8.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -127,6 +146,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.8.xml
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -138,6 +159,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.8.xml
+        caches:
+          - composer
         artifacts:
           - "logs1/**"
           - "test-results/**"
@@ -147,11 +170,14 @@ definitions:
         image: aheadworks/deploy-tools:new-gen
         script:
           - export BUILD_DIR=$PWD
+          - export COMPOSER_AUTH=$COMPOSER_AUTH_EE
           - cd /root
           - composer create-project magento/upgrade-compatibility-tool uct --repository https://repo.magento.com
           - chmod +x uct/bin/uct
           - uct/bin/uct upgrade:check --current-version=2.4.7-p3 --coming-version=2.4.8 --json-output-path=${BUILD_DIR}/test-results/uct-2.4.8.json --html-output-path=${BUILD_DIR}/test-results/uct-2.4.8.html --min-issue-level=${UCT_ISSUE_LEVEL:-'critical'} -- ${BUILD_DIR}
           - *uctValidate
+        caches:
+          - composer
         artifacts:
           - "logs1/**"
           - "test-results/**"
@@ -165,6 +191,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.7.xml
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -176,6 +204,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.7.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -187,6 +217,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.7.xml
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -198,6 +230,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/install-test-2.4.7.xml
+        caches:
+          - composer
         artifacts:
           - "logs1/**"
           - "test-results/**"
@@ -211,6 +245,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager mess-detector ${PWD}
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -222,6 +258,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager codesniffer ${PWD} test-results/codesniffer-2.4.6.xml
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -233,6 +271,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.6.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -244,6 +284,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.6.xml
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -255,6 +297,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
+        caches:
+          - composer
         artifacts:
           - "logs1/**"
           - "test-results/test-unit.xml"
@@ -268,6 +312,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - if [ "$IS_HYVA" -eq 0 ]; then python3 -m aheadworks_test_manager unit ${PWD} test-results/test-unit-2.4.5.xml; else echo "Hyva extension. Unit tests are skipped by design."; fi;
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -279,6 +325,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.5.xml
+        caches:
+          - composer
         artifacts:
           - "test-results/**"
 
@@ -290,6 +338,8 @@ definitions:
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_test_manager install-magento ${PWD} test-results/test-unit.xml
+        caches:
+          - composer
         artifacts:
           - "logs1/**"
           - "test-results/test-unit.xml"
@@ -326,13 +376,18 @@ definitions:
         script:
           - *prepareEnv
           # If the module suggests aheadworks/hyva override the flag to preinstall Hyva dependencies required for the build step
-          - export IS_HYVA=$SUGGESTS_HYVA
+          - >
+            if [ "$IS_HYVA" -eq 0 ]; then
+              IS_HYVA=$SUGGESTS_HYVA;
+            fi
           - *prepareSSH
           - *installLib
           - python3 -m aheadworks_release_manager build-ecommerce-pack --bitbucket_workspace=${BITBUCKET_WORKSPACE} --bitbucket_repo_slug=${BITBUCKET_REPO_SLUG}
           - python3 -m aheadworks_release_manager build-mm-pack
           - if [[ "$BITBUCKET_REPO_SLUG" == "module-test" ]]; then DISCORD_BOT_URL=${TEST_DISCORD_MAGENTO_RELEASE_BOT_URL}; else DISCORD_BOT_URL=${DISCORD_MAGENTO_RELEASE_BOT_URL}; fi;
           - python3 -m aheadworks_release_manager teamwork-release --jira_project_key="${JIRA_PROJECT_KEY}" --composer-file="./composer.json" --discord-bot-url="${DISCORD_BOT_URL}" --path_to_files="/build_archives" --assign_to="${AFTER_RELEASE_ASSIGNEE_TEAMWORK}"
+        caches:
+          - composer
         artifacts:
             - "/build_archives/**"
     - step: &swaggerWebApiDocBuild
@@ -341,7 +396,10 @@ definitions:
         script:
           - *prepareEnv
           # If the module suggests aheadworks/hyva override the flag to preinstall Hyva dependencies required for the build step
-          - export IS_HYVA=$SUGGESTS_HYVA
+          - >
+            if [ "$IS_HYVA" -eq 0 ]; then
+              IS_HYVA=$SUGGESTS_HYVA;
+            fi
           - *prepareSSH
           - git -C /tmp clone https://x-token-auth:$SWAGGER_ACCESS_TOKEN@bitbucket.org/awimpl/magento-swagger-web-api-generator.git
           - cp -r /tmp/magento-swagger-web-api-generator/* /var/www/html/pub
@@ -351,6 +409,9 @@ definitions:
           - echo "aws_access_key_id = $SWAGGER_AWS_ACCESS_KEY_ID" >>  ~/.aws/credentials
           - echo "aws_secret_access_key = $SWAGGER_AWS_SECRET_ACCESS_KEY" >>  ~/.aws/credentials
           - python3 -m aheadworks_release_manager build-swagger-web-api-doc --path-to-module=./ --magento_url=http://localhost
+        caches:
+          - composer
+
 
 pipelines:
   tags:
@@ -360,6 +421,7 @@ pipelines:
     # For commits to master branch: run full set of tests
     master:
       - step: *build
+      - step: *preloadHyva
       - parallel:
           - step: *codesnifferTestPHP82-2.4.6
           - step: *unitTestPHP82-2.4.6
@@ -375,6 +437,7 @@ pipelines:
 
     # For every commit to develop branch: run tests
     develop:
+      - step: *preloadHyva
       - parallel:
           - step: *UCT-PHP83-2.4.8
           - step: *codesnifferTestPHP84-2.4.8
@@ -392,8 +455,8 @@ pipelines:
           - step: *unitTestPHP81-2.4.5
           - step: *phpstanTestPHP81-2.4.5
           - step: *installMagentoPHP81-2.4.5
-          
       - step: *rebuildPrivateComposer
+
     feature/*:
       - parallel:
         - step: *codesnifferTestPHP82-2.4.6
@@ -402,6 +465,7 @@ pipelines:
         - step: *phpstanTestPHP81-2.4.5
 
     bugfix/*:
+      - step: *preloadHyva
       - parallel:
         - step: *unitTestPHP83-2.4.7
         - step: *codesnifferTestPHP82-2.4.6
@@ -411,6 +475,7 @@ pipelines:
 
     release/*:
       - step: *build
+      - step: *preloadHyva
       - parallel:
           - step: *UCT-PHP83-2.4.8
           - step: *unitTestPHP83-2.4.7
@@ -464,7 +529,6 @@ pipelines:
     swagger-web-api-doc-build:
       - step: *swaggerWebApiDocBuild
 
-    # copy this file to all modules
 
     codesniffer-test-with-select-severity:
       - variables:

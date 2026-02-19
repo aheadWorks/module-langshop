@@ -10,6 +10,7 @@ use Aheadworks\Langshop\Model\ResourceModel\TranslatableResource\CollectionInter
 use Aheadworks\Langshop\Model\TranslatableResource\Provider\EntityAttribute as EntityAttributeProvider;
 use Aheadworks\Langshop\Model\TranslatableResource\Validation\Translation as TranslationValidation;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection as CatalogCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as EavAttributeCollection;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb as Collection;
@@ -62,6 +63,13 @@ class Repository implements RepositoryInterface
      * @var string
      */
     private string $resourceType;
+
+    /**
+     * Cache of EAV attribute codes with non-empty default values.
+     *
+     * @var array
+     */
+    private array $eavAttributeCodesWithDefaultCache = [];
 
     /**
      * @param CollectionFactory $collectionFactory
@@ -150,13 +158,19 @@ class Repository implements RepositoryInterface
         }
 
         foreach ($translationByLocales as $locale => $values) {
-            /** @var AbstractModel $item */
-            $item = $this->prepareCollectionById($entityId)
-                ->getFirstItem()
-                ->addData($values);
-
             foreach ($this->localeScopeRepository->getByLocale([$locale]) as $localeScope) {
+                /** @var AbstractModel $item */
+                $item = $this->prepareCollectionById($entityId)
+                    ->getFirstItem()
+                    ->addData($values);
+
                 $item->setData('store_id', $localeScope->getScopeId());
+                $this->preserveEavAttributeValuesWithDefaults(
+                    $resourceModel,
+                    $item,
+                    $localeScope->getScopeId(),
+                    array_keys($values)
+                );
                 $resourceModel->save($item);
 
                 $this->eventManager->dispatch('aw_ls_save_translatable_resource', [
@@ -166,6 +180,118 @@ class Repository implements RepositoryInterface
                 ]);
             }
         }
+    }
+
+    /**
+     * Prevent unintended overriding of EAV attributes with default values.
+     *
+     * @param object $resourceModel
+     * @param AbstractModel $item
+     * @param int $storeId
+     * @param string[] $translationKeys
+     * @return void
+     */
+    private function preserveEavAttributeValuesWithDefaults(
+        object $resourceModel,
+        AbstractModel $item,
+        int $storeId,
+        array $translationKeys
+    ): void {
+        if (!$item->getId()) {
+            return;
+        }
+        if (!method_exists($resourceModel, 'getAttributeRawValue')
+            || !method_exists($resourceModel, 'getEntityType')
+        ) {
+            return;
+        }
+
+        $attributeCodes = $this->getEavAttributeCodesWithDefaults($resourceModel);
+        if (!$attributeCodes) {
+            return;
+        }
+
+        $translationKeyMap = array_fill_keys($translationKeys, true);
+        $missingCodes = [];
+        foreach ($attributeCodes as $code) {
+            if (isset($translationKeyMap[$code])) {
+                continue;
+            }
+            if (!$item->hasData($code)) {
+                $missingCodes[] = $code;
+            }
+        }
+
+        if (!$missingCodes) {
+            return;
+        }
+
+        /** @var array|mixed $rawValues */
+        $rawValues = $resourceModel->getAttributeRawValue((int)$item->getId(), $missingCodes, $storeId);
+        if (!is_array($rawValues)) {
+            if (count($missingCodes) === 1) {
+                $rawValues = [$missingCodes[0] => $rawValues];
+            } else {
+                foreach ($missingCodes as $code) {
+                    if ($item->hasData($code)) {
+                        continue;
+                    }
+                    $value = $resourceModel->getAttributeRawValue((int)$item->getId(), $code, $storeId);
+                    if ($value === false) {
+                        continue;
+                    }
+                    $item->setData($code, $value);
+                    $item->setOrigData($code, $value);
+                }
+                return;
+            }
+        }
+
+        foreach ($missingCodes as $code) {
+            if (!array_key_exists($code, $rawValues)) {
+                continue;
+            }
+            $value = $rawValues[$code];
+            $item->setData($code, $value);
+            $item->setOrigData($code, $value);
+        }
+    }
+
+    /**
+     * Get EAV attribute codes that have a non-empty default value.
+     *
+     * @param object $resourceModel
+     * @return string[]
+     */
+    private function getEavAttributeCodesWithDefaults(object $resourceModel): array
+    {
+        $cacheKey = get_class($resourceModel);
+        if (isset($this->eavAttributeCodesWithDefaultCache[$cacheKey])) {
+            return $this->eavAttributeCodesWithDefaultCache[$cacheKey];
+        }
+
+        try {
+            $entityType = $resourceModel->getEntityType();
+            /** @var EavAttributeCollection $attributeCollection */
+            $attributeCollection = $entityType->getAttributeCollection();
+        } catch (\Throwable) {
+            $this->eavAttributeCodesWithDefaultCache[$cacheKey] = [];
+            return [];
+        }
+
+        // Important: keep "0" default values (they are not empty strings).
+        $attributeCollection->addFieldToFilter('default_value', ['notnull' => true]);
+        $attributeCollection->addFieldToFilter('default_value', ['neq' => '']);
+
+        $codes = array_values(
+            array_unique(
+                array_filter($attributeCollection->getColumnValues('attribute_code'))
+            )
+        );
+
+        $this->eavAttributeCodesWithDefaultCache[$cacheKey] = $codes;
+
+        return $codes;
     }
 
     /**
