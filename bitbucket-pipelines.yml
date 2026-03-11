@@ -1,4 +1,4 @@
-# Generated on 2026-02-04
+# Generated on 2026-03-11
 definitions:
   scripts:
     clean_source: &cleanSource |-
@@ -172,7 +172,7 @@ definitions:
           - export BUILD_DIR=$PWD
           - export COMPOSER_AUTH=$COMPOSER_AUTH_EE
           - cd /root
-          - composer create-project magento/upgrade-compatibility-tool uct --repository https://repo.magento.com
+          - composer create-project magento/upgrade-compatibility-tool uct 3.0.25 --repository https://repo.magento.com
           - chmod +x uct/bin/uct
           - uct/bin/uct upgrade:check --current-version=2.4.7-p3 --coming-version=2.4.8 --json-output-path=${BUILD_DIR}/test-results/uct-2.4.8.json --html-output-path=${BUILD_DIR}/test-results/uct-2.4.8.html --min-issue-level=${UCT_ISSUE_LEVEL:-'critical'} -- ${BUILD_DIR}
           - *uctValidate
