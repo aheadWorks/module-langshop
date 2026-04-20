@@ -3,6 +3,16 @@
         content: '';
         background: url('Aheadworks_Langshop::images/grayscale.svg') no-repeat center;
         background-size: contain;
+        opacity: .55;
+        filter: brightness(1);
+        transition: opacity .15s ease-in-out, filter .15s ease-in-out;
+    }
+
+    .admin__menu .item-langshop.level-0 > a:hover:before,
+    .admin__menu .item-langshop.level-0 > a:focus:before,
+    .admin__menu .item-langshop.level-0._active > a:before {
+        opacity: 1;
+        filter: brightness(1.35);
     }
 
     #system_config_tabs .aw_ls-icon a {
