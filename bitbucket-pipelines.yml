@@ -1,4 +1,4 @@
-# Generated on 2026-03-11
+# Generated on 2026-04-22
 definitions:
   scripts:
     clean_source: &cleanSource |-
@@ -103,7 +103,7 @@ definitions:
 # Preload Hyva modules from gitlab into the composer cache to avoid penalties
     - step: &preloadHyva
         name: Preload Hyva modules from gitlab into the composer cache
-        image: aheadworks/m2test-new:2.4.8-without-db-8.4
+        image: aheadworks/m2test-new:2.4.8-p4-without-db-8.4
         script:
           - *prepareEnv
           - *prepareSSH
@@ -114,7 +114,7 @@ definitions:
 # Magento 2.4.8 tests
     - step: &codesnifferTestPHP84-2.4.8
         name: codesniffer tests PHP 8.4 on Magento 2.4.8
-        image: aheadworks/m2test-new:2.4.8-without-db-8.4
+        image: aheadworks/m2test-new:2.4.8-p4-without-db-8.4
         script:
           - *prepareEnv
           - *prepareSSH
@@ -127,7 +127,7 @@ definitions:
 
     - step: &unitTestPHP84-2.4.8
         name: unit tests PHP 8.4 on Magento 2.4.8
-        image: aheadworks/m2test-new:2.4.8-with-db-8.4
+        image: aheadworks/m2test-new:2.4.8-p4-with-db-8.4
         script:
           - *prepareEnv
           - *prepareSSH
@@ -140,7 +140,7 @@ definitions:
 
     - step: &phpstanTestPHP84-2.4.8
         name: phpstan tests PHP 8.4 on Magento 2.4.8
-        image: aheadworks/m2test-new:2.4.8-with-db-8.4
+        image: aheadworks/m2test-new:2.4.8-p4-with-db-8.4
         script:
           - *prepareEnv
           - *prepareSSH
@@ -153,7 +153,7 @@ definitions:
 
     - step: &installMagentoPHP84-2.4.8
         name: install Magento 2.4.8 test
-        image: aheadworks/m2test-new:2.4.8-without-db-8.4
+        image: aheadworks/m2test-new:2.4.8-p4-without-db-8.4
         script:
           - *prepareEnv
           - *prepareSSH
@@ -185,7 +185,7 @@ definitions:
 # Magento 2.4.7 tests
     - step: &codesnifferTestPHP83-2.4.7
         name: codesniffer tests on Magento 2.4.7
-        image: aheadworks/m2test-new:2.4.7-p5-without-db-8.3
+        image: aheadworks/m2test-new:2.4.7-p9-without-db-8.3
         script:
           - *prepareEnv
           - *prepareSSH
@@ -198,7 +198,7 @@ definitions:
 
     - step: &unitTestPHP83-2.4.7
         name: unit tests PHP 8.3 on Magento 2.4.7
-        image: aheadworks/m2test-new:2.4.7-p5-with-db-8.3
+        image: aheadworks/m2test-new:2.4.7-p9-with-db-8.3
         script:
           - *prepareEnv
           - *prepareSSH
@@ -211,7 +211,7 @@ definitions:
 
     - step: &phpstanTestPHP83-2.4.7
         name: phpstan tests PHP 8.3 on Magento 2.4.7
-        image: aheadworks/m2test-new:2.4.7-p5-with-db-8.3
+        image: aheadworks/m2test-new:2.4.7-p9-with-db-8.3
         script:
           - *prepareEnv
           - *prepareSSH
@@ -224,7 +224,7 @@ definitions:
 
     - step: &installMagentoPHP83-2.4.7
         name: install Magento 2.4.7 test
-        image: aheadworks/m2test-new:2.4.7-p5-without-db-8.3
+        image: aheadworks/m2test-new:2.4.7-p9-without-db-8.3
         script:
           - *prepareEnv
           - *prepareSSH
@@ -239,7 +239,7 @@ definitions:
 # Magento 2.4.6 tests
     - step: &messDetectorTestPHP82-2.4.6
         name: mess detector tests PHP 8.2
-        image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
+        image: aheadworks/m2test-new:2.4.6-p14-with-db-8.2
         script:
           - *prepareEnv
           - *prepareSSH
@@ -252,7 +252,7 @@ definitions:
 
     - step: &codesnifferTestPHP82-2.4.6
         name: codesniffer tests on Magento 2.4.6
-        image: aheadworks/m2test-new:2.4.6-p10-without-db-8.2
+        image: aheadworks/m2test-new:2.4.6-p14-without-db-8.2
         script:
           - *prepareEnv
           - *prepareSSH
@@ -265,7 +265,7 @@ definitions:
 
     - step: &unitTestPHP82-2.4.6
         name: unit tests PHP 8.2 on Magento 2.4.6
-        image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
+        image: aheadworks/m2test-new:2.4.6-p14-with-db-8.2
         script:
           - *prepareEnv
           - *prepareSSH
@@ -278,7 +278,7 @@ definitions:
 
     - step: &phpstanTestPHP82-2.4.6
         name: phpstan tests PHP 8.2 on Magento 2.4.6
-        image: aheadworks/m2test-new:2.4.6-p10-with-db-8.2
+        image: aheadworks/m2test-new:2.4.6-p14-with-db-8.2
         script:
           - *prepareEnv
           - *prepareSSH
@@ -291,7 +291,7 @@ definitions:
 
     - step: &installMagentoPHP82-2.4.6
         name: install Magento 2.4.6 test
-        image: aheadworks/m2test-new:2.4.6-p10-without-db-8.2
+        image: aheadworks/m2test-new:2.4.6-p14-without-db-8.2
         script:
           - *prepareEnv
           - *prepareSSH
@@ -423,13 +423,13 @@ pipelines:
       - step: *build
       - step: *preloadHyva
       - parallel:
+          - step: *phpstanTestPHP83-2.4.7
+          - step: *installMagentoPHP83-2.4.7
           - step: *codesnifferTestPHP82-2.4.6
           - step: *unitTestPHP82-2.4.6
           - step: *installMagentoPHP82-2.4.6
           - step: *phpstanTestPHP82-2.4.6
           - step: *unitTestPHP81-2.4.5
-          - step: *phpstanTestPHP81-2.4.5
-          - step: *installMagentoPHP81-2.4.5
       - step: *rebuildPrivateComposer
       - step: *build_packages
       - step: *swaggerWebApiDocBuild
@@ -453,25 +453,23 @@ pipelines:
           - step: *installMagentoPHP82-2.4.6
           - step: *phpstanTestPHP82-2.4.6
           - step: *unitTestPHP81-2.4.5
-          - step: *phpstanTestPHP81-2.4.5
-          - step: *installMagentoPHP81-2.4.5
       - step: *rebuildPrivateComposer
 
     feature/*:
       - parallel:
+        - step: *phpstanTestPHP83-2.4.7
         - step: *codesnifferTestPHP82-2.4.6
         - step: *unitTestPHP82-2.4.6
         - step: *phpstanTestPHP82-2.4.6
-        - step: *phpstanTestPHP81-2.4.5
 
     bugfix/*:
       - step: *preloadHyva
       - parallel:
         - step: *unitTestPHP83-2.4.7
+        - step: *phpstanTestPHP83-2.4.7
         - step: *codesnifferTestPHP82-2.4.6
         - step: *unitTestPHP82-2.4.6
         - step: *phpstanTestPHP82-2.4.6
-        - step: *phpstanTestPHP81-2.4.5
 
     release/*:
       - step: *build
@@ -479,11 +477,11 @@ pipelines:
       - parallel:
           - step: *UCT-PHP83-2.4.8
           - step: *unitTestPHP83-2.4.7
+          - step: *phpstanTestPHP83-2.4.7
           - step: *codesnifferTestPHP82-2.4.6
           - step: *unitTestPHP82-2.4.6
           - step: *phpstanTestPHP82-2.4.6
           - step: *unitTestPHP81-2.4.5
-          - step: *phpstanTestPHP81-2.4.5
 
   custom:
     # Manual upload to the Public composer repository
@@ -502,24 +500,24 @@ pipelines:
     # Run tests manually
     run-all-tests:
       - parallel:
+          - step: *UCT-PHP83-2.4.8
+          - step: *phpstanTestPHP83-2.4.7
+          - step: *installMagentoPHP83-2.4.7
           - step: *codesnifferTestPHP82-2.4.6
           - step: *unitTestPHP82-2.4.6
           - step: *phpstanTestPHP82-2.4.6
           - step: *messDetectorTestPHP82-2.4.6
           - step: *installMagentoPHP82-2.4.6
-          - step: *phpstanTestPHP81-2.4.5
           - step: *unitTestPHP81-2.4.5
-          - step: *installMagentoPHP81-2.4.5
-          - step: *UCT-PHP83-2.4.8
 
     # Run prerelease tests manually
     run-prerelease-tests:
       - parallel:
+          - step: *installMagentoPHP83-2.4.7
           - step: *codesnifferTestPHP82-2.4.6
           - step: *unitTestPHP82-2.4.6
           - step: *installMagentoPHP82-2.4.6
           - step: *unitTestPHP81-2.4.5
-          - step: *installMagentoPHP81-2.4.5
 
     #prepare build
     build_packages:
@@ -541,7 +539,7 @@ pipelines:
           - name: PHPSTANSEVERITY
             default: 0
       - parallel:
-          - step: *phpstanTestPHP81-2.4.5
+          - step: *phpstanTestPHP83-2.4.7
           - step: *phpstanTestPHP82-2.4.6
 
     mess-detector-test:
