@@ -14,6 +14,7 @@
                  showInStore="1">
             <label>Langshop</label>
             <tab>aheadworks</tab>
+            <class>aw_ls-icon</class>
             <resource>Aheadworks_Langshop::langshop</resource>
             <group id="general"
                    translate="label"
