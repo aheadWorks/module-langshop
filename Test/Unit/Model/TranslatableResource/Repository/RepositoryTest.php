@@ -20,6 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDbFactory as ResourceModelFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -105,6 +106,7 @@ class RepositoryTest extends TestCase
      * @dataProvider dataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('dataProvider')]
     public function testGetList(string $collectionType): void
     {
         $collection = $this->createMock($collectionType);
@@ -141,6 +143,7 @@ class RepositoryTest extends TestCase
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('dataProvider')]
     public function testGet(string $collectionType): void
     {
         $entityId = '1';
@@ -166,6 +169,7 @@ class RepositoryTest extends TestCase
      * @dataProvider dataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('dataProvider')]
     public function testSave(string $collectionType): void
     {
         $entityId = 'entityId';
@@ -395,7 +399,7 @@ class RepositoryTest extends TestCase
      *
      * @return string[][]
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [ProductCollection::class],
