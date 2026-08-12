@@ -1,4 +1,4 @@
-# Generated on 2026-05-19
+# Generated on 2026-08-12
 definitions:
   scripts:
     clean_source: &cleanSource |-
@@ -357,20 +357,6 @@ definitions:
           - "logs1/**"
           - "test-results/test-unit.xml"
 
-# Magento 2.4.5 tests
-    - step: &phpstanTestPHP81-2.4.5
-        name: phpstan tests PHP 8.1 on Magento 2.4.5
-        image: aheadworks/m2test-new:2.4.5-p12-with-db-8.1
-        script:
-          - *prepareEnv
-          - *prepareSSH
-          - *installLib
-          - python3 -m aheadworks_test_manager phpstan ${PWD} test-results/test-phpstan-2.4.5.xml
-        caches:
-          - composer
-        artifacts:
-          - "test-results/**"
-
   deployment_steps:
     - step: &rebuildPrivateComposer
         name: Sync tags and branches to the Internal composer
@@ -480,7 +466,6 @@ pipelines:
           - step: *unitTestPHP82-2.4.6
           - step: *installMagentoPHP82-2.4.6
           - step: *phpstanTestPHP82-2.4.6
-          - step: *phpstanTestPHP81-2.4.5
       - step: *rebuildPrivateComposer
 
     feature/*:
@@ -543,7 +528,6 @@ pipelines:
           - step: *phpstanTestPHP82-2.4.6
           - step: *messDetectorTestPHP82-2.4.6
           - step: *installMagentoPHP82-2.4.6
-          - step: *phpstanTestPHP81-2.4.5
 
     # Run prerelease tests manually
     run-prerelease-tests:
@@ -552,7 +536,6 @@ pipelines:
           - step: *codesnifferTestPHP82-2.4.6
           - step: *unitTestPHP82-2.4.6
           - step: *installMagentoPHP82-2.4.6
-          - step: *phpstanTestPHP81-2.4.5
 
     #prepare build
     build_packages:
