@@ -71,7 +71,7 @@ class Save
         } elseif ($storeLabel === false && $storeLabelId) {
             $this->resourceConnection->getConnection()->delete(
                 $this->resourceConnection->getTableName('eav_attribute_label'),
-                'attribute_label_id = ' . $storeLabelId
+                ['attribute_label_id = ?' => (int) $storeLabelId]
             );
         }
 

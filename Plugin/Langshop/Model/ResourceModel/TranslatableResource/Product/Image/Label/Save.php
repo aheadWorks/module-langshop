@@ -72,14 +72,14 @@ class Save
 
                 if ($imageLabel) {
                     $toInsert[] = [
-                        'value_id' => $imageId,
-                        'store_id' => $storeId,
+                        'value_id' => (int) $imageId,
+                        'store_id' => (int) $storeId,
                         'label' => $imageLabel,
-                        'record_id' => $existingLabel['record_id'],
+                        'record_id' => (int) $existingLabel['record_id'],
                         $linkField => $existingLabel[$linkField]
                     ];
                 } elseif ($existingLabel['record_id']) {
-                    $toDelete[] = $existingLabel['record_id'];
+                    $toDelete[] = (int) $existingLabel['record_id'];
                 }
             }
 
@@ -115,7 +115,7 @@ class Save
         if ($toDelete) {
             $this->resourceConnection->getConnection()->delete(
                 $this->resourceConnection->getTableName(ProductGallery::GALLERY_VALUE_TABLE),
-                sprintf('record_id in (%s)', implode(',', $toDelete))
+                ['record_id IN (?)' => $toDelete]
             );
         }
     }

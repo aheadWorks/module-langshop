@@ -79,9 +79,10 @@ class Save
         $options = $product->getData(self::KEY_OPTIONS);
         if (is_array($options) && $options) {
             $toInsert = [];
-            $storeId = $product->getStoreId();
+            $storeId = (int) $product->getStoreId();
 
             foreach ($options as $optionId => $title) {
+                $optionId = (int) $optionId;
                 if ($title) {
                     $toInsert[] = [
                         'option_id' => $optionId,
@@ -91,7 +92,10 @@ class Save
                 } else {
                     $this->resourceConnection->getConnection()->delete(
                         $this->resourceConnection->getTableName('catalog_product_option_title'),
-                        "option_id = $optionId AND store_id = $storeId"
+                        [
+                            'option_id = ?' => $optionId,
+                            'store_id = ?' => $storeId
+                        ]
                     );
                 }
             }

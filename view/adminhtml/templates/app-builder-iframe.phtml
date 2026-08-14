@@ -10,7 +10,7 @@ use Aheadworks\Langshop\ViewModel\Page\Iframe;
  */
 $viewModel = $block->getData('view_model');
 ?>
-<?php if ($viewModel->isAppBuilderMode()) : ?>
+<?php if ($viewModel->isAppBuilderMode()): ?>
     <script>
         require([
             'mage/apply/main',
@@ -20,7 +20,8 @@ $viewModel = $block->getData('view_model');
                 main.applyFor(
                     iframe,
                     {
-                        redirectUrl: '<?= $escaper->escapeUrl($viewModel->getRedirectUrl()) ?>'
+                        redirectUrl: '<?= $escaper->escapeUrl($viewModel->getRedirectUrl()) ?>',
+                        allowedHosts: <?= /* @noEscape */ json_encode($viewModel->getAllowedHosts()) ?>
                     },
                     'Aheadworks_Langshop/js/iframe-bridge'
                 );
