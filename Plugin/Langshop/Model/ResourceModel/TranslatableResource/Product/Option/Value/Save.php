@@ -43,10 +43,11 @@ class Save
         $values = $product->getData(self::KEY_OPTIONS_VALUES);
         if (is_array($values)) {
             $titleTable = $this->resourceConnection->getTableName('catalog_product_option_type_title');
-            $storeId = $product->getStoreId();
+            $storeId = (int) $product->getStoreId();
             $items = [];
 
             foreach ($values as $id => $title) {
+                $id = (int) $id;
                 if ($title) {
                     $items[] = [
                         'option_type_id' => $id,

@@ -47,6 +47,16 @@ class Iframe implements ArgumentInterface
     }
 
     /**
+     * Hosts allowed for iframe messages and redirects
+     *
+     * @return string[]
+     */
+    public function getAllowedHosts(): array
+    {
+        return $this->urlBuilder->getAllowedHosts();
+    }
+
+    /**
      * Check if mode is Langshop app
      *
      * @return bool
