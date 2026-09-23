@@ -54,10 +54,13 @@ define([
         },
 
         /**
+         * Allow Magento admin URLs and http(s) destinations requested by Langshop.
+         * External hosts (e.g. Stripe pricing) are part of the product workflow.
+         *
          * @param {string} url
          * @returns {boolean}
          */
-        isAllowedRedirectUrl: function (url) {
+        isNavigableUrl: function (url) {
             let parsed;
 
             try {
@@ -66,11 +69,7 @@ define([
                 return false;
             }
 
-            if (parsed.origin === window.location.origin) {
-                return true;
-            }
-
-            return this.isAllowedOrigin(parsed.origin);
+            return parsed.protocol === 'http:' || parsed.protocol === 'https:';
         },
 
         reload: function (data) {
@@ -81,7 +80,7 @@ define([
          * @param {string} data.url
          */
         redirectTo: function (data) {
-            if (data.url && this.isAllowedRedirectUrl(data.url)) {
+            if (data.url && this.isNavigableUrl(data.url)) {
                 window.location.href = data.url;
             }
         },
@@ -102,7 +101,7 @@ define([
                     path: data.path
                 }
             }).success(function (response) {
-                if (response.url && iframeBridge.isAllowedRedirectUrl(response.url)) {
+                if (response.url && iframeBridge.isNavigableUrl(response.url)) {
                     window.parent.location.href = response.url;
                 }
             });
@@ -112,7 +111,7 @@ define([
          * @param {string} data.url
          */
         openInNewTab: function (data) {
-            if (data.url && this.isAllowedRedirectUrl(data.url)) {
+            if (data.url && this.isNavigableUrl(data.url)) {
                 window.open(data.url, '_blank', 'noopener,noreferrer');
             }
         },
@@ -167,7 +166,7 @@ define([
         if (Object.prototype.hasOwnProperty.call(iframeBridge, eventName)
             && typeof iframeBridge[eventName] === 'function'
             && eventName !== 'isAllowedOrigin'
-            && eventName !== 'isAllowedRedirectUrl'
+            && eventName !== 'isNavigableUrl'
             && eventName !== 'getAllowedHosts'
         ) {
             iframeBridge[eventName](eventData);
