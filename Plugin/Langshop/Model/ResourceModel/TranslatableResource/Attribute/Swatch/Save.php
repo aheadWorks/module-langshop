@@ -94,7 +94,8 @@ class Save
             $toDelete = [];
 
             foreach ($swatches as $optionId => $value) {
-                $swatchId = $existingSwatches[$optionId]->getData('swatch_id');
+                $optionId = (int) $optionId;
+                $swatchId = (int) $existingSwatches[$optionId]->getData('swatch_id');
 
                 if ($value) {
                     $toInsert[] = [
@@ -116,10 +117,9 @@ class Save
             }
 
             if ($toDelete) {
-                $toDelete = implode(',', $toDelete);
                 $this->resourceConnection->getConnection()->delete(
                     $this->resourceConnection->getTableName('eav_attribute_option_swatch'),
-                    "swatch_id IN ($toDelete)"
+                    ['swatch_id IN (?)' => $toDelete]
                 );
             }
 

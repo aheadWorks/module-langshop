@@ -94,7 +94,8 @@ class Save
             $toDelete = [];
 
             foreach ($options as $optionId => $value) {
-                $valueId = $existingOptions[$optionId]->getData('value_id');
+                $optionId = (int) $optionId;
+                $valueId = (int) $existingOptions[$optionId]->getData('value_id');
 
                 if ($value) {
                     $toInsert[] = [
@@ -116,10 +117,9 @@ class Save
             }
 
             if ($toDelete) {
-                $toDelete = implode(',', $toDelete);
                 $this->resourceConnection->getConnection()->delete(
                     $this->resourceConnection->getTableName('eav_attribute_option_value'),
-                    "value_id IN ($toDelete)"
+                    ['value_id IN (?)' => $toDelete]
                 );
             }
         }

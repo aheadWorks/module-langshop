@@ -5,7 +5,8 @@ define([
 
     let iframeBridge = {
         options: {
-            redirectUrl: ''
+            redirectUrl: '',
+            allowedHosts: ['langshop.io']
         },
 
         /**
@@ -13,6 +14,63 @@ define([
          */
         iframe: null,
         height: 600,
+
+        /**
+         * @returns {string[]}
+         */
+        getAllowedHosts: function () {
+            if (this.options.allowedHosts && this.options.allowedHosts.length) {
+                return this.options.allowedHosts;
+            }
+            if (this.iframe && this.iframe.src) {
+                try {
+                    return [new URL(this.iframe.src).hostname];
+                } catch (e) {
+                    return ['langshop.io'];
+                }
+            }
+
+            return ['langshop.io'];
+        },
+
+        /**
+         * @param {string} origin
+         * @returns {boolean}
+         */
+        isAllowedOrigin: function (origin) {
+            let host;
+
+            try {
+                host = new URL(origin).hostname.toLowerCase();
+            } catch (e) {
+                return false;
+            }
+
+            return this.getAllowedHosts().some(function (allowed) {
+                allowed = String(allowed).toLowerCase();
+
+                return host === allowed || host.endsWith('.' + allowed);
+            });
+        },
+
+        /**
+         * Allow Magento admin URLs and http(s) destinations requested by Langshop.
+         * External hosts (e.g. Stripe pricing) are part of the product workflow.
+         *
+         * @param {string} url
+         * @returns {boolean}
+         */
+        isNavigableUrl: function (url) {
+            let parsed;
+
+            try {
+                parsed = new URL(url, window.location.href);
+            } catch (e) {
+                return false;
+            }
+
+            return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+        },
 
         reload: function (data) {
             window.location.reload();
@@ -22,7 +80,7 @@ define([
          * @param {string} data.url
          */
         redirectTo: function (data) {
-            if (data.url) {
+            if (data.url && this.isNavigableUrl(data.url)) {
                 window.location.href = data.url;
             }
         },
@@ -31,6 +89,10 @@ define([
          * @param {string} data.path
          */
         redirectToByPath: function (data) {
+            if (!data.path) {
+                return;
+            }
+
             $.ajax({
                 url: this.options.redirectUrl,
                 type: 'get',
@@ -39,7 +101,7 @@ define([
                     path: data.path
                 }
             }).success(function (response) {
-                if (response.url) {
+                if (response.url && iframeBridge.isNavigableUrl(response.url)) {
                     window.parent.location.href = response.url;
                 }
             });
@@ -49,8 +111,8 @@ define([
          * @param {string} data.url
          */
         openInNewTab: function (data) {
-            if (data.url) {
-                window.open(data.url, '_blank');
+            if (data.url && this.isNavigableUrl(data.url)) {
+                window.open(data.url, '_blank', 'noopener,noreferrer');
             }
         },
 
@@ -78,14 +140,35 @@ define([
     };
 
     window.addEventListener('message', function (e) {
-        let messageObject = typeof (e.data) === 'string'
-            ? JSON.parse(e.data)
-            : e.data;
+        let messageObject,
+            eventName,
+            eventData;
 
-        let eventName = messageObject.event || '';
-        let eventData = messageObject.data || {};
+        if (!iframeBridge.isAllowedOrigin(e.origin)) {
+            return;
+        }
 
-        if (iframeBridge[eventName]) {
+        try {
+            messageObject = typeof (e.data) === 'string'
+                ? JSON.parse(e.data)
+                : e.data;
+        } catch (error) {
+            return;
+        }
+
+        if (!messageObject || typeof messageObject !== 'object') {
+            return;
+        }
+
+        eventName = messageObject.event || '';
+        eventData = messageObject.data || {};
+
+        if (Object.prototype.hasOwnProperty.call(iframeBridge, eventName)
+            && typeof iframeBridge[eventName] === 'function'
+            && eventName !== 'isAllowedOrigin'
+            && eventName !== 'isNavigableUrl'
+            && eventName !== 'getAllowedHosts'
+        ) {
             iframeBridge[eventName](eventData);
         }
     });
@@ -96,6 +179,6 @@ define([
      */
     return function (settings, iframe) {
         iframeBridge.iframe = iframe;
-        iframeBridge.options = settings;
+        iframeBridge.options = $.extend({}, iframeBridge.options, settings);
     };
 });
