@@ -74,7 +74,9 @@ class UrlBuilder
             $curl->getBody()
         );
 
-        return $body['url'] ?? '';
+        $url = $body['url'] ?? '';
+
+        return $this->isAllowedSaasUrl($url) ? $url : '';
     }
 
     /**
@@ -89,6 +91,69 @@ class UrlBuilder
             $this->saasConfig->getDomain(),
             $this->saasConfig->getPublicKey()
         );
+    }
+
+    /**
+     * Hosts allowed for the embedded Langshop application
+     *
+     * @return string[]
+     */
+    public function getAllowedHosts(): array
+    {
+        $hosts = ['langshop.io'];
+        $configuredHost = $this->extractHost((string) $this->saasConfig->getDomain());
+        if ($configuredHost) {
+            $hosts[] = $configuredHost;
+        }
+
+        return array_values(array_unique($hosts));
+    }
+
+    /**
+     * Check whether the URL belongs to the configured Langshop application
+     *
+     * @param string $url
+     * @return bool
+     */
+    public function isAllowedSaasUrl(string $url): bool
+    {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $parts = parse_url($url);
+        if (!is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
+            return false;
+        }
+        if (!in_array(strtolower((string) $parts['scheme']), ['http', 'https'], true)) {
+            return false;
+        }
+
+        $host = strtolower((string) $parts['host']);
+        foreach ($this->getAllowedHosts() as $allowed) {
+            if ($host === $allowed || str_ends_with($host, '.' . $allowed)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Extract hostname from a URL or host string
+     *
+     * @param string $url
+     * @return string|null
+     */
+    private function extractHost(string $url): ?string
+    {
+        if ($url === '') {
+            return null;
+        }
+        if (!preg_match('#^https?://#i', $url)) {
+            $url = 'https://' . ltrim($url, '/');
+        }
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $host = parse_url($url, PHP_URL_HOST);
+
+        return is_string($host) && $host !== '' ? strtolower($host) : null;
     }
 
     /**

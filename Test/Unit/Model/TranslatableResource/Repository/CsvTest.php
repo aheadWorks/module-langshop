@@ -18,6 +18,7 @@ use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Translation\Model\ResourceModel\StringUtils;
 use Magento\Translation\Model\ResourceModel\StringUtilsFactory as ResourceModelFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -152,6 +153,7 @@ class CsvTest extends TestCase
      * @dataProvider saveDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave(array $value): void
     {
         $entityId = 'entityId';
@@ -226,7 +228,7 @@ class CsvTest extends TestCase
      *
      * @return array
      */
-    public function saveDataProvider(): array
+    public static function saveDataProvider(): array
     {
         return [
             [['original' => 'translation']],
