@@ -55,15 +55,17 @@ class ErrorProcessor
      * Checks if we have to process the incoming exception
      *
      * @return bool
-     * @throws WebapiException
      */
     private function isOurNamespace(): bool
     {
         $namespace = explode('\\', __NAMESPACE__);
 
-        return str_starts_with(
-            $this->inputParamsResolver->getRoute()->getServiceClass(),
-            sprintf('%s\%s', $namespace[0], $namespace[1])
-        );
+        try {
+            $serviceClass = $this->inputParamsResolver->getRoute()->getServiceClass();
+        } catch (WebapiException) {
+            return false;
+        }
+
+        return str_starts_with($serviceClass, sprintf('%s\%s', $namespace[0], $namespace[1]));
     }
 }
